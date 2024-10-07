@@ -1,7 +1,6 @@
 # TODO
 
 - [ ] observability apps need more tuning later
-- [ ] tunning in-cluster github-action-runner, label:arc-homelab-talos; add LAB_ASSISTANT_APP_ID/LAB_ASSISTANT_APP_KEY.
 
 ## Pre-deployment
 
@@ -11,6 +10,7 @@
 - s3: `s3.noirprime.com`, create buckets, assgin keys
 - nfs: `nas.noirprime.com`, `/mnt/pool_hdd/media`, for calibre-web
 - cilium use interface:bond0, currently only one interface in VM
+- self-hosted-runner, label:arc-homelab, use secret.LAB_ASSISTANT_APP_ID / secret.LAB_ASSISTANT_APP_KEY / secrets.KUBECONFIG (base64 kubeconfig > kubeconfig_base64)
 
 ## Sub-domains
 
