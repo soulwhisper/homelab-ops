@@ -1,0 +1,4 @@
+---
+providerRegex: |
+  ^(delta|enigma|felix)$
+bypassDnsResolution: true

@@ -1,0 +1,43 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/helmfile
+helmDefaults:
+  wait: true
+  waitForJobs: true
+  timeout: 600
+  recreatePods: true
+  force: true
+
+repositories:
+  - name: postfinance
+    url: https://postfinance.github.io/kubelet-csr-approver
+  - name: cilium
+    url: https://helm.cilium.io
+  - name: spegel
+    url: oci://ghcr.io/spegel-org/helm-charts
+
+releases:
+  - name: cilium
+    namespace: kube-system
+    chart: cilium/cilium
+    version: 1.16.2
+    values:
+      - ../apps/kube-system/cilium/app/values.yaml
+
+  - name: kubelet-csr-approver
+    namespace: kube-system
+    chart: postfinance/kubelet-csr-approver
+    version: 1.2.2
+    values:
+      - ../apps/kube-system/kubelet-csr-approver/app/values.yaml
+    needs:
+      - kube-system/cilium
+
+  - name: spegel
+    namespace: kube-system
+    chart: spegel/spegel
+    version: v0.0.24
+    values:
+      - ../apps/kube-system/spegel/app/values.yaml
+    needs:
+      - kube-system/cilium
+      - kube-system/kubelet-csr-approver

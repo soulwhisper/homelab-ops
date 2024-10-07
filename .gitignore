@@ -1,0 +1,14 @@
+# Folders
+ignore/
+logs/
+testing/
+
+# Trash
+.DS_Store
+Thumbs.db
+
+# Sops
+.decrypted~*
+
+# Other files
+kubeconfig

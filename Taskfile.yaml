@@ -1,0 +1,34 @@
+---
+version: "3"
+
+vars:
+  KUBERNETES_DIR: "{{.ROOT_DIR}}/kubernetes"
+
+includes:
+  flux:
+    dir: .taskfiles/flux
+    taskfile: .taskfiles/flux
+  k8s:
+    taskfile: .taskfiles/k8s
+    dir: .taskfiles/k8s
+  externalsecrets:
+    taskfile: .taskfiles/externalsecrets
+    dir: .taskfiles/externalsecrets
+  postgres:
+    taskfile: ".taskfiles/postgres"
+    dir: .taskfiles/postgres
+  sops:
+    taskfile: ".taskfiles/sops"
+    dir: .taskfiles/sops
+  talos:
+    taskfile: ".taskfiles/talos"
+    dir: .taskfiles/talos
+  volsync:
+    taskfile: ".taskfiles/volsync"
+    dir: .taskfiles/volsync
+
+tasks:
+  default:
+    silent: true
+    cmds:
+      - task -l

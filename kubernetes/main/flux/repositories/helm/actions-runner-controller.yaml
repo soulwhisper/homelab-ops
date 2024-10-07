@@ -1,0 +1,12 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/source.toolkit.fluxcd.io/helmrepository_v1.json
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: actions-runner-controller
+  namespace: flux-system
+spec:
+  interval: 30m
+  timeout: 5m
+  type: oci
+  url: oci://ghcr.io/actions

@@ -1,0 +1,69 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/helm.toolkit.fluxcd.io/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: externaldns-external
+spec:
+  interval: 30m
+  timeout: 5m
+  chart:
+    spec:
+      chart: external-dns
+      version: 1.15.0
+      sourceRef:
+        kind: HelmRepository
+        name: kubernetes-sigs-external-dns
+        namespace: flux-system
+
+  install:
+    crds: CreateReplace
+  upgrade:
+    crds: CreateReplace
+  values:
+    fullnameOverride: &name externaldns-external
+    domainFilters:
+      - noirprime.com
+    env:
+      - name: CF_API_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: externaldns-external-secrets
+            key: cloudflare-api-token
+    extraArgs:
+      - --cloudflare-dns-records-per-page=1000
+      - --cloudflare-proxied
+      - --crd-source-apiversion=externaldns.k8s.io/v1alpha1
+      - --crd-source-kind=DNSEndpoint
+      - --events
+      - --ignore-ingress-tls-spec
+      - --ingress-class=external-nginx
+    podAnnotations:
+      secret.reloader.stakater.com/reload: externaldns-external-secrets
+    policy: sync
+    provider: cloudflare
+    resources:
+      requests:
+        cpu: 13m
+        memory: 42M
+      limits:
+        memory: 42M
+    serviceMonitor:
+      enabled: true
+    sources:
+      - ingress
+      - crd
+    txtOwnerId: main
+    txtPrefix: "k8s."
+
+  postRenderers:
+    - kustomize:
+        patches:
+          - target:
+              version: v1
+              kind: Deployment
+              name: *name
+            patch: |
+              - op: add
+                path: /spec/template/spec/enableServiceLinks
+                value: false
