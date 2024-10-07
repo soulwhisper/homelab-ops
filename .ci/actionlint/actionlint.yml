@@ -1,4 +1,4 @@
 ---
 self-hosted-runner:
   labels:
-    - arc-bjw-s-labs
+    - arc-homelab

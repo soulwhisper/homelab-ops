@@ -13,7 +13,7 @@ repositories:
   - name: cilium
     url: https://helm.cilium.io
   - name: spegel
-    url: oci://ghcr.io/spegel-org/helm-charts
+    url: oci://ghcr.io/spegel-org/helm-charts/spegel
 
 releases:
   - name: cilium
