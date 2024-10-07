@@ -1,6 +1,7 @@
 # TODO
 
 - [ ] observability apps need more tuning later
+- [ ] tunning in-cluster github-action-runner, label:arc-homelab-talos; add LAB_ASSISTANT_APP_ID/LAB_ASSISTANT_APP_KEY.
 
 ## Pre-deployment
 
