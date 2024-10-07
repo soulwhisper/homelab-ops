@@ -9,7 +9,7 @@ spec:
   timeout: 5m
   chart:
     spec:
-      chart: openebs/openebs
+      chart: openebs
       version: 4.1.1
       sourceRef:
         kind: HelmRepository
