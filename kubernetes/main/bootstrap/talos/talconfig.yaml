@@ -1,6 +1,6 @@
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/budimanjojo/talhelper/master/pkg/config/schemas/talconfig.json
-clusterName: Talos
+clusterName: main
 endpoint: "https://${clusterEndpointIP}:6443"
 
 # renovate: depName=ghcr.io/siderolabs/installer datasource=docker extractVersion=^(?<version>.*)$
@@ -15,7 +15,7 @@ cniConfig:
   name: none
 
 nodes:
-  - hostname: Exarch-01
+  - hostname: exarch-01.homelab.internal
     ipAddress: 172.19.82.101
     installDisk: /dev/sda
     controlPlane: true
@@ -46,7 +46,7 @@ nodes:
         vip: &vip
           ip: ${clusterEndpointIP}
 
-  - hostname: Exarch-02
+  - hostname: exarch-02.homelab.internal
     ipAddress: 172.19.82.102
     installDisk: /dev/sda
     controlPlane: true
@@ -62,7 +62,7 @@ nodes:
         routes: *gateway
         vip: *vip
 
-  - hostname: Exarch-03
+  - hostname: exarch-03.homelab.internal
     ipAddress: 172.19.82.103
     installDisk: /dev/sda
     controlPlane: true
