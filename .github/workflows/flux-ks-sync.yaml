@@ -19,7 +19,7 @@ jobs:
   sync:
     name: Flux Kustomization Sync
     runs-on:
-      - arc-homelab-talos
+      - arc-homelab
     environment: production
     strategy:
       matrix:
