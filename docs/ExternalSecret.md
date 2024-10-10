@@ -15,7 +15,6 @@
 * cloudflared-tunnel => zero-trust / networks / tunnels => homelab-ingress-ext; ingress-ext.noirprime.com, http://localhost:8080
 * cloudflare, dns-01, noirprime.com: user-profile =>api-tokens, ZONE:READ / DNS:EDIT
 * CLUSTER_SECRET_CPGO_R2_ENDPOINT = https://${CF_ACCOUNT_TAG}.r2.cloudflarestorage.com
-* cloudflare_s3_endpoint = `https://d731264a492abbb86331957efddf5445.r2.cloudflarestorage.com`
 
 ### Minio
 
