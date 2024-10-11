@@ -35,7 +35,7 @@ releases:
   - name: spegel
     namespace: kube-system
     chart: spegel/spegel
-    version: v0.0.24
+    version: v0.0.26
     values:
       - ../apps/kube-system/spegel/app/values.yaml
     needs:
