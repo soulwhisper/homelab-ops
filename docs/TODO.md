@@ -1,6 +1,12 @@
 # TODO
 
-- [ ] observability apps need more tuning later
+- [ ] bring up new cluster
+- [ ] test flux sync
+- [ ] tune observability apps
+
+## Infra
+
+- `infra/scripts/minio-bucket-keys.py`, create minio buckets, service accounts and policies for k8s apps, using 1password keys.
 
 ## Pre-deployment
 
@@ -10,7 +16,13 @@
 - s3: `s3.noirprime.com`, create buckets, assgin keys
 - nfs: `nas.noirprime.com`, `/mnt/pool_hdd/media`, for calibre-web
 - cilium use interface:bond0, currently only one interface in VM
-- self-hosted-runner, label:arc-homelab, use secret.LAB_ASSISTANT_APP_ID / secret.LAB_ASSISTANT_APP_KEY / secrets.KUBECONFIG (base64 kubeconfig > kubeconfig_base64)
+- self-hosted-runner, label:arc-homelab
+
+## Github-secrets
+
+- LAB_ASSISTANT_APP_ID => GITHUB_APP_ID
+- LAB_ASSISTANT_APP_KEY => GITHUB_APP_KEY
+- KUBECONFIG => `base64 kubeconfig > kubeconfig_base64`
 
 ## Sub-domains
 
