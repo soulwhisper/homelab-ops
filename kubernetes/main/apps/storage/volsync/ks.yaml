@@ -6,13 +6,13 @@ metadata:
   name: &appname volsync
   namespace: flux-system
 spec:
-  targetNamespace: kube-system
+  targetNamespace: storage
   commonMetadata:
     labels:
       app.kubernetes.io/name: *appname
   interval: 30m
   timeout: 5m
-  path: "./kubernetes/main/apps/kube-system/volsync/app"
+  path: "./kubernetes/main/apps/storage/volsync/app"
   prune: true
   sourceRef:
     kind: GitRepository

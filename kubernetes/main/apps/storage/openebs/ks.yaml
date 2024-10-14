@@ -6,13 +6,13 @@ metadata:
   name: &appname openebs
   namespace: flux-system
 spec:
-  targetNamespace: openebs
+  targetNamespace: storage
   commonMetadata:
     labels:
       app.kubernetes.io/name: *appname
   interval: 30m
   timeout: 5m
-  path: "./kubernetes/main/apps/openebs/openebs/app"
+  path: "./kubernetes/main/apps/storage/openebs/app"
   prune: true
   sourceRef:
     kind: GitRepository
@@ -26,14 +26,14 @@ metadata:
   name: openebs-replicated
   namespace: flux-system
 spec:
-  targetNamespace: openebs
+  targetNamespace: storage
   commonMetadata:
     labels:
       app.kubernetes.io/name: openebs
       app.kubernetes.io/component: replicated
   interval: 30m
   timeout: 5m
-  path: "./kubernetes/main/apps/openebs/openebs/replicated"
+  path: "./kubernetes/main/apps/storage/openebs/replicated"
   prune: true
   sourceRef:
     kind: GitRepository
