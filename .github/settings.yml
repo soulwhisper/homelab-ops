@@ -1,0 +1,79 @@
+---
+repository:
+  default_branch: main
+
+  allow_merge_commit: false
+  allow_rebase_merge: true
+  allow_squash_merge: true
+  allow_auto_merge: true
+  allow_update_branch: true
+  delete_branch_on_merge: true
+
+  has_issues: true
+  has_wiki: false
+  has_projects: false
+
+  squash_merge_commit_title: "PR_TITLE"
+  squash_merge_commit_message: "BLANK"
+
+labels:
+  # Issue classification
+  - name: bug
+    color: d73a4a
+    description: Something isn't working
+  - name: documentation
+    color: 0075ca
+    description: Improvements or additions to documentation
+  - name: enhancement
+    color: a2eeef
+    description: New feature or request
+  - name: question
+    color: d876e3
+    description: Further information is requested
+  - name: wontfix
+    color: ffffff
+    description: This will not be worked on
+  - name: do-not-merge
+    color: ee0701
+    description: Marks PR that is not (yet) in a mergeable state
+
+  # Semantic Types
+  - name: type/patch
+    color: ffec19
+    description: Issue relates to a patch version bump
+  - name: type/minor
+    color: ff9800
+    description: Issue relates to a minor version bump
+  - name: type/major
+    color: f6412d
+    description: Issue relates to a major version bump
+
+  # Renovate types
+  - name: renovate/ansible
+    color: "027fa0"
+  - name: renovate/container
+    color: "027fa0"
+  - name: renovate/github-action
+    color: "027fa0"
+  - name: renovate/grafana-dashboard
+    color: "027fa0"
+  - name: renovate/github-release
+    color: "027fa0"
+  - name: renovate/helm
+    color: "027fa0"
+  - name: renovate/terraform
+    color: "027fa0"
+
+  # Repo types
+  - name: area/ci
+    color: 0e8a16
+    description: Issue relates to CI
+  - name: area/kubernetes
+    color: 0e8a16
+    description: Issue relates to Kubernetes
+  - name: cluster/main
+    color: ffc300
+    description: Issue relates to the "main" cluster
+  - name: cluster/nas
+    color: ffc300
+    description: Issue relates to the "nas" cluster
