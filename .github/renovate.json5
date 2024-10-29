@@ -2,7 +2,6 @@
   $schema: "https://docs.renovatebot.com/renovate-schema.json",
   extends: [
     "github>soulwhisper/renovate-config",
-    "github>soulwhisper/renovate-config:automerge-github-actions",
     "github>soulwhisper/home-ops//.github/renovate/allowedVersions.json5",
     "github>soulwhisper/home-ops//.github/renovate/autoMerge.json5",
     "github>soulwhisper/home-ops//.github/renovate/groups.json5",
