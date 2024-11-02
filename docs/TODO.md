@@ -2,7 +2,7 @@
 
 - [ ] bring up new cluster
 - [ ] test flux sync
-- [ ] tune observability apps
+- [ ] tune monitoring apps
 
 ## Infra
 
@@ -13,8 +13,9 @@
 - only hostname use `homelab.internal`
 - `172.19.82.10`, clash-proxy / adguard / minio / traefik, dns-01, `s3.noirprime.com`
 - `172.19.82.201-250` used as cilium l2 loadbalancer ip
-- s3: `s3.noirprime.com`, create buckets, assgin keys
+- s3: `s3.noirprime.com`, minio, create buckets, assgin keys; traefik-dns-01;
 - nfs: `nas.noirprime.com`, `/mnt/pool_hdd/media`, for calibre-web
+- mon: `mon.noirprime.com`, `/coroot/` for coroot, `/grafana/` for grafana
 - cilium use interface:bond0, currently only one interface in VM
 - self-hosted-runner, label:arc-homelab
 
@@ -24,16 +25,9 @@
 - LAB_ASSISTANT_APP_KEY => GITHUB_APP_KEY
 - KUBECONFIG => `base64 kubeconfig > kubeconfig_base64`
 
-## Sub-domains
+## Changelog
 
-- s3 = minio; deploy with traefik dns-01 at nas, enable https
-- nas = truenas
-- hubble-main = kube-system/cilium-hubble
-- grafana = obeservability/grafana
-- loki = obeservability/loki
-- kromgo = obeservability/kromgo
-- paperless = media/paperless
-- calibre-web = media/calibre-web
+- archive old monitoring system; replace with coroot as general board, clickhouse-qryn-alloy-grafana as backups;
 
 ## defaults
 

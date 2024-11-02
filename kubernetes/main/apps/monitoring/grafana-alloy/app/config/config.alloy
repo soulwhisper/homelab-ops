@@ -1,0 +1,49 @@
+logging {
+  level = "info"
+  format = "logfmt"
+}
+
+prometheus.scrape "prom" {
+  targets = [{
+    __address__ = "localhost:12345",
+  }]
+  forward_to     = [prometheus.remote_write.default.receiver]
+  job_name       = "prometheus"
+  scrape_timeout = "45s"
+}
+
+prometheus.remote_write "default" {
+  endpoint {
+    name = "qryn"
+    url  = "https://qryn:3100/api/prom/push"
+
+    queue_config {
+      capacity             = 2500
+      max_shards           = 200
+      max_samples_per_send = 500
+    }
+
+    metadata_config {
+      max_samples_per_send = 500
+    }
+  }
+}
+
+local.file_match "loki" {
+    path_targets = [{
+        __address__ = "localhost",
+        __path__    = "/var/log/*.log",
+    }]
+}
+
+loki.source.file "loki" {
+    targets    = local.file_match.loki.targets
+    forward_to = [loki.write.default.receiver]
+}
+
+loki.write "default" {
+    endpoint {
+        url = "http://qryn:3100/loki/api/v1/push"
+    }
+    external_labels = {}
+}

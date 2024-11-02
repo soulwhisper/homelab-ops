@@ -1,0 +1,24 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: qryn
+spec:
+  interval: 30m
+  timeout: 5m
+  chart:
+    spec:
+      chart: qryn-helm
+      sourceRef:
+        kind: HelmRepository
+        name: qryn-helm
+        namespace: flux-system
+      version: 0.1.3
+
+  values:
+    fullnameOverride: qryn
+
+    env:
+      CLICKHOUSE_SERVER: clickhouse.database.svc.cluster.local
+      CLICKHOUSE_AUTH: clickhouse:clickhouse_password

@@ -6,5 +6,9 @@ resources:
   # Pre Flux-Kustomizations
   - ./namespace.yaml
   # Flux-Kustomizations
-  - ./crunchy-postgres-operator/ks.yaml
-  - ./clickhouse/ks.yaml
+  - ./coroot/ks.yaml
+  - ./grafana/ks.yaml
+  - ./grafana-alloy/ks.yaml
+  - ./qryn/ks.yaml
+  - ./kromgo/ks.yaml
+

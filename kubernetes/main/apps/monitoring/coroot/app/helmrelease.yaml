@@ -1,0 +1,34 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/helm.toolkit.fluxcd.io/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: coroot
+spec:
+  interval: 30m
+  timeout: 5m
+  chart:
+    spec:
+      chart: coroot
+      sourceRef:
+        kind: HelmRepository
+        name: coroot
+        namespace: flux-system
+      version: 0.15.14
+
+  values:
+    corootCE:
+      env:
+        - name: AUTH_ANONYMOUS_ROLE
+          value: Admin
+
+      ingress:
+        enabled: true
+        annotations:
+          kubernetes.io/ingress.class: internal-nginx
+          external-dns.alpha.kubernetes.io/target: ingress-int.noirprime.com
+        hosts:
+          - host: mon.noirprime.com
+            paths:
+              - path: /coroot/
+                pathType: ImplementationSpecific

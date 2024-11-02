@@ -139,10 +139,9 @@ patches:
       time:
         disabled: false
         servers:
-          - 0.cn.pool.ntp.org
-          - 1.cn.pool.ntp.org
-          - 2.cn.pool.ntp.org
-          - 3.cn.pool.ntp.org
+          - ntp.ntsc.ac.cn
+          - ntp.aliyun.com
+          - cn.pool.ntp.org
 
 # Enable DNS Cache
   - |-
@@ -152,6 +151,14 @@ patches:
           enabled: true
           resolveMemberNames: true
           forwardKubeDNSToHost: true
+
+# Enable Logging
+  - |-
+    machine:
+      logging:
+        destinations:
+          - endpoint: "udp://localhost:12345/"
+            format: "json_lines"
 
 # Cluster configuration
   - |-
