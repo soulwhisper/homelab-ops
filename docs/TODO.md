@@ -19,15 +19,19 @@
 - cilium use interface:bond0, currently only one interface in VM
 - self-hosted-runner, label:arc-homelab
 
+## Deployment-order
+
+- 1, flux-system
+- 2, kube-system, security, storage/openebs
+- 3, monitoring
+- 4, database
+- 5, others
+
 ## Github-secrets
 
 - LAB_ASSISTANT_APP_ID => GITHUB_APP_ID
 - LAB_ASSISTANT_APP_KEY => GITHUB_APP_KEY
 - KUBECONFIG => `base64 kubeconfig > kubeconfig_base64`
-
-## Changelog
-
-- archive old monitoring system; replace with coroot as general board, clickhouse-qryn-alloy-grafana as backups;
 
 ## defaults
 
@@ -43,6 +47,7 @@
 - [X] /kubernetes/main/bootstrap/talos/talsecret.sops.yaml
 - [X] /kubernetes/main/apps/security/onepassword-connect/app/secret.sops.yaml, 1password-credentials.json, token
 
-## kustomization removed
+## Changelog
 
-- /kubernetes/main/bootstrap/flux/kustomization.yaml
+- remove `/kubernetes/main/bootstrap/flux/kustomization.yaml`
+- archive old monitoring system; replace with coroot as general board, clickhouse-qryn-alloy-grafana as backups;

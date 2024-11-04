@@ -6,9 +6,8 @@ resources:
   # Pre Flux-Kustomizations
   - ./namespace.yaml
   # Flux-Kustomizations
-  - ./coroot/ks.yaml
-  - ./grafana/ks.yaml
-  - ./grafana-alloy/ks.yaml
-  - ./qryn/ks.yaml
   - ./kromgo/ks.yaml
+  - ./deepflow/ks.yaml
+  - ./grafana-alloy/ks.yaml
+  - ./coroot/ks.yaml
 

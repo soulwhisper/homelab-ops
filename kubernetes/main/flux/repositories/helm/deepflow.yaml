@@ -3,9 +3,9 @@
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: HelmRepository
 metadata:
-  name: qryn-helm
+  name: deepflow
   namespace: flux-system
 spec:
   interval: 30m
   timeout: 5m
-  url: https://metrico.github.io/qryn-helm/
+  url: https://deepflowio.github.io/deepflow

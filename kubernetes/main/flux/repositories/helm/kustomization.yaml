@@ -6,8 +6,11 @@ resources:
   - actions-runner-controller.yaml
   - cert-manager.yaml
   - cilium.yaml
+  - coroot.yaml
   - crunchydata.yaml
+  - deepflow.yaml
   - external-secrets.yaml
+  - fluent.yaml
   - grafana.yaml
   - ingress-nginx.yaml
   - intel.yaml
