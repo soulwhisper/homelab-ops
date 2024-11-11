@@ -4,9 +4,9 @@ clusterName: main
 endpoint: "https://${clusterEndpointIP}:6443"
 
 # renovate: depName=ghcr.io/siderolabs/installer datasource=docker extractVersion=^(?<version>.*)$
-talosVersion: v1.8.0
+talosVersion: v1.8.2
 # renovate: depName=kubernetes/kubernetes datasource=github-releases extractVersion=^v(?<version>.*)$
-kubernetesVersion: 1.31.1
+kubernetesVersion: 1.31.2
 
 # baremetal, amd64, secureboot disabled; replace kubespan with tailscale;
 # schema_id = 'a3a9b9e24b6f57a2bd7d988c1bf8913da4438b2d574311288d894f1f08419b7e'
@@ -85,7 +85,7 @@ patches:
     machine:
       network:
         nameservers:
-          - 172.19.82.10
+          - 223.5.5.5
 
 # Enable Proxy, http proxy is more stable than tproxy gateway
 # add exception for tailscale / noirprime.com / homelab.internal
@@ -152,14 +152,6 @@ patches:
           resolveMemberNames: true
           forwardKubeDNSToHost: true
 
-# Enable Logging
-  - |-
-    machine:
-      logging:
-        destinations:
-          - endpoint: "udp://localhost:12345/"
-            format: "json_lines"
-
 # Cluster configuration
   - |-
     cluster:
@@ -214,6 +206,6 @@ controlPlane:
           - 172.19.82.0/24
 
 # AdmissionControl configuration, disable PodSecurity
-  - |-
-    - op: remove
-      path: /cluster/apiServer/admissionControl
+#  - |-
+#    - op: remove
+#      path: /cluster/apiServer/admissionControl
