@@ -1,0 +1,290 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/budimanjojo/talhelper/master/pkg/config/schemas/talconfig.json
+clusterName: &clusterName main
+endpoint: "https://k8s.homelab.internal:6443"
+
+# Current stage = proxmox.vm; next = ms-01;
+# Enable secureboot, disk-encryption; use tailscale instead of kube-span & discovery-site;
+
+# renovate: depName=ghcr.io/siderolabs/installer datasource=docker
+talosVersion: v1.8.3
+# renovate: depName=ghcr.io/siderolabs/kubelet datasource=docker
+kubernetesVersion: v1.31.3
+
+additionalApiServerCertSans: &sans
+  - k8s.homelab.internal
+  - &talosControlplaneVip 172.19.82.100
+  - 127.0.0.1
+additionalMachineCertSans: *sans
+
+cniConfig:
+  name: none
+
+nodes:
+  - hostname: exarch-01
+    ipAddress: 172.19.82.101
+    controlPlane: true
+    installDisk: /dev/sda
+    networkInterfaces:
+      - interface: bond0
+        deviceSelector:
+          busPath: "0*"
+        dhcp: false
+        routes: &gateway
+          - network: 0.0.0.0/0
+            gateway: 172.19.82.1
+        addresses:
+          - 172.19.82.101/24
+        vip:
+          ip: *talosControlplaneVip
+
+  - hostname: exarch-02
+    ipAddress: 172.19.82.102
+    controlPlane: true
+    installDisk: /dev/sda
+    networkInterfaces:
+      - interface: bond0
+        deviceSelector:
+          busPath: "0*"
+        dhcp: false
+        addresses:
+          - 172.19.82.102/24
+        routes: *gateway
+        vip:
+          ip: *talosControlplaneVip
+
+  - hostname: exarch-03
+    ipAddress: 172.19.82.103
+    controlPlane: true
+    installDisk: /dev/sda
+    networkInterfaces:
+      - interface: bond0
+        deviceSelector:
+          busPath: "0*"
+        dhcp: false
+        addresses:
+          - 172.19.82.103/24
+        routes: *gateway
+        vip:
+          ip: *talosControlplaneVip
+
+controlPlane:
+  nodeLabels:
+    topology.kubernetes.io/region: *clusterName
+    topology.kubernetes.io/zone: central
+  schematic: &talos-schema
+    customization:
+      extraKernelArgs:
+        - intel_iommu=on
+        - iommu=pt
+        - net.ifnames=0
+        - console=ttyS0 # needed by hci, e.g. proxmox
+      systemExtensions:
+        officialExtensions:
+          - siderolabs/intel-ucode
+          - siderolabs/i915-ucode
+          - siderolabs/mei
+          - siderolabs/thunderbolt
+          - siderolabs/nut-client
+          - siderolabs/tailscale
+          - siderolabs/qemu-guest-agent
+  extensionServices: &talos-ext
+    - name: tailscale
+      environment:
+        - TS_AUTHKEY=${TS_AUTHKEY}
+        - TS_ROUTES=10.100.0.0/17
+    - name: nut-client
+      configFiles:
+        - content: |-
+            MONITOR 10.0.0.100 1 remote upsuser proxmox
+            SHUTDOWNCMD "/sbin/poweroff"
+          mountPath: /usr/local/etc/nut/upsmon.conf
+      environment:
+        - UPS_NAME=nutdev1
+
+  patches:
+  # controlPlane only patches
+  # ETCD configuration, increase etcd quota to 8G, keep advertisedSubnets if using tailscale / kubespan
+    - |-
+      cluster:
+        etcd:
+          extraArgs:
+            quota-backend-bytes: 8589934592
+          advertisedSubnets:
+            - 172.19.82.0/24
+
+  # AdmissionControl configuration, disable PodSecurity
+    - |-
+      - op: remove
+        path: /cluster/apiServer/admissionControl
+
+patches:
+
+  # Nameserver configuration
+  - |-
+     machine:
+       network:
+         nameservers:
+           - 223.5.5.5
+
+  # VIP Loopback
+  - |-
+     machine:
+       network:
+        extraHostEntries:
+          - ip: 172.19.82.100
+            aliases:
+              - k8s.homelab.internal
+
+  # Enable Proxy, http proxy is more stable than tproxy gateway
+  # add exception for tailscale / noirprime.com / homelab.internal
+  - |-
+    machine:
+      env:
+        http_proxy: http://172.19.82.10:1080
+        https_proxy: http://172.19.82.10:1080
+        no_proxy: .tailscale.com,.tailscale.io,.noirprime.com,.homelab.internal,localhost,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16
+
+  # Kubelet configuration, keep nodeIP if using tailscale / kubespan
+  - |-
+    machine:
+      kubelet:
+        extraArgs:
+          rotate-server-certificates: "true"
+        nodeIP:
+          validSubnets:
+            - 172.19.82.0/24
+
+  # Enable OpenEBS Storage ( Hostpath )
+  - |-
+    machine:
+      kubelet:
+        extraMounts:
+          - destination: /var/local/openebs
+            type: bind
+            source: /var/local/openebs
+            options:
+              - rbind
+              - rshared
+              - rw
+
+  # Enable OpenEBS Storage ( Mayastor )
+  - |-
+    machine:
+      sysctls:
+        vm.nr_hugepages: "1024"
+      nodeLabels:
+        openebs.io/engine: mayastor
+
+  # Disable DHCP search domain
+  - |-
+    machine:
+      network:
+        disableSearchDomain: true
+
+  # NTP server configuration
+  - |-
+    machine:
+      time:
+        disabled: false
+        servers:
+          - ntp.ntsc.ac.cn
+          - ntp.aliyun.com
+          - cn.pool.ntp.org
+
+  # Enable DNS Cache, Disable Host DNS
+  - |-
+    machine:
+      features:
+        hostDNS:
+          enabled: true
+          resolveMemberNames: true
+          forwardKubeDNSToHost: false
+
+  # Cluster configuration
+  - |-
+    cluster:
+      allowSchedulingOnControlPlanes: true
+      proxy:
+        disabled: true
+      discovery:
+        enabled: true
+        registries:
+          kubernetes:
+            disabled: false
+          service:
+            disabled: true
+      network:
+        podSubnets:
+          - 10.100.0.0/17
+        serviceSubnets:
+          - 10.100.128.0/17
+
+  # Enable K8s Talos API Access for system-upgrade-controller
+  - |-
+    machine:
+      features:
+        kubernetesTalosAPIAccess:
+          enabled: true
+          allowedRoles:
+            - os:admin
+          allowedKubernetesNamespaces:
+            - kube-system
+
+  # Enable disk encryption with better encyption method, pass >= 20 characters
+  # https://github.com/siderolabs/talos/issues/8972
+  - |-
+    machine:
+      systemDiskEncryption:
+        ephemeral:
+          cipher: aes-xts-plain64
+          keySize: 256
+          keys:
+            - slot: 1
+              static:
+                passphrase: ${DiskEncryptionPass}
+          provider: luks2
+        state:
+          cipher: aes-xts-plain64
+          keySize: 256
+          keys:
+            - slot: 0
+              tpm: {}
+          provider: luks2
+
+  # Containerd configuration
+  - |-
+    machine:
+      files:
+        - op: create
+          path: /etc/cri/conf.d/20-customization.part
+          content: |
+            [plugins]
+              [plugins."io.containerd.grpc.v1.cri"]
+                enable_unprivileged_ports = true
+                enable_unprivileged_icmp = true
+              [plugins."io.containerd.grpc.v1.cri".containerd]
+                discard_unpacked_layers = false
+              [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc]
+                discard_unpacked_layers = false
+
+  # Sysctls configuration
+  - |-
+    machine:
+      sysctls:
+        fs.inotify.max_queued_events: "65535"
+        fs.inotify.max_user_instances: "8192"
+        fs.inotify.max_user_watches: "524288"
+        net.core.rmem_max: "7500000"
+        net.core.wmem_max: "7500000"
+        user.max_user_namespaces: "11255"
+
+  # Udev rules configuration
+  - |-
+    machine:
+      udev:
+        rules:
+          # Thunderbolt
+          - ACTION=="add", SUBSYSTEM=="thunderbolt", ATTR{authorized}=="0", ATTR{authorized}="1"
+          # Intel GPU i915
+          - SUBSYSTEM=="drm", KERNEL=="renderD*", GROUP="44", MODE="0660"

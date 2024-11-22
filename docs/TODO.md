@@ -1,5 +1,6 @@
 # TODO
 
+- [ ] fill in talenv.sops.yaml
 - [ ] bring up new cluster
 - [ ] test flux sync
 - [ ] tune monitoring apps
@@ -41,7 +42,7 @@
 
 ## SOPS
 
-- [X] /kubernetes/main/flux/vars/cluster-secrets.sops.yaml, CLUSTER_SECRET_CPGO_R2_ENDPOINT
+- [X] /kubernetes/main/flux/vars/cluster-secrets.sops.yaml, ~~CLUSTER_SECRET_CPGO_R2_ENDPOINT~~, CF_ACCOUNT_TAG
 - [X] /kubernetes/main/bootstrap/flux/age-key.sops.yaml, age.agekey
 - [X] /kubernetes/main/bootstrap/talos/talenv.sops.yaml
 - [X] /kubernetes/main/bootstrap/talos/talsecret.sops.yaml
