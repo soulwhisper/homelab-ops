@@ -14,7 +14,7 @@ spec:
         kind: HelmRepository
         name: coroot
         namespace: flux-system
-      version: 0.15.16
+      version: 0.16.3
 
   values:
     corootCE:
