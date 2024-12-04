@@ -38,6 +38,7 @@ spec:
         name: (image-automation-controller|image-reflector-controller)
 
     # Remove the built-in network policies
+    # => block all ingress access to the flux-system namespace, except for notification-controller webhook receiver.
     - patch: |
         $patch: delete
         apiVersion: networking.k8s.io/v1
