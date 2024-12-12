@@ -2,11 +2,11 @@
   $schema: "https://docs.renovatebot.com/renovate-schema.json",
   extends: [
     "github>soulwhisper/renovate-config",
-    "github>soulwhisper/home-ops//.renovate/allowedVersions.json5",
-    "github>soulwhisper/home-ops//.renovate/autoMerge.json5",
-    "github>soulwhisper/home-ops//.renovate/groups.json5",
-    "github>soulwhisper/home-ops//.renovate/clusters.json5",
-    "github>soulwhisper/home-ops//.renovate/grafanaDashboards.json5",
+    "github>soulwhisper/home-ops//renovate/allowedVersions.json5",
+    "github>soulwhisper/home-ops//renovate/autoMerge.json5",
+    "github>soulwhisper/home-ops//renovate/groups.json5",
+    "github>soulwhisper/home-ops//renovate/clusters.json5",
+    "github>soulwhisper/home-ops//renovate/grafanaDashboards.json5",
   ],
   ignorePaths: [".archived/**"],
   flux: {
