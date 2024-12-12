@@ -6,13 +6,13 @@
 
 _... managed by Flux, Renovate and GitHub Actions_ :robot:
 
-[![Renovate](https://img.shields.io/github/actions/workflow/status/soulwhisper/.github/schedule-renovate.yaml?branch=main&label=&logo=renovatebot&style=for-the-badge&color=blue)](https://github.com/soulwhisper/home-ops/actions/workflows/schedule-renovate.yaml)
+[![Renovate](https://img.shields.io/badge/powered_by-Renovate-blue?style=for-the-badge&logo=renovate)](https://www.mend.io/renovate/)
 
 Main k8s cluster stats:
 
-[![Kubernetes](https://img.shields.io/badge/dynamic/yaml?url=https%3A%2F%2Fraw.githubusercontent.com%2Fsoulwhisper%2Fhome-ops%2Fmain%2Fkubernetes%2Fmain%2Fbootstrap%2Ftalos%2Ftalconfig.yaml&query=%24.kubernetesVersion&flat-square&logo=kubernetes&logoColor=white&label=k8s)
+[![Kubernetes](https://img.shields.io/badge/dynamic/yaml?url=https%3A%2F%2Fraw.githubusercontent.com%2Fsoulwhisper%2Fhome-ops%2Fmain%2Fkubernetes%2Fmain%2Ftalos%2Ftalconfig.yaml&query=%24.kubernetesVersion&flat-square&logo=kubernetes&logoColor=white&label=k8s)
 ](https://www.talos.dev/)&nbsp;
-[![Talos](https://img.shields.io/badge/dynamic/yaml?url=https%3A%2F%2Fraw.githubusercontent.com%2Fsoulwhisper%2Fhome-ops%2Fmain%2Fkubernetes%2Fmain%2Fbootstrap%2Ftalos%2Ftalconfig.yaml&query=%24.talosVersion&flat-square&logo=kubernetes&logoColor=white&color=orange&label=talos)
+[![Talos](https://img.shields.io/badge/dynamic/yaml?url=https%3A%2F%2Fraw.githubusercontent.com%2Fsoulwhisper%2Fhome-ops%2Fmain%2Fkubernetes%2Fmain%2Ftalos%2Ftalconfig.yaml&query=%24.talosVersion&flat-square&logo=kubernetes&logoColor=white&color=orange&label=talos)
 ](https://www.talos.dev/)&nbsp;
 [![Age-Days](https://kromgo.noirprime.com/cluster_age_days?format=badge)](https://github.com/kashalls/kromgo/)&nbsp;
 [![Node-Count](https://kromgo.noirprime.com/cluster_node_count?format=badge)](https://github.com/kashalls/kromgo/)&nbsp;

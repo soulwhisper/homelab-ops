@@ -239,8 +239,6 @@ spec:
     ingress:
       enabled: true
       ingressClassName: internal-nginx
-      annotations:
-        external-dns.alpha.kubernetes.io/target: ingress-int.noirprime.com
       hosts:
         - host: mon.noirprime.com
           paths:

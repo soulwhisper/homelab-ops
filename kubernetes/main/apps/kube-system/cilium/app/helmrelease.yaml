@@ -39,8 +39,6 @@ spec:
         ingress:
           enabled: true
           className: "internal-nginx"
-          annotations:
-            external-dns.alpha.kubernetes.io/target: ingress-int.noirprime.com
           hosts:
             - hubble-main.noirprime.com
 

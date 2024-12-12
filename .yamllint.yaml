@@ -1,11 +1,9 @@
 ---
 ignore: |
-  .ansible/
-  .direnv/
-  .private/
+  ._assets/
+  .archived/
   .vscode/
   *.sops.*
-  ansible/roles/xanmanning.k3s/
 
 extends: default
 

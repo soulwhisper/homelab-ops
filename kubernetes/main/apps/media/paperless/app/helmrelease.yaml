@@ -114,8 +114,6 @@ spec:
     ingress:
       app:
         className: "internal-nginx"
-        annotations:
-          external-dns.alpha.kubernetes.io/target: ingress-int.noirprime.com
         hosts:
           - host: paperless.noirprime.com
             paths:
