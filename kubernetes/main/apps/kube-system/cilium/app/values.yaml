@@ -4,7 +4,8 @@ cgroup:
     enabled: false
   hostRoot: /sys/fs/cgroup
 hubble:
-  enabled: true
+  # disable hubble, use ebpf monitoring instead
+  enabled: false
   metrics:
     enableOpenMetrics: true
     enabled:

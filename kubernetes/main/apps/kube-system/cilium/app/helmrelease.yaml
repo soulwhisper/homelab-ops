@@ -21,26 +21,24 @@ spec:
       name: cilium-values
 
   values:
-    hubble:
-      serviceMonitor:
-        enabled: true
-
-      dashboards:
-        enabled: true
-        annotations:
-          grafana_folder: Cilium
-
-      relay:
-        prometheus:
-          serviceMonitor:
-            enabled: true
-
-      ui:
-        ingress:
-          enabled: true
-          className: "internal-nginx"
-          hosts:
-            - hubble-main.noirprime.com
+    # disable hubble, use ebpf monitoring instead
+    # hubble:
+    #   serviceMonitor:
+    #     enabled: true
+    #   dashboards:
+    #     enabled: true
+    #     annotations:
+    #       grafana_folder: Cilium
+    #   relay:
+    #     prometheus:
+    #       serviceMonitor:
+    #         enabled: true
+    #   ui:
+    #     ingress:
+    #       enabled: true
+    #       className: "internal-nginx"
+    #       hosts:
+    #         - hubble-main.noirprime.com
 
     operator:
       prometheus:
