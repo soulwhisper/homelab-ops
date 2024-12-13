@@ -4,7 +4,8 @@ clusterName: &clusterName main
 endpoint: "https://k8s.homelab.internal:6443"
 
 # Current stage = proxmox.vm; next = ms-01;
-# Disable secureboot and disk-encryption; use tailscale instead of kube-span & discovery-site;
+# Disable secureboot and disk-encryption; 
+# Use tailscale instead of kube-span and discovery-site;
 
 # renovate: depName=ghcr.io/siderolabs/installer datasource=docker
 talosVersion: v1.8.3
@@ -83,7 +84,8 @@ controlPlane:
         - intel_iommu=on
         - iommu=pt
         - net.ifnames=0
-        - console=ttyS0 # needed by hci, e.g. proxmox
+        # needed by hci, e.g. proxmox
+        - console=ttyS0
       systemExtensions:
         officialExtensions:
           - siderolabs/intel-ucode
@@ -92,7 +94,6 @@ controlPlane:
           - siderolabs/thunderbolt
           - siderolabs/nut-client
           - siderolabs/tailscale
-          - siderolabs/qemu-guest-agent
   extensionServices: &talos-ext
     - name: tailscale
       environment:
@@ -118,10 +119,10 @@ controlPlane:
           advertisedSubnets:
             - 172.19.82.0/24
 
-  # AdmissionControl configuration, disable PodSecurity
-    - |-
-      - op: remove
-        path: /cluster/apiServer/admissionControl
+  # AdmissionControl configuration, disable PodSecurity; use labels instead
+  #  - |-
+  #    - op: remove
+  #      path: /cluster/apiServer/admissionControl
 
 patches:
 
@@ -130,7 +131,7 @@ patches:
      machine:
        network:
          nameservers:
-           - 223.5.5.5
+           - 172.19.82.20
 
   # VIP Loopback
   - |-
@@ -146,8 +147,8 @@ patches:
   - |-
     machine:
       env:
-        http_proxy: http://172.19.82.10:1080
-        https_proxy: http://172.19.82.10:1080
+        http_proxy: http://172.19.82.20:1080
+        https_proxy: http://172.19.82.20:1080
         no_proxy: .tailscale.com,.tailscale.io,.noirprime.com,.homelab.internal,localhost,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16
 
   # Kubelet configuration, keep nodeIP if using tailscale / kubespan
@@ -197,14 +198,14 @@ patches:
           - ntp.aliyun.com
           - cn.pool.ntp.org
 
-  # Enable DNS Cache, Disable Host DNS
+  # Enable DNS Cache
   - |-
     machine:
       features:
         hostDNS:
           enabled: true
           resolveMemberNames: true
-          forwardKubeDNSToHost: false
+          forwardKubeDNSToHost: true
 
   # Cluster configuration
   - |-
@@ -216,9 +217,9 @@ patches:
         enabled: true
         registries:
           kubernetes:
-            disabled: false
-          service:
             disabled: true
+          service:
+            endpoint: http://172.19.82.20:9900
       network:
         podSubnets:
           - 10.100.0.0/17
