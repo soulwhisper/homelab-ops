@@ -1,9 +1,9 @@
 # TODO
 
-- [ ] fill in talenv.sops.yaml
 - [ ] bring up new cluster
 - [ ] test flux sync
 - [ ] tune monitoring apps
+- [ ] relocate privieged apps to "privileged", with "labels.pod-security.kubernetes.io/enforce: privileged", like "spegel".
 
 ## Infra
 
