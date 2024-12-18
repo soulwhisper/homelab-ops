@@ -3,9 +3,17 @@
 clusterName: &clusterName main
 endpoint: "https://k8s.homelab.internal:6443"
 
-# Current stage = proxmox.vm; next = ms-01;
-# Disable secureboot and disk-encryption; 
-# Use tailscale instead of kube-span and discovery-site;
+# Current stage = vm;
+# 1. disable secureboot and disk-encryption;
+# 2. use tailscale instead of kube-span;
+# 3. sorted by features first, then general optimizations;
+
+# Next stage = ms-01;
+# .todo = remove console=ttyS0;
+# .todo = enable secureboot and disk-encryption;
+# .todo = change installDisk to installDiskSelector;
+# .todo = change node subnet to 10.10.0.0/24; vip to 10.10.0.100;
+# .todo = self-hosted dns/ntp/proxy/talos-api move to 10.10.0.10;
 
 # renovate: depName=ghcr.io/siderolabs/installer datasource=docker
 talosVersion: v1.9.0
@@ -28,14 +36,15 @@ nodes:
     installDisk: /dev/sda
     networkInterfaces:
       - interface: bond0
-        deviceSelector:
-          busPath: "0*"
         dhcp: false
+        bond: &bond
+          deviceSelectors:
+            permanentAddr: '*:f0:ab'   # check MAC of 10G NICs
+        addresses:
+          - 172.19.82.101/24
         routes: &gateway
           - network: 0.0.0.0/0
             gateway: 172.19.82.1
-        addresses:
-          - 172.19.82.101/24
         vip:
           ip: *talosControlplaneVip
 
@@ -45,11 +54,10 @@ nodes:
     installDisk: /dev/sda
     networkInterfaces:
       - interface: bond0
-        deviceSelector:
-          busPath: "0*"
         dhcp: false
         addresses:
           - 172.19.82.102/24
+        bond: *bond
         routes: *gateway
         vip:
           ip: *talosControlplaneVip
@@ -60,16 +68,18 @@ nodes:
     installDisk: /dev/sda
     networkInterfaces:
       - interface: bond0
-        deviceSelector:
-          busPath: "0*"
         dhcp: false
         addresses:
           - 172.19.82.103/24
+        bond: *bond
         routes: *gateway
         vip:
           ip: *talosControlplaneVip
 
+# put general nodes configs here since allowSchedulingOnControlPlanes
 controlPlane:
+
+  # secureboot configuration
   # machineSpec:
   #   mode: metal
   #   arch: amd64
@@ -81,24 +91,27 @@ controlPlane:
   schematic: &talos-schema
     customization:
       extraKernelArgs:
-        - intel_iommu=on
-        - iommu=pt
+        - cpufreq.default_governor=performance
+        - intel_idle.max_cstate=0
         - net.ifnames=0
-        # needed by hci, e.g. proxmox
+        # hci, i.e. proxmox, needs ttyS0
         - console=ttyS0
       systemExtensions:
         officialExtensions:
+          # MS-01/N100 needs i915 and mei
           - siderolabs/intel-ucode
-          - siderolabs/i915-ucode
+          - siderolabs/i915
           - siderolabs/mei
           - siderolabs/thunderbolt
           - siderolabs/nut-client
           - siderolabs/tailscale
   extensionServices: &talos-ext
+    # tailscale for nodes
     - name: tailscale
       environment:
         - TS_AUTHKEY=${TS_AUTHKEY}
         - TS_ROUTES=10.100.0.0/17
+    # nut-client connect to proxmox-router, placeholder
     - name: nut-client
       configFiles:
         - content: |-
@@ -108,8 +121,8 @@ controlPlane:
       environment:
         - UPS_NAME=nutdev1
 
+# controlPlane only patches
   patches:
-  # controlPlane only patches
   # ETCD configuration, increase etcd quota to 8G, keep advertisedSubnets if using tailscale / kubespan
     - |-
       cluster:
@@ -124,42 +137,24 @@ controlPlane:
   #    - op: remove
   #      path: /cluster/apiServer/admissionControl
 
+# general patches
 patches:
 
-  # Nameserver configuration
+  # Kernel modules, Enable thunderbolt/USB4 networking support
   - |-
-     machine:
-       network:
-         nameservers:
-           - 172.19.82.20
-
-  # VIP Loopback
-  - |-
-     machine:
-       network:
-        extraHostEntries:
-          - ip: 172.19.82.100
-            aliases:
-              - k8s.homelab.internal
+    machine:
+      kernel:
+        modules:
+          - name: thunderbolt
+          - name: thunderbolt_net
 
   # Enable Proxy, http proxy is more stable than tproxy gateway
-  # add exception for tailscale / noirprime.com / homelab.internal
   - |-
     machine:
       env:
-        http_proxy: http://172.19.82.20:1080
-        https_proxy: http://172.19.82.20:1080
+        http_proxy: http://172.19.82.10:1080
+        https_proxy: http://172.19.82.10:1080
         no_proxy: .tailscale.com,.tailscale.io,.noirprime.com,.homelab.internal,localhost,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16
-
-  # Kubelet configuration, keep nodeIP if using tailscale / kubespan
-  - |-
-    machine:
-      kubelet:
-        extraArgs:
-          rotate-server-certificates: "true"
-        nodeIP:
-          validSubnets:
-            - 172.19.82.0/24
 
   # Enable OpenEBS Storage ( Hostpath )
   - |-
@@ -182,60 +177,48 @@ patches:
       nodeLabels:
         openebs.io/engine: mayastor
 
-  # Disable DHCP search domain
-  - |-
-    machine:
-      network:
-        disableSearchDomain: true
+  # Enable DRBD and LVM-Thin
+  # - |-
+  #   machine:
+  #     kernel:
+  #       modules:
+  #         - name: drbd
+  #           parameters:
+  #             - usermode_helper=disabled
+  #         - name: drbd_transport_tcp
+  #         - name: dm_thin_pool
 
-  # NTP server configuration
-  - |-
-    machine:
-      time:
-        disabled: false
-        servers:
-          - ntp.ntsc.ac.cn
-          - ntp.aliyun.com
-          - cn.pool.ntp.org
-
-  # Enable DNS Cache
+  # Enable features
   - |-
     machine:
       features:
+        nodeAddressSortAlgorithm: v2
         hostDNS:
           enabled: true
           resolveMemberNames: true
           forwardKubeDNSToHost: true
-
-  # Cluster configuration
-  - |-
-    cluster:
-      allowSchedulingOnControlPlanes: true
-      proxy:
-        disabled: true
-      discovery:
-        enabled: true
-        registries:
-          kubernetes:
-            disabled: true
-          service:
-            endpoint: http://172.19.82.20:9900
-      network:
-        podSubnets:
-          - 10.100.0.0/17
-        serviceSubnets:
-          - 10.100.128.0/17
-
-  # Enable K8s Talos API Access for system-upgrade-controller
-  - |-
-    machine:
-      features:
         kubernetesTalosAPIAccess:
           enabled: true
           allowedRoles:
             - os:admin
           allowedKubernetesNamespaces:
             - kube-system
+
+  # Enable userspaces, isolate privileged containers
+  # https://kubernetes.io/docs/tasks/configure-pod-container/user-namespaces/
+  - |-
+    cluster:
+      apiServer:
+        extraArgs:
+          feature-gates: UserNamespacesSupport=true,UserNamespacesPodSecurityStandards=true
+    machine:
+      sysctls:
+        user.max_user_namespaces: "11255"
+      kubelet:
+        extraConfig:
+          featureGates:
+            UserNamespacesSupport: true
+            UserNamespacesPodSecurityStandards: true
 
   # Enable disk encryption with better encyption method, pass >= 20 characters
   # https://github.com/siderolabs/talos/issues/8972
@@ -257,6 +240,56 @@ patches:
   #           - slot: 0
   #             tpm: {}
   #         provider: luks2
+
+  # NTP configuration, ip for baremetal, '/dev/ptp0' for proxmox
+  - |-
+    machine:
+      time:
+        disabled: false
+        servers:
+          - 172.19.82.10
+
+  # Network configuration
+  - |-
+     machine:
+       network:
+        nameservers:
+          - 172.19.82.10
+        disableSearchDomain: false
+        searchDomains: homelab.internal
+        extraHostEntries:
+          - ip: 172.19.82.100
+            aliases:
+              - k8s.homelab.internal
+
+  # Kubelet configuration
+  - |-
+    machine:
+      kubelet:
+        extraArgs:
+          rotate-server-certificates: "true"
+        nodeIP:
+          validSubnets:
+            - 172.19.82.0/24
+
+  # Cluster configuration
+  - |-
+    cluster:
+      allowSchedulingOnControlPlanes: true
+      proxy:
+        disabled: true
+      discovery:
+        enabled: true
+        registries:
+          kubernetes:
+            disabled: true
+          service:
+            endpoint: http://172.19.82.10:9900
+      network:
+        podSubnets:
+          - 10.100.0.0/17
+        serviceSubnets:
+          - 10.100.128.0/17
 
   # Containerd configuration
   - |-
@@ -283,14 +316,11 @@ patches:
         fs.inotify.max_user_watches: "524288"
         net.core.rmem_max: "7500000"
         net.core.wmem_max: "7500000"
-        user.max_user_namespaces: "11255"
 
-  # Udev rules configuration
+  # Udev configuration, thunderbolt & i915
   - |-
     machine:
       udev:
         rules:
-          # Thunderbolt
           - ACTION=="add", SUBSYSTEM=="thunderbolt", ATTR{authorized}=="0", ATTR{authorized}="1"
-          # Intel GPU i915
           - SUBSYSTEM=="drm", KERNEL=="renderD*", GROUP="44", MODE="0660"
