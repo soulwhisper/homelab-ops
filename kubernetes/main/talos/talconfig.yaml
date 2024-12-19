@@ -8,12 +8,12 @@ endpoint: "https://k8s.homelab.internal:6443"
 # 2. use tailscale instead of kube-span;
 # 3. sorted by features first, then general optimizations;
 
-# Next stage = ms-01;
+# Next stage = ms-01; needs intel-ucode / i915 / mei;
 # .todo = remove console=ttyS0;
 # .todo = enable secureboot and disk-encryption;
 # .todo = change installDisk to installDiskSelector;
 # .todo = change node subnet to 10.10.0.0/24; vip to 10.10.0.100;
-# .todo = self-hosted dns/ntp/proxy/talos-api move to 10.10.0.10;
+# .todo = change self-hosted dns/ntp/proxy/talos-api to 10.10.0.10;
 
 # renovate: depName=ghcr.io/siderolabs/installer datasource=docker
 talosVersion: v1.9.0
@@ -93,12 +93,9 @@ controlPlane:
       extraKernelArgs:
         - cpufreq.default_governor=performance
         - intel_idle.max_cstate=0
-        - net.ifnames=0
-        # hci, i.e. proxmox, needs ttyS0
         - console=ttyS0
       systemExtensions:
         officialExtensions:
-          # MS-01/N100 needs i915 and mei
           - siderolabs/intel-ucode
           - siderolabs/i915
           - siderolabs/mei
@@ -106,12 +103,10 @@ controlPlane:
           - siderolabs/nut-client
           - siderolabs/tailscale
   extensionServices: &talos-ext
-    # tailscale for nodes
     - name: tailscale
       environment:
         - TS_AUTHKEY=${TS_AUTHKEY}
         - TS_ROUTES=10.100.0.0/17
-    # nut-client connect to proxmox-router, placeholder
     - name: nut-client
       configFiles:
         - content: |-
