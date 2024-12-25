@@ -184,6 +184,7 @@ patches:
   #         - name: dm_thin_pool
 
   # Enable features
+  ## fix https://github.com/siderolabs/talos/pull/9200;
   - |-
     machine:
       features:
@@ -191,7 +192,7 @@ patches:
         hostDNS:
           enabled: true
           resolveMemberNames: true
-          forwardKubeDNSToHost: true
+          forwardKubeDNSToHost: false
         kubernetesTalosAPIAccess:
           enabled: true
           allowedRoles:
