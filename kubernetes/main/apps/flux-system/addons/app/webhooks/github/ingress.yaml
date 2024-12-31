@@ -9,7 +9,7 @@ spec:
     - host: flux-webhook.noirprime.com
       http:
         paths:
-          - path: /hook/
+          - path: /main/
             pathType: Prefix
             backend:
               service:
