@@ -4,6 +4,7 @@
 - [ ] test flux sync
 - [ ] tune monitoring apps
 - [ ] relocate privieged apps to "privileged", with "labels.pod-security.kubernetes.io/enforce: privileged", like "spegel".
+- [ ] update github webooks url, [ref](https://fluxcd.io/flux/guides/webhook-receivers/#define-a-git-repository-receiver);
 
 ## Infra
 
