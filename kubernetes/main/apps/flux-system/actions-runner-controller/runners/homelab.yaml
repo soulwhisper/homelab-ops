@@ -15,6 +15,8 @@ spec:
         kind: HelmRepository
         name: actions-runner-controller
         namespace: flux-system
+  driftDetection:
+    mode: enabled
 
   values:
     runnerGroup: arc-homelab
@@ -26,11 +28,17 @@ spec:
     maxRunners: 6
 
     containerMode:
-      type: "dind"
+      type: kubernetes
+      kubernetesModeWorkVolumeClaim:
+        accessModes: ["ReadWriteOnce"]
+        storageClassName: openebs-rep2
+        resources:
+          requests:
+            storage: 10Gi
 
     controllerServiceAccount:
-      name: actions-runner-controller-gha-rs-controller
-      namespace: dev
+      name: actions-runner-controller
+      namespace: flux-system
 
     listenerTemplate:
       metadata:
@@ -48,6 +56,11 @@ spec:
           - name: runner
             image: ghcr.io/onedr0p/actions-runner:2.321.0@sha256:a7539dc157f3f0129f49459826576ab53a529580916bb8a09a395e61e38354c0
             command: ["/home/runner/run.sh"]
+            env:
+              - name: ACTIONS_RUNNER_REQUIRE_JOB_CONTAINER
+                value: "false"
+        securityContext:
+          fsGroup: 123
 
   valuesFrom:
     - kind: Secret

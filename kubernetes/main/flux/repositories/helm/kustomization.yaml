@@ -11,6 +11,7 @@ resources:
   - deepflow.yaml
   - external-secrets.yaml
   - fluent.yaml
+  - flux-operator.yaml
   - grafana.yaml
   - ingress-nginx.yaml
   - intel.yaml

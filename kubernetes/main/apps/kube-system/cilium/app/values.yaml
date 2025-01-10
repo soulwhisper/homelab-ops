@@ -45,6 +45,8 @@ securityContext:
       - IPC_LOCK
       - SYS_ADMIN
       - SYS_RESOURCE
+      - PERFMON
+      - BPF
       - DAC_OVERRIDE
       - FOWNER
       - SETGID
@@ -60,6 +62,8 @@ l2announcements:
 loadBalancer:
   acceleration: native
   mode: hybrid
+bgpControlPlane:
+  enabled: true
 bpf:
   masquerade: true
   datapathMode: netkit
