@@ -12,6 +12,7 @@
       matchDatasources: ["helm", "docker"],
       group: {
         commitMessageTopic: "{{{groupName}}} group",
+        commitMessageSuffix: ""
       },
     },
     {
@@ -24,6 +25,7 @@
       matchDatasources: ["helm", "docker"],
       group: {
         commitMessageTopic: "{{{groupName}}} group",
+        commitMessageSuffix: ""
       },
     },
     {
@@ -36,6 +38,7 @@
       matchDatasources: ["docker"],
       group: {
         commitMessageTopic: "{{{groupName}}} group",
+        commitMessageSuffix: ""
       },
     },
     {
@@ -45,6 +48,7 @@
       matchDatasources: ["docker"],
       group: {
         commitMessageTopic: "{{{groupName}}} group",
+        commitMessageSuffix: ""
       },
     },
   ],
