@@ -6,6 +6,6 @@ metadata:
   name: backube
   namespace: gitops-system
 spec:
-  interval: 5m
+  interval: 10m
   
   url: https://backube.github.io/helm-charts/

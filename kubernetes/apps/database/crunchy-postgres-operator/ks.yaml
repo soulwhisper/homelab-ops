@@ -6,13 +6,12 @@ metadata:
   name: &appname crunchy-postgres-operator
   namespace: gitops-system
 spec:
-  targetNamespace: database
+  targetNamespace: database-system
   commonMetadata:
     labels:
       app.kubernetes.io/name: *appname
-  interval: 5m
-  
-  path: ./kubernetes/apps/database/crunchy-postgres-operator/operator
+  interval: 10m
+  path: ./kubernetes/apps/database-system/crunchy-postgres-operator/operator
   prune: true
   sourceRef:
     kind: GitRepository
@@ -26,13 +25,12 @@ metadata:
   name: &appname crunchy-postgres-operator-cluster
   namespace: gitops-system
 spec:
-  targetNamespace: database
+  targetNamespace: database-system
   commonMetadata:
     labels:
       app.kubernetes.io/name: *appname
-  interval: 5m
-  
-  path: ./kubernetes/apps/database/crunchy-postgres-operator/cluster
+  interval: 10m
+  path: ./kubernetes/apps/database-system/crunchy-postgres-operator/cluster
   prune: true
   sourceRef:
     kind: GitRepository
@@ -48,13 +46,12 @@ metadata:
   name: &appname crunchy-postgres-operator-secretstore
   namespace: gitops-system
 spec:
-  targetNamespace: database
+  targetNamespace: database-system
   commonMetadata:
     labels:
       app.kubernetes.io/name: *appname
-  interval: 5m
-  
-  path: ./kubernetes/apps/database/crunchy-postgres-operator/clustersecretstore
+  interval: 10m
+  path: ./kubernetes/apps/database-system/crunchy-postgres-operator/clustersecretstore
   prune: true
   sourceRef:
     kind: GitRepository
@@ -71,13 +68,12 @@ metadata:
   name: &appname crunchy-postgres-userinit-controller
   namespace: gitops-system
 spec:
-  targetNamespace: database
+  targetNamespace: database-system
   commonMetadata:
     labels:
       app.kubernetes.io/name: *appname
-  interval: 5m
-  
-  path: ./kubernetes/apps/database/crunchy-postgres-operator/userinit-controller
+  interval: 10m
+  path: ./kubernetes/apps/database-system/crunchy-postgres-operator/userinit-controller
   prune: true
   sourceRef:
     kind: GitRepository

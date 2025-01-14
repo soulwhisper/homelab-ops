@@ -6,6 +6,6 @@ metadata:
   name: deepflow
   namespace: gitops-system
 spec:
-  interval: 5m
+  interval: 10m
   
   url: https://deepflowio.github.io/deepflow

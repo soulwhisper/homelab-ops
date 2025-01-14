@@ -6,13 +6,12 @@ metadata:
   name: &appname grafana
   namespace: gitops-system
 spec:
-  targetNamespace: monitoring
+  targetNamespace: monitoring-system
   commonMetadata:
     labels:
       app.kubernetes.io/name: *appname
-  interval: 5m
-  
-  path: "./kubernetes/apps/monitoring/grafana/app"
+  interval: 10m
+  path: "./kubernetes/apps/monitoring-system/grafana/app"
   prune: true
   sourceRef:
     kind: GitRepository

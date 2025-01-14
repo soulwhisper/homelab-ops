@@ -5,6 +5,6 @@ kind: HelmRepository
 metadata:
   name: fluent
 spec:
-  interval: 5m
+  interval: 10m
   
   url: https://fluent.github.io/helm-charts

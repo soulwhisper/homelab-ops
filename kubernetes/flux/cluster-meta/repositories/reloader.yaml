@@ -6,5 +6,5 @@ metadata:
   name: stakater
   namespace: gitops-system
 spec:
-  interval: 5m
+  interval: 10m
   url: oci://ghcr.io/stakater/charts

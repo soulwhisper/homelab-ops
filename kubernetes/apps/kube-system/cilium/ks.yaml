@@ -10,7 +10,7 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *appname
-  interval: 5m
+  interval: 10m
   
   path: "./kubernetes/apps/kube-system/cilium/app"
   prune: true
@@ -31,7 +31,7 @@ spec:
     labels:
       app.kubernetes.io/name: cilium
       app.kubernetes.io/component: config
-  interval: 5m
+  interval: 10m
   
   path: "./kubernetes/apps/kube-system/cilium/config"
   prune: true

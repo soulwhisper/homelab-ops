@@ -6,7 +6,7 @@ metadata:
   name: cluster-meta
   namespace: gitops-system
 spec:
-  interval: 5m
+  interval: 10m
   targetNamespace: gitops-system
   path: ./kubernetes/flux/cluster-meta
   prune: true

@@ -6,13 +6,12 @@ metadata:
   name: &appname clickhouse
   namespace: gitops-system
 spec:
-  targetNamespace: database
+  targetNamespace: database-system
   commonMetadata:
     labels:
       app.kubernetes.io/name: *appname
-  interval: 5m
-  
-  path: "./kubernetes/apps/database/clickhouse/app"
+  interval: 10m
+  path: "./kubernetes/apps/database-system/clickhouse/app"
   prune: true
   sourceRef:
     kind: GitRepository

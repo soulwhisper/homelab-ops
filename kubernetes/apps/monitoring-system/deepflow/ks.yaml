@@ -10,7 +10,7 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *appname
-  interval: 5m
+  interval: 10m
   path: "./kubernetes/apps/monitoring-system/deepflow/app"
   prune: true
   sourceRef:

@@ -5,13 +5,12 @@ metadata:
   name: &appname qryn
   namespace: gitops-system
 spec:
-  targetNamespace: monitoring
+  targetNamespace: monitoring-system
   commonMetadata:
     labels:
       app.kubernetes.io/name: *appname
-  interval: 5m
-  
-  path: "./kubernetes/apps/monitoring/qryn/app"
+  interval: 10m
+  path: "./kubernetes/apps/monitoring-system/qryn/app"
   prune: true
   sourceRef:
     kind: GitRepository

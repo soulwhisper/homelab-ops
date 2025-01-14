@@ -6,6 +6,6 @@ metadata:
   name: kubernetes-sigs-descheduler
   namespace: gitops-system
 spec:
-  interval: 5m
+  interval: 10m
   
   url: https://kubernetes-sigs.github.io/descheduler

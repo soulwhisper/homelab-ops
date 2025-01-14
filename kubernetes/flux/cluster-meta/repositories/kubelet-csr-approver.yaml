@@ -6,6 +6,6 @@ metadata:
   name: postfinance
   namespace: gitops-system
 spec:
-  interval: 5m
+  interval: 10m
   
   url: https://postfinance.github.io/kubelet-csr-approver

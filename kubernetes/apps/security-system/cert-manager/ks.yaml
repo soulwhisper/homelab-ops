@@ -10,7 +10,7 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *appname
-  interval: 5m
+  interval: 10m
   path: "./kubernetes/apps/security-system/cert-manager/app"
   prune: true
   sourceRef:
@@ -29,7 +29,7 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *appname
-  interval: 5m
+  interval: 10m
   path: "./kubernetes/apps/security-system/cert-manager/issuers"
   prune: true
   sourceRef:

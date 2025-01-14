@@ -6,6 +6,6 @@ metadata:
   name: grafana
   namespace: gitops-system
 spec:
-  interval: 5m
+  interval: 10m
   
   url: https://grafana.github.io/helm-charts

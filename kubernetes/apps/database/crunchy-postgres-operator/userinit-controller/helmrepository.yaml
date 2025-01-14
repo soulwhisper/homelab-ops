@@ -5,6 +5,5 @@ kind: HelmRepository
 metadata:
   name: crunchy-userinit
 spec:
-  interval: 5m
+  interval: 10m
   url: https://ramblurr.github.io/crunchy-userinit-controller
-  

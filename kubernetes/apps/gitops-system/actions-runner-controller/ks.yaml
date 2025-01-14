@@ -10,7 +10,7 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *appname
-  interval: 5m
+  interval: 10m
   path: "./kubernetes/apps/gitops-system/actions-runner-controller/operator"
   prune: true
   sourceRef:
@@ -32,7 +32,7 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *appname
-  interval: 5m
+  interval: 10m
   path: "./kubernetes/apps/gitops-system/actions-runner-controller/runners"
   prune: true
   sourceRef:
