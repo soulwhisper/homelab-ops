@@ -5,15 +5,15 @@ kind: HelmRelease
 metadata:
   name: clickhouse
 spec:
-  interval: 30m
-  timeout: 5m
+  interval: 5m
+  
   chart:
     spec:
       chart: clickhouse
       sourceRef:
         kind: HelmRepository
         name: clickhouse
-        namespace: flux-system
+        namespace: gitops-system
       version: 6.3.1
 
   values:

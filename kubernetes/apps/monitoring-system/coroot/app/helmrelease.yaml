@@ -1,0 +1,31 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrelease-helm-v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: coroot
+spec:
+  interval: 5m
+  chart:
+    spec:
+      chart: coroot
+      sourceRef:
+        kind: HelmRepository
+        name: coroot
+        namespace: gitops-system
+      version: 0.16.12
+
+  values:
+    corootCE:
+      env:
+        - name: AUTH_ANONYMOUS_ROLE
+          value: Admin
+
+      ingress:
+        enabled: true
+        className: internal-nginx
+        hosts:
+          - host: mon.noirprime.com
+            paths:
+              - path: /coroot/
+                pathType: ImplementationSpecific

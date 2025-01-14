@@ -1,0 +1,29 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: deepflow
+spec:
+  interval: 5m
+  chart:
+    spec:
+      chart: deepflow
+      sourceRef:
+        kind: HelmRepository
+        name: deepflow
+        namespace: gitops-system
+      version: 6.5.012
+
+  values:
+    global:
+      image:
+        repository: deepflowce
+
+    grafana:
+      image:
+        repository: deepflowce
+
+    server:
+      service:
+        externalTrafficPolicy: Local

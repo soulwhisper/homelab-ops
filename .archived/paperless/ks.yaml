@@ -1,0 +1,29 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: &appname paperless
+  namespace: gitops-system
+spec:
+  targetNamespace: media-apps
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *appname
+  interval: 5m
+  path: "./kubernetes/apps/media-apps/paperless/app"
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: gitops-system
+  wait: false
+  dependsOn:
+    - name: volsync
+    - name: external-secrets-stores
+  postBuild:
+    substitute:
+      APP: *appname
+      APP_UID: "1000"
+      APP_GID: "65542"
+      VOLSYNC_CLAIM: paperless-data
+      VOLSYNC_CAPACITY: 15Gi
