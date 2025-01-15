@@ -1,6 +1,6 @@
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/budimanjojo/talhelper/master/pkg/config/schemas/talconfig.json
-clusterName: &clusterName main
+clusterName: &clusterName homelab
 endpoint: "https://k8s.homelab.internal:6443"
 
 # Current stage = vm;

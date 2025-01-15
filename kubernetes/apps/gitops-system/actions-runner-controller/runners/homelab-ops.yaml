@@ -6,7 +6,6 @@ metadata:
   name: arc-homelab-ops
 spec:
   interval: 10m
-  
   chart:
     spec:
       chart: actions-runner-controller-charts/gha-runner-scale-set
@@ -19,8 +18,6 @@ spec:
     mode: enabled
 
   values:
-    runnerScaleSetName: arc-homelab-ops
-
     githubConfigUrl: https://github.com/soulwhisper/home-ops
 
     minRunners: 0
@@ -39,23 +36,13 @@ spec:
       name: actions-runner-controller
       namespace: gitops-system
 
-    listenerTemplate:
-      metadata:
-        labels:
-          app.kubernetes.io/name: arc-homelab-ops-listener
-      spec:
-        containers: []
-
     template:
-      metadata:
-        labels:
-          app.kubernetes.io/name: arc-homelab-ops-runner
       spec:
-        automountServiceAccountToken: true
         containers:
           - name: runner
             image: ghcr.io/onedr0p/actions-runner:2.321.0@sha256:a7539dc157f3f0129f49459826576ab53a529580916bb8a09a395e61e38354c0
-            command: ["/home/runner/run.sh"]
+            command:
+              - /home/runner/run.sh
             env:
               - name: ACTIONS_RUNNER_REQUIRE_JOB_CONTAINER
                 value: "false"
@@ -67,8 +54,6 @@ spec:
               - mountPath: /var/run/secrets/talos.dev
                 name: talos
                 readOnly: true
-        securityContext:
-          fsGroup: 123
         serviceAccountName: actions-runner
         volumes:
           - name: talos

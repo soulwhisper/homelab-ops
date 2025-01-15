@@ -1,33 +1,38 @@
 ---
+autoDirectNodeRoutes: true
+bandwidthManager:
+  enabled: true
+  bbr: true
+bgpControlPlane:
+  enabled: true
+bpf:
+  datapathMode: netkit
+  masquerade: true
+  tproxy: true
 cgroup:
   autoMount:
     enabled: false
   hostRoot: /sys/fs/cgroup
+cni:
+  exclusive: false
+devices: bond+
+enableIPv4BIGTCP: true
+endpointRoutes:
+  enabled: true
 hubble:
-  # disable hubble, use ebpf monitoring instead
-  enabled: false
-  metrics:
-    enableOpenMetrics: true
-    enabled:
-      - dns
-      - drop
-      - tcp
-      - flow
-      - port-distribution
-      - icmp
-      - httpV2:exemplars=true;labelsContext=source_ip,source_namespace,source_workload,destination_ip,destination_namespace,destination_workload,traffic_direction
-  relay:
-    enabled: true
-    rollOutPods: true
-  ui:
-    enabled: true
-    rollOutPods: true
+  enabled: false # hubble disabled, use ebpf monitoring instead
 ipam:
   mode: "kubernetes"
+ipv4NativeRoutingCIDR: 10.100.0.0/17
 k8sServiceHost: localhost
 k8sServicePort: 7445
 kubeProxyReplacement: true
 kubeProxyReplacementHealthzBindAddr: 0.0.0.0:10256
+l2announcements:
+  enabled: true
+loadBalancer:
+  acceleration: native
+  mode: hybrid
 operator:
   rollOutPods: true
   prometheus:
@@ -35,6 +40,7 @@ operator:
 prometheus:
   enabled: true
 rollOutCiliumPods: true
+routingMode: native
 securityContext:
   capabilities:
     ciliumAgent:
@@ -55,26 +61,4 @@ securityContext:
       - NET_ADMIN
       - SYS_ADMIN
       - SYS_RESOURCE
-cni:
-  exclusive: false
-l2announcements:
-  enabled: true
-loadBalancer:
-  acceleration: native
-  mode: hybrid
-bgpControlPlane:
-  enabled: true
-bpf:
-  masquerade: true
-  datapathMode: netkit
-  tproxy: true
-bandwidthManager:
-  enabled: true
-  bbr: true
-devices: bond+
-enableIPv4BIGTCP: true
-routingMode: native
-ipv4NativeRoutingCIDR: 10.100.0.0/17
-autoDirectNodeRoutes: true
-endpointRoutes:
-  enabled: true
+

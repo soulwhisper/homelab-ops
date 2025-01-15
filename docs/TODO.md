@@ -1,5 +1,6 @@
 # TODO
 
+- [ ] add a special openebs storageclass for tmpfs, i.e. actions-runner
 - [ ] put more secrets into 1password, check "kubernetes/bootstrap/templates/resources.yaml.j2" and "kubernetes/talos/talsecret.yaml"
 - [ ] fix system-upgrade-controller installer-id
 - [ ] bring up new cluster
