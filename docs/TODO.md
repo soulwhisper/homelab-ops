@@ -12,16 +12,16 @@
 ## Infra
 
 - `infra/scripts/minio-bucket-keys.py`, create minio buckets, service accounts and policies for k8s apps, using 1password keys.
+- offsite backup ( volsync ) using minio @ nix-infra;
+- since migrated to MS-01, openebs-hostpath is disabled with using 256G system disk.
 
 ## Pre-deployment
 
-- only hostname use `homelab.internal`
-- `172.19.82.10`, clash-proxy / adguard / minio / traefik, dns-01, `s3.noirprime.com`
-- `172.19.82.201-250` used as cilium l2 loadbalancer ip
-- s3: `s3.noirprime.com`, minio, create buckets, assgin keys; traefik-dns-01;
-- mon: `mon.noirprime.com`, `/coroot/` for coroot, `/grafana/` for grafana
-- cilium use interface:bond0, currently only one interface in VM
-- self-hosted-runner, label:arc-homelab
+- `10.10.0.11-13` as k8s nodes
+- `10.10.0.101-250` as cilium l2 loadbalancer ip
+- minio: `s3.noirprime.com`, create buckets, assgin keys
+- monitoring: `mon.noirprime.com`, `/coroot/` for coroot, `/grafana/` for grafana
+- self-hosted-runner, label:arc-homelab / label:arc-homelab-ops
 
 ## Deployment-order
 
@@ -51,7 +51,14 @@
 - [X] /kubernetes/bootstrap/talos/talsecret.sops.yaml
 - [X] /kubernetes/apps/security/onepassword-connect/app/secret.sops.yaml, 1password-credentials.json, token
 
-## Changelog
+## Hardware
 
-- remove `/kubernetes/bootstrap/flux/kustomization.yaml`
-- archive old monitoring system; replace with coroot as general board, clickhouse-qryn-alloy-grafana as backups;
+- NodeCount: 3
+- Frame: Miniforum MS-01
+- CPU: Intel 13900H
+- RAM: Crucial DDR5 5600MHz 48G X2
+- SystemDisk: Advantech A+E 2230 SSD 256G, replace WIFI
+- StorageDisk1: SK Hynix P31 2TB X1
+- StorageDisk2: SK Hynix P41 2TB X1
+- StorageDisk3: Kioxia CM6/CD6 10+TB X1
+- Switch: H3C S6300-48S

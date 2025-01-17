@@ -151,18 +151,18 @@ patches:
         https_proxy: http://172.19.82.10:1080
         no_proxy: .tailscale.com,.tailscale.io,.noirprime.com,.homelab.internal,localhost,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16
 
-  # Enable OpenEBS Storage ( Hostpath )
-  - |-
-    machine:
-      kubelet:
-        extraMounts:
-          - destination: /var/local/openebs
-            type: bind
-            source: /var/local/openebs
-            options:
-              - rbind
-              - rshared
-              - rw
+  # Enable OpenEBS Storage ( Hostpath ), disabled for MS-01 256G system disk
+  # - |-
+  #   machine:
+  #     kubelet:
+  #       extraMounts:
+  #         - destination: /var/local/openebs
+  #           type: bind
+  #           source: /var/local/openebs
+  #           options:
+  #             - rbind
+  #             - rshared
+  #             - rw
 
   # Enable OpenEBS Storage ( Mayastor )
   - |-

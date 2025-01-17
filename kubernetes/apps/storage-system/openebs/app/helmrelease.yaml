@@ -18,7 +18,7 @@ spec:
   values:
     localpv-provisioner:
       hostpathClass:
-        enabled: true
+        enabled: false # disabled for ms-01 256G system disk
         name: openebs-hostpath
         isDefaultClass: false
         basePath: /var/local/openebs
