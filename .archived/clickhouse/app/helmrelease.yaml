@@ -17,7 +17,7 @@ spec:
 
   values:
     global:
-      defaultStorageClass: openebs-rep2
+      defaultStorageClass: openebs-rep3
 
     auth:
       username: clickhouse

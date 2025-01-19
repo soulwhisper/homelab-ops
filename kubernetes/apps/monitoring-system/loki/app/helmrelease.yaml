@@ -68,7 +68,7 @@ spec:
       replicas: 1
       persistence:
         enabled: true
-        storageClass: openebs-rep2
+        storageClass: openebs-rep3
         size: 30Gi
     test:
       enabled: false

@@ -27,7 +27,7 @@ spec:
       type: kubernetes
       kubernetesModeWorkVolumeClaim:
         accessModes: ["ReadWriteOnce"]
-        storageClassName: openebs-rep2
+        storageClassName: openebs-rep1
         resources:
           requests:
             storage: 10Gi

@@ -5,7 +5,7 @@ metadata:
   name: openebs-pool-01
   namespace: storage-system
 spec:
-  node: Exarch-01
+  node: exarch-01
   disks: ["/dev/sdb"]
 ---
 apiVersion: "openebs.io/v1beta2"
@@ -14,7 +14,7 @@ metadata:
   name: openebs-pool-02
   namespace: storage-system
 spec:
-  node: Exarch-02
+  node: exarch-02
   disks: ["/dev/sdb"]
 ---
 apiVersion: "openebs.io/v1beta2"
@@ -23,5 +23,5 @@ metadata:
   name: openebs-pool-03
   namespace: storage-system
 spec:
-  node: Exarch-03
+  node: exarch-03
   disks: ["/dev/sdb"]
