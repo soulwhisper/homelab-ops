@@ -40,7 +40,4 @@ jobs:
           token: ${{ steps.app-token.outputs.token }}
           title: "chore(yaml): Fix format"
           commit-message: "chore(yaml): Fix format"
-          body: |
-            ## Summary
-            ${{ steps.devenv-test.outputs }}
           delete-branch: true
