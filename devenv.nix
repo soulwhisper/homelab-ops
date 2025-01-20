@@ -71,7 +71,7 @@
       # pre-commit-hook-ensure-sops.enable = true;
       # pre-commit-hook-ensure-sops.files = "\.sops\.(toml|ya?ml)$";
       # shellcheck.enable = true;
-      trim-trailing-whitespace.enable = true;
+      # trim-trailing-whitespace.enable = true;
       mixed-line-endings.enable = true;
     };
   };
