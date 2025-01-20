@@ -6,6 +6,7 @@
     "github>soulwhisper/home-ops//renovate/autoMerge.json5",
     "github>soulwhisper/home-ops//renovate/groups.json5",
     "github>soulwhisper/home-ops//renovate/grafanaDashboards.json5",
+    "github>soulwhisper/home-ops//renovate/regexManagers.json5",
   ],
   ignorePaths: [".archived/**"],
   flux: {
@@ -13,7 +14,7 @@
   },
   "helm-values": {
     fileMatch: ["^kubernetes/.+\\.ya?ml$"],
-    "pinDigests": true,
+    pinDigests: true,
   },
   kubernetes: {
     fileMatch: ["^kubernetes/.+\\.ya?ml$"],
