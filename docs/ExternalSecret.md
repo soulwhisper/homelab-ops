@@ -24,19 +24,14 @@
 
 ```json
 {
- "Version": "",
- "Statement": [
-  {
-   "Effect": "Allow",
-   "Action": [
-    "s3:*"
-   ],
-   "Resource": [
-    "arn:aws:s3:::volsync/*",
-    "arn:aws:s3:::volsync"
-   ]
-  }
- ]
+  "Version": "",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": ["s3:*"],
+      "Resource": ["arn:aws:s3:::volsync/*", "arn:aws:s3:::volsync"]
+    }
+  ]
 }
 ```
 
