@@ -10,4 +10,3 @@ resources:
   - ./deepflow/ks.yaml
   - ./grafana-alloy/ks.yaml
   - ./coroot/ks.yaml
-

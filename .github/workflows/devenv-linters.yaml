@@ -32,7 +32,7 @@ jobs:
       - name: Build devenv then run git hooks
         id: devenv-test
         run: devenv test
-      - name: Create Pull 
+      - name: Create Pull
         if: failure()
         id: create-pull-request
         uses: peter-evans/create-pull-request@67ccf781d68cd99b580ae25a5c18a1cc84ffff1f # v7

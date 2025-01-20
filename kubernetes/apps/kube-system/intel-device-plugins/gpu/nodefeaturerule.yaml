@@ -10,22 +10,22 @@ spec:
       matchFeatures:
         - feature: pci.device
           matchExpressions:
-            vendor: {op: In, value: ["8086"]}
-            class: {op: In, value: ["0300", "0380"]}
+            vendor: { op: In, value: ["8086"] }
+            class: { op: In, value: ["0300", "0380"] }
       matchAny:
         - matchFeatures:
-          - feature: kernel.loadedmodule
-            matchExpressions:
-              i915: {op: Exists}
+            - feature: kernel.loadedmodule
+              matchExpressions:
+                i915: { op: Exists }
         - matchFeatures:
-          - feature: kernel.enabledmodule
-            matchExpressions:
-              i915: {op: Exists}
+            - feature: kernel.enabledmodule
+              matchExpressions:
+                i915: { op: Exists }
         - matchFeatures:
-          - feature: kernel.loadedmodule
-            matchExpressions:
-              xe: {op: Exists}
+            - feature: kernel.loadedmodule
+              matchExpressions:
+                xe: { op: Exists }
         - matchFeatures:
-          - feature: kernel.enabledmodule
-            matchExpressions:
-              xe: {op: Exists}
+            - feature: kernel.enabledmodule
+              matchExpressions:
+                xe: { op: Exists }
