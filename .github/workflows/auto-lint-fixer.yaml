@@ -36,6 +36,6 @@ jobs:
         uses: peter-evans/create-pull-request@67ccf781d68cd99b580ae25a5c18a1cc84ffff1f # v7
         with:
           token: ${{ steps.app-token.outputs.token }}
-          title: "[Auto]: Fix linting issues"
-          commit-message: "[Auto]: Fix linting issues"
+          title: "chore(lint): Fix linting issues"
+          commit-message: "chore(lint): Fix linting issues"
           delete-branch: true
