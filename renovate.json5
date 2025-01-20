@@ -13,6 +13,7 @@
   },
   "helm-values": {
     fileMatch: ["^kubernetes/.+\\.ya?ml$"],
+    "pinDigests": true,
   },
   kubernetes: {
     fileMatch: ["^kubernetes/.+\\.ya?ml$"],
