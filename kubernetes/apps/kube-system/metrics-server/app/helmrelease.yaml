@@ -6,7 +6,6 @@ metadata:
   name: metrics-server
 spec:
   interval: 10m
-  
   chart:
     spec:
       chart: metrics-server

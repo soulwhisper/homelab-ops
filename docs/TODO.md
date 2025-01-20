@@ -10,7 +10,7 @@
 
 ## Infra
 
-- `infra/scripts/minio-bucket-keys.py`, create minio buckets, service accounts and policies for k8s apps, using 1password keys.
+- `infra/scripts/minio-bucket-keys.sh`, create minio buckets, service accounts and policies for k8s apps, using 1password keys.
 - offsite backup ( volsync ) use minio @ nix-infra;
 - openebs-hostpath, disabled due to MS-01 using 256G system disk;
 - openebs-rep3, for database and apps;

@@ -12,9 +12,9 @@
 
 ### Cloudflare
 
-* cloudflared-tunnel => zero-trust / networks / tunnels => homelab-ingress-ext; ingress-ext.noirprime.com, http://localhost:8080
-* cloudflare, dns-01, noirprime.com: user-profile =>api-tokens, ZONE:READ / DNS:EDIT
-* CLUSTER_SECRET_CPGO_R2_ENDPOINT = https://${CF_ACCOUNT_TAG}.r2.cloudflarestorage.com
+- cloudflared-tunnel => zero-trust / networks / tunnels => homelab-ingress-ext; ingress-ext.noirprime.com, http://localhost:8080
+- cloudflare, dns-01, noirprime.com: user-profile =>api-tokens, ZONE:READ / DNS:EDIT
+- CLUSTER_SECRET_CPGO_R2_ENDPOINT = https://${CF_ACCOUNT_TAG}.r2.cloudflarestorage.com
 
 ### Minio
 
@@ -22,8 +22,7 @@
 - region = us-east-1
 - versioning = disabled; object-locking = disabled; quota = disabled;
 
-```
-# access-key-policy-rw-example
+```json
 {
  "Version": "",
  "Statement": [

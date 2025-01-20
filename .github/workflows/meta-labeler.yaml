@@ -25,3 +25,8 @@ jobs:
         with:
           repo-token: "${{ steps.app-token.outputs.token }}"
           configuration-path: .github/labeler.yaml
+
+      - name: Enforce PR labels
+        uses: yogevbd/enforce-label-action@a3c219da6b8fa73f6ba62b68ff09c469b3a1c024 # 2.2.2
+        with:
+          BANNED_LABELS: "do-not-merge"

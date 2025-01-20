@@ -51,7 +51,7 @@ spec:
     labels:
       app.kubernetes.io/name: *appname
   interval: 10m
-  
+
   path: ./kubernetes/apps/gitops-system/flux-operator/instance-config
   prune: true
   sourceRef:

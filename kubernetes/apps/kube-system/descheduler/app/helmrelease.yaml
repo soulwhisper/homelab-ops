@@ -6,7 +6,6 @@ metadata:
   name: descheduler
 spec:
   interval: 10m
-  
   chart:
     spec:
       chart: descheduler

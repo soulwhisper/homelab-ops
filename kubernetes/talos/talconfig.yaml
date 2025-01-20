@@ -39,7 +39,7 @@ nodes:
         dhcp: false
         bond: &bond
           deviceSelectors:
-            permanentAddr: '*:f0:ab'   # check MAC of 10G NICs
+            permanentAddr: "*:f0:ab" # check MAC of 10G NICs
         addresses:
           - 172.19.82.101/24
         routes: &gateway
@@ -78,7 +78,6 @@ nodes:
 
 # put general nodes configs here since allowSchedulingOnControlPlanes
 controlPlane:
-
   # secureboot configuration
   # machineSpec:
   #   mode: metal
@@ -116,9 +115,9 @@ controlPlane:
       environment:
         - UPS_NAME=nutdev1
 
-# controlPlane only patches
+  # controlPlane only patches
   patches:
-  # ETCD configuration, increase etcd quota to 8G, keep advertisedSubnets if using tailscale / kubespan
+    # ETCD configuration, increase etcd quota to 8G, keep advertisedSubnets if using tailscale / kubespan
     - |-
       cluster:
         etcd:
@@ -134,7 +133,6 @@ controlPlane:
 
 # general patches
 patches:
-
   # Kernel modules, Enable thunderbolt/USB4 networking support
   - |-
     machine:
@@ -247,16 +245,16 @@ patches:
 
   # Network configuration
   - |-
-     machine:
-       network:
-        nameservers:
-          - 172.19.82.10
-        disableSearchDomain: false
-        searchDomains: homelab.internal
-        extraHostEntries:
-          - ip: 172.19.82.100
-            aliases:
-              - k8s.homelab.internal
+    machine:
+      network:
+       nameservers:
+         - 172.19.82.10
+       disableSearchDomain: false
+       searchDomains: homelab.internal
+       extraHostEntries:
+         - ip: 172.19.82.100
+           aliases:
+             - k8s.homelab.internal
 
   # Kubelet configuration
   - |-
