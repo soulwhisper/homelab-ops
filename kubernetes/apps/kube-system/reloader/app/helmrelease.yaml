@@ -6,7 +6,6 @@ metadata:
   name: reloader
 spec:
   interval: 10m
-  
   chart:
     spec:
       chart: reloader

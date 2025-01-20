@@ -15,7 +15,6 @@ spec:
     kind: GitRepository
     name: gitops-system
   interval: 10m
-  
   prune: true
   wait: true
   dependsOn:

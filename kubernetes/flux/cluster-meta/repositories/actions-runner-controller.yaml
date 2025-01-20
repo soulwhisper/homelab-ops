@@ -7,6 +7,5 @@ metadata:
   namespace: gitops-system
 spec:
   interval: 10m
-  
   type: oci
   url: oci://ghcr.io/actions

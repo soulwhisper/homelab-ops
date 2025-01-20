@@ -6,7 +6,6 @@ metadata:
   name: onepassword-connect
 spec:
   interval: 10m
-  
   chart:
     spec:
       chart: app-template

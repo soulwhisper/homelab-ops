@@ -1,7 +1,6 @@
 # Folders
-ignore/
 logs/
-testing/
+test/
 
 # Trash
 .DS_Store
@@ -9,6 +8,12 @@ Thumbs.db
 
 # Sops
 .decrypted~*
+
+# Devenv
+.devenv*
+devenv.local.nix
+.pre-commit-config.yaml
+.env
 
 # Other files
 kubeconfig

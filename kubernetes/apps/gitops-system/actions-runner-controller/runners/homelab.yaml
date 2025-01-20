@@ -6,7 +6,6 @@ metadata:
   name: arc-homelab
 spec:
   interval: 10m
-  
   chart:
     spec:
       chart: actions-runner-controller-charts/gha-runner-scale-set
