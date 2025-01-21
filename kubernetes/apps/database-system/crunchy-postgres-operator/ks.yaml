@@ -4,7 +4,6 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &appname crunchy-postgres-operator
-  namespace: gitops-system
 spec:
   targetNamespace: database-system
   commonMetadata:
@@ -16,14 +15,17 @@ spec:
   sourceRef:
     kind: GitRepository
     name: gitops-system
+    namespace: gitops-system
   wait: true
+  dependsOn:
+    - name: onepassword-store
+      namespace: security-system
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &appname crunchy-postgres-operator-cluster
-  namespace: gitops-system
 spec:
   targetNamespace: database-system
   commonMetadata:
@@ -35,16 +37,24 @@ spec:
   sourceRef:
     kind: GitRepository
     name: gitops-system
+    namespace: gitops-system
   wait: true
+  postBuild:
+    substituteFrom:
+      - kind: Secret
+        name: cloudflare-account-tag
+        optional: false
   dependsOn:
     - name: crunchy-postgres-operator
+      namespace: database-system
+    - name: onepassword-store
+      namespace: security-system
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &appname crunchy-postgres-operator-secretstore
-  namespace: gitops-system
 spec:
   targetNamespace: database-system
   commonMetadata:
@@ -56,17 +66,19 @@ spec:
   sourceRef:
     kind: GitRepository
     name: gitops-system
+    namespace: gitops-system
   wait: true
   dependsOn:
     - name: crunchy-postgres-operator-cluster
+      namespace: database-system
     - name: external-secrets
+      namespace: security-system
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &appname crunchy-postgres-userinit-controller
-  namespace: gitops-system
 spec:
   targetNamespace: database-system
   commonMetadata:
@@ -78,6 +90,5 @@ spec:
   sourceRef:
     kind: GitRepository
     name: gitops-system
-  wait: true
-  dependsOn:
-    - name: crunchy-postgres-operator-cluster
+    namespace: gitops-system
+  wait: false

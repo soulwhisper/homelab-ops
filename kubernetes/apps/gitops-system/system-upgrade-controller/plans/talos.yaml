@@ -29,7 +29,7 @@ spec:
       operator: Exists
       effect: NoSchedule
   prepare: &prepare
-    image: ghcr.io/siderolabs/talosctl@sha256:363be5a73f6001337f0993cda4ded9d14d950710252ff615c3b61b6a6b1719a6:${TALOS_VERSION}
+    image: ghcr.io/siderolabs/talosctl@sha256:1db8bc51afb87206fe532997c743f9c81968dd4124c4586bd3e4ed0cc968ccd9
     envs:
       - name: NODE_IP
         valueFrom:
@@ -44,6 +44,6 @@ spec:
     args:
       - --nodes=$(NODE_IP)
       - upgrade
-      - --image=factory.talos.dev/installer/a3a9b9e24b6f57a2bd7d988c1bf8913da4438b2d574311288d894f1f08419b7e:$(SYSTEM_UPGRADE_PLAN_LATEST_VERSION)
+      - --image=factory.talos.dev/installer/a3a9b9e24b6f57a2bd7d988c1bf8913da4438b2d574311288d894f1f08419b7e:$(SYSTEM_UPGRADE_PLAN_LATEST_VERSION)  # update later
       - --preserve=true
       - --wait=false

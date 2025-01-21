@@ -15,8 +15,10 @@ spec:
         name: actions-runner-controller
         namespace: gitops-system
       interval: 10m
-
   install:
     crds: CreateReplace
   upgrade:
     crds: CreateReplace
+  values:
+    fullnameOverride: actions-runner-controller
+    replicaCount: 1

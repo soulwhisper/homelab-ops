@@ -4,7 +4,6 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &appname openebs
-  namespace: gitops-system
 spec:
   targetNamespace: storage-system
   commonMetadata:
@@ -12,18 +11,18 @@ spec:
       app.kubernetes.io/name: *appname
   interval: 10m
   path: "./kubernetes/apps/storage-system/openebs/app"
-  prune: true
+  prune: false # Never delete this
   sourceRef:
     kind: GitRepository
     name: gitops-system
-  wait: true
+    namespace: gitops-system
+  wait: false
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: openebs-replicated
-  namespace: gitops-system
 spec:
   targetNamespace: storage-system
   commonMetadata:
@@ -32,10 +31,12 @@ spec:
       app.kubernetes.io/component: replicated
   interval: 10m
   path: "./kubernetes/apps/storage-system/openebs/replicated"
-  prune: true
+  prune: false # Never delete this
   sourceRef:
     kind: GitRepository
     name: gitops-system
+    namespace: gitops-system
   wait: false
   dependsOn:
     - name: openebs
+      namespace: storage-system

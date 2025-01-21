@@ -16,6 +16,10 @@ spec:
         name: grafana
         namespace: gitops-system
       interval: 10m
+  dependsOn:
+    - name: openebs
+      namespace: storage-system
+
   values:
     deploymentMode: SingleBinary
 
@@ -32,7 +36,7 @@ spec:
       ingester:
         chunk_encoding: snappy
       limits_config:
-        retention_period: 14d
+        retention_period: 7d
       schemaConfig:
         configs:
           - from: "2024-04-01"
@@ -68,8 +72,8 @@ spec:
       replicas: 1
       persistence:
         enabled: true
-        storageClass: openebs-rep3
-        size: 30Gi
+        storageClass: openebs-rep1
+        size: 50Gi
     test:
       enabled: false
     write:

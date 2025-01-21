@@ -4,18 +4,18 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &appname flux-operator
-  namespace: gitops-system
 spec:
   targetNamespace: gitops-system
   commonMetadata:
     labels:
       app.kubernetes.io/name: *appname
   interval: 10m
-  path: ./kubernetes/apps/gitops-system/flux-operator/instance
+  path: ./kubernetes/apps/gitops-system/flux-operator/app
   prune: false # Never delete this
   sourceRef:
     kind: GitRepository
     name: gitops-system
+    namespace: gitops-system
   wait: false
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
@@ -23,7 +23,6 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &appname flux-instance
-  namespace: gitops-system
 spec:
   targetNamespace: gitops-system
   commonMetadata:
@@ -35,28 +34,29 @@ spec:
   sourceRef:
     kind: GitRepository
     name: gitops-system
+    namespace: gitops-system
   wait: false
-  dependsOn:
-    - name: flux-operator
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &appname flux-instance-config
-  namespace: gitops-system
+  name: &appname flux-sops
 spec:
   targetNamespace: gitops-system
   commonMetadata:
     labels:
       app.kubernetes.io/name: *appname
   interval: 10m
-
-  path: ./kubernetes/apps/gitops-system/flux-operator/instance-config
+  path: ./kubernetes/apps/gitops-system/flux-operator/sops
   prune: true
   sourceRef:
     kind: GitRepository
     name: gitops-system
-  wait: false
+    namespace: gitops-system
+  wait: true
   dependsOn:
-    - name: external-secrets-stores
+    - name: flux-instance
+      namespace: gitops-system
+    - name: external-secrets
+      namespace: security-system

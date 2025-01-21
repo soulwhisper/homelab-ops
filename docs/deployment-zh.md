@@ -41,7 +41,7 @@
   - `kubernetes/bootstrap/flux/age-key.sops.yaml`
   - `kubernetes/bootstrap/talos/talenv.sops.yaml`
   - `kubernetes/bootstrap/talos/talsecret.sops.yaml`
-  - `kubernetes/apps/security-system/onepassword-connect/app/secret.sops.yaml`
+  - `kubernetes/apps/security-system/onepassword/app/secret.sops.yaml`
 - 使用 age 对上述文档进行加密;
 - 使用 `infra/scripts/minio-bucket-keys.py` 初始化 NAS 上的 Minio;
 

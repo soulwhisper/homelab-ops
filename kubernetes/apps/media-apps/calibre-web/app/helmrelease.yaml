@@ -14,13 +14,15 @@ spec:
         kind: HelmRepository
         name: bjw-s
         namespace: gitops-system
+  dependsOn:
+    - name: openebs
+      namespace: storage-system
+    - name: volsync
+      namespace: storage-system
 
   values:
     controllers:
       calibre-web:
-        annotations:
-          reloader.stakater.com/auto: "true"
-
         pod:
           securityContext:
             runAsUser: 2000

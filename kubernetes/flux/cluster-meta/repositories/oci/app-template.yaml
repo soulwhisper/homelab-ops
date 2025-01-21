@@ -3,9 +3,9 @@
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: HelmRepository
 metadata:
-  name: crunchydata
+  name: bjw-s
   namespace: gitops-system
 spec:
-  interval: 10m
   type: oci
-  url: oci://registry.developers.crunchydata.com/crunchydata
+  interval: 10m
+  url: oci://ghcr.io/bjw-s/helm

@@ -34,7 +34,7 @@ spec:
       metadata:
         labels:
           app.kubernetes.io/name: crunchy-postgres
-      replicas: &replica 2
+      replicas: &replica 3
       dataVolumeClaimSpec:
         storageClassName: openebs-rep3
         accessModes:
@@ -60,9 +60,9 @@ spec:
       password:
         type: AlphaNumeric
     # Applications
-    - name: atuin
+    - name: piped
       databases:
-        - atuin
+        - piped
       password:
         type: AlphaNumeric
 

@@ -14,7 +14,11 @@ spec:
         kind: HelmRepository
         name: bjw-s
         namespace: gitops-system
-
+  dependsOn:
+    - name: externaldns-cloudflare
+      namespace: networking-system
+    - name: nginx-external
+      namespace: networking-system
   values:
     controllers:
       cloudflared:
@@ -110,7 +114,7 @@ spec:
     persistence:
       config:
         type: configMap
-        name: cloudflared-configmap
+        name: cloudflared
         globalMounts:
           - path: /etc/cloudflared/config/config.yaml
             subPath: config.yaml

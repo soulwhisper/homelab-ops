@@ -5,7 +5,7 @@ kind: Kustomization
 resources:
   - ./helmrelease.yaml
 configMapGenerator:
-  - name: kromgo-configmap
+  - name: kromgo
     files:
       - config/config.yaml
 generatorOptions:

@@ -1,0 +1,20 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/kustomization
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - cert-manager.yaml
+  - cilium.yaml
+  - coroot.yaml
+  - deepflow.yaml
+  - fluent.yaml
+  - grafana.yaml
+  - ingress-nginx.yaml
+  - intel.yaml
+  - kubelet-csr-approver.yaml
+  - kubernetes-sigs-descheduler.yaml
+  - kubernetes-sigs-external-dns.yaml
+  - kubernetes-sigs-metrics-server.yaml
+  - kubernetes-sigs-nfd.yaml
+  - openebs.yaml
+  - volsync.yaml

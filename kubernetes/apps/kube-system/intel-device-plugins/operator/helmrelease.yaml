@@ -14,7 +14,9 @@ spec:
         kind: HelmRepository
         name: intel
         namespace: gitops-system
-
+  dependsOn:
+    - name: cert-manager
+      namespace: security-system
   install:
     crds: CreateReplace
   upgrade:
