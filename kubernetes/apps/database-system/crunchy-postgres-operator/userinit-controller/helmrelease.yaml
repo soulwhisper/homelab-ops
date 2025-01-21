@@ -13,6 +13,8 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: crunchy-userinit
-
+  dependsOn:
+    - name: crunchy-postgres-operator-cluster
+      namespace: database-system
   values:
     fullnameOverride: crunchy-userinit-controller

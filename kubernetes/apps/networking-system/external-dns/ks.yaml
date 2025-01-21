@@ -16,9 +16,10 @@ spec:
     kind: GitRepository
     name: gitops-system
     namespace: gitops-system
-  wait: true
+  wait: false
   dependsOn:
-    - name: external-secrets-stores
+    - name: onepassword-store
+      namespace: security-system
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
@@ -39,5 +40,5 @@ spec:
     namespace: gitops-system
   wait: false
   dependsOn:
-    - name: external-secrets-stores
+    - name: onepassword-store
       namespace: security-system

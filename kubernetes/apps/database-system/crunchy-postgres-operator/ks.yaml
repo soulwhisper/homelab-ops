@@ -18,7 +18,7 @@ spec:
     namespace: gitops-system
   wait: true
   dependsOn:
-    - name: external-secrets-stores
+    - name: onepassword-store
       namespace: security-system
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
@@ -47,7 +47,7 @@ spec:
   dependsOn:
     - name: crunchy-postgres-operator
       namespace: database-system
-    - name: external-secrets-stores
+    - name: onepassword-store
       namespace: security-system
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
@@ -91,7 +91,4 @@ spec:
     kind: GitRepository
     name: gitops-system
     namespace: gitops-system
-  wait: true
-  dependsOn:
-    - name: crunchy-postgres-operator-cluster
-      namespace: database-system
+  wait: false

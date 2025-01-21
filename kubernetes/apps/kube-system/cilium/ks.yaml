@@ -11,7 +11,7 @@ spec:
       app.kubernetes.io/name: *appname
   interval: 10m
   path: "./kubernetes/apps/kube-system/cilium/app"
-  prune: true
+  prune: false # Never delete this
   sourceRef:
     kind: GitRepository
     name: gitops-system
@@ -31,9 +31,12 @@ spec:
       app.kubernetes.io/component: config
   interval: 10m
   path: "./kubernetes/apps/kube-system/cilium/config"
-  prune: true
+  prune: false # Never delete this
   sourceRef:
     kind: GitRepository
     name: gitops-system
     namespace: gitops-system
   wait: false
+  dependsOn:
+    - name: cilium
+      namespace: kube-system

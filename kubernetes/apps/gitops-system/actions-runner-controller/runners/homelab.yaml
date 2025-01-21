@@ -16,7 +16,11 @@ spec:
         namespace: gitops-system
   driftDetection:
     mode: enabled
-
+  dependsOn:
+    - name: actions-runner-controller
+      namespace: gitops-system
+    - name: openebs
+      namespace: storage-system
   values:
     runnerGroup: arc-homelab
     runnerScaleSetName: arc-homelab

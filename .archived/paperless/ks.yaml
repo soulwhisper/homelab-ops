@@ -20,7 +20,7 @@ spec:
   dependsOn:
     - name: volsync
       namespace: storage-system
-    - name: external-secrets-stores
+    - name: onepassword-store
       namespace: security-system
   postBuild:
     substitute:

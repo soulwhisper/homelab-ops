@@ -18,9 +18,5 @@ spec:
     namespace: gitops-system
   wait: false
   dependsOn:
-    - name: external-secrets-stores
+    - name: onepassword-store
       namespace: security-system
-    - name: externaldns-cloudflare
-      namespace: networking-system
-    - name: nginx-external
-      namespace: networking-system

@@ -18,5 +18,5 @@ spec:
     namespace: gitops-system
   wait: false
   dependsOn:
-    - name: external-secrets-stores
+    - name: onepassword-store
       namespace: security-system

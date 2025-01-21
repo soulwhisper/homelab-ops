@@ -16,4 +16,4 @@ spec:
     kind: GitRepository
     name: gitops-system
     namespace: gitops-system
-  wait: true
+  wait: false
