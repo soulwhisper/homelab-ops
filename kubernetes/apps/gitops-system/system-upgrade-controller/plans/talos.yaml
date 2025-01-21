@@ -44,6 +44,6 @@ spec:
     args:
       - --nodes=$(NODE_IP)
       - upgrade
-      - --image=factory.talos.dev/installer/a3a9b9e24b6f57a2bd7d988c1bf8913da4438b2d574311288d894f1f08419b7e:$(SYSTEM_UPGRADE_PLAN_LATEST_VERSION)  # update later
+      - --image=factory.talos.dev/installer/a3a9b9e24b6f57a2bd7d988c1bf8913da4438b2d574311288d894f1f08419b7e:$(SYSTEM_UPGRADE_PLAN_LATEST_VERSION) # update later
       - --preserve=true
       - --wait=false
