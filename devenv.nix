@@ -75,7 +75,6 @@
       check-executables-have-shebangs.enable = true;
       end-of-file-fixer.enable = true;
       fix-byte-order-marker.enable = true;
-      trim-trailing-whitespace.enable = true;
       mixed-line-endings.enable = true;
     };
   };
