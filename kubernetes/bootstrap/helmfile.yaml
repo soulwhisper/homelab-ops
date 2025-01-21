@@ -12,6 +12,8 @@ repositories:
     url: https://postfinance.github.io/kubelet-csr-approver
   - name: cilium
     url: https://helm.cilium.io
+  - name: jetstack
+    url: https://charts.jetstack.io
   - name: spegel
     url: oci://ghcr.io/spegel-org/helm-charts/spegel
 
@@ -41,6 +43,20 @@ releases:
     needs:
       - kube-system/cilium
       - kube-system/kubelet-csr-approver
+
+  - name: cert-manager
+    namespace: cert-manager
+    chart: jetstack/cert-manager
+    version: v1.16.3
+    values:
+      - ../apps/cert-manager/cert-manager/app/values.yaml
+
+  - name: external-secrets
+    namespace: external-secrets
+    chart: oci://ghcr.io/external-secrets/charts/external-secrets
+    version: 0.12.1
+    values:
+      - ../apps/external-secrets/external-secrets/app/values.yaml
 
   - name: flux-operator
     namespace: gitops-system

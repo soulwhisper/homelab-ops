@@ -4,7 +4,6 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &appname openebs
-  namespace: gitops-system
 spec:
   targetNamespace: storage-system
   commonMetadata:
@@ -16,6 +15,7 @@ spec:
   sourceRef:
     kind: GitRepository
     name: gitops-system
+    namespace: gitops-system
   wait: true
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
@@ -23,7 +23,6 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: openebs-replicated
-  namespace: gitops-system
 spec:
   targetNamespace: storage-system
   commonMetadata:
@@ -36,6 +35,8 @@ spec:
   sourceRef:
     kind: GitRepository
     name: gitops-system
+    namespace: gitops-system
   wait: false
   dependsOn:
     - name: openebs
+      namespace: storage-system

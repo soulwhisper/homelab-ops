@@ -4,7 +4,6 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &appname nginx-shared
-  namespace: gitops-system
 spec:
   targetNamespace: networking-system
   commonMetadata:
@@ -16,16 +15,17 @@ spec:
   sourceRef:
     kind: GitRepository
     name: gitops-system
+    namespace: gitops-system
   wait: true
   dependsOn:
     - name: cert-manager-issuers
+      namespace: security-system
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &appname nginx-external
-  namespace: gitops-system
 spec:
   targetNamespace: networking-system
   commonMetadata:
@@ -37,16 +37,17 @@ spec:
   sourceRef:
     kind: GitRepository
     name: gitops-system
+    namespace: gitops-system
   wait: false
   dependsOn:
     - name: nginx-shared
+      namespace: networking-system
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &appname nginx-internal
-  namespace: gitops-system
 spec:
   targetNamespace: networking-system
   commonMetadata:
@@ -58,6 +59,8 @@ spec:
   sourceRef:
     kind: GitRepository
     name: gitops-system
+    namespace: gitops-system
   wait: false
   dependsOn:
     - name: nginx-shared
+      namespace: networking-system

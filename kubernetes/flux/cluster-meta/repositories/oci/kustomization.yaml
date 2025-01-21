@@ -5,6 +5,7 @@ kind: Kustomization
 resources:
   - actions-runner-controller.yaml
   - crunchydata.yaml
+  - external-secrets.yaml
   - flux-operator.yaml
   - reloader.yaml
   - spegel.yaml

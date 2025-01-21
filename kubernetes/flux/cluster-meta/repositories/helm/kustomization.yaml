@@ -7,7 +7,6 @@ resources:
   - cilium.yaml
   - coroot.yaml
   - deepflow.yaml
-  - external-secrets.yaml
   - fluent.yaml
   - grafana.yaml
   - ingress-nginx.yaml

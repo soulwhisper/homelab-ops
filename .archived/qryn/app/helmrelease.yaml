@@ -19,5 +19,5 @@ spec:
     fullnameOverride: qryn
 
     env:
-      CLICKHOUSE_SERVER: clickhouse.database.svc.cluster.local
+      CLICKHOUSE_SERVER: clickhouse.database-system.svc.cluster.local
       CLICKHOUSE_AUTH: clickhouse:clickhouse_password

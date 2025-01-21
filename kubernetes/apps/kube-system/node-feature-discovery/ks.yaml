@@ -4,7 +4,6 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &appname node-feature-discovery
-  namespace: gitops-system
 spec:
   targetNamespace: kube-system
   commonMetadata:
@@ -16,6 +15,7 @@ spec:
   sourceRef:
     kind: GitRepository
     name: gitops-system
+    namespace: gitops-system
   wait: true
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
@@ -23,7 +23,6 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &appname node-feature-discovery-rules
-  namespace: gitops-system
 spec:
   targetNamespace: kube-system
   commonMetadata:
@@ -35,6 +34,8 @@ spec:
   sourceRef:
     kind: GitRepository
     name: gitops-system
+    namespace: gitops-system
   wait: true
   dependsOn:
     - name: node-feature-discovery
+      namespace: kube-system

@@ -4,20 +4,23 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &appname cloudflared
-  namespace: gitops-system
 spec:
-  targetNamespace: network
+  targetNamespace: networking-system
   commonMetadata:
     labels:
       app.kubernetes.io/name: *appname
   interval: 10m
-  path: "./kubernetes/apps/network/cloudflared/app"
+  path: "./kubernetes/apps/networking-system/cloudflared/app"
   prune: true
   sourceRef:
     kind: GitRepository
     name: gitops-system
+    namespace: gitops-system
   wait: false
   dependsOn:
     - name: external-secrets-stores
+      namespace: security-system
     - name: externaldns-cloudflare
+      namespace: networking-system
     - name: nginx-external
+      namespace: networking-system
