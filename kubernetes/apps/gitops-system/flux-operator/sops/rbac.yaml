@@ -31,9 +31,9 @@ kind: RoleBinding
 metadata:
   name: eso-read-secrets
 subjects:
-- kind: ServiceAccount
-  name: eso-read-secrets
-  namespace: gitops-system
+  - kind: ServiceAccount
+    name: eso-read-secrets
+    namespace: gitops-system
 roleRef:
   kind: Role
   name: read-secrets
