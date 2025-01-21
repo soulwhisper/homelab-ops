@@ -51,13 +51,6 @@ releases:
     values:
       - ../apps/cert-manager/cert-manager/app/values.yaml
 
-  - name: external-secrets
-    namespace: external-secrets
-    chart: oci://ghcr.io/external-secrets/charts/external-secrets
-    version: 0.13.0
-    values:
-      - ../apps/external-secrets/external-secrets/app/values.yaml
-
   - name: flux-operator
     namespace: gitops-system
     chart: oci://ghcr.io/controlplaneio-fluxcd/charts/flux-operator

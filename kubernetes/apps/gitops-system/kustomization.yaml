@@ -2,7 +2,14 @@
 # yaml-language-server: $schema=https://json.schemastore.org/kustomization
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
+namespace: gitops-system
 resources:
+  # Pre Flux-Kustomizations
   - ./namespace.yaml
+  # Flux-Kustomizations
+  - ./action-runner-controller/ks.yaml
   - ./flux-operator/ks.yaml
-  - ./action-runner/ks.yaml
+  - ./system-upgrade-controller/ks.yaml
+components:
+  - ../../components/flux/alerts
+  - ../../components/flux/sops

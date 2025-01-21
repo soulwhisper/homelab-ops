@@ -8,16 +8,16 @@ spec:
   trigger:
     manual: restore-once
   restic:
-    repository: {{ ENV.APP }}-volsync-minio
-    destinationPVC: {{ ENV.CLAIM }}
-    copyMethod: Direct
-    storageClassName: {{ ENV.STORAGE_CLASS_NAME }}
     accessModes: {{ ENV.ACCESS_MODES }}
-    previous: {{ ENV.PREVIOUS }}
+    cleanupCachePVC: true
+    cleanupTempPVC: true
+    enableFileDeletion: true
+    copyMethod: Direct
+    destinationPVC: {{ ENV.CLAIM }}
     moverSecurityContext:
       runAsUser: {{ ENV.PUID }}
       runAsGroup: {{ ENV.PGID }}
       fsGroup: {{ ENV.PGID }}
-    enableFileDeletion: true
-    cleanupCachePVC: true
-    cleanupTempPVC: true
+    previous: {{ ENV.PREVIOUS }}
+    repository: {{ ENV.APP }}-volsync-minio
+    storageClassName: {{ ENV.STORAGE_CLASS_NAME }}

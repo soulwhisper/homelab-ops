@@ -1,12 +1,15 @@
 # TODO
 
 - [ ] put more secrets into 1password, check "kubernetes/bootstrap/templates/resources.yaml.j2" and "kubernetes/talos/talsecret.yaml"
+- [ ] fill "kubernetes/components/flux/sops/secret.sops.yaml" with "age.agekey" (op://DevOps/age-keys/user_flux_private), encrypt with user_soulwhisper+user_flux
 - [ ] fix system-upgrade-controller installer-id
 - [ ] bring up new cluster
 - [ ] tune monitoring apps
 - [ ] relocate privieged apps to "privileged", with "labels.pod-security.kubernetes.io/enforce: privileged", like "spegel".
 - [ ] consider adding [MAP](https://github.com/kubernetes/enhancements/tree/master/keps/sig-api-machinery/3962-mutating-admission-policies) when beta, [examples](https://github.com/search?q=repo%3Abjw-s-labs%2Fhome-ops+MutatingAdmissionPolicy&type=commits).
 - [ ] update github webooks url, [ref](https://fluxcd.io/flux/guides/webhook-receivers/#define-a-git-repository-receiver);
+- [ ] use "sigs.k8s.io/controller-tools/cmd/controller-gen" to update volsync replicationsource/replicationdestination schema
+- [ ] add pushover "userkey" and "alertmanager_token" to onepassword
 
 ## Infra
 
@@ -36,6 +39,20 @@
 - VOLSYNC_STORAGECLASS=openebs-rep3
 - VOLSYNC_CACHE_SNAPSHOTCLASS=-openebs-rep1
 - VOLSYNC_SNAPSHOTCLASS=openebs-snapshot
+
+## volsync-nfs
+
+```yaml
+# if using volsync-nfs, add below lines
+          volumeMounts:
+            - mountPath: /volsync
+              name: volsync
+      volumes:
+        - name: volsync
+          nfs:
+            server: "nix-infra.homelab.internal"
+            path: "/opt/backup/volsync"
+```
 
 ## Hardware
 

@@ -2,8 +2,11 @@
 # yaml-language-server: $schema=https://json.schemastore.org/kustomization
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
+namespace: database-system
 resources:
   # Pre Flux-Kustomizations
   - ./namespace.yaml
   # Flux-Kustomizations
   - ./crunchy-postgres-operator/ks.yaml
+components:
+  - ../../components/flux/alerts

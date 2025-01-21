@@ -2,11 +2,16 @@
 # yaml-language-server: $schema=https://json.schemastore.org/kustomization
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
+namespace: monitoring-system
 resources:
   # Pre Flux-Kustomizations
   - ./namespace.yaml
   # Flux-Kustomizations
-  - ./kromgo/ks.yaml
-  - ./deepflow/ks.yaml
-  - ./grafana-alloy/ks.yaml
+  - ./alertmanager/ks.yaml
   - ./coroot/ks.yaml
+  - ./deepflow/ks.yaml
+  - ./fluent-bit/ks.yaml
+  - ./kromgo/ks.yaml
+  - ./loki/ks.yaml
+components:
+  - ../../components/flux/alerts
