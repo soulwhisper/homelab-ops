@@ -38,4 +38,6 @@ spec:
   wait: true
   dependsOn:
     - name: external-secrets
+      namespace: security-system
     - name: onepassword-connect
+      namespace: security-system
