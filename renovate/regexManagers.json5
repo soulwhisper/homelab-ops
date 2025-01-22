@@ -2,17 +2,27 @@
   regexManagers: [
     {
       fileMatch: ["helmfile\\.yaml$"],
-      description: "Regex for helmfile deps",
+      description: "Regex for helmfile docker deps",
       matchStrings: [
-        'namespace:\\s*"?(?<namespace>\\S+)"?.*\\n\\s*chart:\\s*"?(?<chart>\\S+)"?.*\\n\\s*version:\\s*"?(?<currentValue>[\\S]+)"?.*\\n\\s*repositories:\\s*\\n\\s*-\\s*name:\\s*"?(?<repoName>\\S+)"?.*\\n\\s*url:\\s*"(?<repoUrl>(https?|oci)://[\\S]+/(?<product>[\\S]+))"',
+        'namespace:\\s*"?(?<namespace>\\S+)"?.*\\n\\s*chart:\\s*"?(?<chart>\\S+)"?.*\\n\\s*version:\\s*"?(?<currentValue>[\\S]+)"?.*\\n\\s*repositories:\\s*\\n\\s*-\\s*name:\\s*"?(?<repoName>\\S+)"?.*\\n\\s*url:\\s*"(?<repoUrl>oci://[\\S]+/(?<product>[\\S]+))"',
       ],
       datasourceTemplate: "docker",
       packageNameTemplate: "{{product}}",
       versioningTemplate: "semver",
     },
     {
+      fileMatch: ["helmfile\\.yaml$"],
+      description: "Regex for helmfile helm deps",
+      matchStrings: [
+        'namespace:\\s*"?(?<namespace>\\S+)"?.*\\n\\s*chart:\\s*"?(?<chart>\\S+)"?.*\\n\\s*version:\\s*"?(?<currentValue>[\\S]+)"?.*\\n\\s*repositories:\\s*\\n\\s*-\\s*name:\\s*"?(?<repoName>\\S+)"?.*\\n\\s*url:\\s*"(?<repoUrl>https://[\\S]+/(?<product>[\\S]+))"',
+      ],
+      datasourceTemplate: "helm",
+      packageNameTemplate: "{{product}}",
+      versioningTemplate: "semver",
+    },
+    {
       fileMatch: ["helmrelease\\.yaml$"],
-      description: "Regex for app deps",
+      description: "Regex for docker app deps",
       matchStrings: [
         'repository:\\s*"?(?<repository>docker.io/\\S+)"?.*\\ntag:\\s*"?(?<currentValue>v[\\d\\.]+)"?',
       ],
