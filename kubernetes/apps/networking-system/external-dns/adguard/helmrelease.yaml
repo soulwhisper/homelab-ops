@@ -49,7 +49,7 @@ spec:
           - name: LOG_LEVEL
             value: debug
           - name: ADGUARD_URL
-            value: http://172.19.82.10
+            value: http://10.10.0.10
           - name: ADGUARD_USER
             value: admin
           - name: ADGUARD_PASSWORD

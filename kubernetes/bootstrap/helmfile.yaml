@@ -7,27 +7,17 @@ helmDefaults:
   recreatePods: true
   force: true
 
-repositories:
-  - name: postfinance
-    url: https://postfinance.github.io/kubelet-csr-approver
-  - name: cilium
-    url: https://helm.cilium.io
-  - name: jetstack
-    url: https://charts.jetstack.io
-  - name: spegel
-    url: oci://ghcr.io/spegel-org/helm-charts/spegel
-
 releases:
   - name: cilium
     namespace: kube-system
-    chart: cilium/cilium
-    version: 1.16.5
+    chart: https://helm.cilium.io/cilium
+    version: 1.16.6
     values:
       - ../apps/kube-system/cilium/app/values.yaml
 
   - name: kubelet-csr-approver
     namespace: kube-system
-    chart: postfinance/kubelet-csr-approver
+    chart: https://postfinance.github.io/kubelet-csr-approver/kubelet-csr-approver
     version: 1.2.5
     values:
       - ../apps/kube-system/kubelet-csr-approver/app/values.yaml
@@ -36,8 +26,8 @@ releases:
 
   - name: spegel
     namespace: kube-system
-    chart: spegel/spegel
-    version: v0.0.28
+    chart: oci://ghcr.io/spegel-org/helm-charts/spegel
+    version: v0.0.30
     values:
       - ../apps/kube-system/spegel/app/values.yaml
     needs:
@@ -46,7 +36,7 @@ releases:
 
   - name: cert-manager
     namespace: cert-manager
-    chart: jetstack/cert-manager
+    chart: https://charts.jetstack.io/cert-manager
     version: v1.16.3
     values:
       - ../apps/cert-manager/cert-manager/app/values.yaml
