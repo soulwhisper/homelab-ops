@@ -8,7 +8,7 @@
     "github>soulwhisper/home-ops//renovate/packageRules.json5",
   ],
   ignorePaths: ["archived/**", "**/system-upgrade-controller/plans/**"],
-  "suppressNotifications": ["dependencyLookupWarnings", "prIgnoreNotification"],
+  suppressNotifications: ["dependencyLookupWarnings", "prIgnoreNotification"],
   flux: {
     fileMatch: ["^kubernetes/.+\\.ya?ml$"],
   },
