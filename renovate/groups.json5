@@ -2,22 +2,8 @@
   $schema: "https://docs.renovatebot.com/renovate-schema.json",
   packageRules: [
     {
-      description: "Cilium image and chart",
-      groupName: "cilium",
-      matchPackageNames: [
-        "quay.io/cilium/cilium",
-        "quay.io/cilium/operator-generic",
-        "cilium",
-      ],
-      matchDatasources: ["helm", "docker"],
-      group: {
-        commitMessageTopic: "{{{groupName}}} group",
-        commitMessageSuffix: "",
-      },
-    },
-    {
-      description: "Actions Runner Controller charts",
-      groupName: "ARC",
+      description: "Actions Runner Controller Group",
+      groupName: "actions-runner-controller",
       matchPackageNames: [
         "actions-runner-controller-charts/gha-runner-scale-set-controller",
         "actions-runner-controller-charts/gha-runner-scale-set",
@@ -29,7 +15,7 @@
       },
     },
     {
-      description: "Talos",
+      description: "Talos Group",
       groupName: "Talos",
       matchPackageNames: [
         "ghcr.io/siderolabs/installer",
