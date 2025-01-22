@@ -11,7 +11,10 @@
   flux: {
     fileMatch: ["^kubernetes/.+\\.ya?ml$"],
   },
-  "helm-values": {
+  helm-values: {
+    fileMatch: ["^kubernetes/.+\\.ya?ml$"],
+  },
+  helmfile: {
     fileMatch: ["^kubernetes/.+\\.ya?ml$"],
   },
   kubernetes: {
