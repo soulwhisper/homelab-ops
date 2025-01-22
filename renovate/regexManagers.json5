@@ -1,16 +1,6 @@
 {
   regexManagers: [
     {
-      fileMatch: ["helmfile\\.ya?ml$"],
-      description: "Regex for helmfile docker deps",
-      matchStrings: [
-        'namespace:\\s*"?(?<namespace>\\S+)"?.*\\n\\s*chart:\\s*"?(?<chart>\\S+)"?.*\\n\\s*version:\\s*"?(?<currentValue>[\\S]+)"?.*\\n\\s*repositories:\\s*\\n\\s*-\\s*name:\\s*"?(?<repoName>\\S+)"?.*\\n\\s*url:\\s*"(?<repoUrl>oci://[\\S]+/(?<product>[\\S]+))"',
-      ],
-      datasourceTemplate: "docker",
-      packageNameTemplate: "{{product}}",
-      versioningTemplate: "semver",
-    },
-    {
       fileMatch: ["helmrelease\\.ya?ml$"],
       description: "Regex for docker app deps",
       matchStrings: [
