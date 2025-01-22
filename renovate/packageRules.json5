@@ -11,12 +11,6 @@
       allowedVersions: "<1",
     },
     {
-      description: "Override datasource in helmfile.yaml",
-      "matchFileNames": ["(^|/)helmfile\\.ya?ml$"],
-      "matchPackageNames": ["spegel", "flux-operator", "flux-instance"],
-      "overrideDatasource": "docker"
-    },
-    {
       description: "Auto merge container digests",
       matchDatasources: ["docker"],
       automerge: true,
