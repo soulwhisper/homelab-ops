@@ -15,7 +15,7 @@
     fileMatch: ["^kubernetes/.+\\.ya?ml$"],
   },
   helmfile: {
-    fileMatch: ["(^|/)helmfile\.ya?ml$"],
+    fileMatch: ["(^|/)helmfile\\.ya?ml$"],
   },
   kubernetes: {
     fileMatch: ["^kubernetes/.+\\.ya?ml$"],
