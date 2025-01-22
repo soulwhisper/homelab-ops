@@ -1,15 +1,12 @@
-# TODO
+## GTD
 
-- [ ] put more secrets into 1password, check "kubernetes/bootstrap/templates/resources.yaml.j2" and "kubernetes/talos/talsecret.yaml"
-- [ ] fill "kubernetes/components/flux/sops/secret.sops.yaml" with "age.agekey" (op://DevOps/age-keys/user_flux_private), encrypt with user_soulwhisper+user_flux
-- [ ] fix system-upgrade-controller installer-id
-- [ ] bring up new cluster
-- [ ] tune monitoring apps
-- [ ] relocate privieged apps to "privileged", with "labels.pod-security.kubernetes.io/enforce: privileged", like "spegel".
-- [ ] consider adding [MAP](https://github.com/kubernetes/enhancements/tree/master/keps/sig-api-machinery/3962-mutating-admission-policies) when beta, [examples](https://github.com/search?q=repo%3Abjw-s-labs%2Fhome-ops+MutatingAdmissionPolicy&type=commits).
-- [ ] update github webooks url, [ref](https://fluxcd.io/flux/guides/webhook-receivers/#define-a-git-repository-receiver);
-- [ ] use "sigs.k8s.io/controller-tools/cmd/controller-gen" to update volsync replicationsource/replicationdestination schema
-- [ ] add pushover "userkey" and "alertmanager_token" to onepassword
+- bring up new cluster, using secureboot ISO, not pxe/matchbox
+- add github webooks after deployment, [ref](https://fluxcd.io/flux/guides/webhook-receivers/#define-a-git-repository-receiver);
+- tune monitoring apps
+- relocate privieged apps to "privileged", with "labels.pod-security.kubernetes.io/enforce: privileged", like "spegel".
+- consider adding [MAP](https://github.com/kubernetes/enhancements/tree/master/keps/sig-api-machinery/3962-mutating-admission-policies) when beta, [examples](https://github.com/search?q=repo%3Abjw-s-labs%2Fhome-ops+MutatingAdmissionPolicy&type=commits).
+- use "sigs.k8s.io/controller-tools/cmd/controller-gen" to update volsync replicationsource/replicationdestination schema
+- add discord notifications for github actions;
 
 ## Infra
 
@@ -18,9 +15,12 @@
 - openebs-hostpath, disabled due to MS-01 using 256G system disk;
 - openebs-rep3, for database and apps;
 - openebs-rep1, for tmp and cache;
+- sops.age for configs, migrating to onepassword;
+- onepassword, main secret store;
 
 ## Pre-deployment
 
+- make sure system-upgrade-controller use correct installer and schematicID
 - `10.10.0.10` as nix-infra node, minio / dns / ntp / talos-api / ...
 - `10.10.0.11-13` as k8s nodes;
 - `10.10.0.101-250` as cilium l2 loadbalancer ip;
@@ -31,7 +31,6 @@
 
 - LAB_ASSISTANT_APP_ID => GITHUB_APP_ID
 - LAB_ASSISTANT_APP_KEY => GITHUB_APP_KEY
-- KUBECONFIG => `base64 kubeconfig > kubeconfig_base64`
 
 ## defaults
 

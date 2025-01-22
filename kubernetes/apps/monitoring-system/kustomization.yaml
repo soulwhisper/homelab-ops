@@ -4,9 +4,6 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 namespace: monitoring-system
 resources:
-  # Pre Flux-Kustomizations
-  - ./namespace.yaml
-  # Flux-Kustomizations
   - ./alertmanager/ks.yaml
   - ./coroot/ks.yaml
   - ./deepflow/ks.yaml
@@ -14,4 +11,15 @@ resources:
   - ./kromgo/ks.yaml
   - ./loki/ks.yaml
 components:
+  - ../../components/namespace
   - ../../components/flux/alerts
+patches:
+  - patch: |
+      - op: replace
+        path: /metadata/name
+        value: monitoring-system
+      - op: add
+        path: /metadata/labels/pod-security.kubernetes.io~1enforce
+        value: privileged
+    target:
+      kind: Namespace

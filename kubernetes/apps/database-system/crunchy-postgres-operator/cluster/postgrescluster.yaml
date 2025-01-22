@@ -17,7 +17,7 @@ spec:
     metadata:
       annotations:
         external-dns.alpha.kubernetes.io/hostname: "postgres.noirprime.com"
-        lbipam.cilium.io/ips: "172.19.82.201"
+        lbipam.cilium.io/ips: "10.10.0.201"
 
   patroni: # turn on sync writes to at least 1 other replica
     dynamicConfiguration:

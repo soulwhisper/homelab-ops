@@ -1,39 +1,29 @@
 ---
 receivers:
   - name: "null"
-  - name: "pushover"
-    pushover_configs:
-      - html: true
-        token_file: /etc/secrets/pushover_api_token
-        user_key_file: /etc/secrets/pushover_api_userkey
+  - name: "discord"
+    discord_configs:
+      - webhook_url_file: /etc/secrets/discord_webhook_url
         send_resolved: true
-        priority: |-
-          {{ if eq .Status "firing" }}1{{ else }}0{{ end }}
-        url_title: View in Alert Manager
         title: |-
-          [{{ .Status | toUpper }}{{ if eq .Status "firing" }}:{{ .Alerts.Firing | len }}{{ end }}] {{ .CommonLabels.alertname }}
-        message: |-
+          {{ if eq .Status "firing" }}🔥 **ALERT: {{ .CommonLabels.alertname }} ({{ .Alerts.Firing | len }} Active)** 🔥
+          {{ else }}✅ **RESOLVED: {{ .CommonLabels.alertname }}** ✅
+          {{ end }}
+        text: |-
           {{- range .Alerts }}
-            {{- if ne .Labels.severity "" }}
-              <b>Severity:</b> <i>{{ .Labels.severity }}</i>
-            {{- else }}
-              <b>Severity:</b> <i>N/A</i>
-            {{- end }}
-            {{- if ne .Annotations.description "" }}
-              <b>Description:</b> <i>{{ .Annotations.description }}</i>
-            {{- else if ne .Annotations.summary "" }}
-              <b>Summary:</b> <i>{{ .Annotations.summary }}</i>
-            {{- else if ne .Annotations.message "" }}
-              <b>Message:</b> <i>{{ .Annotations.message }}</i>
-            {{- else }}
-              <b>Description:</b> <i>N/A</i>
-            {{- end }}
-            {{- if gt (len .Labels.SortedPairs) 0 }}
-              <b>Details:</b>
-              {{- range .Labels.SortedPairs }}
-                • <b>{{ .Name }}:</b> <i>{{ .Value }}</i>
-              {{- end }}
-            {{- end }}
+          ---
+          **🔔 Alert Details:**
+          **• Status:** {{ if eq .Status "firing" }}🔥 _FIRING_ 🔥{{ else }}✅ _RESOLVED_ ✅{{ end }}
+          **• Severity:** {{ .Labels.severity | default "N/A" }}
+          **• Description:** {{ .Annotations.description | default "N/A" }}
+          **• Instance:** {{ .Labels.instance | default "Unknown" }}
+          {{- if gt (len .Labels.SortedPairs) 0 }}
+          **• Additional Details:**
+          {{- range .Labels.SortedPairs }}
+          > **{{ .Name }}:** _{{ .Value }}_
+          {{- end }}
+          {{- end }}
+          ---
           {{- end }}
 
 route:
@@ -41,12 +31,12 @@ route:
   group_wait: 30s
   group_interval: 5m
   repeat_interval: 6h
-  receiver: "pushover"
+  receiver: "discord"
   routes:
     - receiver: "null"
       matchers:
         - alertname =~ "InfoInhibitor|Watchdog"
-    - receiver: "pushover"
+    - receiver: "discord"
       matchers:
         - severity = critical
       continue: true
