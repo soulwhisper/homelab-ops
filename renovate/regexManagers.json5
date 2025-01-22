@@ -4,14 +4,12 @@
       fileMatch: ["helmfile\\.yaml$"],
       description: "Regex for helmfile deps",
       matchStrings: [
-        'name:\\s*"?(?<product>\\S+)"?.*\\n\\s*namespace:\\s*"?(?<namespace>\\S+)"?.*\\n\\s*chart:\\s*"?(?<chart>\\S+)"?.*\\n\\s*version:\\s*"?(?<currentValue>[\\S]+)"?.*\\n\\s*repositories:\\s*\\n\\s*-\\s*name:\\s*"?(?<repoName>\\S+)"?.*\\n\\s*url:\\s*"(?<repoUrl>https?://[\\S]+)"',
+        'name:\\s*"?(?<product>\\S+)"?.*\\n\\s*namespace:\\s*"?(?<namespace>\\S+)"?.*\\n\\s*chart:\\s*"?(?<chart>\\S+)"?.*\\n\\s*version:\\s*"?(?<currentValue>[\\S]+)"?.*\\n\\s*repositories:\\s*\\n\\s*-\\s*name:\\s*"?(?<repoName>\\S+)"?.*\\n\\s*url:\\s*"(?<repoUrl>(https?|oci)://[\\S]+/(?<product>[\\S]+))"',
       ],
       datasourceTemplate: "docker",
       packageNameTemplate: "{{product}}",
       versioningTemplate: "semver",
     },
-  ],
-  regexManagers: [
     {
       fileMatch: ["helmrelease\\.yaml$"],
       description: "Regex for app deps",

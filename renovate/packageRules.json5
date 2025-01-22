@@ -2,6 +2,17 @@
   $schema: "https://docs.renovatebot.com/renovate-schema.json",
   packageRules: [
     {
+      "matchDatasources": [
+        "docker"
+      ],
+      "pinDigests": false
+    },
+    {
+      matchDatasources: ["docker"],
+      matchPackageNames: ["ghcr.io/linuxserver/calibre-web"],
+      allowedVersions: "<1",
+    },
+    {
       description: "Auto merge container digests",
       matchDatasources: ["docker"],
       automerge: true,
