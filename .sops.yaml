@@ -4,20 +4,9 @@ keys:
   - &user_flux age1d525lccq3zpxaa75xk2xxrfmazqg2p3e0syx9mucnwh9cjd7j50qsp6ejj
 
 creation_rules:
-  - path_regex: kubernetes/.*/talos/.*\.sops\.ya?ml$
-    key_groups:
-      - age:
-          - *user_soulwhisper
-          - *user_flux
-
   - path_regex: kubernetes/.*\.sops\.ya?ml$
     encrypted_regex: "^(data|stringData)$"
     key_groups:
       - age:
           - *user_soulwhisper
           - *user_flux
-
-  - path_regex: .*\.sops\.ya?ml$
-    key_groups:
-      - age:
-          - *user_soulwhisper

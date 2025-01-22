@@ -3,17 +3,12 @@
 clusterName: &clusterName homelab
 endpoint: "https://k8s.homelab.internal:6443"
 
-# Current stage = vm;
-# 1. disable secureboot and disk-encryption;
-# 2. use tailscale instead of kube-span;
-# 3. sorted by features first, then general optimizations;
-
-# Next stage = ms-01; needs intel-ucode / i915 / mei;
-# .todo = remove console=ttyS0;
-# .todo = enable secureboot and disk-encryption;
-# .todo = change installDisk to installDiskSelector;
-# .todo = change node subnet to 10.10.0.0/24; vip to 10.10.0.100;
-# .todo = change self-hosted dns/ntp/proxy/talos-api to 10.10.0.10;
+# Current stage = ms-01;
+# schematic_ID = afd9fbee2487ab9a50e8a034b2fdf412bb36bf17f27053b006b24c40744a9ea2
+# enable featuers:
+#   - disk-encryption
+#   - secureboot
+#   - tailscale
 
 # renovate: depName=ghcr.io/siderolabs/installer datasource=docker
 talosVersion: v1.9.2
@@ -22,7 +17,7 @@ kubernetesVersion: v1.32.1
 
 additionalApiServerCertSans: &sans
   - k8s.homelab.internal
-  - &talosControlplaneVip 172.19.82.100
+  - &talosControlplaneVip 10.10.0.100
   - 127.0.0.1
 additionalMachineCertSans: *sans
 
@@ -31,7 +26,7 @@ cniConfig:
 
 nodes:
   - hostname: exarch-01
-    ipAddress: 172.19.82.101
+    ipAddress: 10.10.0.101
     controlPlane: true
     installDisk: /dev/sda
     networkInterfaces:
@@ -41,36 +36,36 @@ nodes:
           deviceSelectors:
             permanentAddr: "*:f0:ab" # check MAC of 10G NICs
         addresses:
-          - 172.19.82.101/24
+          - 10.10.0.101/24
         routes: &gateway
           - network: 0.0.0.0/0
-            gateway: 172.19.82.1
+            gateway: 10.10.0.1
         vip:
           ip: *talosControlplaneVip
 
   - hostname: exarch-02
-    ipAddress: 172.19.82.102
+    ipAddress: 10.10.0.102
     controlPlane: true
     installDisk: /dev/sda
     networkInterfaces:
       - interface: bond0
         dhcp: false
         addresses:
-          - 172.19.82.102/24
+          - 10.10.0.102/24
         bond: *bond
         routes: *gateway
         vip:
           ip: *talosControlplaneVip
 
   - hostname: exarch-03
-    ipAddress: 172.19.82.103
+    ipAddress: 10.10.0.103
     controlPlane: true
     installDisk: /dev/sda
     networkInterfaces:
       - interface: bond0
         dhcp: false
         addresses:
-          - 172.19.82.103/24
+          - 10.10.0.103/24
         bond: *bond
         routes: *gateway
         vip:
@@ -79,11 +74,11 @@ nodes:
 # put general nodes configs here since allowSchedulingOnControlPlanes
 controlPlane:
   # secureboot configuration
-  # machineSpec:
-  #   mode: metal
-  #   arch: amd64
-  #   secureboot: true
-  #   useUKI: true
+  machineSpec:
+    mode: metal
+    arch: amd64
+    secureboot: true
+    useUKI: true
   nodeLabels:
     topology.kubernetes.io/region: *clusterName
     topology.kubernetes.io/zone: central
@@ -92,7 +87,7 @@ controlPlane:
       extraKernelArgs:
         - cpufreq.default_governor=performance
         - intel_idle.max_cstate=0
-        - console=ttyS0
+      #  - console=ttyS0
       systemExtensions:
         officialExtensions:
           - siderolabs/intel-ucode
@@ -105,7 +100,7 @@ controlPlane:
     - name: tailscale
       environment:
         - TS_AUTHKEY=${TS_AUTHKEY}
-        - TS_ROUTES=10.100.0.0/17
+        - TS_ROUTES=10.100.0.0/16
     - name: nut-client
       configFiles:
         - content: |-
@@ -124,7 +119,7 @@ controlPlane:
           extraArgs:
             quota-backend-bytes: 8589934592
           advertisedSubnets:
-            - 172.19.82.0/24
+            - 10.10.0.0/24
 
   # AdmissionControl configuration, disable PodSecurity; use labels instead
   #  - |-
@@ -145,8 +140,8 @@ patches:
   - |-
     machine:
       env:
-        http_proxy: http://172.19.82.10:1080
-        https_proxy: http://172.19.82.10:1080
+        http_proxy: http://10.10.0.10:1080
+        https_proxy: http://10.10.0.10:1080
         no_proxy: .tailscale.com,.tailscale.io,.noirprime.com,.homelab.internal,localhost,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16
 
   # Enable OpenEBS Storage ( Hostpath ), disabled for MS-01 256G system disk
@@ -216,24 +211,24 @@ patches:
 
   # Enable disk encryption with better encyption method, pass >= 20 characters
   # https://github.com/siderolabs/talos/issues/8972
-  # - |-
-  #   machine:
-  #     systemDiskEncryption:
-  #       ephemeral:
-  #         cipher: aes-xts-plain64
-  #         keySize: 256
-  #         keys:
-  #           - slot: 1
-  #             static:
-  #               passphrase: ${DiskEncryptionPass}
-  #         provider: luks2
-  #       state:
-  #         cipher: aes-xts-plain64
-  #         keySize: 256
-  #         keys:
-  #           - slot: 0
-  #             tpm: {}
-  #         provider: luks2
+  - |-
+    machine:
+      systemDiskEncryption:
+        ephemeral:
+          cipher: aes-xts-plain64
+          keySize: 256
+          keys:
+            - slot: 1
+              static:
+                passphrase: ${DISK_ENCRYPTION_PASS}
+          provider: luks2
+        state:
+          cipher: aes-xts-plain64
+          keySize: 256
+          keys:
+            - slot: 0
+              tpm: {}
+          provider: luks2
 
   # NTP configuration, ip for baremetal, '/dev/ptp0' for proxmox
   - |-
@@ -241,18 +236,18 @@ patches:
       time:
         disabled: false
         servers:
-          - 172.19.82.10
+          - 10.10.0.10
 
   # Network configuration
   - |-
     machine:
       network:
        nameservers:
-         - 172.19.82.10
+         - 10.10.0.10
        disableSearchDomain: false
        searchDomains: homelab.internal
        extraHostEntries:
-         - ip: 172.19.82.100
+         - ip: 10.10.0.100
            aliases:
              - k8s.homelab.internal
 
@@ -264,7 +259,7 @@ patches:
           rotate-server-certificates: "true"
         nodeIP:
           validSubnets:
-            - 172.19.82.0/24
+            - 10.10.0.0/24
 
   # Cluster configuration
   - |-
@@ -278,7 +273,7 @@ patches:
           kubernetes:
             disabled: true
           service:
-            endpoint: http://172.19.82.10:9900
+            endpoint: http://10.10.0.10:9300
       network:
         podSubnets:
           - 10.100.0.0/17

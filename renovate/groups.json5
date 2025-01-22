@@ -36,13 +36,14 @@
         "ghcr.io/siderolabs/talosctl",
       ],
       matchDatasources: ["docker"],
+      pinDigests: false,
       group: {
         commitMessageTopic: "{{{groupName}}} group",
         commitMessageSuffix: "",
       },
     },
     {
-      description: ["Flux Operator Group"],
+      description: "Flux Operator Group",
       groupName: "Flux Operator",
       matchPackagePatterns: ["flux-operator", "flux-instance"],
       matchDatasources: ["docker"],
