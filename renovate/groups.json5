@@ -9,6 +9,7 @@
         "actions-runner-controller-charts/gha-runner-scale-set",
       ],
       matchDatasources: ["helm", "docker"],
+      pinDigests: false,
       group: {
         commitMessageTopic: "{{{groupName}}} group",
         commitMessageSuffix: "",
@@ -22,6 +23,7 @@
         "ghcr.io/siderolabs/talosctl",
       ],
       matchDatasources: ["docker"],
+      pinDigests: false,
       group: {
         commitMessageTopic: "{{{groupName}}} group",
         commitMessageSuffix: "",
@@ -32,6 +34,7 @@
       groupName: "Flux Operator",
       matchPackagePatterns: ["flux-operator", "flux-instance"],
       matchDatasources: ["docker"],
+      pinDigests: false,
       group: {
         commitMessageTopic: "{{{groupName}}} group",
         commitMessageSuffix: "",

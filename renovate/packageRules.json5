@@ -3,7 +3,7 @@
   packageRules: [
     {
       matchDatasources: ["docker"],
-      pinDigests: false,
+      pinDigests: true,
     },
     {
       matchDatasources: ["docker"],
