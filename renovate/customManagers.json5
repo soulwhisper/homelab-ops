@@ -1,8 +1,9 @@
 {
-  regexManagers: [
+  customManagers: [
     {
-      fileMatch: ["helmrelease\\.ya?ml$"],
+      customType: "regex",
       description: "Regex for docker app deps",
+      fileMatch: ["helmrelease\\.ya?ml$"],
       matchStrings: [
         'repository:\\s*"?(?<repository>docker.io/\\S+)"?.*\\ntag:\\s*"?(?<currentValue>v[\\d\\.]+)"?',
       ],

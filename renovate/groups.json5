@@ -36,6 +36,7 @@
         "ghcr.io/siderolabs/talosctl",
       ],
       matchDatasources: ["docker"],
+      pinDigests: false,
       group: {
         commitMessageTopic: "{{{groupName}}} group",
         commitMessageSuffix: "",

@@ -3,10 +3,6 @@
   packageRules: [
     {
       matchDatasources: ["docker"],
-      pinDigests: false,
-    },
-    {
-      matchDatasources: ["docker"],
       matchPackageNames: ["ghcr.io/linuxserver/calibre-web"],
       allowedVersions: "<1",
     },
