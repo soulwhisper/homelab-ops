@@ -12,7 +12,7 @@
     fileMatch: ["^kubernetes/.+\\.ya?ml$"],
   },
   "helm-values": {
-    fileMatch: ["^kubernetes/.+\\.ya?ml$"],
+    fileMatch: ["^kubernetes/.+\\.ya?ml$", "helmfile\\.yaml$" ],
   },
   kubernetes: {
     fileMatch: ["^kubernetes/.+\\.ya?ml$"],
