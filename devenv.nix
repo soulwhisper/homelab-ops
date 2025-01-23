@@ -12,10 +12,18 @@
 
   # dotenv.enable = true;
 
-  # languages.python.enable = true;
-  # languages.python.uv.enable = true;
-  # languages.python.venv.enable = true;
-  # languages.python.version = "3.12.2";
+  # disable this part when using ci, for speed
+  languages.python = lib.optionalAttrs (!config.devenv.isTesting) {
+    enable = true;
+    # version = "3.12.2";
+    uv.enable = true;
+    venv = {
+      enable = true;
+      requirements = ''
+        flux-local
+      '';
+    };
+  }; 
 
   # replace pre-commit and various linters
   git-hooks = {
