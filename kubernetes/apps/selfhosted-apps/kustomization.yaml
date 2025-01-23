@@ -1,11 +1,9 @@
----
 # yaml-language-server: $schema=https://json.schemastore.org/kustomization
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-namespace: media-apps
+namespace: selfhosted-apps
 resources:
-  - ./pvc-shared.yaml
-  - ./ytdl-sub/ks.yaml
+  - ./piped/ks.yaml
 components:
   - ../../components/namespace
   - ../../components/flux/alerts
@@ -13,6 +11,6 @@ patches:
   - patch: |
       - op: replace
         path: /metadata/name
-        value: media-apps
+        value: selfhosted-apps
     target:
       kind: Namespace

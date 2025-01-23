@@ -60,6 +60,11 @@ spec:
       password:
         type: AlphaNumeric
     # Applications
+    - name: miniflux
+      databases:
+        - miniflux
+      password:
+        type: AlphaNumeric
     - name: piped
       databases:
         - piped
