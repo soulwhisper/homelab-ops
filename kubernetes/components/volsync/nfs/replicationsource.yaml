@@ -17,9 +17,9 @@ spec:
     cacheStorageClassName: "${VOLSYNC_CACHE_SNAPSHOTCLASS:-openebs-rep1}"
     copyMethod: "${VOLSYNC_COPYMETHOD:-Snapshot}"
     moverSecurityContext:
-      runAsUser: ${APP_UID:-2000}
-      runAsGroup: ${APP_GID:-2000}
-      fsGroup: ${APP_GID:-2000}
+      runAsUser: ${APP_UID:-1001}
+      runAsGroup: ${APP_GID:-1001}
+      fsGroup: ${APP_GID:-1001}
     pruneIntervalDays: 7
     repository: ${APP}-volsync-nfs
     retain:

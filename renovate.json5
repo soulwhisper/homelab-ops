@@ -2,13 +2,11 @@
   $schema: "https://docs.renovatebot.com/renovate-schema.json",
   extends: [
     "github>soulwhisper/renovate-config",
-    "github>soulwhisper/home-ops//renovate/customManagers.json5",
     "github>soulwhisper/home-ops//renovate/grafanaDashboards.json5",
     "github>soulwhisper/home-ops//renovate/groups.json5",
     "github>soulwhisper/home-ops//renovate/packageRules.json5",
   ],
   ignorePaths: ["archived/**", "**/system-upgrade-controller/plans/**"],
-  suppressNotifications: ["dependencyLookupWarnings", "prIgnoreNotification"],
   flux: {
     fileMatch: ["^kubernetes/.+\\.ya?ml$"],
   },

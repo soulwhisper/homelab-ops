@@ -13,7 +13,7 @@ spec:
         kind: HelmRepository
         name: coroot
         namespace: gitops-system
-      version: 0.17.1
+      version: 0.17.4
 
   values:
     corootCE:

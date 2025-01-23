@@ -38,6 +38,7 @@
 - VOLSYNC_STORAGECLASS=openebs-rep3
 - VOLSYNC_CACHE_SNAPSHOTCLASS=-openebs-rep1
 - VOLSYNC_SNAPSHOTCLASS=openebs-snapshot
+- app_uid = app_gid = 1001
 
 ## volsync-nfs
 
@@ -63,3 +64,7 @@
 - StorageDisk2: SK Hynix P41 2TB
 - StorageDisk3: Kioxia CM6/CD6 10+TB
 - Switch1: H3C S6300-48S
+
+## App Memo
+
+- use Valkey instead of Dragonflydb if apps served <= 2;

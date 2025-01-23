@@ -25,7 +25,7 @@ Kubernetes cluster stats:
 </div>
 <br>
 
-👋 Welcome to my Home Operations repository. This is a mono repository for my home infrastructure and Kubernetes cluster. I try to adhere to Infrastructure as Code (IaC) and GitOps practices using the tools like [Kubernetes](https://kubernetes.io/), [Flux](https://github.com/fluxcd/flux2), [Renovate](https://github.com/renovatebot/renovate) and [GitHub Actions](https://github.com/features/actions). Inspired by [bjw-s/home-ops](https://github.com/bjw-s/home-ops).
+👋 Welcome to my Home Operations repository. This is a mono repository for my home infrastructure and Kubernetes cluster. I try to adhere to Infrastructure as Code (IaC) and GitOps practices using the tools like [Kubernetes](https://kubernetes.io/), [Flux](https://github.com/fluxcd/flux2), [Renovate](https://github.com/renovatebot/renovate) and [GitHub Actions](https://github.com/features/actions).
 
 ---
 
@@ -38,6 +38,11 @@ The documentation that goes along with this repo can be found [over here]().
 ### :handshake: Thanks
 
 Thanks to all the people who donate their time to the [Kubernetes @Home](https://discord.gg/k8s-at-home) Discord community. A lot of inspiration for my cluster comes from the people that have shared their clusters using the [k8s-at-home](https://github.com/topics/k8s-at-home) GitHub topic. Be sure to check out the [Kubernetes @Home search](https://nanne.dev/k8s-at-home-search/) for ideas on how to deploy applications or get ideas on what you can deploy.
+
+I got help from some cool repo like:
+
+- [bjw-s/home-ops](https://github.com/bjw-s/home-ops)
+- [onedr0p/home-ops](https://github.com/onedr0p/home-ops)
 
 ---
 

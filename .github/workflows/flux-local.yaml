@@ -1,6 +1,6 @@
 ---
 # yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
-name: "Flux Diff"
+name: "Flux Local"
 
 on:
   pull_request:
@@ -9,48 +9,41 @@ on:
     paths:
       - kubernetes/apps/**
       - kubernetes/flux/**
-      - kubernetes/templates/**
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.number || github.ref }}
   cancel-in-progress: true
 
 jobs:
-  changed-clusters:
-    name: Changed Clusters
+  test:
+    name: Flux Local Test
     runs-on: ubuntu-latest
-    outputs:
-      matrix: ${{ steps.changed-clusters.outputs.all_changed_and_modified_files }}
     steps:
-      - name: Checkout Default Branch
+      - name: Generate Token
+        uses: actions/create-github-app-token@c1a285145b9d317df6ced56c09f525b5c2b6f755 # v1
+        if: ${{ github.event.pull_request.head.repo.full_name == github.repository }}
+        id: app-token
+        with:
+          app-id: ${{ secrets.LAB_ASSISTANT_APP_ID }}
+          private-key: ${{ secrets.LAB_ASSISTANT_APP_KEY }}
+
+      - name: Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
         with:
-          fetch-depth: 0
-          repository: ${{ github.event.pull_request.head.repo.full_name }}
+          token: "${{ steps.app-token.outputs.token }}"
 
-      - name: Get Changed Clusters
-        id: changed-clusters
-        uses: tj-actions/changed-files@d6e91a2266cdb9d62096cebf1e8546899c6aa18f # v45
+      - name: Run flux-local test
+        uses: docker://ghcr.io/allenporter/flux-local:v7.0.0
         with:
-          files: kubernetes/**
-          dir_names: true
-          dir_names_max_depth: 2
-          json: true
-          escape_json: false
+          args: test --enable-helm --path /github/workspace/kubernetes/flux/cluster
 
-      - name: List All Changed Clusters
-        run: echo "${{ steps.changed-clusters.outputs.all_changed_and_modified_files }}"
-
-  flux-diff:
-    name: Flux Diff
+  diff:
+    name: Flux Local Diff
     runs-on: ubuntu-latest
-    needs:
-      - changed-clusters
     permissions:
       pull-requests: write
     strategy:
       matrix:
-        paths: ${{ fromJSON(needs.changed-clusters.outputs.matrix) }}
         resources:
           - helmrelease
           - kustomization
@@ -65,7 +58,7 @@ jobs:
           app-id: ${{ secrets.LAB_ASSISTANT_APP_ID }}
           private-key: ${{ secrets.LAB_ASSISTANT_APP_KEY }}
 
-      - name: Checkout
+      - name: Checkout Pull Request Branch
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
         with:
           token: "${{ steps.app-token.outputs.token }}"
@@ -78,8 +71,8 @@ jobs:
           ref: "${{ github.event.repository.default_branch }}"
           path: default
 
-      - name: Diff Resources
-        uses: docker://ghcr.io/allenporter/flux-local:v7.0.0@sha256:abf237e31d20de26f8a4b08e588cc927cb0a9f0ecf90d04bada00f393b919354
+      - name: Run flux-local diff
+        uses: docker://ghcr.io/allenporter/flux-local:v7.0.0
         with:
           args: >-
             diff ${{ matrix.resources }}
@@ -89,7 +82,7 @@ jobs:
             --strip-attrs "helm.sh/chart,checksum/config,app.kubernetes.io/version,chart"
             --limit-bytes 10000
             --all-namespaces
-            --sources "gitops-system"
+            --sources "flux-system"
             --output-file diff.patch
 
       - name: Generate Diff
@@ -97,15 +90,15 @@ jobs:
         run: |
           cat diff.patch;
           {
-            echo 'diff<<EOF'
-            cat diff.patch
-            echo EOF
+              echo 'diff<<EOF'
+              cat diff.patch
+              echo EOF
           } >> "$GITHUB_OUTPUT";
           {
-            echo "### Diff"
-            echo '```diff'
-            cat diff.patch
-            echo '```'
+              echo "### Diff"
+              echo '```diff'
+              cat diff.patch
+              echo '```'
           } >> "$GITHUB_STEP_SUMMARY"
 
       - if: ${{ steps.diff.outputs.diff != '' }}
@@ -113,19 +106,20 @@ jobs:
         uses: mshick/add-pr-comment@b8f338c590a895d50bcbfa6c5859251edc8952fc # v2
         with:
           repo-token: "${{ steps.app-token.outputs.token }}"
-          message-id: "${{ github.event.pull_request.number }}/${{ matrix.paths }}/${{ matrix.resources }}"
+          message-id: "${{ github.event.pull_request.number }}/main/${{ matrix.resources }}"
           message-failure: Diff was not successful
           message: |
             ```diff
             ${{ steps.diff.outputs.diff }}
 
-  flux-diff-success:
+  flux-local-success:
     needs:
-      - flux-diff
+      - test
+      - diff
     if: ${{ always() }}
-    name: Flux Diff successful
+    name: Flux Local successful
     runs-on: ubuntu-latest
     steps:
-      - name: Check matrix status
+      - name: Check flux-local status
         if: ${{ contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled') }}
         run: exit 1

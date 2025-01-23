@@ -13,9 +13,8 @@
   # dotenv.enable = true;
 
   # languages.python.enable = true;
-  # languages.python.uv.enable = true;
-  # languages.python.venv.enable = true;
   # languages.python.version = "3.12.2";
+  # languages.python.uv.enable = true;
 
   # replace pre-commit and various linters
   git-hooks = {

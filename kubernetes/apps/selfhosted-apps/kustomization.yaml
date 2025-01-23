@@ -1,0 +1,22 @@
+# yaml-language-server: $schema=https://json.schemastore.org/kustomization
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: selfhosted-apps
+resources:
+  - ./actual/ks.yaml
+  - ./hoarder/ks.yaml
+  - ./miniflux/ks.yaml
+  - ./n8n/ks.yaml
+  - ./piped/ks.yaml
+  - ./searxng/ks.yaml
+  - ./vikunja/ks.yaml
+components:
+  - ../../components/namespace
+  - ../../components/flux/alerts
+patches:
+  - patch: |
+      - op: replace
+        path: /metadata/name
+        value: selfhosted-apps
+    target:
+      kind: Namespace
