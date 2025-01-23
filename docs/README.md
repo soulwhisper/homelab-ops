@@ -38,6 +38,7 @@
 - VOLSYNC_STORAGECLASS=openebs-rep3
 - VOLSYNC_CACHE_SNAPSHOTCLASS=-openebs-rep1
 - VOLSYNC_SNAPSHOTCLASS=openebs-snapshot
+- app_uid = app_gid = 1001
 
 ## volsync-nfs
 

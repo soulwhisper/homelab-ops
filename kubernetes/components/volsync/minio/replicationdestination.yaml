@@ -20,9 +20,9 @@ spec:
     enableFileDeletion: true
     copyMethod: "${VOLSYNC_COPYMETHOD:-Snapshot}"
     moverSecurityContext:
-      runAsUser: ${APP_UID:-2000}
-      runAsGroup: ${APP_GID:-2000}
-      fsGroup: ${APP_GID:-2000}
+      runAsUser: ${APP_UID:-1001}
+      runAsGroup: ${APP_GID:-1001}
+      fsGroup: ${APP_GID:-1001}
     repository: "${APP}-volsync-minio"
     storageClassName: "${VOLSYNC_STORAGECLASS:-openebs-rep3}"
     volumeSnapshotClassName: "${VOLSYNC_SNAPSHOTCLASS:-openebs-snapshot}"
