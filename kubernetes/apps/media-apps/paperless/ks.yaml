@@ -25,6 +25,7 @@ spec:
     - name: volsync
       namespace: storage-system
   components:
+    - ../../../components/nfs-server
     - ../../../components/volsync
   postBuild:
     substitute:

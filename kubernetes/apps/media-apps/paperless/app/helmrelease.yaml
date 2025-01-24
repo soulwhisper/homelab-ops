@@ -127,7 +127,7 @@ spec:
             app:
               - path: /local
       data:
-        existingClaim: media-shared
+        existingClaim: paperless-nfs-share
         advancedMounts:
           paperless:
             app:

@@ -1,0 +1,12 @@
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: "${APP}-nfs-share"
+spec:
+  storageClassName: "nfs-csi"
+  accessModes:
+    - "ReadWriteMany"
+  resources:
+    requests:
+      storage: "${NFS_SHARE_CAPACITY:-10Gi}"

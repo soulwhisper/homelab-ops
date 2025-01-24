@@ -10,12 +10,6 @@
   env.TALOSCONFIG = "./kubernetes/talos/clusterconfig/talosconfig";
   env.MINIJINJA_CONFIG_FILE = ".minijinja.toml";
 
-  # dotenv.enable = true;
-
-  # languages.python.enable = true;
-  # languages.python.version = "3.12.2";
-  # languages.python.uv.enable = true;
-
   # replace pre-commit and various linters
   git-hooks = {
     # exclude = "_assets\/.*";
@@ -27,7 +21,6 @@
       prettier = {
         enable = true;
         settings = {
-          end-of-line = "lf";
           tab-width = 2;
           trailing-comma = "es5";
           use-tabs = false;
@@ -40,7 +33,7 @@
           extends: default
           rules:
             truthy:
-              allowed-values: ["true", "false", "on"]
+              allowed-values: ["true", "false"]
             comments:
               min-spaces-from-content: 1
             line-length: disable
@@ -72,9 +65,6 @@
       check-added-large-files.enable = true;
       check-merge-conflicts.enable = true;
       check-executables-have-shebangs.enable = true;
-      end-of-file-fixer.enable = true;
-      fix-byte-order-marker.enable = true;
-      mixed-line-endings.enable = true;
     };
   };
 

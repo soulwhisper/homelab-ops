@@ -68,3 +68,8 @@
 ## App Memo
 
 - use Valkey instead of Dragonflydb if apps served <= 2;
+
+## Overengineering
+
+- NTS support servers in NTP config;
+- Disk encryption for homelab env;

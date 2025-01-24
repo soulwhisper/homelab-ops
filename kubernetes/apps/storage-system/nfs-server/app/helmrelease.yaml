@@ -1,0 +1,60 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrelease-helm-v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: nfs-server
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: app-template
+      version: 3.6.1
+      interval: 30m
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: gitops-system
+  dependsOn:
+    - name: openebs
+      namespace: storage-system
+  values:
+    controllers:
+      nfs-server:
+        annotations:
+          reloader.stakater.com/auto: "true"
+        pod:
+          # enable user namespace
+          hostUsers: false
+
+        containers:
+          ocis:
+            image:
+              repository: itsthenetwork/nfs-server-alpine
+              tag: 12
+            probes:
+              liveness:
+                enabled: true
+              readiness:
+                enabled: true
+            resources:
+              requests:
+                cpu: 50m
+                memory: 128Mi
+              limits:
+                memory: 512Mi
+
+    service:
+      app:
+        controller: nfs-server
+        ports:
+          http:
+            port: 2049
+
+    persistence:
+      data:
+        existingClaim: nfs-server-pvc
+        advancedMounts:
+          nfs-server:
+            app:
+              - path: /nfsshare

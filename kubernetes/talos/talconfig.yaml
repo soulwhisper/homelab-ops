@@ -9,11 +9,12 @@ endpoint: "https://k8s.homelab.internal:6443"
 #   - disk-encryption
 #   - secureboot
 #   - tailscale
+#   - nut
 
 # renovate: depName=ghcr.io/siderolabs/installer datasource=docker
-talosVersion: v1.9.2
+talosVersion: v1.9.0
 # renovate: depName=ghcr.io/siderolabs/kubelet datasource=docker
-kubernetesVersion: v1.32.1
+kubernetesVersion: v1.32.0
 
 additionalApiServerCertSans: &sans
   - k8s.homelab.internal
@@ -121,7 +122,7 @@ controlPlane:
           advertisedSubnets:
             - 10.10.0.0/24
 
-  # AdmissionControl configuration, disable PodSecurity; use labels instead
+  # AdmissionControl configuration, disabled; use labels instead
   #  - |-
   #    - op: remove
   #      path: /cluster/apiServer/admissionControl
@@ -144,26 +145,22 @@ patches:
         https_proxy: http://10.10.0.10:1080
         no_proxy: .tailscale.com,.tailscale.io,.noirprime.com,.homelab.internal,localhost,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16
 
-  # Enable OpenEBS Storage ( Hostpath ), disabled for MS-01 256G system disk
-  # - |-
-  #   machine:
-  #     kubelet:
-  #       extraMounts:
-  #         - destination: /var/local/openebs
-  #           type: bind
-  #           source: /var/local/openebs
-  #           options:
-  #             - rbind
-  #             - rshared
-  #             - rw
-
-  # Enable OpenEBS Storage ( Mayastor )
+  # Enable OpenEBS Storage
   - |-
     machine:
       sysctls:
         vm.nr_hugepages: "1024"
       nodeLabels:
         openebs.io/engine: mayastor
+      kubelet:
+        extraMounts:
+          - destination: /var/local/openebs
+            type: bind
+            source: /var/local/openebs
+            options:
+              - rbind
+              - rshared
+              - rw
 
   # Enable DRBD and LVM-Thin
   # - |-
@@ -191,7 +188,7 @@ patches:
           allowedRoles:
             - os:admin
           allowedKubernetesNamespaces:
-            - kube-system
+            - gitops-system
 
   # Enable userspaces, isolate privileged containers
   # https://kubernetes.io/docs/tasks/configure-pod-container/user-namespaces/
@@ -211,6 +208,7 @@ patches:
 
   # Enable disk encryption with better encyption method, pass >= 20 characters
   # https://github.com/siderolabs/talos/issues/8972
+  # https://en.m.wikipedia.org/wiki/Evil_maid_attack
   - |-
     machine:
       systemDiskEncryption:

@@ -76,14 +76,14 @@ spec:
                 readOnly: true
 
       media:
-        existingClaim: media-shared
+        existingClaim: ytdl-sub-nfs-share
         advancedMounts:
           ytdl-sub:
             app:
               - path: /music
-                subPath: /media/youtube/music
+                subPath: /media/music
               - path: /tv_shows
-                subPath: /media/youtube/tv_shows
+                subPath: /media/tv_shows
 
       tmp:
         type: emptyDir

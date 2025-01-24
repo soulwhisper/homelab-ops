@@ -4,9 +4,6 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 namespace: media-apps
 resources:
-  # Shared PVC
-  - ./pvc-shared.yaml
-  # Flux-Kustomizations
   - ./ocis/ks.yaml
   - ./paperless/ks.yaml
   - ./ytdl-sub/ks.yaml
