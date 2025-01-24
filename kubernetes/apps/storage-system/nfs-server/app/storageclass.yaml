@@ -1,0 +1,16 @@
+---
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: nfs-csi
+  annotations:
+    storageclass.storage.kubernetes.io/is-default-class: "false"
+parameters:
+  server: nfs-server.storage-system.svc.cluster.local
+  share: /
+mountOptions:
+  - nfsvers=4.1
+provisioner: nfs.csi.k8s.io
+allowVolumeExpansion: true
+volumeBindingMode: Immediate
+reclaimPolicy: Delete

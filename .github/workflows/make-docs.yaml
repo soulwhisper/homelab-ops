@@ -1,0 +1,48 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+name: "Make Docs"
+
+on:
+  workflow_dispatch:
+  push:
+    branches: ["main"]
+    paths:
+      - .github/workflows/make-docs.yaml
+      - docs/**
+
+permissions:
+  actions: write
+  contents: read
+  id-token: write
+  pages: write
+
+jobs:
+  Make-Docs:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}
+    steps:
+      - uses: actions/create-github-app-token@c1a285145b9d317df6ced56c09f525b5c2b6f755 # v1
+        id: app-token
+        with:
+          app-id: "${{ secrets.LAB_ASSISTANT_APP_ID }}"
+          private-key: "${{ secrets.LAB_ASSISTANT_APP_KEY}}"
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+      - uses: actions/configure-pages@983d7736d9b0ae728b81ab479565c72886d7745b # v5
+        with:
+          token: "${{ steps.app-token.outputs.token }}"
+          enablement: true
+      - uses: docker://ghcr.io/bjw-s/mdbook:0.4.43@sha256:fdc61a86bc78f865d967a87912c37fecd8e26e289a97c040e0ab221ff5b0de18
+        with:
+          args: mdbook build docs
+      - uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa # v3
+        with:
+          path: ./docs/book
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e # v4
+        with:
+          token: "${{ steps.app-token.outputs.token }}"

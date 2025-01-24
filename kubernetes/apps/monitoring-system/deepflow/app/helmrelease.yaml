@@ -23,7 +23,21 @@ spec:
     grafana:
       image:
         repository: deepflowce
-
+      ingress:
+        enabled: true
+        ingressClassName: internal-nginx
+        hosts:
+          - host: deepflow.noirprime.com
+            paths:
+              - path: /
+                service:
+                  identifier: app
+                  port: http
     server:
       service:
         externalTrafficPolicy: Local
+
+    inputs:
+      integration:
+        prometheus_extra_labels:
+          enabled: true

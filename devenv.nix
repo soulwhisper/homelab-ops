@@ -5,17 +5,10 @@
   ...
 }:
 {
-  env.GREET = "home-ops";
+  env.GREET = "homelab-ops";
   env.KUBECONFIG = "./kubernetes/kubeconfig";
   env.TALOSCONFIG = "./kubernetes/talos/clusterconfig/talosconfig";
   env.MINIJINJA_CONFIG_FILE = ".minijinja.toml";
-
-  # dotenv.enable = true;
-
-  # languages.python.enable = true;
-  # languages.python.uv.enable = true;
-  # languages.python.venv.enable = true;
-  # languages.python.version = "3.12.2";
 
   # replace pre-commit and various linters
   git-hooks = {
@@ -28,7 +21,6 @@
       prettier = {
         enable = true;
         settings = {
-          end-of-line = "lf";
           tab-width = 2;
           trailing-comma = "es5";
           use-tabs = false;
@@ -73,9 +65,6 @@
       check-added-large-files.enable = true;
       check-merge-conflicts.enable = true;
       check-executables-have-shebangs.enable = true;
-      end-of-file-fixer.enable = true;
-      fix-byte-order-marker.enable = true;
-      mixed-line-endings.enable = true;
     };
   };
 

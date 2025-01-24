@@ -1,0 +1,37 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrelease-helm-v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: smartctl-exporter
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: prometheus-smartctl-exporter
+      version: 0.13.0
+      sourceRef:
+        kind: HelmRepository
+        name: kube-prometheus-stack
+        namespace: gitops-system
+      interval: 30m
+  values:
+    fullnameOverride: smartctl-exporter
+
+    image:
+      registry: quay.io
+
+    serviceMonitor:
+      enabled: true
+      relabelings:
+        - action: labeldrop
+          regex: (pod)
+        - action: replace
+          regex: (.*)
+          replacement: $1.homelablab.internal
+          sourceLabels:
+            - __meta_kubernetes_endpoint_node_name
+          targetLabel: instance
+
+    prometheusRules:
+      enabled: false

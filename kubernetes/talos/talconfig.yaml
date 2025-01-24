@@ -1,7 +1,7 @@
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/budimanjojo/talhelper/master/pkg/config/schemas/talconfig.json
-clusterName: &clusterName homelab
-endpoint: "https://k8s.homelab.internal:6443"
+clusterName: &clusterName homelablab
+endpoint: "https://k8s.homelablab.internal:6443"
 
 # Current stage = ms-01;
 # schematic_ID = afd9fbee2487ab9a50e8a034b2fdf412bb36bf17f27053b006b24c40744a9ea2
@@ -9,14 +9,15 @@ endpoint: "https://k8s.homelab.internal:6443"
 #   - disk-encryption
 #   - secureboot
 #   - tailscale
+#   - nut
 
 # renovate: depName=ghcr.io/siderolabs/installer datasource=docker
-talosVersion: v1.9.2
+talosVersion: v1.9.0
 # renovate: depName=ghcr.io/siderolabs/kubelet datasource=docker
-kubernetesVersion: v1.32.1
+kubernetesVersion: v1.32.0
 
 additionalApiServerCertSans: &sans
-  - k8s.homelab.internal
+  - k8s.homelablab.internal
   - &talosControlplaneVip 10.10.0.100
   - 127.0.0.1
 additionalMachineCertSans: *sans
@@ -121,7 +122,7 @@ controlPlane:
           advertisedSubnets:
             - 10.10.0.0/24
 
-  # AdmissionControl configuration, disable PodSecurity; use labels instead
+  # AdmissionControl configuration, disabled; use labels instead
   #  - |-
   #    - op: remove
   #      path: /cluster/apiServer/admissionControl
@@ -142,28 +143,24 @@ patches:
       env:
         http_proxy: http://10.10.0.10:1080
         https_proxy: http://10.10.0.10:1080
-        no_proxy: .tailscale.com,.tailscale.io,.noirprime.com,.homelab.internal,localhost,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16
+        no_proxy: .tailscale.com,.tailscale.io,.noirprime.com,.homelablab.internal,localhost,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16
 
-  # Enable OpenEBS Storage ( Hostpath ), disabled for MS-01 256G system disk
-  # - |-
-  #   machine:
-  #     kubelet:
-  #       extraMounts:
-  #         - destination: /var/local/openebs
-  #           type: bind
-  #           source: /var/local/openebs
-  #           options:
-  #             - rbind
-  #             - rshared
-  #             - rw
-
-  # Enable OpenEBS Storage ( Mayastor )
+  # Enable OpenEBS Storage
   - |-
     machine:
       sysctls:
         vm.nr_hugepages: "1024"
       nodeLabels:
         openebs.io/engine: mayastor
+      kubelet:
+        extraMounts:
+          - destination: /var/local/openebs
+            type: bind
+            source: /var/local/openebs
+            options:
+              - rbind
+              - rshared
+              - rw
 
   # Enable DRBD and LVM-Thin
   # - |-
@@ -191,7 +188,7 @@ patches:
           allowedRoles:
             - os:admin
           allowedKubernetesNamespaces:
-            - kube-system
+            - gitops-system
 
   # Enable userspaces, isolate privileged containers
   # https://kubernetes.io/docs/tasks/configure-pod-container/user-namespaces/
@@ -211,6 +208,7 @@ patches:
 
   # Enable disk encryption with better encyption method, pass >= 20 characters
   # https://github.com/siderolabs/talos/issues/8972
+  # https://en.m.wikipedia.org/wiki/Evil_maid_attack
   - |-
     machine:
       systemDiskEncryption:
@@ -245,11 +243,11 @@ patches:
        nameservers:
          - 10.10.0.10
        disableSearchDomain: false
-       searchDomains: homelab.internal
+       searchDomains: homelablab.internal
        extraHostEntries:
          - ip: 10.10.0.100
            aliases:
-             - k8s.homelab.internal
+             - k8s.homelablab.internal
 
   # Kubelet configuration
   - |-

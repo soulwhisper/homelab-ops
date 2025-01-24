@@ -4,8 +4,9 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &appname coroot
+  namespace: &namespace monitoring-system
 spec:
-  targetNamespace: monitoring-system
+  targetNamespace: *namespace
   commonMetadata:
     labels:
       app.kubernetes.io/name: *appname
@@ -16,7 +17,13 @@ spec:
     kind: GitRepository
     name: gitops-system
     namespace: gitops-system
-  wait: true
+  wait: false
   dependsOn:
     - name: openebs
       namespace: storage-system
+  components:
+    - ../../../components/gatus
+  postBuild:
+    substitute:
+      APP: *appname
+      GATUS_GROUP: monitoring
