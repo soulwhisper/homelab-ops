@@ -5,7 +5,7 @@
   ...
 }:
 {
-  env.GREET = "home-ops";
+  env.GREET = "homelab-ops";
   env.KUBECONFIG = "./kubernetes/kubeconfig";
   env.TALOSCONFIG = "./kubernetes/talos/clusterconfig/talosconfig";
   env.MINIJINJA_CONFIG_FILE = ".minijinja.toml";

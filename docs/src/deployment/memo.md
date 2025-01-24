@@ -4,7 +4,7 @@
 - add github webooks after deployment, [ref](https://fluxcd.io/flux/guides/webhook-receivers/#define-a-git-repository-receiver);
 - tune monitoring apps
 - relocate privieged apps to "privileged", with "labels.pod-security.kubernetes.io/enforce: privileged", like "spegel".
-- consider adding [MAP](https://github.com/kubernetes/enhancements/tree/master/keps/sig-api-machinery/3962-mutating-admission-policies) when beta, [examples](https://github.com/search?q=repo%3Abjw-s-labs%2Fhome-ops+MutatingAdmissionPolicy&type=commits).
+- consider adding [MAP](https://github.com/kubernetes/enhancements/tree/master/keps/sig-api-machinery/3962-mutating-admission-policies) when beta, [examples](https://github.com/search?q=repo%3Abjw-s-labs%2Fhomelab-ops+MutatingAdmissionPolicy&type=commits).
 - use "sigs.k8s.io/controller-tools/cmd/controller-gen" to update volsync replicationsource/replicationdestination schema
 - add discord notifications for github actions;
 - design grafana dashboard for openebs-mayastor, [ref](https://openebs.io/docs/user-guides/replicated-storage-user-guide/replicated-pv-mayastor/advanced-operations/monitoring); then disable ceph;
@@ -26,7 +26,7 @@
 - `10.10.0.101-103` as k8s nodes;
 - `10.10.0.201-250` as cilium l2 loadbalancer ip;
 - monitoring: `mon.noirprime.com`, `/coroot/` for coroot, `/grafana/` for grafana
-- self-hosted-runner, label:arc-homelab / label:arc-homelab-ops
+- self-hosted-runner, label:arc-homelablab / label:arc-homelablab-ops
 
 ## Github-secrets
 
@@ -51,7 +51,7 @@
       volumes:
         - name: volsync
           nfs:
-            server: "nix-infra.homelab.internal"
+            server: "nix-infra.homelablab.internal"
             path: "/opt/backup/volsync"
 ```
 
@@ -73,4 +73,4 @@
 ## Overengineering
 
 - NTS support servers in NTP config;
-- Disk encryption for homelab env;
+- Disk encryption for homelablab env;

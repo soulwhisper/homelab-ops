@@ -23,6 +23,6 @@ spec:
       - create: true
         name: cluster-settings
         data:
-          CLUSTER_NAME: home-ops
+          CLUSTER_NAME: homelab-ops
 
     secrets: []

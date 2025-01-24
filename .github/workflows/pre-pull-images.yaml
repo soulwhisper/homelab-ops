@@ -87,7 +87,7 @@ jobs:
   pre-pull-images:
     if: ${{ needs.extract-images.outputs.matrix != '[]' }}
     name: Pre-pull images
-    runs-on: arc-homelab-ops
+    runs-on: arc-homelablab-ops
     needs:
       - extract-images
       - compare-images
@@ -97,8 +97,8 @@ jobs:
       max-parallel: 4
       fail-fast: false
     steps:
-      - name: Setup Homebrew
-        uses: Homebrew/actions/setup-homebrew@master
+      - name: Setup Homelabbrew
+        uses: Homelabbrew/actions/setup-homelabbrew@master
 
       - name: Setup Workflow Tools
         run: brew install siderolabs/tap/talosctl

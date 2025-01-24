@@ -113,7 +113,7 @@
       "type": "timepicker"
     },
     "timezone": "browser",
-    "title": "Home",
+    "title": "Homelab",
     "version": 0,
     "weekStart": ""
   }

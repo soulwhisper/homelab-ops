@@ -17,7 +17,7 @@ search:
     - zh-CN
 
 general:
-  instance_name: Homelab Search
+  instance_name: Homelablab Search
 
 ui:
   default_theme: simple

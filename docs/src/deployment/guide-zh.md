@@ -6,7 +6,7 @@
 
 ## 软件
 
-- gitops 目录: [soulwhisper/home-ops](https://github.com/soulwhisper/home-ops);
+- gitops 目录: [soulwhisper/homelab-ops](https://github.com/soulwhisper/homelab-ops);
 - 工作机: [soulwhisper/nix-config#nix-dev](https://github.com/soulwhisper/nix-config/tree/main/hosts/nix-dev), 或 Archlinux;
 - 引导工具: [ventoy](https://www.ventoy.net/cn/index.html);
 
@@ -23,14 +23,14 @@
 - 准备第三方密钥管理工具, 推荐使用 1password; 生成 1password 开发工具中的访问令牌;
 - 准备一个私人域名, 推荐使用 cloudflare, 此处域名为 `noirprime.com`; 配置 cloudflare-tunnel;
 - 准备 NAS, 同时在 NAS 上部署 Adguard, Minio 和代理服务端, 共享备份目录 ( 此处目录为 `/mnt/pool_hdd/media` );
-- 为 Home-Ops 单独划分一个子网, 其中 NAS 使用 `.10` 的 IP;
+- 为 Homelab-Ops 单独划分一个子网, 其中 NAS 使用 `.10` 的 IP;
 - 使用 10G 光纤将 MS-01 与交换机相连, 将 NAS 与交换机相连，在交换机内部配置 DHCP, 范围为上面划定的独立子网 ( `.100-.200` );
 - 在 Adguard 中配置 DNS 重写, 指定主机名和其对应的 IP 地址; 该操作也可通过静态 DHCP 主机名实现;
 
 ## 初始化
 
 - 使用 git 下载 gitops 目录到本地;
-- 修改 `https://github.com/soulwhisper/home-ops/tree/main/kubernetes/bootstrap/talos` 目录下的 K8S 配置;
+- 修改 `https://github.com/soulwhisper/homelab-ops/tree/main/kubernetes/bootstrap/talos` 目录下的 K8S 配置;
   - 替换 `172.19.82.` 为自己的子网, 根据需要调整主机 IP 地址 ( `.100-.200` );
   - 如不需要 Tailscale, 段落 `extensionServices` 可删除;
   - 其他配置无需修改;

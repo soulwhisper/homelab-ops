@@ -3,12 +3,12 @@ authors = ["Hekatos Noir"]
 language = "en"
 multilingual = false
 src = "src"
-title = "Homelab Operations"
+title = "Homelablab Operations"
 
 [output.html]
 default-theme = "navy"
 preferred-dark-theme = "navy"
-git-repository-url = "https://github.com/soulwhisper/home-ops"
+git-repository-url = "https://github.com/soulwhisper/homelab-ops"
 git-repository-icon = "fa-github"
 no-section-label = true
 additional-js = ["mermaid.min.js", "mermaid-init.js"]

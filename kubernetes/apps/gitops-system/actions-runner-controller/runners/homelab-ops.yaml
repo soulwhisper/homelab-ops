@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: arc-homelab-ops
+  name: arc-homelablab-ops
 spec:
   interval: 10m
   chart:
@@ -23,7 +23,7 @@ spec:
       namespace: storage-system
 
   values:
-    githubConfigUrl: https://github.com/soulwhisper/home-ops
+    githubConfigUrl: https://github.com/soulwhisper/homelab-ops
 
     minRunners: 0
     maxRunners: 2
@@ -47,7 +47,7 @@ spec:
           - name: runner
             image: ghcr.io/onedr0p/actions-runner:2.321.0@sha256:a7539dc157f3f0129f49459826576ab53a529580916bb8a09a395e61e38354c0
             command:
-              - /home/runner/run.sh
+              - /homelab/runner/run.sh
             env:
               - name: ACTIONS_RUNNER_REQUIRE_JOB_CONTAINER
                 value: "false"

@@ -1,7 +1,7 @@
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/budimanjojo/talhelper/master/pkg/config/schemas/talconfig.json
-clusterName: &clusterName homelab
-endpoint: "https://k8s.homelab.internal:6443"
+clusterName: &clusterName homelablab
+endpoint: "https://k8s.homelablab.internal:6443"
 
 # Current stage = ms-01;
 # schematic_ID = afd9fbee2487ab9a50e8a034b2fdf412bb36bf17f27053b006b24c40744a9ea2
@@ -17,7 +17,7 @@ talosVersion: v1.9.0
 kubernetesVersion: v1.32.0
 
 additionalApiServerCertSans: &sans
-  - k8s.homelab.internal
+  - k8s.homelablab.internal
   - &talosControlplaneVip 10.10.0.100
   - 127.0.0.1
 additionalMachineCertSans: *sans
@@ -143,7 +143,7 @@ patches:
       env:
         http_proxy: http://10.10.0.10:1080
         https_proxy: http://10.10.0.10:1080
-        no_proxy: .tailscale.com,.tailscale.io,.noirprime.com,.homelab.internal,localhost,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16
+        no_proxy: .tailscale.com,.tailscale.io,.noirprime.com,.homelablab.internal,localhost,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16
 
   # Enable OpenEBS Storage
   - |-
@@ -243,11 +243,11 @@ patches:
        nameservers:
          - 10.10.0.10
        disableSearchDomain: false
-       searchDomains: homelab.internal
+       searchDomains: homelablab.internal
        extraHostEntries:
          - ip: 10.10.0.100
            aliases:
-             - k8s.homelab.internal
+             - k8s.homelablab.internal
 
   # Kubelet configuration
   - |-

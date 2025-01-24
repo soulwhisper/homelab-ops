@@ -5,7 +5,7 @@ kind: Kustomization
 configMapGenerator:
   - name: grafana-dashboard
     files:
-      - home.json
+      - homelab.json
 generatorOptions:
   disableNameSuffixHash: true
   annotations:
