@@ -16,7 +16,6 @@ The Kubernetes cluster is deployed using [Talos](https://www.talos.dev), leverag
 - [spegel](https://github.com/spegel-org/spegel): Stateless cluster local OCI registry mirror.
 - [volsync](https://github.com/backube/volsync): Backup and recovery of persistent volume claims.
 
-
 ### GitOps
 
 [Flux](https://github.com/fluxcd/flux2) watches the clusters in my [kubernetes](./kubernetes/) folder (see Directories below) and makes the changes to my clusters based on the state of my Git repository.
