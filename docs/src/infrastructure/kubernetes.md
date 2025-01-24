@@ -17,11 +17,13 @@ The Kubernetes cluster is deployed using [Talos](https://www.talos.dev), leverag
 
 ### GitOps
 
-[Flux](https://github.com/fluxcd/flux2) watches the clusters in my [kubernetes](./kubernetes/) folder (see Directories below) and makes the changes to my clusters based on the state of my Git repository.
+[Flux](https://github.com/fluxcd/flux2) watches the clusters in my [kubernetes](./kubernetes/) folder (see Directories below) and ensures that my clusters are updated based on the state of the corresponding Git repository.
 
-The way Flux works for me here is it will recursively search the `kubernetes/apps` folder until it finds the most top level `kustomization.yaml` per directory and then apply all the resources listed in it. That aforementioned `kustomization.yaml` will generally only have a namespace resource and one or many Flux kustomizations (`ks.yaml`). Under the control of those Flux kustomizations there will be a `HelmRelease` or other resources related to the application which will be applied.
+In my setup, Flux operates by recursively scanning the `kubernetes/apps` folder until it identifies the top-level `kustomization.yaml` file within each directory. This file serves as the entry point for Flux, and it lists all the resources to be applied to the cluster. Typically, the `kustomization.yaml` contains a namespace resource and one or more Flux kustomizations (`ks.yaml`). These kustomizations govern the deployment of specific resources, including `HelmRelease` resources or other application-specific resources, which Flux subsequently applies to the cluster.
 
-[Renovate](https://github.com/renovatebot/renovate) watches my **entire** repository looking for dependency updates, when they are found a PR is automatically created. When some PRs are merged Flux applies the changes to my cluster.
+[Renovate](https://github.com/renovatebot/renovate) continuously monitors my **entire** repository for dependency updates. When an update is detected, Renovate automatically creates a pull request. Upon merging these pull requests, Flux is triggered to apply the changes to my clusters, ensuring that my environments are always aligned with the latest desired state as defined in Git.
+
+This GitOps workflow enables a fully automated and declarative approach to managing both the infrastructure and application deployments across my Kubernetes clusters. By relying on Flux and Renovate, I can ensure that updates are consistent, repeatable, and seamlessly applied, maintaining the integrity and reliability of the cluster without manual intervention.
 
 ### Directories
 
@@ -32,7 +34,7 @@ This Git repository contains the following directories under [Kubernetes](./kube
 ├── 📁 apps           # applications
 ├── 📁 bootstrap      # bootstrap procedures
 ├── 📁 components     # re-useable components
-└── 📁 flux           # flux system configuration
+├── 📁 flux           # flux system configuration
 └── 📁 talos          # talos configuration
 ```
 
