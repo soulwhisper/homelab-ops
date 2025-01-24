@@ -22,6 +22,9 @@ spec:
   dependsOn:
     - name: onepassword-store
       namespace: security-system
+  components:
+    - ../../../components/gatus
   postBuild:
     substitute:
       APP: *appname
+      GATUS_GROUP: selfhosted

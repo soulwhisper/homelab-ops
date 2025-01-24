@@ -19,9 +19,9 @@ spec:
     defaultPodOptions:
       automountServiceAccountToken: false
       securityContext:
-        runAsUser: 1000
-        runAsGroup: 1000
-        fsGroup: 1000
+        runAsUser: 1001
+        runAsGroup: 1001
+        fsGroup: 1001
         fsGroupChangePolicy: "OnRootMismatch"
 
     controllers:
@@ -170,7 +170,7 @@ spec:
         annotations:
           nginx.ingress.kubernetes.io/enable-cors: "true"
           nginx.ingress.kubernetes.io/cors-allow-origin: "https://piped.noirprime.com, https://piped-api.noirprime.com, https://piped-proxy.noirprime.com"
-        className: "external-nginx"
+        className: external-nginx
         hosts:
           - host: piped-api.noirprime.com
             paths:
@@ -182,7 +182,7 @@ spec:
         annotations:
           nginx.ingress.kubernetes.io/enable-cors: "true"
           nginx.ingress.kubernetes.io/cors-allow-origin: "https://piped.noirprime.com, https://piped-api.noirprime.com, https://piped-proxy.noirprime.com"
-        className: "internal-nginx"
+        className: internal-nginx
         hosts:
           - host: piped.noirprime.com
             paths:
@@ -194,7 +194,7 @@ spec:
         annotations:
           nginx.ingress.kubernetes.io/enable-cors: "true"
           nginx.ingress.kubernetes.io/cors-allow-origin: "https://piped.noirprime.com, https://piped-api.noirprime.com, https://piped-proxy.noirprime.com"
-        className: "internal-nginx"
+        className: internal-nginx
         hosts:
           - host: piped-proxy.noirprime.com
             paths:

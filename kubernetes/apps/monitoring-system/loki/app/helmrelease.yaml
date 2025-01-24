@@ -5,7 +5,7 @@ kind: HelmRelease
 metadata:
   name: loki
 spec:
-  interval: 10m
+  interval: 30m
   timeout: 15m
   chart:
     spec:
@@ -15,11 +15,10 @@ spec:
         kind: HelmRepository
         name: grafana
         namespace: gitops-system
-      interval: 10m
+      interval: 30m
   dependsOn:
     - name: openebs
       namespace: storage-system
-
   values:
     deploymentMode: SingleBinary
 
@@ -36,7 +35,7 @@ spec:
       ingester:
         chunk_encoding: snappy
       limits_config:
-        retention_period: 7d
+        retention_period: 14d
       schemaConfig:
         configs:
           - from: "2024-04-01"
@@ -72,7 +71,7 @@ spec:
       replicas: 1
       persistence:
         enabled: true
-        storageClass: openebs-rep1
+        storageClass: openebs-rep3
         size: 50Gi
     test:
       enabled: false

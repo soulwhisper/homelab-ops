@@ -33,7 +33,7 @@
           extends: default
           rules:
             truthy:
-              allowed-values: ["true", "false"]
+              allowed-values: ["true", "false", "on"]
             comments:
               min-spaces-from-content: 1
             line-length: disable

@@ -8,7 +8,7 @@ spec:
   interval: 10m
   chart:
     spec:
-      chart: coroot
+      chart: coroot-operator
       sourceRef:
         kind: HelmRepository
         name: coroot
@@ -25,7 +25,9 @@ spec:
         enabled: true
         className: internal-nginx
         hosts:
-          - host: mon.noirprime.com
+          - host: coroot.noirprime.com
             paths:
-              - path: /coroot/
-                pathType: ImplementationSpecific
+              - path: /
+                service:
+                  identifier: app
+                  port: http

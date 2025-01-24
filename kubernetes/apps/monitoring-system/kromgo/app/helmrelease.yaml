@@ -5,16 +5,16 @@ kind: HelmRelease
 metadata:
   name: kromgo
 spec:
-  interval: 10m
+  interval: 30m
   chart:
     spec:
       chart: app-template
       version: 3.6.1
+      interval: 30m
       sourceRef:
         kind: HelmRepository
         name: bjw-s
         namespace: gitops-system
-
   values:
     controllers:
       kromgo:
@@ -41,20 +41,20 @@ spec:
           kromgo:
             image:
               repository: ghcr.io/kashalls/kromgo
-              tag: v0.4.3@sha256:c9148045a3e211ad46d416c3e3bb7ffd4c169a8b6f8e56df03ea68ed1ed5571b
+              tag: v0.4.3
             env:
-              PROMETHEUS_URL: http://deepflow-server.monitoring.svc.cluster.local
+              PROMETHEUS_URL: http://prometheus-operated.monitoring-system.svc.cluster.local:9090
               SERVER_HOST: 0.0.0.0
-              SERVER_PORT: &port 20416
+              SERVER_PORT: &port 8080
               HEALTH_HOST: 0.0.0.0
-              HEALTH_PORT: &hport 20417
+              HEALTH_PORT: &hport 8888
             probes:
               liveness: &probes
                 enabled: true
                 custom: true
                 spec:
                   httpGet:
-                    path: /v1/health/
+                    path: /readyz
                     port: *hport
                   initialDelaySeconds: 0
                   periodSeconds: 10
@@ -85,7 +85,7 @@ spec:
             port: *hport
     ingress:
       app:
-        className: "external-nginx"
+        className: external-nginx
         hosts:
           - host: kromgo.noirprime.com
             paths:
@@ -97,7 +97,7 @@ spec:
     persistence:
       config-file:
         type: configMap
-        name: kromgo
+        name: kromgo-configmap
         globalMounts:
           - path: /kromgo/config.yaml
             subPath: config.yaml

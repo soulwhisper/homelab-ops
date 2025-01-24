@@ -21,3 +21,9 @@ spec:
   dependsOn:
     - name: openebs
       namespace: storage-system
+  components:
+    - ../../../components/gatus
+  postBuild:
+    substitute:
+      APP: *appname
+      GATUS_GROUP: monitoring

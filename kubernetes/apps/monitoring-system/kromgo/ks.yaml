@@ -10,7 +10,8 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *appname
-  interval: 10m
+  interval: 30m
+  timeout: 5m
   path: "./kubernetes/apps/monitoring-system/kromgo/app"
   prune: true
   sourceRef:
@@ -18,3 +19,9 @@ spec:
     name: gitops-system
     namespace: gitops-system
   wait: false
+  components:
+    - ../../../components/gatus
+  postBuild:
+    substitute:
+      APP: *appname
+      GATUS_GROUP: monitoring

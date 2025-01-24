@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="https://github.com/soulwhisper/home-ops/blob/main/_assets/logo.jpg?raw=true" width="144px" height="144px"/>
+<img src="https://github.com/soulwhisper/home-ops/blob/main/docs/_assets/logo.jpg?raw=true" width="144px" height="144px"/>
 
 ## My Home Operations repository
 

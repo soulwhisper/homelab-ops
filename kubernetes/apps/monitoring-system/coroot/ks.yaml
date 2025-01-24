@@ -17,7 +17,13 @@ spec:
     kind: GitRepository
     name: gitops-system
     namespace: gitops-system
-  wait: true
+  wait: false
   dependsOn:
     - name: openebs
       namespace: storage-system
+  components:
+    - ../../../components/gatus
+  postBuild:
+    substitute:
+      APP: *appname
+      GATUS_GROUP: monitoring

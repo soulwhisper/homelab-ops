@@ -112,7 +112,7 @@ spec:
       app:
         className: internal-nginx
         hosts:
-          - host: search.noirprime.com
+          - host: searxng.noirprime.com
             paths:
               - path: /
                 service:
