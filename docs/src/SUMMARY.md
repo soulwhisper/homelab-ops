@@ -2,7 +2,9 @@
 
 [Introduction](introduction.md)
 
-# Infrastructure
+---
+
+## Infrastructure (WIP)
 
 - [Kubernetes](./infrastructure/kubernetes.md)
   - [External Secrets (WIP)](./deployment/externalSecrets.md)
