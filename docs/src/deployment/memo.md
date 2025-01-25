@@ -1,4 +1,4 @@
-## GTD
+## Memo (WIP)
 
 - bring up new cluster, using secureboot ISO, not pxe/matchbox
 - add github webooks after deployment, [ref](https://fluxcd.io/flux/guides/webhook-receivers/#define-a-git-repository-receiver);
@@ -9,7 +9,7 @@
 - add discord notifications for github actions;
 - design grafana dashboard for openebs-mayastor, [ref](https://openebs.io/docs/user-guides/replicated-storage-user-guide/replicated-pv-mayastor/advanced-operations/monitoring); then disable ceph;
 
-## Infra
+### Infra
 
 - `infra/scripts/minio-bucket-keys.sh`, create minio buckets, service accounts and policies for k8s apps, using 1password keys.
 - offsite backup ( volsync ) use minio @ nix-infra;
@@ -19,7 +19,7 @@
 - sops.age for configs, migrating to onepassword;
 - onepassword, main secret store;
 
-## Pre-deployment
+### Pre-deployment
 
 - make sure system-upgrade-controller use correct installer and schematicID
 - `10.10.0.10` as nix-infra node, minio / dns / ntp / talos-api / ...
@@ -28,12 +28,12 @@
 - monitoring: `mon.noirprime.com`, `/coroot/` for coroot, `/grafana/` for grafana
 - self-hosted-runner, label:arc-homelablab / label:arc-homelablab-ops
 
-## Github-secrets
+### Github-secrets
 
 - LAB_ASSISTANT_APP_ID => GITHUB_APP_ID
 - LAB_ASSISTANT_APP_KEY => GITHUB_APP_KEY
 
-## defaults
+### defaults
 
 - doamin = "cluster.local"
 - VOLSYNC_STORAGECLASS=openebs-rep3
@@ -41,7 +41,7 @@
 - VOLSYNC_SNAPSHOTCLASS=openebs-snapshot
 - app_uid = app_gid = 1001
 
-## volsync-nfs
+### volsync-nfs
 
 ```yaml
 # if using volsync-nfs, add below lines
@@ -55,22 +55,11 @@
             path: "/opt/backup/volsync"
 ```
 
-## Hardware
-
-- Node: Miniforum MS-01 X3
-- CPU: Intel 13900H
-- RAM: Crucial DDR5 5600MHz 48G X2
-- SystemDisk: Advantech A+E 2230 SSD 256G, replace WIFI
-- StorageDisk1: SK Hynix P31 2TB
-- StorageDisk2: SK Hynix P41 2TB
-- StorageDisk3: Kioxia CM6/CD6 10+TB
-- Switch1: H3C S6300-48S
-
-## App Memo
+### App Memo
 
 - use Valkey instead of Dragonflydb if apps served <= 2;
 
-## Overengineering
+### Overengineering
 
 - NTS support servers in NTP config;
 - Disk encryption for homelablab env;

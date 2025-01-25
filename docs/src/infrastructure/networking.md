@@ -2,13 +2,14 @@
 
 The homelab network is anchored by a datacenter-grade access switch, primarily operating in Layer 2 mode with BGP for routing. Outside the cluster, a dedicated industrial PC configured with [nix-config](https://github.com/soulwhisper/nix-config/tree/main/hosts/nix-infra) provides essential Kubernetes infrastructure services, including NTP, external-dns, HTTP proxy, and discovery services.
 
-While most of my infrastructure and workloads are self-hosted I do rely upon the cloud for certain key parts of my setup. This saves me from having to worry about three things. (1) Dealing with chicken/egg scenarios, (2) services I critically need whether my cluster is online or not and (3) The "hit by a bus factor" - what happens to critical apps (e.g. Email, Password Manager, Photos) that my family relies on when I no longer around.
+While the majority of my infrastructure and workloads are self-hosted, I rely on the cloud for certain critical components of my setup, as this approach is essential for mitigating several key risks. By offloading these applications to the cloud, I significantly reduce the complexity of maintenance. Specifically, this approach addresses three critical concerns: (1) avoiding chicken-and-egg scenarios, (2) ensuring the availability of mission-critical services regardless of the status of my Kubernetes cluster, and (3) addressing the "hit by a bus" factor—ensuring that vital applications such as email, password managers, and photo storage remain accessible and functional even in the event of an unexpected absence.
 
-Alternative solutions to the first two of these problems would be to host a Kubernetes cluster in the cloud and deploy applications like [HCVault](https://www.vaultproject.io/), [Vaultwarden](https://github.com/dani-garcia/vaultwarden), [ntfy](https://ntfy.sh/), and [Gatus](https://gatus.io/); however, maintaining another cluster and monitoring another group of workloads would be more work and probably be more or equal out to the same costs as described below.
+While one could theoretically resolve the first two issues by hosting a Kubernetes cluster in the cloud and deploying critical services like [HCVault](https://www.vaultproject.io/), [Keycloak](https://www.keycloak.org/), and [Ntfy](https://ntfy.sh/). The practicality of maintaining another cluster and monitoring a separate set of workloads would incur additional overhead. Moreover, the effort and cost of managing a cloud-based Kubernetes cluster would likely equate to, if not exceed, the savings gained from delegating these responsibilities to the cloud, as described below.
 
-| Service                                         | Use                                                               | Cost           |
-|-------------------------------------------------|-------------------------------------------------------------------|----------------|
-| [1Password](https://1password.com/)             | Secrets with [External Secrets](https://external-secrets.io/)     | ~$36/yr        |
-| [Cloudflare](https://www.cloudflare.com/)       | Domain and S3                                                     | Free           |
-| [GitHub](https://github.com/)                   | Hosting this repository and continuous integration/deployments    | Free           |
-|                                                 |                                                                   | Total: ~$3/mo  |
+| Service                                   | Use                                                            | Cost          |
+| ----------------------------------------- | -------------------------------------------------------------- | ------------- |
+| [1Password](https://1password.com/)       | Secrets with [External Secrets](https://external-secrets.io/)  | ~$36/yr       |
+| [Cloudflare](https://www.cloudflare.com/) | Domain, S3 and ZeroTrust                                       | Free          |
+| [Discord](https://discord.com/)           | Private channel notify me cluster alerts                       | Free          |
+| [GitHub](https://github.com/)             | Hosting this repository and continuous integration/deployments | Free          |
+|                                           |                                                                | Total: ~$3/mo |

@@ -1,23 +1,25 @@
-## 硬件
+## 部署指南
+
+### 硬件
 
 - Minisforum MS-01, x3; 每台至少 2 块存储;
 - 10G 交换机, 至少 4 口, 推荐 8 口以上, x1;
 - NAS, x1;
 
-## 软件
+### 软件
 
 - gitops 目录: [soulwhisper/homelab-ops](https://github.com/soulwhisper/homelab-ops);
 - 工作机: [soulwhisper/nix-config#nix-dev](https://github.com/soulwhisper/nix-config/tree/main/hosts/nix-dev), 或 Archlinux;
 - 引导工具: [ventoy](https://www.ventoy.net/cn/index.html);
 
-## 相关技术
+### 相关技术
 
 - [external-secrets-1password](https://external-secrets.io/main/provider/1password-automation/);
 - [external-dns-cloudflare](https://github.com/kubernetes-sigs/external-dns/blob/master/docs/tutorials/cloudflare.md);
 - [sops-age](https://github.com/getsops/sops?tab=readme-ov-file#encrypting-using-age);
 - [talos](https://www.talos.dev), [talhelper](https://budimanjojo.github.io/talhelper/latest/);
 
-## 准备工作
+### 准备工作
 
 - 准备代理;
 - 准备第三方密钥管理工具, 推荐使用 1password; 生成 1password 开发工具中的访问令牌;
@@ -27,7 +29,7 @@
 - 使用 10G 光纤将 MS-01 与交换机相连, 将 NAS 与交换机相连，在交换机内部配置 DHCP, 范围为上面划定的独立子网 ( `.100-.200` );
 - 在 Adguard 中配置 DNS 重写, 指定主机名和其对应的 IP 地址; 该操作也可通过静态 DHCP 主机名实现;
 
-## 初始化
+### 初始化
 
 - 使用 git 下载 gitops 目录到本地;
 - 修改 `https://github.com/soulwhisper/homelab-ops/tree/main/kubernetes/bootstrap/talos` 目录下的 K8S 配置;
@@ -45,7 +47,7 @@
 - 使用 age 对上述文档进行加密;
 - 使用 `infra/scripts/minio-bucket-keys.py` 初始化 NAS 上的 Minio;
 
-## 部署工作
+### 部署工作
 
 - 根据 talconfig 中的 schematic 配置在 [TalosLinuxImageFactory](https://factory.talos.dev/) 上生成镜像 iso;
 - 使用 ventoy 引导 MS-01 UEFI 启动, 关闭 Secure-boot;
