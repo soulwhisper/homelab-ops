@@ -6,24 +6,28 @@ src = "src"
 title = "Homelablab Operations"
 
 [output.html]
-default-theme = "navy"
+default-theme = "light"
 preferred-dark-theme = "navy"
 git-repository-url = "https://github.com/soulwhisper/homelab-ops"
 git-repository-icon = "fa-github"
-no-section-label = true
+no-section-label = false  # enable section numbers
 additional-js = ["mermaid.min.js", "mermaid-init.js"]
 additional-css = ["mdbook-admonish.css"]
 git-branch = "main"
 
+[output.html.print]
+enable = false
+
 [output.html.fold]
-enable = true
-level = 1
+enable = false
+level = 0
 
 [output.html.playground]
 copyable = false
 
 [output.html.search]
-limit-results = 15
+enable = true
+limit-results = 20
 
 [preprocessor]
 
