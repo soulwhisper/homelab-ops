@@ -11,6 +11,41 @@
 | password.title | password.label     | password.new_field    | password.section/notes/tags |
 | document.title | document.file_name | document.file_content | document.section/notes/tags |
 
+```yaml
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/external-secrets.io/externalsecret_v1beta1.json
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: paperless
+spec:
+  refreshInterval: 5m
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: onepassword
+  target:
+    name: paperless-secret
+    creationPolicy: Owner
+    template:
+      data:
+        PAPERLESS_ADMIN_USER: "{{ .paperless_username }}"
+        PAPERLESS_ADMIN_PASSWORD: "{{ .paperless_password }}"
+        PAPERLESS_SECRET_KEY: "{{ .paperless_encryption_cipher }}"
+  data:
+    - secretKey: paperless_username
+      remoteRef:
+        key: app_admin
+        property: username
+    - secretKey: paperless_password
+      remoteRef:
+        key: app_admin
+        property: password
+    - secretKey: paperless_encryption_cipher
+      remoteRef:
+        key: encryption_cipher
+        property: paperless
+```
+
 ### S3 Storage
 
 | app              | bucket           | key-name         |

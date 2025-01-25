@@ -2,16 +2,14 @@
 
 [Introduction](introduction.md)
 
----
-
-## Infrastructure (WIP)
+## Infrastructure
 
 - [Kubernetes](./infrastructure/kubernetes.md)
-  - [External Secrets (WIP)](./deployment/externalSecrets.md)
+  - [External Secrets](./deployment/externalSecrets.md)
 - [Networking](./infrastructure/networking.md)
 - [Hardware](./deployment/hardware.md)
 
 # Deployment Notes
 
-- [Memo (WIP)](./deployment/memo.md)
-- [如何部署](./deployment/guide-zh.md)
+- [Memo](./deployment/memo.md)
+- [部署指南](./deployment/guide-zh.md)
