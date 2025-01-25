@@ -5,7 +5,7 @@
 # Infrastructure
 
 - [Kubernetes](./infrastructure/kubernetes.md)
-    - [External Secrets (WIP)](./deployment/externalSecrets.md)
+  - [External Secrets (WIP)](./deployment/externalSecrets.md)
 - [Networking](./infrastructure/networking.md)
 - [Hardware](./deployment/hardware.md)
 
