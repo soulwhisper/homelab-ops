@@ -46,7 +46,6 @@ spec:
                     fieldPath: metadata.namespace
             securityContext:
               allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: false
               capabilities:
                 drop:
                   - ALL
@@ -58,8 +57,6 @@ spec:
       name: system-upgrade
 
     persistence:
-      tmp:
-        type: emptyDir
       etc-ssl:
         type: hostPath
         hostPath: /etc/ssl

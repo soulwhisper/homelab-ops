@@ -76,7 +76,6 @@ spec:
                 memory: 256Mi
             securityContext:
               allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
               capabilities:
                 drop:
                   - "ALL"
@@ -90,6 +89,7 @@ spec:
         identifier: config
         globalMounts:
           - path: /var/run/silence-operator/configmap
+            readOnly: true
 
     serviceAccount:
       create: true

@@ -51,7 +51,15 @@ spec:
               limits:
                 memory: 512Mi
             securityContext:
-              privileged: true
+              allowPrivilegeEscalation: false
+              capabilities:
+                drop:
+                  - "ALL"
+                add:
+                  - SYS_ADMIN
+                  - SETPCAP
+              seccompProfile:
+                type: RuntimeDefault
 
     service:
       app:

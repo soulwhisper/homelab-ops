@@ -63,7 +63,6 @@ spec:
                 memory: 99M
             securityContext:
               allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
               capabilities:
                 drop:
                   - ALL
@@ -94,8 +93,10 @@ spec:
         name: alertmanager
         globalMounts:
           - path: /etc/alertmanager
+            readOnly: true
       secrets:
         type: secret
         name: alertmanager-secret
         globalMounts:
           - path: /etc/secrets
+            readOnly: true

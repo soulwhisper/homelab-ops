@@ -85,9 +85,8 @@ spec:
                 memory: 2Gi
               limits:
                 memory: 6Gi
-            securityContext:
+            securityContext: &securityContext
               allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: false
               capabilities:
                 drop:
                   - ALL
@@ -108,14 +107,7 @@ spec:
                 memory: 32Mi
               limits:
                 memory: 128Mi
-            securityContext:
-              allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
-              capabilities:
-                drop:
-                  - ALL
-              seccompProfile:
-                type: RuntimeDefault
+            securityContext: *securityContext
 
     service:
       app:

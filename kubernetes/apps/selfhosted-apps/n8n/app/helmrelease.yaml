@@ -51,7 +51,6 @@ spec:
                     key: N8N_ENCRYPTION_KEY
             securityContext:
               allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: false
               capabilities:
                 drop:
                   - ALL

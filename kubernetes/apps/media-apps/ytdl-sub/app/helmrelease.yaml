@@ -44,7 +44,6 @@ spec:
                 ytdl-sub --log-level=debug --config=/config/config.yaml sub /media/youtube/subscriptions.yaml
             securityContext:
               allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: false
               capabilities:
                 drop:
                   - ALL
@@ -78,15 +77,3 @@ spec:
                 subPath: /media/music
               - path: /tv_shows
                 subPath: /media/tv_shows
-
-      tmp:
-        type: emptyDir
-        advancedMounts:
-          ytdl-sub:
-            app:
-              - path: /tmp
-                subPath: tmp
-              - path: /config
-                subPath: config
-              - path: /workdir
-                subPath: workdir

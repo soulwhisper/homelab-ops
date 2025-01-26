@@ -68,7 +68,6 @@ spec:
                 memory: 512Mi
             securityContext:
               allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: false
               capabilities:
                 drop:
                   - ALL
@@ -112,8 +111,3 @@ spec:
         globalMounts:
           - path: /var/lib/ocis
             subPath: /media/ocis
-      tmpfs:
-        type: emptyDir
-        globalMounts:
-          - path: /tmp
-            subPath: tmp

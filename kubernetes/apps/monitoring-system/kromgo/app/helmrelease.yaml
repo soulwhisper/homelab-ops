@@ -60,7 +60,6 @@ spec:
               readiness: *probes
             securityContext:
               allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
               capabilities:
                 drop:
                   - "ALL"
