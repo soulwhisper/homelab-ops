@@ -52,8 +52,8 @@ Thanks to all the people who donate their time to the [Home Operations](https://
 
 I got help from some cool repo like:
 
-- [bjw-s/homelab-ops](https://github.com/bjw-s/homelab-ops)
-- [onedr0p/homelab-ops](https://github.com/onedr0p/homelab-ops)
+- [bjw-s/home-ops](https://github.com/bjw-s/home-ops)
+- [onedr0p/home-ops](https://github.com/onedr0p/home-ops)
 
 ---
 
