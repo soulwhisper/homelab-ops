@@ -51,6 +51,8 @@ instance:
           spec:
             template:
               spec:
+                pod:
+                  hostUsers: false
                 containers:
                   - name: manager
                     resources:

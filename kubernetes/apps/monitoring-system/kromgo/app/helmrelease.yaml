@@ -25,10 +25,7 @@ spec:
           reloader.stakater.com/auto: "true"
 
         pod:
-          securityContext:
-            runAsUser: 1001
-            runAsGroup: 1001
-            runAsNonRoot: true
+          hostUsers: false
           topologySpreadConstraints:
             - maxSkew: 1
               topologyKey: kubernetes.io/hostname
@@ -67,6 +64,8 @@ spec:
               capabilities:
                 drop:
                   - "ALL"
+              seccompProfile:
+                type: RuntimeDefault
             resources:
               requests:
                 cpu: 5m

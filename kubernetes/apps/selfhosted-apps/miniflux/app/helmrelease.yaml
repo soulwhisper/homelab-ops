@@ -24,9 +24,7 @@ spec:
           reloader.stakater.com/auto: "true"
 
         pod:
-          securityContext:
-            runAsUser: 1001
-            runAsGroup: 1001
+          hostUsers: false
 
         containers:
           app:
@@ -58,6 +56,14 @@ spec:
                   httpGet:
                     path: /healthcheck
                     port: 8080
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: false
+              capabilities:
+                drop:
+                  - ALL
+              seccompProfile:
+                type: RuntimeDefault
             resources:
               requests:
                 cpu: 12m

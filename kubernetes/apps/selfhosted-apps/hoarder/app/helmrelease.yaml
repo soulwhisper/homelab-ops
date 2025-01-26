@@ -20,12 +20,7 @@ spec:
       namespace: storage-system
   values:
     defaultPodOptions:
-      securityContext:
-        runAsUser: 1001
-        runAsGroup: 1001
-        runAsNonRoot: true
-        fsGroup: 1001
-        fsGroupChangePolicy: "OnRootMismatch"
+      hostUsers: false
 
     controllers:
       hoarder:
@@ -61,7 +56,15 @@ spec:
                 enabled: true
               readiness:
                 enabled: true
-            resources:
+            securityContext: &securityContext
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: false
+              capabilities:
+                drop:
+                  - ALL
+              seccompProfile:
+                type: RuntimeDefault
+            resources: &resources
               requests:
                 cpu: 10m
               limits:
@@ -85,15 +88,8 @@ spec:
               - --remote-debugging-address=0.0.0.0
               - --remote-debugging-port=9222
               - --hide-scrollbars
-            securityContext:
-              capabilities:
-                drop:
-                  - ALL
-            resources:
-              requests:
-                cpu: 10m
-              limits:
-                memory: 1Gi
+            securityContext: *securityContext
+            resources: *resources
 
       meilisearch:
         annotations:
@@ -121,11 +117,8 @@ spec:
                   secretKeyRef:
                     name: hoarder-secret
                     key: meilisearch_master_key
-            resources:
-              requests:
-                cpu: 10m
-              limits:
-                memory: 1Gi
+            securityContext: *securityContext
+            resources: *resources
 
     service:
       app:

@@ -21,12 +21,7 @@ spec:
         strategy: RollingUpdate
 
         pod:
-          securityContext:
-            runAsNonRoot: true
-            runAsUser: 65534
-            runAsGroup: 65534
-            seccompProfile:
-              type: RuntimeDefault
+          hostUsers: false
 
         containers:
           app:
@@ -51,7 +46,7 @@ spec:
                     fieldPath: metadata.namespace
             securityContext:
               allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
+              readOnlyRootFilesystem: false
               capabilities:
                 drop:
                   - ALL

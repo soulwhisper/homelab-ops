@@ -23,15 +23,22 @@ spec:
       nfs-server:
         annotations:
           reloader.stakater.com/auto: "true"
-        pod:
-          # enable user namespace
-          hostUsers: false
 
         containers:
-          ocis:
+          nfs-server:
             image:
-              repository: itsthenetwork/nfs-server-alpine
-              tag: 12
+              repository: gists/nfs-server
+              tag: 2.6.4
+            env:
+              - name: NFS_DIR
+                value: "/nfsshare"
+              - name: NFS_DOMAIN
+                value: "*"
+              - name: NFS_OPTION
+                value: "rw,fsid=0,async,insecure,no_subtree_check,all_squash,anonuid=65534,anongid=65534"
+            ports:
+              - name: nfs
+                containerPort: 2049
             probes:
               liveness:
                 enabled: true
@@ -43,6 +50,8 @@ spec:
                 memory: 128Mi
               limits:
                 memory: 512Mi
+            securityContext:
+              privileged: true
 
     service:
       app:

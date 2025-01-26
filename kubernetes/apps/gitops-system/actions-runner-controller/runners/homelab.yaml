@@ -55,6 +55,8 @@ spec:
         labels:
           app.kubernetes.io/name: arc-homelablab-runner
       spec:
+        pod:
+          hostUsers: false
         containers:
           - name: runner
             image: ghcr.io/onedr0p/actions-runner:2.322.0@sha256:34aa045b8b0b82469bcb5951e244fd2bd41b8abbd493f956092497fcdcd29209
@@ -62,8 +64,14 @@ spec:
             env:
               - name: ACTIONS_RUNNER_REQUIRE_JOB_CONTAINER
                 value: "false"
-        securityContext:
-          fsGroup: 123
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop:
+                  - ALL
+              seccompProfile:
+                type: RuntimeDefault
 
   valuesFrom:
     - kind: Secret

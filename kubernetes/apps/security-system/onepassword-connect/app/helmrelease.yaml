@@ -61,6 +61,8 @@ spec:
               capabilities:
                 drop:
                   - "ALL"
+              seccompProfile:
+                type: RuntimeDefault
             resources: &resources
               requests:
                 cpu: 10m
@@ -102,14 +104,7 @@ spec:
             securityContext: *securityContext
             resources: *resources
     defaultPodOptions:
-      securityContext:
-        runAsNonRoot: true
-        runAsUser: 999
-        runAsGroup: 999
-        fsGroup: 999
-        fsGroupChangePolicy: OnRootMismatch
-        seccompProfile:
-          type: RuntimeDefault
+      hostUsers: false
     service:
       app:
         controller: onepassword-connect

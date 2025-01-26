@@ -19,6 +19,8 @@ spec:
   values:
     controllers:
       searxng:
+        pod:
+          hostUsers: false
         strategy: RollingUpdate
         annotations:
           reloader.stakater.com/auto: "true"
@@ -57,21 +59,16 @@ spec:
                 memory: 2Gi
             securityContext:
               allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
+              readOnlyRootFilesystem: false
               capabilities:
                 drop:
                   - ALL
-                add:
-                  - CHOWN
-                  - SETGID
-                  - SETUID
-                  - DAC_OVERRIDE
+              seccompProfile:
+                type: RuntimeDefault
 
       redis:
         pod:
-          securityContext:
-            runAsUser: 65534
-            runAsGroup: 65534
+          hostUsers: false
         strategy: RollingUpdate
         containers:
           redis:
@@ -95,6 +92,8 @@ spec:
               capabilities:
                 drop:
                   - ALL
+              seccompProfile:
+                type: RuntimeDefault
 
     service:
       app:

@@ -22,15 +22,7 @@ spec:
 
         pod:
           restartPolicy: Never
-          securityContext:
-            runAsUser: 1001
-            runAsGroup: 1001
-            runAsNonRoot: true
-            fsGroup: 1001
-            fsGroupChangePolicy: OnRootMismatch
-            supplementalGroups:
-              - 44
-              - 109
+          hostUsers: false
 
         cronjob:
           schedule: "0 */6 * * *"
@@ -52,10 +44,12 @@ spec:
                 ytdl-sub --log-level=debug --config=/config/config.yaml sub /media/youtube/subscriptions.yaml
             securityContext:
               allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
+              readOnlyRootFilesystem: false
               capabilities:
                 drop:
                   - ALL
+              seccompProfile:
+                type: RuntimeDefault
             resources:
               requests:
                 cpu: 10m

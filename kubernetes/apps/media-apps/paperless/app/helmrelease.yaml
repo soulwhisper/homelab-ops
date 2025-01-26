@@ -24,6 +24,9 @@ spec:
         annotations:
           reloader.stakater.com/auto: "true"
 
+        pod:
+          hostUsers: false
+
         containers:
           app:
             image:
@@ -82,8 +85,18 @@ spec:
                 memory: 2Gi
               limits:
                 memory: 6Gi
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: false
+              capabilities:
+                drop:
+                  - ALL
+              seccompProfile:
+                type: RuntimeDefault
 
       redis:
+        pod:
+          hostUsers: false
         containers:
           redis:
             image:
@@ -95,6 +108,14 @@ spec:
                 memory: 32Mi
               limits:
                 memory: 128Mi
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop:
+                  - ALL
+              seccompProfile:
+                type: RuntimeDefault
 
     service:
       app:

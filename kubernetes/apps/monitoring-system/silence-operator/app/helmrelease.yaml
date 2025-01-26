@@ -41,12 +41,7 @@ spec:
     controllers:
       silence-operator:
         pod:
-          securityContext:
-            runAsGroup: 1001
-            runAsUser: 1001
-            runAsNonRoot: true
-            seccompProfile:
-              type: RuntimeDefault
+          hostUsers: false
 
         containers:
           silence-operator:
@@ -81,6 +76,7 @@ spec:
                 memory: 256Mi
             securityContext:
               allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
               capabilities:
                 drop:
                   - "ALL"

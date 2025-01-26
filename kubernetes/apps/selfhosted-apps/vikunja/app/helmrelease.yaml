@@ -25,11 +25,7 @@ spec:
           reloader.stakater.com/auto: "true"
 
         pod:
-          securityContext:
-            runAsUser: 1001
-            runAsGroup: 1001
-            fsGroup: 1001
-            fsGroupChangePolicy: "OnRootMismatch"
+          hostUsers: false
 
         containers:
           app:
@@ -57,10 +53,12 @@ spec:
                 memory: 1024Mi
             securityContext:
               allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
+              readOnlyRootFilesystem: false
               capabilities:
                 drop:
                   - ALL
+              seccompProfile:
+                type: RuntimeDefault
 
     service:
       app:

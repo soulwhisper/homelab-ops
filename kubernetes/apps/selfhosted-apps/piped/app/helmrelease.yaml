@@ -18,11 +18,7 @@ spec:
   values:
     defaultPodOptions:
       automountServiceAccountToken: false
-      securityContext:
-        runAsUser: 1001
-        runAsGroup: 1001
-        fsGroup: 1001
-        fsGroupChangePolicy: "OnRootMismatch"
+      hostUsers: false
 
     controllers:
       backend:
@@ -46,8 +42,9 @@ spec:
                 memory: 500Mi
               limits:
                 memory: 2000Mi
-            securityContext:
+            securityContext: &securityContext
               allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: false
               capabilities:
                 drop:
                   - ALL
@@ -75,12 +72,7 @@ spec:
                 memory: 32Mi
               limits:
                 memory: 256Mi
-            securityContext:
-              allowPrivilegeEscalation: false
-              capabilities:
-                drop:
-                  - ALL
-              readOnlyRootFilesystem: true
+            securityContext: *securityContext
 
       ytproxy:
         strategy: RollingUpdate
@@ -103,13 +95,7 @@ spec:
                 memory: 500Mi
               limits:
                 memory: 2000Mi
-            securityContext:
-              allowPrivilegeEscalation: false
-              capabilities:
-                drop:
-                  - ALL
-              seccompProfile:
-                type: RuntimeDefault
+            securityContext: *securityContext
 
       update-subscriptions:
         type: cronjob
@@ -140,13 +126,7 @@ spec:
                 memory: 128Mi
               limits:
                 memory: 128Mi
-            securityContext:
-              allowPrivilegeEscalation: false
-              capabilities:
-                drop:
-                  - ALL
-              seccompProfile:
-                type: RuntimeDefault
+            securityContext: *securityContext
 
     service:
       backend:
