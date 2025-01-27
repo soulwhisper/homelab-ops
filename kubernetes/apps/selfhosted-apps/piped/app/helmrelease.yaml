@@ -57,7 +57,7 @@ spec:
           app:
             image:
               repository: ghcr.io/bjw-s-labs/piped-frontend
-              tag: 2025.1.24@sha256:afa1282ccdb31cb46c9db550b3676f32eaaf3e4d7c3949dc811b4f700d7ebdca
+              tag: 2025.1.26@sha256:0f3d4a571fb3ac0afcdf9e8690c8d85287b7afb6b29a8166361692bf84f690ff
             env:
               BACKEND_HOSTNAME: piped-api.noirprime.com
             probes:
