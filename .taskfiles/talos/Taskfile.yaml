@@ -9,9 +9,9 @@ tasks:
       - which op test talhelper
       - test -f {{.K8S_DIR}}/talos/talsecret.yaml
       - test -f {{.K8S_DIR}}/talos/talconfig.yaml
-      - test -f {{.K8S_DIR}}/talos/talhelper-secrets.env
+      - test -f {{.K8S_DIR}}/talos/talhelper.env
     cmds:
-      - op run --env-file {{.K8S_DIR}}/talos/talhelper-secrets.env --no-masking -- talhelper genconfig
+      - op run --env-file {{.K8S_DIR}}/talos/talhelper.env --no-masking -- talhelper genconfig
         --secret-file {{.K8S_DIR}}/talos/talsecret.yaml
         --config-file {{.K8S_DIR}}/talos/talconfig.yaml
         --out-dir {{.K8S_DIR}}/talos/clusterconfig

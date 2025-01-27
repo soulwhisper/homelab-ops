@@ -277,6 +277,20 @@ patches:
           - 10.100.0.0/17
         serviceSubnets:
           - 10.100.128.0/17
+      scheduler:
+          config:
+            apiVersion: kubescheduler.config.k8s.io/v1
+            kind: KubeSchedulerConfiguration
+            profiles:
+              - schedulerName: default-scheduler
+                pluginConfig:
+                  - name: PodTopologySpread
+                    args:
+                      defaultingType: List
+                      defaultConstraints:
+                        - maxSkew: 1
+                          topologyKey: kubernetes.io/hostname
+                          whenUnsatisfiable: ScheduleAnyway
 
   # Containerd configuration
   - |-
