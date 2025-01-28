@@ -86,11 +86,11 @@ jobs:
           echo "images=${images}" >> "$GITHUB_OUTPUT"
 
   pre-pull-images:
-    if: ${{ needs.extract-images.outputs.matrix != '[]' }}
+    if: ${{ needs.compare-images.outputs.matrix != '[]' }}
     name: Pre-pull images
-    runs-on: arc-homelablab-ops
+    runs-on: 
+      - arc-homelablab-ops
     needs:
-      - extract-images
       - compare-images
     strategy:
       matrix:
@@ -110,7 +110,6 @@ jobs:
   pre-pull-images-success:
     if: ${{ always() }}
     needs:
-      - compare-images
       - pre-pull-images
     name: Pre-pull Images Successful
     runs-on: ubuntu-latest
