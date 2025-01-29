@@ -11,16 +11,16 @@
       allowedVersions: "< 1",
     },
     {
-      description: "Pin talos version if something breaks; until v1.9.3",
+      description: "Pin talos version if something breaks",
       matchDatasources: ["docker"],
       matchPackageNames: ["ghcr.io/siderolabs/installer"],
-      allowedVersions: "<= v1.9.0",
+      allowedVersions: ">= v1.9.3",
     },
     {
       description: "Pin kubelet version if something breaks",
       matchDatasources: ["docker"],
       matchPackageNames: ["ghcr.io/siderolabs/kubelet"],
-      allowedVersions: "<= v1.32.0",
+      allowedVersions: ">= v1.32.1",
     },
   ],
 }
