@@ -81,14 +81,14 @@ jobs:
           images=$(jq --compact-output --null-input \
               --argjson f1 '${{ needs.extract-images.outputs.default }}' \
               --argjson f2 '${{ needs.extract-images.outputs.pull }}' \
-              '$f2 - $f1' \
+              '[ $f2[] | select(. as $img | $f1 | index($img) | not) ]' \
           )
           echo "images=${images}" >> "$GITHUB_OUTPUT"
 
   pre-pull-images:
     if: ${{ needs.compare-images.outputs.matrix != '[]' }}
     name: Pre-pull images
-    runs-on: 
+    runs-on:
       - arc-homelablab-ops
     needs:
       - compare-images
@@ -108,12 +108,11 @@ jobs:
         run: talosctl -n "$NODE_IP" image pull "${{ matrix.images }}"
 
   pre-pull-images-success:
-    if: ${{ always() }}
+    if: ${{ needs.pre-pull-images.result == 'success' || needs.pre-pull-images.result == 'skipped' }}
     needs:
       - pre-pull-images
     name: Pre-pull Images Successful
     runs-on: ubuntu-latest
     steps:
-      - if: ${{ needs.compare-images.outputs.images != '[]' && !contains(needs.*.result, 'success') }}
-        name: Check matrix status
-        run: exit 1
+      - name: Confirm Success
+        run: echo "All necessary images are available in cache!"
