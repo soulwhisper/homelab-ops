@@ -17,13 +17,13 @@ spec:
     cacheStorageClassName: "${VOLSYNC_CACHE_SNAPSHOTCLASS:-openebs-rep1}"
     copyMethod: "${VOLSYNC_COPYMETHOD:-Snapshot}"
     moverSecurityContext:
-      runAsUser: ${APP_UID:-1001}
-      runAsGroup: ${APP_GID:-1001}
-      fsGroup: ${APP_GID:-1001}
+      runAsUser: ${APP_UID:-2000}
+      runAsGroup: ${APP_GID:-2000}
+      fsGroup: ${APP_GID:-2000}
     pruneIntervalDays: 7
     repository: ${APP}-volsync-minio
     retain:
       hourly: 24
       daily: 7
-    storageClassName: "${VOLSYNC_STORAGECLASS:-openebs-rep3}"
+    storageClassName: "${VOLSYNC_STORAGECLASS:-openebs-rep1}"
     volumeSnapshotClassName: "${VOLSYNC_SNAPSHOTCLASS:-openebs-snapshot}"

@@ -36,10 +36,10 @@
 ### defaults
 
 - doamin = "cluster.local"
-- VOLSYNC_STORAGECLASS=openebs-rep3
+- VOLSYNC_STORAGECLASS=openebs-rep1
 - VOLSYNC_CACHE_SNAPSHOTCLASS=-openebs-rep1
 - VOLSYNC_SNAPSHOTCLASS=openebs-snapshot
-- app_uid = app_gid = 1001
+- app_uid = app_gid = 2000
 
 ### volsync-nfs
 
