@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &name externaldns-cloudflare
+  name: &name externaldns-rfc2136
 spec:
   interval: 10m
   chart:
@@ -15,32 +15,32 @@ spec:
         name: kubernetes-sigs-external-dns
         namespace: gitops-system
 
-  install:
-    crds: CreateReplace
-  upgrade:
-    crds: CreateReplace
   values:
     fullnameOverride: *name
     domainFilters:
       - noirprime.com
     env:
-      - name: CF_API_TOKEN
+      - name: EXTERNAL_DNS_RFC2136_HOST
+        value: "10.10.0.1"
+      - name: EXTERNAL_DNS_RFC2136_PORT
+        value: "53"
+      - name: EXTERNAL_DNS_RFC2136_ZONE
+        value: "noirprime.com"
+      - name: EXTERNAL_DNS_RFC2136_TSIG_AXFR
+        value: "true"
+      - name: EXTERNAL_DNS_RFC2136_TSIG_KEYNAME
+        value: "rndc-key"
+      - name: EXTERNAL_DNS_RFC2136_TSIG_SECRET_ALG
+        value: "hmac-sha256"
+      - name: EXTERNAL_DNS_RFC2136_TSIG_SECRET
         valueFrom:
           secretKeyRef:
-            name: externaldns-cloudflare-secrets
-            key: cloudflare-api-token
-    extraArgs:
-      - --cloudflare-dns-records-per-page=1000
-      - --cloudflare-proxied
-      - --crd-source-apiversion=externaldns.k8s.io/v1alpha1
-      - --crd-source-kind=DNSEndpoint
-      - --events
-      - --ignore-ingress-tls-spec
-      - --ingress-class=external-nginx
+            name: externaldns-rfc2136-secrets
+            key: tsig-secret
     podAnnotations:
-      secret.reloader.stakater.com/reload: externaldns-cloudflare-secrets
+      secret.reloader.stakater.com/reload: externaldns-rfc2136-secrets
     policy: sync
-    provider: cloudflare
+    provider: rfc2136
     resources:
       requests:
         cpu: 13m
@@ -51,8 +51,8 @@ spec:
       enabled: true
     sources:
       - ingress
-      - crd
-    txtPrefix: "k8s-ext."
+      - service
+    txtPrefix: "k8s-int."
 
   postRenderers:
     - kustomize:
