@@ -42,7 +42,7 @@ spec:
             targetLabel: nodename
           - action: replace
             regex: (.*)
-            replacement: $1.homelablab.internal:9100
+            replacement: $1.homelab.internal:9100
             sourceLabels:
               - kubernetes_node
             targetLabel: instance

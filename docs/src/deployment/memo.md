@@ -26,7 +26,7 @@
 - `10.10.0.101-103` as k8s nodes;
 - `10.10.0.201-250` as cilium l2 loadbalancer ip;
 - monitoring: `mon.noirprime.com`, `/coroot/` for coroot, `/grafana/` for grafana
-- self-hosted-runner, label:arc-homelablab / label:arc-homelablab-ops
+- self-hosted-runner, label:arc-homelab / label:arc-homelab-ops
 
 ### Github-secrets
 
@@ -51,7 +51,7 @@
       volumes:
         - name: volsync
           nfs:
-            server: "nix-infra.homelablab.internal"
+            server: "nix-infra.homelab.internal"
             path: "/opt/backup/volsync"
 ```
 
@@ -62,4 +62,4 @@
 ### Overengineering
 
 - NTS support servers in NTP config;
-- Disk encryption for homelablab env;
+- Disk encryption for homelab env;

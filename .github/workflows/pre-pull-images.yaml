@@ -89,7 +89,7 @@ jobs:
     if: ${{ needs.compare-images.outputs.images != '[]' }}
     name: Pre-pull images
     runs-on:
-      - arc-homelablab-ops
+      - arc-homelab-ops
     needs:
       - compare-images
     strategy:

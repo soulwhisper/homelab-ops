@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: arc-homelablab
+  name: arc-homelab
 spec:
   interval: 10m
   chart:
@@ -22,8 +22,8 @@ spec:
     - name: openebs
       namespace: storage-system
   values:
-    runnerGroup: arc-homelablab
-    runnerScaleSetName: arc-homelablab
+    runnerGroup: arc-homelab
+    runnerScaleSetName: arc-homelab
 
     githubConfigUrl: https://github.com/soulwhisper
 
@@ -46,14 +46,14 @@ spec:
     listenerTemplate:
       metadata:
         labels:
-          app.kubernetes.io/name: arc-homelablab-listener
+          app.kubernetes.io/name: arc-homelab-listener
       spec:
         containers: []
 
     template:
       metadata:
         labels:
-          app.kubernetes.io/name: arc-homelablab-runner
+          app.kubernetes.io/name: arc-homelab-runner
       spec:
         pod:
           hostUsers: false
