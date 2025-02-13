@@ -110,7 +110,7 @@ spec:
           app:
             image:
               repository: ghcr.io/bjw-s-labs/piped-scripts
-              tag: 0.0.2@sha256:16f6c6be0e994e799b849c11b8b4e49d8e4575016883f84520dda2bd5f51b03f
+              tag: 0.0.2@sha256:52cdb4dffb45a137fbac55e590460a3cf67f8685b01eac7abca38d8f27fff9f0
             env:
               SCRIPT_NAME: update_subscriptions.sh
               PIPED_BACKEND: http://piped-backend.selfhosted-apps.svc.cluster.local:8080
