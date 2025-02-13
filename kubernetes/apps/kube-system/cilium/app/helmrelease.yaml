@@ -13,7 +13,7 @@ spec:
         kind: HelmRepository
         name: cilium
         namespace: gitops-system
-      version: 1.17.0
+      version: 1.17.1
 
   valuesFrom:
     - kind: ConfigMap
