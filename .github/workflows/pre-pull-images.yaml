@@ -108,11 +108,12 @@ jobs:
         run: talosctl -n "$NODE_IP" image pull "${{ matrix.images }}"
 
   pre-pull-images-success:
-    if: ${{ needs.pre-pull-images.result == 'success' || needs.pre-pull-images.result == 'skipped' }}
+    if: ${{ !cancelled() }}
     needs:
       - pre-pull-images
     name: Pre-pull Images Successful
     runs-on: ubuntu-latest
     steps:
-      - name: Confirm Success
-        run: echo "All necessary images are available in cache!"
+      - name: Check job status
+        if: ${{ contains(needs.*.result, 'failure') }}
+        run: exit 1
