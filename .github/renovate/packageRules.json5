@@ -22,5 +22,11 @@
       matchPackageNames: ["ghcr.io/siderolabs/kubelet"],
       allowedVersions: ">= v1.32.1",
     },
+    {
+      "description": "Only allow major upgrades",
+      "matchDepNames": ["ghcr.io/bjw-s-labs/piped-frontend"],
+      "matchUpdateTypes": ["minor", "patch", "pin"],
+      "enabled": false
+    },
   ],
 }
