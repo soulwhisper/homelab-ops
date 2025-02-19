@@ -6,5 +6,5 @@ metadata:
   name: coroot
   namespace: gitops-system
 spec:
-  interval: 10m
+  interval: 30m
   url: https://coroot.github.io/helm-charts

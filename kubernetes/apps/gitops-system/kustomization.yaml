@@ -6,7 +6,6 @@ namespace: gitops-system
 resources:
   - ./action-runner-controller/ks.yaml
   - ./flux-operator/ks.yaml
-  - ./kustomize-mutating-webhook/ks.yaml
   - ./system-upgrade-controller/ks.yaml
 components:
   - ../../components/namespace

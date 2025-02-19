@@ -10,7 +10,7 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *appname
-  interval: 10m
+  interval: 30m
   path: "./kubernetes/apps/networking-system/ingress-nginx/shared"
   prune: true
   sourceRef:
@@ -33,7 +33,7 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *appname
-  interval: 10m
+  interval: 30m
   path: "./kubernetes/apps/networking-system/ingress-nginx/external"
   prune: true
   sourceRef:
@@ -56,7 +56,7 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *appname
-  interval: 10m
+  interval: 30m
   path: "./kubernetes/apps/networking-system/ingress-nginx/internal"
   prune: true
   sourceRef:

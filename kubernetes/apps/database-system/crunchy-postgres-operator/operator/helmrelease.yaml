@@ -5,7 +5,7 @@ kind: HelmRelease
 metadata:
   name: crunchy-postgres-operator
 spec:
-  interval: 10m
+  interval: 30m
   chart:
     spec:
       chart: pgo

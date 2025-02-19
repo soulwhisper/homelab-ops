@@ -5,7 +5,7 @@ kind: HelmRelease
 metadata:
   name: cert-manager
 spec:
-  interval: 10m
+  interval: 30m
   chart:
     spec:
       chart: cert-manager

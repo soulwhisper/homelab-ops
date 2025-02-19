@@ -2,7 +2,7 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: &name system-upgrade
+  name: &name system-upgrade-controller
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
@@ -15,7 +15,7 @@ subjects:
 apiVersion: talos.dev/v1alpha1
 kind: ServiceAccount
 metadata:
-  name: system-upgrade
+  name: system-upgrade-controller
 spec:
   roles:
     - os:admin

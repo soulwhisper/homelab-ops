@@ -6,6 +6,6 @@ metadata:
   name: crunchy
   namespace: gitops-system
 spec:
-  interval: 10m
+  interval: 30m
   type: oci
   url: oci://registry.developers.crunchydata.com/crunchydata

@@ -6,6 +6,6 @@ metadata:
   name: spegel
   namespace: gitops-system
 spec:
-  interval: 10m
+  interval: 30m
   type: oci
   url: oci://ghcr.io/spegel-org/helm-charts

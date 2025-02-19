@@ -15,6 +15,6 @@ spec:
     kind: GitRepository
     name: gitops-system
     namespace: gitops-system
-  interval: 10m
+  interval: 30m
   prune: true
   wait: false

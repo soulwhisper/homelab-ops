@@ -10,8 +10,8 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *appname
-  interval: 10m
-  retryInterval: 1m
+  interval: 30m
+  timeout: 5m
   path: "./kubernetes/apps/gitops-system/system-upgrade-controller/app"
   prune: true
   sourceRef:
@@ -31,8 +31,8 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *appname
-  interval: 10m
-  retryInterval: 1m
+  interval: 30m
+  timeout: 5m
   path: "./kubernetes/apps/gitops-system/system-upgrade-controller/plans"
   prune: true
   sourceRef:
