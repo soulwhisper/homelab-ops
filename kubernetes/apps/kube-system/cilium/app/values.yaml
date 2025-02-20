@@ -29,7 +29,7 @@ k8sServicePort: 7445
 kubeProxyReplacement: true
 kubeProxyReplacementHealthzBindAddr: 0.0.0.0:10256
 l2announcements:
-  enabled: true
+  enabled: false # use bgp instead
 loadBalancer:
   acceleration: native
   mode: hybrid
