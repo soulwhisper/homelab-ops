@@ -51,6 +51,7 @@ spec:
                     key: encryption_key
               NEXTAUTH_URL: https://hoarder.noirprime.com
               DISABLE_NEW_RELEASE_CHECK: true
+              COREPACK_INTEGRITY_KEYS: 0
             probes:
               liveness:
                 enabled: true
@@ -67,7 +68,7 @@ spec:
               requests:
                 cpu: 10m
               limits:
-                memory: 1Gi
+                memory: 4Gi
 
       chrome:
         annotations:
@@ -100,6 +101,10 @@ spec:
                 - labelSelector:
                     matchExpressions:
                       - key: app.kubernetes.io/name
+                        operator: In
+                        values:
+                          - hoarder
+                      - key: app.kubernetes.io/component
                         operator: In
                         values:
                           - hoarder

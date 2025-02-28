@@ -37,6 +37,7 @@ operator:
   rollOutPods: true
   prometheus:
     enabled: true
+  tolerations: []
 prometheus:
   enabled: true
 rollOutCiliumPods: true

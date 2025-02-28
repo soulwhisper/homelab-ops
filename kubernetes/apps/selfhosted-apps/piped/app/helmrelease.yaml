@@ -25,7 +25,6 @@ spec:
         strategy: RollingUpdate
         annotations:
           secret.reloader.stakater.com/reload: piped-secret
-
         containers:
           app:
             image:
@@ -52,7 +51,6 @@ spec:
 
       frontend:
         strategy: RollingUpdate
-
         containers:
           app:
             image:
@@ -75,7 +73,6 @@ spec:
 
       ytproxy:
         strategy: RollingUpdate
-
         containers:
           app:
             image:
@@ -96,16 +93,34 @@ spec:
                 memory: 2000Mi
             securityContext: *securityContext
 
+      bg-helper:
+        strategy: RollingUpdate
+        containers:
+          app:
+            image:
+              repository: 1337kavin/bg-helper-server
+              tag: latest@sha256:295802c9de9449e7728d34f0c0840fa15165bc00e5545b996bf045c7b62beeac
+            probes:
+              liveness:
+                enabled: true
+              readiness:
+                enabled: true
+            resources:
+              requests:
+                cpu: 10m
+                memory: 256Mi
+              limits:
+                memory: 2000Mi
+            securityContext: *securityContext
+
       update-subscriptions:
         type: cronjob
-
         cronjob:
           schedule: "@daily"
           backoffLimit: 0
           concurrencyPolicy: Forbid
           failedJobsHistory: 1
           successfulJobsHistory: 0
-
         containers:
           app:
             image:
@@ -143,6 +158,11 @@ spec:
         ports:
           http:
             port: 8080
+      bg-helper:
+        controller: bg-helper
+        ports:
+          http:
+            port: 3000
 
     ingress:
       backend:

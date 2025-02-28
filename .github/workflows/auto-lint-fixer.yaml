@@ -13,6 +13,8 @@ on:
 jobs:
   auto-lint-fixer:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - name: Generate Token
         uses: actions/create-github-app-token@0d564482f06ca65fa9e77e2510873638c82206f2 # v1
@@ -28,14 +30,7 @@ jobs:
       - name: Install devenv.sh
         run: nix profile install nixpkgs#devenv
       - name: Run devenv tests
-        id: devenv-test
-        run: devenv test
-      - name: Create Pull
-        if: failure()
-        id: create-pull-request
-        uses: peter-evans/create-pull-request@dd2324fc52d5d43c699a5636bcf19fceaa70c284 # v7
-        with:
-          token: ${{ steps.app-token.outputs.token }}
-          title: "chore(lint): fix linting issues"
-          commit-message: "chore(lint): fix linting issues"
-          delete-branch: true
+        continue-on-error: true
+        run: devenv test --verbose
+      - name: Auto commit
+        uses: stefanzweifel/git-auto-commit-action@e348103e9026cc0eee72ae06630dbe30c8bf7a79 # v5

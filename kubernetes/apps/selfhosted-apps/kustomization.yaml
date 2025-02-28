@@ -9,8 +9,6 @@ resources:
   - ./miniflux/ks.yaml
   - ./n8n/ks.yaml
   - ./piped/ks.yaml
-  - ./searxng/ks.yaml
-  - ./vikunja/ks.yaml
 components:
   - ../../components/namespace
   - ../../components/flux/alerts
