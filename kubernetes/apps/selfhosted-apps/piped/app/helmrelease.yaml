@@ -99,7 +99,7 @@ spec:
           app:
             image:
               repository: 1337kavin/bg-helper-server
-              tag: latest@sha256:b3d74287b5b155e619da9e1dc0c4bef7f744b9bf6f2362a61230615f93884732
+              tag: latest@sha256:3d69218f9bfeac6f55919e17997d2acc2295d0ec0f341fe1a301715035dd21e8
             probes:
               liveness:
                 enabled: true
