@@ -6,7 +6,6 @@ namespace: selfhosted-apps
 resources:
   - ./actual/ks.yaml
   - ./hoarder/ks.yaml
-  - ./miniflux/ks.yaml
   - ./n8n/ks.yaml
   - ./piped/ks.yaml
 components:
