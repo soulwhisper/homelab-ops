@@ -5,6 +5,7 @@ kind: Kustomization
 namespace: selfhosted-apps
 resources:
   - ./actual/ks.yaml
+  - ./freshrss/ks.yaml
   - ./hoarder/ks.yaml
   - ./n8n/ks.yaml
   - ./piped/ks.yaml
