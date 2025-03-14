@@ -7,9 +7,9 @@ metadata:
 spec:
   interval: 30m
   chartRef:
-     kind: OCIRepository
-     name: app-template
-     namespace: gitops-system
+    kind: OCIRepository
+    name: app-template
+    namespace: gitops-system
 
   values:
     defaultPodOptions:

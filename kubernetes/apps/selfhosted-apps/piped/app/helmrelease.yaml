@@ -6,9 +6,9 @@ metadata:
   name: piped
 spec:
   chartRef:
-     kind: OCIRepository
-     name: app-template
-     namespace: gitops-system
+    kind: OCIRepository
+    name: app-template
+    namespace: gitops-system
   interval: 30m
   values:
     defaultPodOptions:

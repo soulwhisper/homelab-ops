@@ -29,11 +29,11 @@ tasks:
     vars:
       STATE: "{{index .MATCH 0}}"
       NAMESPACES:
-         sh: kubectl get ns --no-headers -o custom-columns='NAME:.metadata.name'
+        sh: kubectl get ns --no-headers -o custom-columns='NAME:.metadata.name'
     preconditions:
       - '[[ "{{.STATE}}" == "suspend" || "{{.STATE}}" == "resume" ]]'
       - which flux kubectl
     cmds:
       - for:
-           var: NAMESPACES
+          var: NAMESPACES
         cmd: flux {{.STATE}} ks -n "{{.ITEM}}" --all
