@@ -136,22 +136,22 @@ spec:
           revision: 4
           datasource: Prometheus
 
-    #  ceph:
-    #    ceph-cluster:
-    #      # renovate: dashboardName="Ceph Cluster"
-    #      gnetId: 2842
-    #      revision: 18
-    #      datasource: Prometheus
-    #    ceph-osd:
-    #      # renovate: dashboardName="Ceph - OSD (Single)"
-    #      gnetId: 5336
-    #      revision: 9
-    #      datasource: Prometheus
-    #    ceph-pools:
-    #      # renovate: dashboardName="Ceph - Pools"
-    #      gnetId: 5342
-    #      revision: 9
-    #      datasource: Prometheus
+      #  ceph:
+      #    ceph-cluster:
+      #      # renovate: dashboardName="Ceph Cluster"
+      #      gnetId: 2842
+      #      revision: 18
+      #      datasource: Prometheus
+      #    ceph-osd:
+      #      # renovate: dashboardName="Ceph - OSD (Single)"
+      #      gnetId: 5336
+      #      revision: 9
+      #      datasource: Prometheus
+      #    ceph-pools:
+      #      # renovate: dashboardName="Ceph - Pools"
+      #      gnetId: 5342
+      #      revision: 9
+      #      datasource: Prometheus
 
       flux:
         flux-cluster:
@@ -196,13 +196,13 @@ spec:
           revision: 14
           datasource: Prometheus
 
-    #  nginx:
-    #    nginx:
-    #      url: https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/grafana/dashboards/nginx.json
-    #      datasource: Prometheus
-    #    nginx-request-handling-performance:
-    #      url: https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/grafana/dashboards/request-handling-performance.json
-    #      datasource: Prometheus
+      #  nginx:
+      #    nginx:
+      #      url: https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/grafana/dashboards/nginx.json
+      #      datasource: Prometheus
+      #    nginx-request-handling-performance:
+      #      url: https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/grafana/dashboards/request-handling-performance.json
+      #      datasource: Prometheus
 
       postgres:
         crunchy-pgbackrest:

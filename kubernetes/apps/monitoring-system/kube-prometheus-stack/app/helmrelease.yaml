@@ -138,6 +138,6 @@ spec:
               namespace: kube-system
               sectionName: https
           rules:
-           - backendRefs:
-               - name: prometheus
-                 port: 9090
+            - backendRefs:
+                - name: prometheus
+                  port: 9090
