@@ -17,6 +17,6 @@ spec:
   upgrade:
     crds: CreateReplace
   values:
-     manager:
+    manager:
       devices:
         gpu: true

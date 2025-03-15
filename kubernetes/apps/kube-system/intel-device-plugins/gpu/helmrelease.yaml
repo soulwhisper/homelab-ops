@@ -10,8 +10,8 @@ spec:
     kind: OCIRepository
     name: intel-device-plugins-gpu
   dependsOn:
-     - name: intel-device-plugins-operator
-       namespace: kube-system
+    - name: intel-device-plugins-operator
+      namespace: kube-system
 
   values:
     name: i915
