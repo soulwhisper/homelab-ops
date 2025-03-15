@@ -12,7 +12,6 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: deepflow
-        namespace: gitops-system
       version: 6.5.012
 
   values:

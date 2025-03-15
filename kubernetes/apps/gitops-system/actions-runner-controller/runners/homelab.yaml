@@ -6,14 +6,9 @@ metadata:
   name: arc-homelab
 spec:
   interval: 30m
-  chart:
-    spec:
-      chart: actions-runner-controller-charts/gha-runner-scale-set
-      version: 0.10.1
-      sourceRef:
-        kind: HelmRepository
-        name: actions-runner-controller
-        namespace: gitops-system
+  chartRef:
+    kind: OCIRepository
+    name: actions-runner-controller
   driftDetection:
     mode: enabled
   dependsOn:

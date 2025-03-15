@@ -13,7 +13,6 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: openebs
-        namespace: gitops-system
 
   values:
     localpv-provisioner:

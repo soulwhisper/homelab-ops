@@ -20,7 +20,29 @@ enableIPv4BIGTCP: true
 endpointRoutes:
   enabled: true
 hubble:
-  enabled: false # hubble disabled, use ebpf monitoring instead
+  enabled: true
+  metrics:
+    enabled:
+      - dns:query
+      - drop
+      - tcp
+      - flow
+      - port-distribution
+      - icmp
+      - http
+    serviceMonitor:
+      enabled: true
+    dashboards:
+      enabled: true
+  relay:
+    enabled: true
+    rollOutPods: true
+    prometheus:
+      serviceMonitor:
+        enabled: true
+  ui:
+    enabled: true
+    rollOutPods: true
 ipam:
   mode: "kubernetes"
 ipv4NativeRoutingCIDR: 10.100.0.0/17
