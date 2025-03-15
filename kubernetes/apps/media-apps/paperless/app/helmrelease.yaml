@@ -109,23 +109,25 @@ spec:
         controller: paperless
         ports:
           http:
-            port: 8000
+            port: &port 8000
       redis:
         controller: redis
         ports:
           http:
             port: 6379
 
-    ingress:
+    route:
       app:
-        className: internal-nginx
-        hosts:
-          - host: paperless.noirprime.com
-            paths:
-              - path: /
-                service:
-                  identifier: app
-                  port: http
+        hostnames:
+          - paperless.noirprime.com
+        parentRefs:
+          - name: internal
+            namespace: kube-system
+            sectionName: https
+        rules:
+          - backendRefs:
+              - name: paperless
+                port: *port
 
     persistence:
       app:

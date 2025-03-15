@@ -124,7 +124,7 @@ spec:
         controller: hoarder
         ports:
           http:
-            port: 3000
+            port: &port 3000
       chrome:
         controller: chrome
         ports:
@@ -136,16 +136,18 @@ spec:
           http:
             port: 7700
 
-    ingress:
+    route:
       app:
-        className: internal-nginx
-        hosts:
-          - host: hoarder.noirprime.com
-            paths:
-              - path: /
-                service:
-                  identifier: app
-                  port: http
+        hostnames:
+          - hoarder.noirprime.com
+        parentRefs:
+          - name: internal
+            namespace: kube-system
+            sectionName: https
+        rules:
+          - backendRefs:
+              - name: hoarder
+                port: *port
 
     persistence:
       app:

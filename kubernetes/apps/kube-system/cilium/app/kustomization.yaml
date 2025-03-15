@@ -4,6 +4,7 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
   - ../helmrepository.yaml
+  - https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.2.0/experimental-install.yaml
   - ./helmrelease.yaml
 configMapGenerator:
   - name: cilium-values

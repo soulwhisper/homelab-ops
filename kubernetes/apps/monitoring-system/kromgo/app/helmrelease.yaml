@@ -76,16 +76,18 @@ spec:
             port: *port
           health:
             port: *hport
-    ingress:
+    route:
       app:
-        className: external-nginx
-        hosts:
-          - host: kromgo.noirprime.com
-            paths:
-              - path: /
-                service:
-                  identifier: app
-                  port: http
+        hostnames:
+          - kromgo.noirprime.com
+        parentRefs:
+          - name: external
+            namespace: kube-system
+            sectionName: https
+        rules:
+          - backendRefs:
+              - name: kromgo
+                port: *port
 
     persistence:
       config-file:

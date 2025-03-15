@@ -20,13 +20,15 @@ spec:
         - name: AUTH_ANONYMOUS_ROLE
           value: Admin
 
-      ingress:
-        enabled: true
-        className: internal-nginx
-        hosts:
-          - host: coroot.noirprime.com
-            paths:
-              - path: /
-                service:
-                  identifier: app
-                  port: http
+    route:
+      main:
+        hostnames:
+          - coroot.noirprime.com
+        parentRefs:
+          - name: internal
+            namespace: kube-system
+            sectionName: https
+        rules:
+          - backendRefs:
+              - name: coroot
+                port: 80

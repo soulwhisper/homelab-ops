@@ -5,6 +5,6 @@ metadata:
   name: cloudflared-tunnel
 spec:
   endpoints:
-    - dnsName: ingress-ext.noirprime.com
+    - dnsName: gateway-ext.noirprime.com
       recordType: CNAME
       targets: ["9fa6f6e3-834f-45e7-9745-6fb545153647.cfargotunnel.com"]

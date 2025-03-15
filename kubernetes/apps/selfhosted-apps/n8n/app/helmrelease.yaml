@@ -65,16 +65,33 @@ spec:
           http:
             port: *port
 
-    ingress:
+    route:
       app:
-        className: internal-nginx
-        hosts:
-          - host: *hostName
-            paths:
-              - path: /
-                service:
-                  identifier: app
-                  port: http
+        hostnames:
+          - *hostName
+        parentRefs:
+          - name: internal
+            namespace: kube-system
+            sectionName: https
+        rules:
+          - backendRefs:
+              - name: n8n
+                port: *port
+
+      webhooks:
+        hostnames:
+          - n8n-webhook.noirprime.com
+        parentRefs:
+          - name: external
+            namespace: kube-system
+            sectionName: https
+        rules:
+          - matches:
+              - path:
+                  value: /webhook
+            backendRefs:
+              - name: n8n
+                port: *port
 
     persistence:
       app:

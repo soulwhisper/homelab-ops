@@ -13,8 +13,7 @@ spec:
   dependsOn:
     - name: externaldns-cloudflare
       namespace: networking-system
-    - name: nginx-external
-      namespace: networking-system
+
   values:
     controllers:
       cloudflared:

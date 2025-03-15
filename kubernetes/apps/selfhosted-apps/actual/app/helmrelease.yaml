@@ -64,16 +64,18 @@ spec:
           http:
             port: *httpPort
 
-    ingress:
-      app:
-        className: internal-nginx
-        hosts:
-          - host: actual.noirprime.com
-            paths:
-              - path: /
-                service:
-                  identifier: app
-                  port: http
+    route:
+      main:
+        hostnames:
+          - actual.noirprime.com
+        parentRefs:
+          - name: internal
+            namespace: kube-system
+            sectionName: https
+        rules:
+          - backendRefs:
+              - name: actual
+                port: *httpPort
 
     persistence:
       app:

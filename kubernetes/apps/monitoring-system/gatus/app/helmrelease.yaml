@@ -90,16 +90,18 @@ spec:
         ports:
           http:
             port: *port
-    ingress:
+    route:
       app:
-        className: external-nginx
-        hosts:
-          - host: gatus.noirprime.com
-            paths:
-              - path: /
-                service:
-                  identifier: app
-                  port: http
+        hostnames:
+          - gatus.noirprime.com
+        parentRefs:
+          - name: external
+            namespace: kube-system
+            sectionName: https
+        rules:
+          - backendRefs:
+              - name: gatus
+                port: *port
     serviceAccount:
       create: true
       name: gatus

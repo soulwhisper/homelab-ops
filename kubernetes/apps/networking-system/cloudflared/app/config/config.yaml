@@ -1,11 +1,10 @@
 ---
+originRequest:
+  originServerName: gateway-ext.noirprime.com
+
 ingress:
   - hostname: "noirprime.com"
-    service: https://nginx-external-controller.networking-system.svc.cluster.local:443
-    originRequest:
-      originServerName: ingress-ext.noirprime.com
+    service: &svc https://cilium-gateway-external.kube-system.svc.cluster.local
   - hostname: "*.noirprime.com"
-    service: https://nginx-external-controller.networking-system.svc.cluster.local:443
-    originRequest:
-      originServerName: ingress-ext.noirprime.com
+    service: *svc
   - service: http_status:404

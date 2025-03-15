@@ -22,16 +22,15 @@ spec:
     grafana:
       image:
         repository: deepflowce
-      ingress:
-        enabled: true
-        ingressClassName: internal-nginx
-        hosts:
-          - host: deepflow.noirprime.com
-            paths:
-              - path: /
-                service:
-                  identifier: app
-                  port: http
+      route:
+        app:
+          hostnames:
+            - deepflow.noirprime.com
+          parentRefs:
+            - name: internal
+              namespace: kube-system
+              sectionName: https
+
     server:
       service:
         externalTrafficPolicy: Local

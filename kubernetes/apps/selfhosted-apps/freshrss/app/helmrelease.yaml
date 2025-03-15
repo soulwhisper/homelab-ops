@@ -47,18 +47,20 @@ spec:
         controller: freshrss
         ports:
           http:
-            port: 8080
+            port: &port 8080
 
-    ingress:
+    route:
       app:
-        className: internal-nginx
-        hosts:
-          - host: freshrss.noirprime.com
-            paths:
-              - path: /
-                service:
-                  identifier: app
-                  port: http
+        hostnames:
+          - freshrss.noirprime.com
+        parentRefs:
+          - name: internal
+            namespace: kube-system
+            sectionName: https
+        rules:
+          - backendRefs:
+              - name: freshrss
+                port: *port
 
     persistence:
       data:

@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: nginx-internal
+  name: nginx-external
 spec:
   interval: 30m
   chart:
@@ -15,7 +15,7 @@ spec:
         name: ingress-nginx
 
   values:
-    fullnameOverride: nginx-internal
+    fullnameOverride: nginx-external
 
     controller:
       replicaCount: 2
@@ -30,16 +30,16 @@ spec:
         enabled: true
         type: LoadBalancer
         annotations:
-          external-dns.alpha.kubernetes.io/hostname: "ingress-int.noirprime.com"
+          external-dns.alpha.kubernetes.io/hostname: "ingress-ext.noirprime.com"
           lbipam.cilium.io/ips: "10.10.0.202"
 
       publishService:
         enabled: true
 
       ingressClassResource:
-        name: internal-nginx
-        default: true
-        controllerValue: k8s.io/ingress-nginx-internal
+        name: external-nginx
+        default: false
+        controllerValue: k8s.io/ingress-nginx-external
 
       admissionWebhooks:
         objectSelector:
@@ -47,11 +47,11 @@ spec:
             - key: ingress-class
               operator: In
               values:
-                - internal-nginx
+                - external-nginx
 
       config:
         block-user-agents: "AdsBot-Google,Amazonbot,anthropic-ai,Applebot-Extended,Bytespider,CCBot,ChatGPT-User,ClaudeBot,Claude-Web,cohere-ai,Diffbot,FacebookBot,FriendlyCrawler,Google-Extended,GoogleOther,GPTBot,img2dataset,omgili,omgilibot,peer39_crawler,peer39_crawler/1.0,PerplexityBot,YouBot," # taken from https://github.com/ai-robots-txt/ai.robots.txt
-        client-body-buffer-size: "100M"
+        client-body-buffer-size: 100M
         client-body-timeout: 120
         client-header-timeout: 120
         enable-brotli: "true"
@@ -93,7 +93,7 @@ spec:
           whenUnsatisfiable: DoNotSchedule
           labelSelector:
             matchLabels:
-              app.kubernetes.io/instance: nginx-internal
+              app.kubernetes.io/instance: nginx-external
               app.kubernetes.io/component: controller
 
       resources:

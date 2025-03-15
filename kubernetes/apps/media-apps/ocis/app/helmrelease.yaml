@@ -74,18 +74,20 @@ spec:
         controller: ocis
         ports:
           http:
-            port: 9200
+            port: &port 9200
 
-    ingress:
+    route:
       app:
-        className: external-nginx
-        hosts:
-          - host: ocis.noirprime.com
-            paths:
-              - path: /
-                service:
-                  identifier: app
-                  port: http
+        hostnames:
+          - ocis.noirprime.com
+        parentRefs:
+          - name: external
+            namespace: kube-system
+            sectionName: https
+        rules:
+          - backendRefs:
+              - name: ocis
+                port: *port
 
     persistence:
       config:

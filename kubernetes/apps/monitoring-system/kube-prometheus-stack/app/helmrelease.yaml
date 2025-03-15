@@ -94,13 +94,6 @@ spec:
             memory: 32M
 
     prometheus:
-      ingress:
-        enabled: true
-        ingressClassName: internal-nginx
-        hosts:
-          - prometheus.noirprime.com
-        pathType: Prefix
-
       prometheusSpec:
         alertingEndpoints:
           - namespace: monitoring
@@ -135,3 +128,16 @@ spec:
                 requests:
                   storage: 60Gi
         walCompression: true
+
+      route:
+        main:
+          hostnames:
+            - prom.noirprime.com
+          parentRefs:
+            - name: internal
+              namespace: kube-system
+              sectionName: https
+          rules:
+           - backendRefs:
+               - name: prometheus
+                 port: 9090

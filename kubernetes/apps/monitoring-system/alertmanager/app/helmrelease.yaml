@@ -69,18 +69,20 @@ spec:
         controller: alertmanager
         ports:
           http:
-            port: 9093
+            port: &port 9093
 
-    ingress:
+    route:
       app:
-        className: internal-nginx
-        hosts:
-          - host: alertmanager.noirprime.com
-            paths:
-              - path: /
-                service:
-                  identifier: app
-                  port: http
+        hostnames:
+          - alm.noirprime.com
+        parentRefs:
+          - name: internal
+            namespace: kube-system
+            sectionName: https
+        rules:
+          - backendRefs:
+              - name: alertmanager
+                port: *port
 
     persistence:
       config:
