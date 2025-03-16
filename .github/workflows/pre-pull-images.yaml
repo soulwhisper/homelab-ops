@@ -18,19 +18,20 @@ jobs:
     name: Filter changes
     runs-on: ubuntu-latest
     outputs:
-      any_changed: ${{ steps.changed-files.outputs.any_changed }}
+      changed-files: ${{ steps.changed-files.outputs.filtered_files }}
     steps:
       - name: Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
 
-      - name: Get Changed Files
+      - name: Get changed files
         id: changed-files
-        uses: tj-actions/changed-files@48d8f15b2aaa3d255ca5af3eba4870f807ce6b3c # v45
+        uses: ./.github/actions/get-changed-files
         with:
-          files: kubernetes/**
+          matchers: |-
+            ^kubernetes/.*
 
   extract-images:
-    if: ${{ needs.filter-changes.outputs.any_changed == 'true' }}
+    if: ${{ needs.filter-changes.outputs.changed-files != '[]' }}
     name: Extract Images
     runs-on: ubuntu-latest
     needs:
@@ -45,18 +46,9 @@ jobs:
       default: ${{ steps.extract-images.outputs.default }}
       pull: ${{ steps.extract-images.outputs.pull }}
     steps:
-      - name: Generate Token
-        uses: actions/create-github-app-token@21cfef2b496dd8ef5b904c159339626a10ad380e # v1
-        if: ${{ github.event.pull_request.head.repo.full_name == github.repository }}
-        id: app-token
-        with:
-          app-id: ${{ secrets.LAB_ASSISTANT_APP_ID }}
-          private-key: ${{ secrets.LAB_ASSISTANT_APP_KEY }}
-
       - name: Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
         with:
-          token: "${{ steps.app-token.outputs.token }}"
           ref: "${{ matrix.branches == 'default' && github.event.repository.default_branch || '' }}"
 
       - name: Gather Images
