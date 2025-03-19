@@ -29,13 +29,15 @@ nodes:
   - hostname: exarch-01
     ipAddress: 10.10.0.101
     controlPlane: true
+    nodeLabels:
+      intel.feature.node.kubernetes.io/gpu: "true"
     installDisk: /dev/sda
     networkInterfaces:
       - interface: bond0
         dhcp: false
         bond: &bond
           deviceSelectors:
-            permanentAddr: "*:f0:ab" # check MAC of 10G NICs
+            - permanentAddr: "*:f0:ab" # check MAC of 10G NICs
         addresses:
           - 10.10.0.101/24
         routes: &gateway
@@ -47,6 +49,8 @@ nodes:
   - hostname: exarch-02
     ipAddress: 10.10.0.102
     controlPlane: true
+    nodeLabels:
+      intel.feature.node.kubernetes.io/gpu: "true"
     installDisk: /dev/sda
     networkInterfaces:
       - interface: bond0
@@ -61,6 +65,8 @@ nodes:
   - hostname: exarch-03
     ipAddress: 10.10.0.103
     controlPlane: true
+    nodeLabels:
+      intel.feature.node.kubernetes.io/gpu: "true"
     installDisk: /dev/sda
     networkInterfaces:
       - interface: bond0
