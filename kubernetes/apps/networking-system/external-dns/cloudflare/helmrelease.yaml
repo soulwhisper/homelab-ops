@@ -20,6 +20,9 @@ spec:
     crds: CreateReplace
   values:
     fullnameOverride: *name
+    image: # TODO: Remove this block when new chart version is released
+      repository: registry.k8s.io/external-dns/external-dns
+      tag: v0.16.1
     domainFilters:
       - noirprime.com
     env:
@@ -35,7 +38,7 @@ spec:
       - --crd-source-kind=DNSEndpoint
       - --events
       - --ignore-ingress-tls-spec
-      - --gateway-label-filter=gateway==external
+      - --gateway-name=external
     podAnnotations:
       secret.reloader.stakater.com/reload: externaldns-cloudflare-secrets
     policy: sync

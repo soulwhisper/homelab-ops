@@ -3,38 +3,68 @@
   packageRules: [
     {
       description: "Actions Runner Controller Group",
-      groupName: "actions-runner-controller",
+      groupName: "Actions Runner Controller",
+      matchDatasources: ["docker"],
       matchPackageNames: [
         "actions-runner-controller-charts/gha-runner-scale-set-controller",
         "actions-runner-controller-charts/gha-runner-scale-set",
       ],
-      matchDatasources: ["helm", "docker"],
       group: {
         commitMessageTopic: "{{{groupName}}} group",
-        commitMessageSuffix: "",
       },
     },
     {
-      description: "Talos Group",
-      groupName: "Talos",
-      matchPackageNames: [
-        "ghcr.io/siderolabs/installer",
-        "ghcr.io/siderolabs/talosctl",
-      ],
+      "description": ["Cert-Manager Group"],
+      "groupName": "Cert-Manager",
+      "matchDatasources": ["docker"],
+      "matchPackageNames": ["/cert-manager/"],
+      "group": {
+        "commitMessageTopic": "{{{groupName}}} group"
+      }
+    },
+    {
+      "description": ["Cilium Group"],
+      "groupName": "Cilium",
+      "matchDatasources": ["docker"],
+      "matchPackageNames": ["/cilium/"],
+      "group": {
+        "commitMessageTopic": "{{{groupName}}} group"
+      }
+    },
+    {
+      description: "External Secrets Operator Group",
+      groupName: "External Secrets Operator",
       matchDatasources: ["docker"],
+      matchPackageNames: ["/external-secrets/"],
       group: {
         commitMessageTopic: "{{{groupName}}} group",
-        commitMessageSuffix: "",
       },
     },
     {
       description: "Flux Operator Group",
       groupName: "Flux Operator",
-      matchPackagePatterns: ["flux-operator", "flux-instance"],
       matchDatasources: ["docker"],
+      matchPackageNames: ["/flux-operator/", "/flux-instance/"],
       group: {
         commitMessageTopic: "{{{groupName}}} group",
-        commitMessageSuffix: "",
+      },
+    },
+    {
+      description: "Rook-Ceph Group",
+      groupName: "Rook-Ceph",
+      matchDatasources: ["docker"],
+      matchPackageNames: ["/rook-ceph/", "/rook-ceph-cluster/"],
+      group: {
+        commitMessageTopic: "{{{groupName}}} group",
+      },
+    },
+    {
+      description: "Silence-Operator Group",
+      groupName: "Silence-Operator",
+      matchPackageNames: ["/silence-operator/"],
+      matchDatasources: ["docker", "github-releases"],
+      group: {
+        commitMessageTopic: "{{{groupName}}} group",
       },
     },
   ],

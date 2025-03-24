@@ -49,6 +49,7 @@ jobs:
     needs:
       - filter-changes
     permissions:
+      contents: read
       pull-requests: write
     strategy:
       matrix:
@@ -107,12 +108,11 @@ jobs:
           private-key: ${{ secrets.LAB_ASSISTANT_APP_KEY }}
 
       - if: ${{ steps.diff.outputs.diff != '' }}
-        name: Add comment
-        uses: mshick/add-pr-comment@b8f338c590a895d50bcbfa6c5859251edc8952fc # v2
+        name: Add Comment
+        uses: marocchino/sticky-pull-request-comment@v2
         with:
-          repo-token: "${{ steps.app-token.outputs.token }}"
-          message-id: "${{ github.event.pull_request.number }}/kubernetes/${{ matrix.resources }}"
-          message-failure: Diff was not successful
+          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
+          header: ${{ github.event.pull_request.number }}/kubernetes/${{ matrix.resource }}
           message: |
             ```diff
             ${{ steps.diff.outputs.diff }}
