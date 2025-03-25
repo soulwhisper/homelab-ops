@@ -92,13 +92,13 @@ controlPlane:
   schematic: &talos-schema
     customization:
       extraKernelArgs:
-      #  - cpufreq.default_governor=performance # cost more power
-      #  - intel_idle.max_cstate=0 # cost more power
-         - iommu.passthrough=1 # pci passthrough
-         - intel_iommu=on # pci passthrough, intel
-         - init_on_alloc=0 # memory optimize
-         - init_on_free=0 # memory optimize
-         - net.ifnames=1
+        #  - cpufreq.default_governor=performance # cost more power
+        #  - intel_idle.max_cstate=0 # cost more power
+        - iommu.passthrough=1 # pci passthrough
+        - intel_iommu=on # pci passthrough, intel
+        - init_on_alloc=0 # memory optimize
+        - init_on_free=0 # memory optimize
+        - net.ifnames=1
       #  - console=ttyS0 # disable if barematel
       systemExtensions:
         officialExtensions:
