@@ -24,13 +24,7 @@
     },
     {
       description: "Only allow major upgrades",
-      matchDepNames: ["ghcr.io/bjw-s-labs/piped-frontend"],
-      matchUpdateTypes: ["minor", "patch", "pin"],
-      enabled: false,
-    },
-    {
-      description: "Only allow major upgrades",
-      matchDepNames: ["ghcr.io/jmbannon/ytdl-sub"],
+      matchDepNames: ["ghcr.io/bjw-s-labs/piped-frontend", "ghcr.io/jmbannon/ytdl-sub", "ghcr.io/n8n-io/n8n"],
       matchUpdateTypes: ["minor", "patch", "pin"],
       enabled: false,
     },
