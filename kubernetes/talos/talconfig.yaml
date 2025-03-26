@@ -8,7 +8,6 @@ endpoint: "https://k8s.homelab.internal:6443"
 # enable featuers:
 #   - disk-encryption
 #   - secureboot
-#   - tailscale
 #   - nut
 
 # renovate: depName=ghcr.io/siderolabs/installer datasource=docker
@@ -107,12 +106,7 @@ controlPlane:
           - siderolabs/mei
           - siderolabs/thunderbolt
           - siderolabs/nut-client
-          - siderolabs/tailscale
   extensionServices: &talos-ext
-    - name: tailscale
-      environment:
-        - TS_AUTHKEY=${TS_AUTHKEY}
-        - TS_ROUTES=10.100.0.0/16
     - name: nut-client
       configFiles:
         - content: |-
