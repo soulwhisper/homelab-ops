@@ -23,13 +23,13 @@
       allowedVersions: ">= v1.32.1",
     },
     {
-      description: "Only allow major upgrades",
+      description: "Only allow major/minor upgrades",
       matchDepNames: [
         "ghcr.io/bjw-s-labs/piped-frontend",
         "ghcr.io/jmbannon/ytdl-sub",
         "ghcr.io/n8n-io/n8n",
       ],
-      matchUpdateTypes: ["minor", "patch", "pin"],
+      matchUpdateTypes: ["patch"],
       enabled: false,
     },
   ],
