@@ -7,8 +7,11 @@ bgpControlPlane:
   enabled: true
 bpf:
   datapathMode: netkit
+  events:
+    monitorInterval: 10s
   masquerade: true
   preallocateMaps: true
+bpfClockProbe: true
 cluster:
   id: 1
   name: main
@@ -24,6 +27,7 @@ dashboards:
     grafana_folder: Cilium
 devices: bond+
 enableIPv4BIGTCP: true
+enableIPv6BIGTCP: true
 enableRuntimeDeviceDetection: true
 endpointRoutes:
   enabled: true
@@ -36,6 +40,7 @@ gatewayAPI:
   xffNumTrustedHops: 1
 hubble:
   enabled: true
+  eventQueueSize: 32768
   metrics:
     enabled:
       - dns:query
@@ -60,7 +65,11 @@ hubble:
     rollOutPods: true
 ipam:
   mode: "kubernetes"
+ipv4:
+  enabled: true
 ipv4NativeRoutingCIDR: 10.100.0.0/17
+ipv6:
+  enabled: true
 k8sServiceHost: localhost
 k8sServicePort: 7445
 kubeProxyReplacement: true
@@ -68,8 +77,12 @@ kubeProxyReplacementHealthzBindAddr: 0.0.0.0:10256
 l2announcements:
   enabled: false # use bgp instead
 loadBalancer:
-  acceleration: native
+  acceleration: native # ms-01, otherwise best-effort
+  algorithm: maglev
   mode: hybrid
+maglev:
+  tableSize: 65521
+  hashSeed: 8zdzvOS4yeYFjkj8
 operator:
   dashboards:
     enabled: true
