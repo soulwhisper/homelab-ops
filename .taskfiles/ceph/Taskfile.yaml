@@ -1,0 +1,26 @@
+---
+# yaml-language-server: $schema=https://taskfile.dev/schema.json
+version: "3"
+
+tasks:
+  status:
+    desc: Print the phase and conditions of all CRs
+    vars:
+      NS: "{{.NS | default .storage-system }}" # ceph namespace
+    preconditions:
+      - which kubectl
+      - kubectl rook-ceph rook version --namespace {{.NS}}
+      - kubectl rook-ceph ceph versions --namespace {{.NS}}
+    cmds:
+      - kubectl rook-ceph rook status all --namespace {{.NS}}
+
+  health:
+    desc: check health of the cluster and common configuration issues
+    vars:
+      NS: "{{.NS | default .storage-system }}" # ceph namespace
+    preconditions:
+      - which kubectl
+      - kubectl rook-ceph rook version --namespace {{.NS}}
+      - kubectl rook-ceph ceph versions --namespace {{.NS}}
+    cmds:
+      - kubectl rook-ceph health --namespace {{.NS}}
