@@ -3,13 +3,13 @@
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: "noirprime-com"
+  name: noirprime-com
 spec:
-  secretName: "noirprime-com-tls"
+  secretName: noirprime-com-tls
   issuerRef:
     name: letsencrypt-production
     kind: ClusterIssuer
-  commonName: "noirprime.com"
+  commonName: noirprime.com
   dnsNames:
     - "noirprime.com"
     - "*.noirprime.com"

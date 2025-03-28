@@ -6,6 +6,7 @@ metadata:
   name: external
   annotations:
     external-dns.alpha.kubernetes.io/target: &hostname gateway-ext.noirprime.com
+    cert-manager.io/issuer: letsencrypt-production
 spec:
   gatewayClassName: cilium
   addresses:
@@ -30,6 +31,22 @@ spec:
         namespaces:
           from: All
       tls:
+        mode: Terminate
         certificateRefs:
-          - kind: Secret
-            name: noirprime-com-tls
+          - name: noirprime-com-tls
+---
+# yaml-language-server: $schema=https://github.com/datreeio/CRDs-catalog/raw/refs/heads/main/gateway.networking.k8s.io/httproute_v1.json
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: force-https-external
+spec:
+  parentRefs:
+    - name: external
+      sectionName: http
+  rules:
+    - filters:
+      - type: RequestRedirect
+        requestRedirect:
+          scheme: https
+          statusCode: 301

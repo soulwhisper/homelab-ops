@@ -30,6 +30,22 @@ spec:
         namespaces:
           from: All
       tls:
+        mode: Terminate
         certificateRefs:
-          - kind: Secret
-            name: noirprime-com-tls
+          - name: noirprime-com-tls
+---
+# yaml-language-server: $schema=https://github.com/datreeio/CRDs-catalog/raw/refs/heads/main/gateway.networking.k8s.io/httproute_v1.json
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: force-https-internal
+spec:
+  parentRefs:
+    - name: internal
+      sectionName: http
+  rules:
+    - filters:
+      - type: RequestRedirect
+        requestRedirect:
+          scheme: https
+          statusCode: 301
