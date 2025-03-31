@@ -9,7 +9,7 @@ spec:
   url: https://github.com/giantswarm/silence-operator
   ref:
     # renovate: depName=giantswarm/silence-operator datasource=github-releases
-    tag: v0.13.0
+    tag: v0.14.0
   ignore: |
     # exclude
     /*
