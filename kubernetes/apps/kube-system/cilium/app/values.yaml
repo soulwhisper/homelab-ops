@@ -9,6 +9,7 @@ bpf:
   datapathMode: netkit
   events:
     monitorInterval: 10s
+  hostLegacyRouting: true
   masquerade: true
   preallocateMaps: true
 bpfClockProbe: true
