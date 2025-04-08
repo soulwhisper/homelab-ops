@@ -32,6 +32,15 @@
       },
     },
     {
+      description: "CoreDNS Group",
+      groupName: "CoreDNS",
+      matchDatasources: ["docker"],
+      matchPackageNames: ["/coredns/"],
+      group: {
+        commitMessageTopic: "{{{groupName}}} group",
+      },
+    },
+    {
       description: "External Secrets Operator Group",
       groupName: "External Secrets Operator",
       matchDatasources: ["docker"],

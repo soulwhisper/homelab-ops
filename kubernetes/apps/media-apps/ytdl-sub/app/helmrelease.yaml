@@ -64,7 +64,7 @@ spec:
                 readOnly: true
 
       media:
-        existingClaim: ytdl-sub-nfs-share
+        existingClaim: ytdl-sub-fs
         advancedMounts:
           ytdl-sub:
             app:

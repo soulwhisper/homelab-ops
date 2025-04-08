@@ -151,21 +151,21 @@ patches:
         no_proxy: .tailscale.com,.tailscale.io,.noirprime.com,.homelab.internal,localhost,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16
 
   # Enable OpenEBS Storage
-  - |-
-    machine:
-      sysctls:
-        vm.nr_hugepages: "1024"
-      nodeLabels:
-        openebs.io/engine: mayastor
-      kubelet:
-        extraMounts:
-          - destination: /var/local/openebs
-            type: bind
-            source: /var/local/openebs
-            options:
-              - rbind
-              - rshared
-              - rw
+  # - |-
+  #   machine:
+  #     sysctls:
+  #       vm.nr_hugepages: "1024"
+  #     nodeLabels:
+  #       openebs.io/engine: mayastor
+  #     kubelet:
+  #       extraMounts:
+  #         - destination: /var/local/openebs
+  #           type: bind
+  #           source: /var/local/openebs
+  #           options:
+  #             - rbind
+  #             - rshared
+  #             - rw
 
   # Enable DRBD and LVM-Thin
   # - |-
@@ -268,6 +268,8 @@ patches:
   - |-
     cluster:
       allowSchedulingOnControlPlanes: true
+      coreDNS:
+        disabled: true
       proxy:
         disabled: true
       discovery:

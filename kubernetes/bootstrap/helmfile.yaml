@@ -8,14 +8,17 @@ helmDefaults:
   force: true
 
 repositories:
-  - name: postfinance
-    url: https://postfinance.github.io/kubelet-csr-approver
   - name: cilium
     url: https://helm.cilium.io
   - name: jetstack
     url: https://charts.jetstack.io
 
 releases:
+  - name: prometheus-operator-crds
+    namespace: monitoring-system
+    chart: oci://ghcr.io/prometheus-community/charts/prometheus-operator-crds
+    version: 19.0.0
+
   - name: cilium
     namespace: kube-system
     chart: cilium/cilium
@@ -23,27 +26,17 @@ releases:
     values:
       - ../apps/kube-system/cilium/app/values.yaml
 
-  - name: kubelet-csr-approver
+  - name: coredns
     namespace: kube-system
-    chart: postfinance/kubelet-csr-approver
-    version: 1.2.6
+    chart: oci://ghcr.io/coredns/charts/coredns
+    version: 1.39.2
     values:
-      - ../apps/kube-system/kubelet-csr-approver/app/values.yaml
+      - ../apps/kube-system/coredns/app/values.yaml
     needs:
       - kube-system/cilium
-
-  - name: spegel
-    namespace: kube-system
-    chart: oci://ghcr.io/spegel-org/helm-charts/spegel
-    version: 0.1.1
-    values:
-      - ../apps/kube-system/spegel/app/values.yaml
-    needs:
-      - kube-system/cilium
-      - kube-system/kubelet-csr-approver
 
   - name: cert-manager
-    namespace: cert-manager
+    namespace: security-system
     chart: jetstack/cert-manager
     version: v1.17.1
     values:

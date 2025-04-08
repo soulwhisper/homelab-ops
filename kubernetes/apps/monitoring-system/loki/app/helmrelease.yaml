@@ -11,7 +11,7 @@ spec:
     kind: OCIRepository
     name: loki
   dependsOn:
-    - name: openebs
+    - name: rook-ceph-cluster
       namespace: storage-system
   values:
     deploymentMode: SingleBinary
@@ -65,7 +65,7 @@ spec:
       replicas: 1
       persistence:
         enabled: true
-        storageClass: openebs-rep3
+        storageClass: ceph-block
         size: 50Gi
     test:
       enabled: false

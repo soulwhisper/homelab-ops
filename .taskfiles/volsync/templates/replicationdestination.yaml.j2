@@ -19,5 +19,5 @@ spec:
       runAsGroup: {{ ENV.PGID }}
       fsGroup: {{ ENV.PGID }}
     previous: {{ ENV.PREVIOUS }}
-    repository: {{ ENV.APP }}-volsync-minio
+    repository: {{ ENV.APP }}-volsync-s3
     storageClassName: {{ ENV.STORAGE_CLASS_NAME }}

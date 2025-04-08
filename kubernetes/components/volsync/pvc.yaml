@@ -4,7 +4,7 @@ kind: PersistentVolumeClaim
 metadata:
   name: "${APP}-app"
 spec:
-  storageClassName: "${VOLSYNC_STORAGECLASS:-openebs-rep1}"
+  storageClassName: "${VOLSYNC_STORAGECLASS:-ceph-block}"
   accessModes:
     - "${VOLSYNC_ACCESSMODES:-ReadWriteOnce}"
   dataSourceRef:

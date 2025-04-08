@@ -13,7 +13,7 @@ spec:
     cacheAccessModes:
       - "${VOLSYNC_CACHE_ACCESSMODES:-ReadWriteOnce}"
     cacheCapacity: "${VOLSYNC_CACHE_CAPACITY:-1Gi}"
-    cacheStorageClassName: "${VOLSYNC_CACHE_SNAPSHOTCLASS:-openebs-rep1}"
+    cacheStorageClassName: "${VOLSYNC_CACHE_SNAPSHOTCLASS:-ceph-block}"
     capacity: "${VOLSYNC_CAPACITY:-1Gi}"
     cleanupCachePVC: true
     cleanupTempPVC: true
@@ -24,5 +24,5 @@ spec:
       runAsGroup: ${APP_GID:-2000}
       fsGroup: ${APP_GID:-2000}
     repository: "${APP}-volsync-nfs"
-    storageClassName: "${VOLSYNC_STORAGECLASS:-openebs-rep1}"
-    volumeSnapshotClassName: "${VOLSYNC_SNAPSHOTCLASS:-openebs-snapshot}"
+    storageClassName: "${VOLSYNC_STORAGECLASS:-ceph-block}"
+    volumeSnapshotClassName: "${VOLSYNC_SNAPSHOTCLASS:-ceph-block-snapshot}"

@@ -5,3 +5,6 @@ kind: Kustomization
 resources:
   - ../ocirepository.yaml
   - ./helmrelease.yaml
+  - ./alerts
+  - ./prometheusrules
+  - ./scrapeconfigs

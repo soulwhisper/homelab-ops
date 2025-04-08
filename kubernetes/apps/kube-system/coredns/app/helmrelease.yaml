@@ -3,9 +3,12 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: prometheus-operator-crds
+  name: coredns
 spec:
-  interval: 30m
   chartRef:
     kind: OCIRepository
-    name: prometheus-operator-crds
+    name: coredns
+  interval: 30m
+  valuesFrom:
+    - kind: ConfigMap
+      name: coredns-values

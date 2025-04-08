@@ -5,6 +5,7 @@ kind: Kustomization
 namespace: kube-system
 resources:
   - ./cilium/ks.yaml
+  - ./coredns/ks.yaml
   - ./descheduler/ks.yaml
   - ./intel-device-plugins/ks.yaml
   - ./kubelet-csr-approver/ks.yaml
