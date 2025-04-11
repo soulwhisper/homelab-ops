@@ -25,11 +25,11 @@ jobs:
     concurrency:
       group: ${{ github.workflow }}-${{ github.ref }}
     steps:
-      - uses: actions/create-github-app-token@d72941d797fd3113feb6b93fd0dec494b13a2547 # v1
+      - uses: actions/create-github-app-token@v2
         id: app-token
         with:
-          app-id: "${{ secrets.LAB_ASSISTANT_APP_ID }}"
-          private-key: "${{ secrets.LAB_ASSISTANT_APP_KEY}}"
+          app-id: ${{ secrets.PRIVATE_APP_ID }}
+          private-key: ${{ secrets.PRIVATE_APP_KEY }}
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
       - uses: actions/configure-pages@983d7736d9b0ae728b81ab479565c72886d7745b # v5
         with:

@@ -14,11 +14,11 @@ jobs:
       contents: read
     steps:
       - name: Generate Token
-        uses: actions/create-github-app-token@d72941d797fd3113feb6b93fd0dec494b13a2547 # v1
+        uses: actions/create-github-app-token@v2
         id: app-token
         with:
-          app-id: ${{ secrets.LAB_ASSISTANT_APP_ID }}
-          private-key: ${{ secrets.LAB_ASSISTANT_APP_KEY }}
+          app-id: ${{ secrets.PRIVATE_APP_ID }}
+          private-key: ${{ secrets.PRIVATE_APP_KEY }}
 
       - name: Cleanup workflow stale runs
         uses: Mattraks/delete-workflow-runs@4c9f24749b7996562658e3d6e10662489e22caca # v2
