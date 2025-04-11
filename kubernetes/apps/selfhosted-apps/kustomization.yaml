@@ -6,7 +6,7 @@ namespace: selfhosted-apps
 resources:
   - ./actual/ks.yaml
   - ./freshrss/ks.yaml
-  - ./hoarder/ks.yaml
+  - ./karakeep/ks.yaml
   - ./n8n/ks.yaml
   - ./piped/ks.yaml
 components:

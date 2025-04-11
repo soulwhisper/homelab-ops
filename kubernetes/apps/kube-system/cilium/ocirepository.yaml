@@ -3,14 +3,12 @@
 apiVersion: source.toolkit.fluxcd.io/v1beta2
 kind: OCIRepository
 metadata:
-  name: kyverno
+  name: cert-manager
 spec:
   interval: 10m
   layerSelector:
     mediaType: application/vnd.cncf.helm.chart.content.v1.tar+gzip
     operation: copy
   ref:
-    tag: 3.3.7
-  url: oci://ghcr.io/kyverno/charts/kyverno
-  verify:
-    provider: cosign
+    tag: v1.17.1
+  url: oci://quay.io/jetstack/charts/cert-manager

@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: hoarder
+  name: karakeep
 spec:
   interval: 30m
   chartRef:
@@ -18,33 +18,33 @@ spec:
       hostUsers: false
 
     controllers:
-      hoarder:
+      karakeep:
         annotations:
           reloader.stakater.com/auto: "true"
         containers:
           app:
             image:
-              repository: ghcr.io/hoarder-app/hoarder
+              repository: ghcr.io/karakeep-app/karakeep
               tag: 0.23.2
             env:
-              BROWSER_WEB_URL: http://hoarder-chrome.selfhosted-apps.svc.cluster.local:9222
+              BROWSER_WEB_URL: http://karakeep-chrome.selfhosted-apps.svc.cluster.local:9222
               CRAWLER_DOWNLOAD_BANNER_IMAGE: true
               CRAWLER_ENABLE_ADBLOCKER: true
               CRAWLER_STORE_SCREENSHOT: true
               DATA_DIR: /data
               DISABLE_SIGNUPS: true
-              MEILI_ADDR: http://hoarder-meilisearch.selfhosted-apps.svc.cluster.local:7700
+              MEILI_ADDR: http://karakeep-meilisearch.selfhosted-apps.svc.cluster.local:7700
               MEILI_MASTER_KEY:
                 valueFrom:
                   secretKeyRef:
-                    name: hoarder-secret
+                    name: karakeep-secret
                     key: meilisearch_master_key
               NEXTAUTH_SECRET:
                 valueFrom:
                   secretKeyRef:
-                    name: hoarder-secret
+                    name: karakeep-secret
                     key: encryption_key
-              NEXTAUTH_URL: https://hoarder.noirprime.com
+              NEXTAUTH_URL: https://karakeep.noirprime.com
               DISABLE_NEW_RELEASE_CHECK: true
               COREPACK_INTEGRITY_KEYS: 0
             probes:
@@ -98,11 +98,11 @@ spec:
                       - key: app.kubernetes.io/name
                         operator: In
                         values:
-                          - hoarder
+                          - karakeep
                       - key: app.kubernetes.io/component
                         operator: In
                         values:
-                          - hoarder
+                          - karakeep
                   topologyKey: kubernetes.io/hostname
         containers:
           app:
@@ -114,14 +114,14 @@ spec:
               MEILI_MASTER_KEY:
                 valueFrom:
                   secretKeyRef:
-                    name: hoarder-secret
+                    name: karakeep-secret
                     key: meilisearch_master_key
             securityContext: *securityContext
             resources: *resources
 
     service:
       app:
-        controller: hoarder
+        controller: karakeep
         ports:
           http:
             port: &port 3000
@@ -139,24 +139,24 @@ spec:
     route:
       app:
         hostnames:
-          - hoarder.noirprime.com
+          - karakeep.noirprime.com
         parentRefs:
           - name: internal
             namespace: kube-system
             sectionName: https
         rules:
           - backendRefs:
-              - name: hoarder
+              - name: karakeep
                 port: *port
 
     persistence:
       app:
-        existingClaim: hoarder-app
+        existingClaim: karakeep-app
         advancedMounts:
-          hoarder:
+          karakeep:
             app:
               - path: /data
-                subPath: hoarder
+                subPath: karakeep
           meilisearch:
             app:
               - path: /meili_data

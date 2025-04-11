@@ -6,13 +6,9 @@ metadata:
   name: cilium
 spec:
   interval: 30m
-  chart:
-    spec:
-      chart: cilium
-      sourceRef:
-        kind: HelmRepository
-        name: cilium
-      version: 1.17.1
+  chartRef:
+    kind: OCIRepository
+    name: cert-manager
 
   valuesFrom:
     - kind: ConfigMap
