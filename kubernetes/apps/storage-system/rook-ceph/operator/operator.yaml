@@ -15,6 +15,7 @@ spec:
       enabled: true
     csi:
       cephFSKernelMountOptions: ms_mode=prefer-crc
+      csiDriverNamePrefix: storage-system
       enableLiveness: true
       serviceMonitor:
         enabled: true
