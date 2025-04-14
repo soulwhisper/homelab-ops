@@ -21,7 +21,7 @@ spec:
       runAsGroup: ${APP_GID:-2000}
       fsGroup: ${APP_GID:-2000}
     pruneIntervalDays: 7
-    repository: ${APP}-volsync-s3"
+    repository: ${APP}-volsync-s3
     retain:
       hourly: 24
       daily: 7

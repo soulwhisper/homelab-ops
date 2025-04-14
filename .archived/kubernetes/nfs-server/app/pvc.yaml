@@ -5,7 +5,7 @@ metadata:
   name: nfs-server-pvc
   namespace: storage-system
 spec:
-  storageClassName: openebs-rep3
+  storageClassName: ceph-fs
   accessModes: ["ReadWriteOnce"]
   resources:
     requests:

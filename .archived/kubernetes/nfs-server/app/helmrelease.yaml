@@ -11,7 +11,7 @@ spec:
     name: app-template
     namespace: gitops-system
   dependsOn:
-    - name: openebs
+    - name: rook-ceph-cluster
       namespace: storage-system
   values:
     controllers:
@@ -30,7 +30,7 @@ spec:
               - name: NFS_DOMAIN
                 value: "*"
               - name: NFS_OPTION
-                value: "rw,fsid=0,async,insecure,no_subtree_check,all_squash,anonuid=65534,anongid=65534"
+                value: "rw,fsid=0,async,insecure,no_subtree_check,all_squash,anonuid=2000,anongid=2000"
             ports:
               - name: nfs
                 containerPort: 2049

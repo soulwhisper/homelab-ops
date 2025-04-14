@@ -7,15 +7,16 @@
 - consider adding [MAP](https://github.com/kubernetes/enhancements/tree/master/keps/sig-api-machinery/3962-mutating-admission-policies) when beta, [examples](https://github.com/search?q=repo%3Abjw-s-labs%2Fhomelab-ops+MutatingAdmissionPolicy&type=commits).
 - use "sigs.k8s.io/controller-tools/cmd/controller-gen" to update volsync replicationsource/replicationdestination schema
 - add discord notifications for github actions;
-- design grafana dashboard for openebs-mayastor, [ref](https://openebs.io/docs/user-guides/replicated-storage-user-guide/replicated-pv-mayastor/advanced-operations/monitoring); then disable ceph;
+- migrated from mayastor to ceph; disable ceph-nfs;
 
 ### Infra
 
 - `infra/scripts/minio-bucket-keys.sh`, create minio buckets, service accounts and policies for k8s apps, using 1password keys.
 - offsite backup ( volsync ) use minio @ nix-infra;
 - openebs-hostpath, disabled due to MS-01 using 256G system disk;
-- openebs-rep3, for database and apps;
-- openebs-rep1, for tmp and cache;
+- ceph-block, for database and apps;
+- ceph-fs, for shared-media;
+- ceph-s3, for volsync backup;
 - sops.age for configs, migrating to onepassword;
 - onepassword, main secret store;
 
@@ -28,32 +29,10 @@
 - monitoring: `mon.noirprime.com`, `/coroot/` for coroot, `/grafana/` for grafana
 - self-hosted-runner, label:arc-homelab / label:arc-homelab-ops
 
-### Github-secrets
-
-- LAB_ASSISTANT_APP_ID => GITHUB_APP_ID
-- LAB_ASSISTANT_APP_KEY => GITHUB_APP_KEY
-
 ### defaults
 
 - doamin = "cluster.local"
-- VOLSYNC_STORAGECLASS=openebs-rep1
-- VOLSYNC_CACHE_SNAPSHOTCLASS=-openebs-rep1
-- VOLSYNC_SNAPSHOTCLASS=openebs-snapshot
 - app_uid = app_gid = 2000
-
-### volsync-nfs
-
-```yaml
-# if using volsync-nfs, add below lines
-          volumeMounts:
-            - mountPath: /volsync
-              name: volsync
-      volumes:
-        - name: volsync
-          nfs:
-            server: "nix-infra.homelab.internal"
-            path: "/opt/backup/volsync"
-```
 
 ### App Memo
 

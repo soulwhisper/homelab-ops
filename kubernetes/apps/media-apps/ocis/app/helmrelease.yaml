@@ -104,7 +104,7 @@ spec:
             app:
               - path: /etc/ocis
       data:
-        existingClaim: ocis-fs
+        existingClaim: shared-media
         globalMounts:
           - path: /var/lib/ocis
             subPath: /media/ocis

@@ -1,0 +1,61 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/ceph.rook.io/cephobjectstoreuser_v1.json
+apiVersion: ceph.rook.io/v1
+kind: CephObjectStoreUser
+metadata:
+  name: volsync
+  namespace: storage-system
+spec:
+  store: ceph-objectstore
+  displayName: "volsync"
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/external-secrets.io/pushsecret_v1alpha1.json
+apiVersion: external-secrets.io/v1alpha1
+kind: PushSecret
+metadata:
+  name: update-volsync-keys
+spec:
+  deletionPolicy: Delete
+  refreshInterval: 1h
+  secretStoreRefs:
+    - name: onepassword
+      kind: ClusterSecretStore
+  selector:
+    secret:
+      name: rook-ceph-object-user-ceph-objectstore-volsync
+  data:
+    - match:
+        secretKey: AccessKey
+        remoteRef:
+          remoteKey: minio
+          property: volsync_access_key
+    - match:
+        secretKey: SecretKey
+        remoteRef:
+          remoteKey: minio
+          property: volsync_secret_key
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/objectbucket.io/objectbucketclaim_v1alpha1.json
+apiVersion: objectbucket.io/v1alpha1
+kind: ObjectBucketClaim
+metadata:
+  name: volsync-local-s3
+  namespace: storage-system
+spec:
+  bucketName: volsync
+  storageClassName: ceph-s3
+  additionalConfig:
+    bucketPolicy: |
+      {
+        "Version": "",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Action": ["s3:*"],
+            "Resource": [
+              "arn:aws:s3:::volsync",
+              "arn:aws:s3:::volsync/*"
+            ]
+          }
+        ]
+      }

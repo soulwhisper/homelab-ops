@@ -133,19 +133,10 @@ spec:
               requests:
                 cpu: 100m
                 memory: 1Gi
-            placement:
-              topologySpreadConstraints:
-                - maxSkew: 1
-                  topologyKey: kubernetes.io/hostname
-                  labelSelector:
-                    matchLabels:
-                      app.kubernetes.io/component: cephfilesystems.ceph.rook.io
-                      app.kubernetes.io/name: ceph-mds
-                      app.kubernetes.io/part-of: ceph-fs
-                  whenUnsatisfiable: DoNotSchedule
             priorityClassName: system-cluster-critical
         storageClass:
           enabled: true
+          isDefault: false
           name: ceph-fs
           pool: data0
           reclaimPolicy: Delete

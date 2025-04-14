@@ -19,5 +19,5 @@ spec:
     namespace: gitops-system
   wait: true
   dependsOn:
-    - name: openebs
+    - name: rook-ceph-cluster
       namespace: storage-system
