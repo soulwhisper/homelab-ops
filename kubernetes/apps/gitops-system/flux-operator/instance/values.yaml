@@ -10,6 +10,11 @@ instance:
     - kustomize-controller
     - helm-controller
     - notification-controller
+  sharding:
+    key: "sharding.fluxcd.io/key"
+    shards:
+      - "prod"
+      - "test"
   sync:
     kind: GitRepository
     url: https://github.com/soulwhisper/homelab-ops.git
