@@ -23,9 +23,9 @@
 ### Pre-deployment
 
 - make sure system-upgrade-controller use correct installer and schematicID
-- `10.10.0.10` as nix-infra node, minio / dns / ntp / talos-api / ...
-- `10.10.0.101-103` as k8s nodes;
-- `10.10.0.201-250` as cilium l2 loadbalancer ip;
+- `172.19.82.10` as nix-infra node, minio / dns / ntp / talos-api / ...
+- `172.19.82.101-103` as k8s nodes;
+- `172.19.82.201-250` as cilium l2 loadbalancer ip;
 - monitoring: `mon.noirprime.com`, `/coroot/` for coroot, `/grafana/` for grafana
 - self-hosted-runner, label:arc-homelab / label:arc-homelab-ops
 
