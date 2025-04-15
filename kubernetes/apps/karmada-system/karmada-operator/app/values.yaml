@@ -1,0 +1,7 @@
+---
+operator:
+  replicaCount: 3
+  nodeSelector:
+    matchExpressions:
+      - key: node-role.kubernetes.io/control-plane
+        operator: Exists

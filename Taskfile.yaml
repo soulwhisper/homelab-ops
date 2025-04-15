@@ -12,6 +12,7 @@ includes:
   flux: .taskfiles/flux/Taskfile.yaml
   k8s: .taskfiles/k8s/Taskfile.yaml
   k8s-bootstrap: .taskfiles/k8s-bootstrap/Taskfile.yaml
+  karmada: .taskfiles/karmada/Taskfile.yaml
   postgres: .taskfiles/postgres/Taskfile.yaml
   sops: .taskfiles/sops/Taskfile.yaml
   talos: .taskfiles/talos/Taskfile.yaml
