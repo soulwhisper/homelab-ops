@@ -110,11 +110,9 @@ controlPlane:
     - name: nut-client
       configFiles:
         - content: |-
-            MONITOR 10.0.0.100 1 remote upsuser proxmox
+            MONITOR santak-box@10.0.0.10 1 upsmon sEcr3T! secondary
             SHUTDOWNCMD "/sbin/poweroff"
           mountPath: /usr/local/etc/nut/upsmon.conf
-      environment:
-        - UPS_NAME=nutdev1
 
   # controlPlane only patches
   patches:
