@@ -31,11 +31,11 @@ This Git repository contains the following directories under [Kubernetes](./kube
 
 ```sh
 📁 kubernetes
-├── 📁 apps           # applications
-├── 📁 bootstrap      # bootstrap procedures
-├── 📁 components     # re-useable components
-├── 📁 flux           # flux system configuration
-└── 📁 talos          # talos configuration
+├── 📁 apps                          # applications
+├── 📁 infrastructure/bootstrap      # bootstrap procedures
+├── 📁 infrastructure/components     # re-useable components
+├── 📁 infrastructure/flux           # flux system configuration
+└── 📁 infrastructure/talos          # talos configuration
 ```
 
 ### Flux Workflow

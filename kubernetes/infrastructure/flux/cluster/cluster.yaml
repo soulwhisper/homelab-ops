@@ -8,7 +8,7 @@ metadata:
 spec:
   targetNamespace: *namespace
   interval: 30m
-  path: ./kubernetes/flux/repositories
+  path: ./kubernetes/infrastructure/flux/repositories
   prune: true
   wait: false
   sourceRef:

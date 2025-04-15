@@ -7,8 +7,8 @@ resources:
   - ./cloudflared/ks.yaml
   - ./external-dns/ks.yaml
 components:
-  - ../../components/namespace
-  - ../../components/flux/alerts
+  - ../../infrastructure/components/namespace
+  - ../../infrastructure/components/flux/alerts
 patches:
   - patch: |
       - op: replace

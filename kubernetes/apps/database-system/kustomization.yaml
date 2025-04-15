@@ -6,8 +6,8 @@ namespace: database-system
 resources:
   - ./crunchy-postgres-operator/ks.yaml
 components:
-  - ../../components/namespace
-  - ../../components/flux/alerts
+  - ../../infrastructure/components/namespace
+  - ../../infrastructure/components/flux/alerts
 patches:
   - patch: |
       - op: replace

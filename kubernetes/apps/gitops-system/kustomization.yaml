@@ -8,9 +8,9 @@ resources:
   - ./flux-operator/ks.yaml
   - ./system-upgrade-controller/ks.yaml
 components:
-  - ../../components/namespace
-  - ../../components/flux/alerts
-  - ../../components/flux/sops
+  - ../../infrastructure/components/namespace
+  - ../../infrastructure/components/flux/alerts
+  - ../../infrastructure/components/flux/sops
 patches:
   - patch: |
       - op: replace

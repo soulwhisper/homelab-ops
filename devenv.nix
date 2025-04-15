@@ -7,7 +7,7 @@
 {
   env.GREET = "homelab-ops";
   env.KUBECONFIG = "./kubernetes/kubeconfig";
-  env.TALOSCONFIG = "./kubernetes/talos/clusterconfig/talosconfig";
+  env.TALOSCONFIG = "./kubernetes/infrastructure/talos/clusterconfig/talosconfig";
   env.MINIJINJA_CONFIG_FILE = ".minijinja.toml";
 
   # replace pre-commit and various linters

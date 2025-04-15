@@ -23,7 +23,7 @@ spec:
     - name: onepassword-store
       namespace: security-system
   components:
-    - ../../../components/gatus
+    - ../../../infrastructure/components/gatus
   postBuild:
     substitute:
       APP: *appname

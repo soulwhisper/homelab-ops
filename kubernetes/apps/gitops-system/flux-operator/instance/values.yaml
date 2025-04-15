@@ -10,16 +10,11 @@ instance:
     - kustomize-controller
     - helm-controller
     - notification-controller
-  sharding:
-    key: "sharding.fluxcd.io/key"
-    shards:
-      - "prod"
-      - "test"
   sync:
     kind: GitRepository
     url: https://github.com/soulwhisper/homelab-ops.git
     ref: refs/heads/main
-    path: kubernetes/flux/config/cluster
+    path: kubernetes/infrastructure/flux/config/cluster
   commonMetadata:
     labels:
       app.kubernetes.io/name: flux

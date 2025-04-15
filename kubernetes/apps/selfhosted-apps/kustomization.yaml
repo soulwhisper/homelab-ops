@@ -10,8 +10,8 @@ resources:
   - ./n8n/ks.yaml
   - ./piped/ks.yaml
 components:
-  - ../../components/namespace
-  - ../../components/flux/alerts
+  - ../../infrastructure/components/namespace
+  - ../../infrastructure/components/flux/alerts
 patches:
   - patch: |
       - op: replace
