@@ -9,6 +9,8 @@ helmDefaults:
 repositories:
   - name: cilium
     url: https://helm.cilium.io
+  - name: portefaix-hub
+    url: https://charts.portefaix.xyz
 
 releases:
   - name: prometheus-operator-crds
@@ -16,6 +18,12 @@ releases:
     atomic: true
     chart: oci://ghcr.io/prometheus-community/charts/prometheus-operator-crds
     version: 19.1.0
+
+  - name: gateway-api-crds
+    namespace: kube-system
+    atomic: true
+    chart: portefaix-hub/gateway-api-crds
+    version: 1.2.1
 
   - name: cilium
     namespace: kube-system
@@ -34,15 +42,6 @@ releases:
         args:
           - -c
           - until kubectl get crd ciliumbgppeeringpolicies.cilium.io ciliuml2announcementpolicies.cilium.io ciliumloadbalancerippools.cilium.io &>/dev/null; do sleep 10; done
-        showlogs: true
-      - # Apply gateway-api CRD
-        events:
-          - postsync
-        command: kubectl
-        args:
-          - apply
-          - -f
-          - https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.2.1/experimental-install.yaml
         showlogs: true
       - # Apply cilium network configuration
         events:
@@ -75,6 +74,7 @@ releases:
       - '{{ requiredEnv "ROOT_DIR" }}/kubernetes/apps/security-system/cert-manager/app/values.yaml'
     needs:
       - kube-system/coredns
+      - kube-system/gateway-api-crds
 
   # only needed if previous rook need wipe, `export ROOK_DISK=` first
   # - name: wipe-rook
