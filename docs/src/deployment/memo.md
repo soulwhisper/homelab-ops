@@ -22,17 +22,31 @@
 
 ### Pre-deployment
 
-- make sure system-upgrade-controller use correct installer and schematicID
-- `172.19.82.10` as nix-infra node, minio / dns / ntp / talos-api / ...
-- `172.19.82.101-103` as k8s nodes;
-- `172.19.82.201-250` as cilium l2 loadbalancer ip;
-- monitoring: `mon.noirprime.com`, `/coroot/` for coroot, `/grafana/` for grafana
-- self-hosted-runner, label:arc-homelab / label:arc-homelab-ops
+- set `exarch-0n` and `k8s.homelab.internal` to IPs;
+- make sure system-upgrade-controller use correct installer and schematicID;
+- `10.10.0.10` as nix-infra node, dns / ntp / talos-api / ...;
+- `10.10.0.100` as VIP, but not functional during bootstrap;
+- `10.10.0.101-103` as k8s nodes;
+- `10.10.0.201-250` as cilium l2 loadbalancer ip;
+- self-hosted-runner, label:arc-homelab / label:arc-homelab-ops;
 
-### defaults
+### Bootstrp
 
-- doamin = "cluster.local"
-- app_uid = app_gid = 2000
+```shell
+# op signin, then
+cd homelab-ops
+eval $(op signin)
+
+export ROOT_DIR=$PWD
+export KUBECONFIG=$ROOT_DIR/kubernetes/kubeconfig
+export TALOSCONFIG=$ROOT_DIR/kubernetes/infrastructure/talos/clusterconfig/talosconfig
+export MINIJINJA_CONFIG_FILE=$ROOT_DIR/.minijinja.toml
+
+# tasks
+task talos:generate-clusterconfig
+task k8s-bootstrap:talos
+task k8s-bootstrap:apps
+```
 
 ### App Memo
 

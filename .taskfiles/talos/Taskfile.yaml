@@ -31,7 +31,7 @@ tasks:
         vars:
           FILENAME: "{{.ITEM}}"
           HOSTNAME: |-
-            {{ trimPrefix (printf "homelab-ops-") (base .ITEM) | trimSuffix ".yaml" }}
+            {{ trimPrefix (printf "homelab-") (base .ITEM) | trimSuffix ".yaml" }}
           DRY_RUN: "{{ .DRY_RUN }}"
           INSECURE: "{{ .INSECURE }}"
 
@@ -46,7 +46,7 @@ tasks:
         - NODE
     vars:
       FILE:
-        sh: ls {{.K8S_DIR}}/infrastructure/talos/clusterconfig/homelab-ops-{{.NODE}}*.yaml
+        sh: ls {{.K8S_DIR}}/infrastructure/talos/clusterconfig/homelab-{{.NODE}}*.yaml
     cmds:
       - task: _apply-machineconfig
         vars:
@@ -65,7 +65,7 @@ tasks:
         - NODE
     vars:
       FILE:
-        sh: ls {{.K8S_DIR}}/infrastructure/talos/clusterconfig/homelab-ops-{{.NODE}}*.yaml
+        sh: ls {{.K8S_DIR}}/infrastructure/talos/clusterconfig/homelab-{{.NODE}}*.yaml
       TALOS_IMAGE:
         sh: yq '.machine.install.image' < "{{.FILE}}"
     cmds:

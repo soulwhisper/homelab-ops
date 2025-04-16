@@ -8,7 +8,7 @@ serviceAccount:
   create: true
 service:
   name: kube-dns
-  clusterIP: 10.100.100.100
+  clusterIP: 10.100.200.200
 servers:
   - zones:
       - zone: .
