@@ -22,7 +22,7 @@ spec:
     - name: rook-ceph-cluster
       namespace: storage-system
   components:
-    - ../../../infrastructure/components/gatus
+    - ../../../../infrastructure/components/gatus
   postBuild:
     substitute:
       APP: *appname
