@@ -8,7 +8,7 @@ tasks:
     vars:
       NS: "{{.NS | default .storage-system }}" # ceph namespace
     preconditions:
-      - which kubectl
+      - sh: '[ -n "$(command -v kubectl)" ] || (echo "kubectl not found" && exit 1)'
       - kubectl rook-ceph rook version --namespace {{.NS}}
       - kubectl rook-ceph ceph versions --namespace {{.NS}}
     cmds:
@@ -19,7 +19,7 @@ tasks:
     vars:
       NS: "{{.NS | default .storage-system }}" # ceph namespace
     preconditions:
-      - which kubectl
+      - sh: '[ -n "$(command -v kubectl)" ] || (echo "kubectl not found" && exit 1)'
       - kubectl rook-ceph rook version --namespace {{.NS}}
       - kubectl rook-ceph ceph versions --namespace {{.NS}}
     cmds:

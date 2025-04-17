@@ -5,6 +5,8 @@ version: "3"
 tasks:
   re-encrypt:
     desc: Decrypt and re-encrypt all sops secrets
+    preconditions:
+      - sh: '[ -n "$(command -v sops)" ] || (echo "sops not found" && exit 1)'
     vars:
       SECRET_FILES:
         sh: find . -type f -name '*.sops.yaml' ! -name ".sops.yaml"

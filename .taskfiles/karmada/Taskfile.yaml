@@ -9,7 +9,7 @@ tasks:
       vars:
         - NAME
     preconditions:
-      - which kubectl
+      - sh: '[ -n "$(command -v kubectl)" ] || (echo "kubectl not found" && exit 1)'
     cmds:
       - echo "Creating Karmada instance {{.NAME}}..."
       - |

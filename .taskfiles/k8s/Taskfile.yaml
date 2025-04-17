@@ -6,7 +6,7 @@ tasks:
   cleanup-pods:
     desc: Clean up pods with a Failed/Pending/Succeeded phase
     preconditions:
-      - which kubectl
+      - sh: '[ -n "$(command -v kubectl)" ] || (echo "kubectl not found" && exit 1)'
     cmds:
       - for:
           matrix:
@@ -19,7 +19,7 @@ tasks:
   sync-externalsecrets:
     desc: Force sync all ExternalSecret resources
     preconditions:
-      - which kubectl
+      - sh: '[ -n "$(command -v kubectl)" ] || (echo "kubectl not found" && exit 1)'
     vars:
       SECRETS:
         sh: kubectl get externalsecret --all-namespaces --no-headers --output=jsonpath='{range .items[*]}{.metadata.namespace},{.metadata.name}{"\n"}{end}'

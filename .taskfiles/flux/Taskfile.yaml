@@ -15,14 +15,15 @@ tasks:
         - DIR
     preconditions:
       - '[[ "{{.OPERATION}}" == "build" || "{{.OPERATION}}" == "apply" || "{{.OPERATION}}" == "delete" ]]'
-      - which kubectl flux-local
-      - test -d {{.KS_DIR}}
+      - sh: '[ -n "$(command -v kubectl)" ] || (echo "kubectl not found" && exit 1)'
+      - sh: '[ -d "{{.KS_DIR}}" ] || (echo "Folder {{.KS_DIR}} not found" && exit 1)'
+      - fish -i -c 'flux-local -h' >/dev/null 2>&1
     cmds:
-      - flux-local build ks --all-namespaces {{.NS}} --path {{.KS_DIR}} {{.NAME}}
+      - fish -i -c 'flux-local build ks --all-namespaces {{.NS}} --path {{.KS_DIR}} {{.NAME}}
         | yq -
         {{ if or (eq .OPERATION "apply") (eq .OPERATION "delete") -}}
         | kubectl {{.OPERATION}} {{- .OPERATION_ARGS}} --filename -
-        {{ end }}
+        {{ end }}'
 
   "*-ks-all":
     desc: Suspend or resume all Flux Kustomizations
@@ -32,7 +33,8 @@ tasks:
         sh: kubectl get ns --no-headers -o custom-columns='NAME:.metadata.name'
     preconditions:
       - '[[ "{{.STATE}}" == "suspend" || "{{.STATE}}" == "resume" ]]'
-      - which flux kubectl
+      - sh: '[ -n "$(command -v flux)" ] || (echo "flux not found" && exit 1)'
+      - sh: '[ -n "$(command -v kubectl)" ] || (echo "kubectl not found" && exit 1)'
     cmds:
       - for:
           var: NAMESPACES
