@@ -1,10 +1,10 @@
 version: "3"
 
 vars:
-  DB_NS: {{.NS | default "database-system"}}
-  DB_CLUSTER: {{.DB_CLUSTER | default "postgres"}}
-  OUTPUT_DIR: {{.OUTPUT_DIR | default "."}}
-  PG_CLI_ARGS: {{.CLI_ARGS | default "--verbose --format=c --no-comments --clean --if-exists --no-owner --extension plpgsql"}}
+  DB_NS: "database-system"
+  DB_CLUSTER: "postgres"
+  OUTPUT_DIR: "."
+  PG_CLI_ARGS: "--verbose --format=c --no-comments --clean --if-exists --no-owner --extension plpgsql"
 
 tasks:
   crunchy-dump:
