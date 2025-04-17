@@ -27,7 +27,7 @@ tasks:
             -o jsonpath='{.items[0].metadata.name}'
     cmds:
       - kubectl exec -it --container database -n {{.DB_NS}} {{.CRUNCHY_PRIMARY_POD}} -- \
-          pg_dump --dbname {{.DB_NAME}} {{.PG_CLI_ARGS}} --file /pgdata/{{.DB_NAME}}.psql
+        pg_dump --dbname {{.DB_NAME}} {{.PG_CLI_ARGS}} --file /pgdata/{{.DB_NAME}}.psql
       - kubectl cp --container database "{{.DB_NS}}/{{.CRUNCHY_PRIMARY_POD}}:/pgdata/{{.DB_NAME}}.psql" "{{.OUTPUT_DIR}}/{{.DB_NAME}}.psql"
       - kubectl exec -it --container database -n {{.DB_NS}} {{.CRUNCHY_PRIMARY_POD}} -- rm -f /pgdata/{{.DB_NAME}}.psql
 
@@ -51,9 +51,9 @@ tasks:
     cmds:
       - kubectl cp --container database "{{.FILE}}" "{{.DB_NS}}/{{.CRUNCHY_PRIMARY_POD}}:/pgdata/restore-{{.DB_NAME}}.psql"
       - kubectl exec -it --container database -n {{.DB_NS}} {{.CRUNCHY_PRIMARY_POD}} -- \
-          psql -c "ALTER DATABASE \"{{.DB_NAME}}\" OWNER TO \"{{.DB_USER}}\";"
+        psql -c "ALTER DATABASE \"{{.DB_NAME}}\" OWNER TO \"{{.DB_USER}}\";"
       - kubectl exec -it --container database -n {{.DB_NS}} {{.CRUNCHY_PRIMARY_POD}} -- \
-          pg_restore --dbname {{.DB_NAME}} {{.PG_CLI_ARGS}} /pgdata/restore-{{.DB_NAME}}.psql
+        pg_restore --dbname {{.DB_NAME}} {{.PG_CLI_ARGS}} /pgdata/restore-{{.DB_NAME}}.psql
       - defer: kubectl exec -it --container database -n {{.DB_NS}} {{.CRUNCHY_PRIMARY_POD}} -- rm -f /pgdata/restore-{{.DB_NAME}}.psql
 
   crunchy-exec:
