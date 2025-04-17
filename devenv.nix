@@ -5,8 +5,8 @@
   ...
 }:
 {
-  env.GREET = "homelab-ops";
-  env.KUBECONFIG = "./kubernetes/kubeconfig";
+  # KUBECONFIG/TALOSCONFIG backup at ~/.config/homelab-ops
+  env.KUBECONFIG = "./kubernetes/infrastructure/talos/clusterconfig/kubeconfig";
   env.TALOSCONFIG = "./kubernetes/infrastructure/talos/clusterconfig/talosconfig";
   env.MINIJINJA_CONFIG_FILE = ".minijinja.toml";
 

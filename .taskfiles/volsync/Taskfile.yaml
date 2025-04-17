@@ -10,7 +10,7 @@ tasks:
   unlock:
     desc: Unlock all restic source repos
     preconditions:
-      - sh: '[ -n "$(command -v kubectl)" ] || (echo "kubectl not found" && exit 1)'
+      - which kubectl
     vars:
       SOURCES:
         sh: kubectl get replicationsources --all-namespaces --no-headers --output=jsonpath='{range .items[*]}{.metadata.namespace},{.metadata.name}{"\n"}{end}'
@@ -23,9 +23,8 @@ tasks:
   list:
     desc: List snapshots for an app [APP=required]
     preconditions:
-      - sh: '[ -n "$(command -v kubectl)" ] || (echo "kubectl not found" && exit 1)'
-      - sh: '[ -n "$(command -v minijinja-cli)" ] || (echo "minijinja-cli not found" && exit 1)'
-      - sh: '[ -f "{{.VOLSYNC_TASK_RESOURCES_DIR}}/list-snapshots.yaml.j2" ] || (echo "File {{.VOLSYNC_TASK_RESOURCES_DIR}}/list-snapshots.yaml.j2 not found" && exit 1)'
+      - which kubectl minijinja-cli
+      - test -f "{{.VOLSYNC_TASK_RESOURCES_DIR}}/list-snapshots.yaml.j2"
       - kubectl --namespace {{.VOLSYNC_NS}} get replicationsources {{.APP}}
     requires:
       vars:
@@ -45,7 +44,7 @@ tasks:
   snapshot:
     desc: Snapshot an app [NS=default] [APP=required]
     preconditions:
-      - sh: '[ -n "$(command -v kubectl)" ] || (echo "kubectl not found" && exit 1)'
+      - which kubectl
       - kubectl --namespace {{.VOLSYNC_NS}} get replicationsources {{.APP}}
     requires:
       vars:
@@ -61,7 +60,7 @@ tasks:
   snapshot-all:
     desc: Snapshot all apps across all namespaces
     preconditions:
-      - sh: '[ -n "$(command -v kubectl)" ] || (echo "kubectl not found" && exit 1)'
+      - which kubectl
     vars:
       ALL_APPS:
         sh: |
@@ -78,10 +77,8 @@ tasks:
   restore:
     desc: Restore an app [APP=required] [PREVIOUS=required]
     preconditions:
-      - sh: '[ -n "$(command -v flux)" ] || (echo "flux not found" && exit 1)'
-      - sh: '[ -n "$(command -v kubectl)" ] || (echo "kubectl not found" && exit 1)'
-      - sh: '[ -n "$(command -v minijinja-cli)" ] || (echo "minijinja-cli not found" && exit 1)'
-      - sh: '[ -f "{{.VOLSYNC_TASK_RESOURCES_DIR}}/replicationdestination.yaml.j2" ] || (echo "File {{.VOLSYNC_TASK_RESOURCES_DIR}}/replicationdestination.yaml.j2 not found" && exit 1)'
+      - which flux kubectl minijinja-cli
+      - test -f "{{.VOLSYNC_TASK_RESOURCES_DIR}}/replicationdestination.yaml.j2"
     requires:
       vars:
         - APP

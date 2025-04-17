@@ -6,17 +6,16 @@ tasks:
   generate-clusterconfig:
     desc: Generate clusterconfig for Talos
     preconditions:
-      - sh: '[ -n "$(command -v op)" ] || (echo "op not found" && exit 1)'
-      - sh: '[ -n "$(command -v talhelper)" ] || (echo "talhelper not found" && exit 1)'
-      - sh: '[ -f "${TALOSCONFIG}" ] || (echo "File ${TALOSCONFIG} not found" && exit 1)'
-      - sh: '[ -f "{{.K8S_DIR}}/infrastructure/talos/talconfig.yaml" ] || (echo "File {{.K8S_DIR}}/infrastructure/talos/talconfig.yaml not found" && exit 1)'
-      - sh: '[ -f "{{.K8S_DIR}}/infrastructure/talos/talsecret.yaml" ] || (echo "File {{.K8S_DIR}}/infrastructure/talos/talsecret.yaml not found" && exit 1)'
-      - sh: '[ -f "{{.K8S_DIR}}/infrastructure/talos/talhelper.env" ] || (echo "File {{.K8S_DIR}}/infrastructure/talos/talhelper.env not found" && exit 1)'
+      - which op talhelper
+      - test -f "{{.K8S_DIR}}/infrastructure/talos/talconfig.yaml"
+      - test -f "{{.K8S_DIR}}/infrastructure/talos/talsecret.yaml"
+      - test -f "{{.K8S_DIR}}/infrastructure/talos/talhelper.env"
     cmds:
-      - op run --env-file {{.K8S_DIR}}/infrastructure/talos/talhelper.env --no-masking -- talhelper genconfig \
-        --config-file {{.K8S_DIR}}/infrastructure/talos/talconfig.yaml \
-        --secret-file {{.K8S_DIR}}/infrastructure/talos/talsecret.yaml \
+      - op run --env-file {{.K8S_DIR}}/infrastructure/talos/talhelper.env --no-masking -- talhelper genconfig
+        --config-file {{.K8S_DIR}}/infrastructure/talos/talconfig.yaml
+        --secret-file {{.K8S_DIR}}/infrastructure/talos/talsecret.yaml
         --out-dir {{.K8S_DIR}}/infrastructure/talos/clusterconfig
+      - fish -i -c 'mkdir -p ~/.config/homelab-ops && cp ${TALOSCONFIG} ~/.config/homelab-ops/talosconfig'
 
   apply-clusterconfig:
     desc: Apply clusterconfig for a Talos cluster
@@ -24,7 +23,7 @@ tasks:
       CLUSTERCONFIG_FILES:
         sh: ls {{.K8S_DIR}}/infrastructure/talos/clusterconfig/*.yaml
     preconditions:
-      - sh: '[ -f "${TALOSCONFIG}" ] || (echo "File ${TALOSCONFIG} not found" && exit 1)'
+      - test -f "${TALOSCONFIG}"
     cmds:
       - for:
           var: CLUSTERCONFIG_FILES
@@ -39,8 +38,8 @@ tasks:
   apply-node:
     desc: Apply Talos config to a node [NODE=required]
     preconditions:
-      - sh: '[ -n "$(command -v talosctl)" ] || (echo "talosctl not found" && exit 1)'
-      - sh: '[ -f "${TALOSCONFIG}" ] || (echo "File ${TALOSCONFIG} not found" && exit 1)'
+      - which talosctl
+      - test -f "${TALOSCONFIG}"
       - talosctl --nodes {{.NODE}} get machineconfig
     requires:
       vars:
@@ -58,9 +57,8 @@ tasks:
   upgrade-node:
     desc: Upgrade Talos on a single node [NODE=required]
     preconditions:
-      - sh: '[ -n "$(command -v talosctl)" ] || (echo "talosctl not found" && exit 1)'
-      - sh: '[ -n "$(command -v yq)" ] || (echo "yq not found" && exit 1)'
-      - sh: '[ -f "${TALOSCONFIG}" ] || (echo "File ${TALOSCONFIG} not found" && exit 1)'
+      - which talosctl yq
+      - test -f "${TALOSCONFIG}"
       - talosctl --nodes {{.NODE}} get machineconfig
     requires:
       vars:
@@ -78,8 +76,8 @@ tasks:
     internal: true
     desc: Apply a single Talos machineConfig to a Talos node
     preconditions:
-      - sh: '[ -n "$(command -v talosctl)" ] || (echo "talosctl not found" && exit 1)'
-      - sh: '[ -f "{{.FILENAME}}" ] || (echo "File {{.FILENAME}} not found" && exit 1)'
+      - which talosctl
+      - test -f "{{.FILENAME}}"
     requires:
       vars:
         - HOSTNAME

@@ -15,8 +15,8 @@ tasks:
         - DIR
     preconditions:
       - '[[ "{{.OPERATION}}" == "build" || "{{.OPERATION}}" == "apply" || "{{.OPERATION}}" == "delete" ]]'
-      - sh: '[ -n "$(command -v kubectl)" ] || (echo "kubectl not found" && exit 1)'
-      - sh: '[ -d "{{.KS_DIR}}" ] || (echo "Folder {{.KS_DIR}} not found" && exit 1)'
+      - which kubectl
+      - test -d "{{.KS_DIR}}"
       - fish -i -c 'flux-local -h' >/dev/null 2>&1
     cmds:
       - fish -i -c 'flux-local build ks --all-namespaces {{.NS}} --path {{.KS_DIR}} {{.NAME}}
@@ -33,8 +33,7 @@ tasks:
         sh: kubectl get ns --no-headers -o custom-columns='NAME:.metadata.name'
     preconditions:
       - '[[ "{{.STATE}}" == "suspend" || "{{.STATE}}" == "resume" ]]'
-      - sh: '[ -n "$(command -v flux)" ] || (echo "flux not found" && exit 1)'
-      - sh: '[ -n "$(command -v kubectl)" ] || (echo "kubectl not found" && exit 1)'
+      - which flux kubectl
     cmds:
       - for:
           var: NAMESPACES

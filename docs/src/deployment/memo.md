@@ -37,15 +37,27 @@
 cd homelab-ops
 eval $(op signin)
 
+## dev-env method-1
 export ROOT_DIR=$PWD
-export KUBECONFIG=$ROOT_DIR/kubernetes/kubeconfig
+export KUBECONFIG=$ROOT_DIR/kubernetes/infrastructure/talos/clusterconfig/kubeconfig
 export TALOSCONFIG=$ROOT_DIR/kubernetes/infrastructure/talos/clusterconfig/talosconfig
 export MINIJINJA_CONFIG_FILE=$ROOT_DIR/.minijinja.toml
+## dev-env method-2
+devenv shell
+## dev-env method-3
+mise env -s fish | source
 
-# tasks
+# init
 task talos:generate-clusterconfig
 task k8s-bootstrap:talos
 task k8s-bootstrap:apps
+
+# deploy
+task flux:apply-ks DIR=storage-system
+task flux:apply-ks DIR=security-system
+task flux:apply-ks DIR=monitoring-system
+task flux:apply-ks DIR=networking-system
+## deploy others
 ```
 
 ### App Memo

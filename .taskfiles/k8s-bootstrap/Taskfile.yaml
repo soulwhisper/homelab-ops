@@ -9,31 +9,26 @@ tasks:
       TALOS_CONTROLLER:
         sh: talosctl config info --output json | jq --raw-output '.endpoints[]' | shuf -n 1
     preconditions:
-      - sh: '[ -n "$(command -v jq)" ] || (echo "jq not found" && exit 1)'
-      - sh: '[ -n "$(command -v minijinja-cli)" ] || (echo "minijinja-cli not found" && exit 1)'
-      - sh: '[ -n "$(command -v sops)" ] || (echo "sops not found" && exit 1)'
-      - sh: '[ -n "$(command -v talosctl)" ] || (echo "talosctl not found" && exit 1)'
-      - sh: '[ -f "${TALOSCONFIG}" ] || (echo "File ${TALOSCONFIG} not found" && exit 1)'
+      - which jq minijinja-cli sops talosctl
+      - test -f "${TALOSCONFIG}"
       - talosctl config info
     cmds:
       - task: :talos:apply-clusterconfig
         vars:
           INSECURE: "true"
       - until talosctl --nodes {{.TALOS_CONTROLLER}} bootstrap; do sleep 5; done
-      - talosctl kubeconfig --nodes {{.TALOS_CONTROLLER}} --force --force-context-name {{.K8S_CLUSTER}} "${KUBECONFIG}"
+      - talosctl kubeconfig --nodes {{.TALOS_CONTROLLER}} --force ${KUBECONFIG}
+      - fish -i -c 'mkdir -p ~/.config/homelab-ops && cp ${KUBECONFIG} ~/.config/homelab-ops/kubeconfig'
 
   apps:
     desc: Bootstrap Apps
     prompt: Bootstrap apps into Talos cluster?
     preconditions:
-      - sh: '[ -n "$(command -v helmfile)" ] || (echo "helmfile not found" && exit 1)'
-      - sh: '[ -n "$(command -v kubectl)" ] || (echo "kubectl not found" && exit 1)'
-      - sh: '[ -n "$(command -v op)" ] || (echo "op not found" && exit 1)'
-      - sh: '[ -n "$(command -v talosctl)" ] || (echo "talosctl not found" && exit 1)'
-      - sh: '[ -f "${TALOSCONFIG}" ] || (echo "File ${TALOSCONFIG} not found" && exit 1)'
-      - sh: '[ -f "{{.K8S_DIR}}/infrastructure/bootstrap/bootstrap.env" ] || (echo "File {{.K8S_DIR}}/infrastructure/bootstrap/bootstrap.env not found" && exit 1)'
-      - sh: '[ -f "{{.K8S_DIR}}/infrastructure/bootstrap/helmfile.yaml" ] || (echo "File {{.K8S_DIR}}/infrastructure/bootstrap/helmfile.yaml not found" && exit 1)'
-      - sh: '[ -f "{{.K8S_DIR}}/infrastructure/bootstrap/templates/resources.yaml.j2" ] || (echo "File {{.K8S_DIR}}/infrastructure/bootstrap/templates/resources.yaml.j2 not found" && exit 1)'
+      - which helmfile kubectl op talosctl
+      - test -f "${TALOSCONFIG}"
+      - test -f "{{.K8S_DIR}}/infrastructure/bootstrap/bootstrap.env"
+      - test -f "{{.K8S_DIR}}/infrastructure/bootstrap/helmfile.yaml"
+      - test -f "{{.K8S_DIR}}/infrastructure/bootstrap/templates/resources.yaml.j2"
       - op user get --me
       - talosctl config info
     env:
