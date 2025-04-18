@@ -41,5 +41,5 @@ spec:
   dependsOn:
     - name: external-secrets
       namespace: security-system
-    - name: onepassword
+    - name: onepassword-connect
       namespace: security-system
