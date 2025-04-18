@@ -9,7 +9,7 @@ tasks:
       TALOS_CONTROLLER:
         sh: talosctl config info --output json | jq --raw-output '.endpoints[]' | shuf -n 1
     preconditions:
-      - which jq minijinja-cli sops talosctl
+      - which talosctl
       - test -f "${TALOSCONFIG}"
       - talosctl config info
     cmds:
@@ -18,23 +18,20 @@ tasks:
           INSECURE: "true"
       - until talosctl --nodes {{.TALOS_CONTROLLER}} bootstrap; do sleep 5; done
       - talosctl kubeconfig --nodes {{.TALOS_CONTROLLER}} --force ${KUBECONFIG}
-      - fish -i -c 'mkdir -p ~/.config/homelab-ops && cp ${KUBECONFIG} ~/.config/homelab-ops/kubeconfig'
+      - fish -i -c 'mkdir -p ~/.kube && cp ${KUBECONFIG} ~/.kube/config'
 
   apps:
     desc: Bootstrap Apps
     prompt: Bootstrap apps into Talos cluster?
     preconditions:
-      - which helmfile kubectl op talosctl
-      - test -f "${TALOSCONFIG}"
+      - which helmfile kubectl minijinja-cli op
       - test -f "{{.K8S_DIR}}/infrastructure/bootstrap/bootstrap.env"
       - test -f "{{.K8S_DIR}}/infrastructure/bootstrap/helmfile.yaml"
       - test -f "{{.K8S_DIR}}/infrastructure/bootstrap/templates/resources.yaml.j2"
       - op user get --me
+      - kubectl config view
       - talosctl config info
-    env:
-      NODE_COUNT:
-        sh: talosctl config info --output json | jq --raw-output '.nodes | length'
     cmds:
       - until kubectl wait nodes --for=condition=Ready=False --all --timeout=10m; do sleep 5; done
-      - op run --env-file {{.K8S_DIR}}/infrastructure/bootstrap/bootstrap.env --no-masking -- minijinja-cli "{{.K8S_DIR}}/infrastructure/bootstrap/templates/resources.yaml.j2" | kubectl apply --server-side --filename -
+      - op run --env-file {{.K8S_DIR}}/infrastructure/bootstrap/bootstrap.env --no-masking -- minijinja-cli {{.MINIJINJA_ARGS}} "{{.K8S_DIR}}/infrastructure/bootstrap/templates/resources.yaml.j2" | kubectl apply --server-side --filename -
       - helmfile --file {{.K8S_DIR}}/infrastructure/bootstrap/helmfile.yaml apply --skip-diff-on-install --suppress-diff

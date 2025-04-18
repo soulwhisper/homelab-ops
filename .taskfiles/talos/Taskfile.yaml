@@ -15,7 +15,7 @@ tasks:
         --config-file {{.K8S_DIR}}/infrastructure/talos/talconfig.yaml
         --secret-file {{.K8S_DIR}}/infrastructure/talos/talsecret.yaml
         --out-dir {{.K8S_DIR}}/infrastructure/talos/clusterconfig
-      - fish -i -c 'mkdir -p ~/.config/homelab-ops && cp ${TALOSCONFIG} ~/.config/homelab-ops/talosconfig'
+      - fish -i -c 'mkdir -p ~/.talos && cp ${TALOSCONFIG} ~/.talos/config'
 
   apply-clusterconfig:
     desc: Apply clusterconfig for a Talos cluster

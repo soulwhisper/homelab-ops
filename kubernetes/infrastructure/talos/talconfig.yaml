@@ -5,10 +5,12 @@ endpoint: "https://k8s.homelab.internal:6443"
 
 # Current stage = ms-01;
 # schematic_ID = 622253f1ab573d6baa9d8d70afb6588ea9e7d8884328e5a8fdfddaf83becebcb
-# enable featuers:
+# enabled features:
+#   - predictable ifnames
 #   - disk-encryption
 #   - secureboot
 #   - nut
+# disabled features:
 
 # renovate: depName=ghcr.io/siderolabs/installer datasource=docker
 talosVersion: v1.9.5
@@ -97,7 +99,6 @@ controlPlane:
         - intel_iommu=on # pci passthrough, intel
         - init_on_alloc=0 # memory optimize
         - init_on_free=0 # memory optimize
-        - net.ifnames=1
       #  - console=ttyS0 # disable if barematel
       systemExtensions:
         officialExtensions:
@@ -179,14 +180,15 @@ patches:
 
   # Enable features
   ## https://github.com/siderolabs/talos/issues/10002#issuecomment-2557069620;
+  ## hostLegacyRouting=true conflict with BIGTCP and BBR
   - |-
     machine:
       features:
         nodeAddressSortAlgorithm: v2
         hostDNS:
           enabled: true
+          forwardKubeDNSToHost: false
           resolveMemberNames: true
-          forwardKubeDNSToHost: true
         kubernetesTalosAPIAccess:
           enabled: true
           allowedRoles:
@@ -244,14 +246,13 @@ patches:
   - |-
     machine:
       network:
-       nameservers:
-         - 10.10.0.10
-       searchDomains:
-         - homelab.internal
-       extraHostEntries:
-         - ip: 10.10.0.100
-           aliases:
-             - k8s.homelab.internal
+        disableSearchDomain: true
+        extraHostEntries:
+          - ip: 10.10.0.100
+            aliases:
+              - k8s.homelab.internal
+        nameservers:
+          - 10.10.0.10
 
   # Kubelet configuration
   - |-

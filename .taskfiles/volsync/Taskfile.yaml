@@ -35,7 +35,7 @@ tasks:
       NS: "{{.VOLSYNC_NS}}"
       APP: "{{.APP}}"
     cmds:
-      - minijinja-cli {{.VOLSYNC_TASK_RESOURCES_DIR}}/list-snapshots.yaml.j2 | kubectl apply --server-side --filename -
+      - minijinja-cli {{.MINIJINJA_ARGS}} {{.VOLSYNC_TASK_RESOURCES_DIR}}/list-snapshots.yaml.j2 | kubectl apply --server-side --filename -
       - until kubectl --namespace {{.VOLSYNC_NS}} get job/{{ .JOB }} &>/dev/null; do sleep 5; done
       - kubectl --namespace {{.VOLSYNC_NS}} wait job/{{ .JOB }} --for=condition=complete --timeout=5m
       - kubectl stern --namespace {{.VOLSYNC_NS}} job/{{ .JOB }} --no-follow
@@ -107,7 +107,7 @@ tasks:
       - kubectl --namespace {{.VOLSYNC_NS}} scale {{.CONTROLLER}}/{{.APP}} --replicas 0
       - kubectl --namespace {{.VOLSYNC_NS}} wait pod --for=delete --selector="app.kubernetes.io/name={{.APP}}" --timeout=5m
       # Restore
-      - minijinja-cli {{.VOLSYNC_TASK_RESOURCES_DIR}}/replicationdestination.yaml.j2 | kubectl apply --server-side --filename -
+      - minijinja-cli {{.MINIJINJA_ARGS}} {{.VOLSYNC_TASK_RESOURCES_DIR}}/replicationdestination.yaml.j2 | kubectl apply --server-side --filename -
       - until kubectl --namespace {{.VOLSYNC_NS}} get job/volsync-dst-{{.APP}}-manual &>/dev/null; do sleep 5; done
       - kubectl --namespace {{.VOLSYNC_NS}} wait job/volsync-dst-{{.APP}}-manual --for=condition=complete --timeout=120m
       - kubectl --namespace {{.VOLSYNC_NS}} delete replicationdestination {{.APP}}-manual

@@ -1,5 +1,3 @@
 [env]
-# KUBECONFIG/TALOSCONFIG backup at ~/.config/homelab-ops
 KUBECONFIG = '{{config_root}}/kubernetes/talos/clusterconfig/kubeconfig'
 TALOSCONFIG = '{{config_root}}/kubernetes/talos/clusterconfig/talosconfig'
-MINIJINJA_CONFIG_FILE = '{{config_root}}/.minijinja.toml'
