@@ -52,3 +52,12 @@ task k8s-bootstrap:apps
 # ns priority
 # kube-system > storage-system = security-system = monitoring-system > networking-system > others
 ```
+
+### flux debug
+
+```shell
+kubectl -n gitops-system get fluxreport/flux -o yaml
+kubectl -n gitops-system events --for FluxInstance/flux
+kubectl -n gitops-system logs deployment/flux-operator
+flux -n gitops-system get all -A --status-selector ready=false
+```
