@@ -3,12 +3,14 @@
 apiVersion: source.toolkit.fluxcd.io/v1beta2
 kind: OCIRepository
 metadata:
-  name: reloader
+  name: external-secrets
 spec:
   interval: 10m
   layerSelector:
     mediaType: application/vnd.cncf.helm.chart.content.v1.tar+gzip
     operation: copy
   ref:
-    tag: 2.0.0
-  url: oci://ghcr.io/stakater/charts/reloader
+    tag: 0.16.1
+  url: oci://ghcr.io/external-secrets/charts/external-secrets
+  verify:
+    provider: cosign

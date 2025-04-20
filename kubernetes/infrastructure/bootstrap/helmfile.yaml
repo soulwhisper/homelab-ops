@@ -4,6 +4,7 @@ helmDefaults:
   cleanupOnFail: true
   wait: true
   waitForJobs: true
+  timeout: 3600
 
 repositories:
   - name: cilium
@@ -22,10 +23,17 @@ releases:
     chart: cilium/cilium
     version: 1.17.3
     values:
-      - '{{ requiredEnv "ROOT_DIR" }}/kubernetes/apps/kube-system/cilium/app/values.yaml'
-    needs:
-      - monitoring-system/prometheus-operator-crds
+      - "../../apps/kube-system/cilium/app/values.yaml"
     hooks:
+      - # Install gateway-api CRDs
+        events:
+          - postsync
+        command: kubectl
+        args:
+          - apply
+          - -f
+          - https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.2.1/experimental-install.yaml
+        showlogs: true
       - # Wait for cilium CRDs to be available
         events:
           - postsync
@@ -43,8 +51,10 @@ releases:
           - --namespace=kube-system
           - --server-side
           - --field-manager=kustomize-controller
-          - --kustomize={{ requiredEnv "ROOT_DIR" }}/kubernetes/apps/kube-system/cilium/config/
+          - --kustomize=../../apps/kube-system/cilium/config/
         showlogs: true
+    needs:
+      - monitoring-system/prometheus-operator-crds
 
   - name: coredns
     namespace: kube-system
@@ -52,7 +62,7 @@ releases:
     chart: oci://ghcr.io/coredns/charts/coredns
     version: 1.39.2
     values:
-      - '{{ requiredEnv "ROOT_DIR" }}/kubernetes/apps/kube-system/coredns/app/values.yaml'
+      - "../../apps/kube-system/coredns/app/values.yaml"
     needs:
       - kube-system/cilium
 
@@ -62,19 +72,20 @@ releases:
     chart: oci://quay.io/jetstack/charts/cert-manager
     version: v1.17.1
     values:
-      - '{{ requiredEnv "ROOT_DIR" }}/kubernetes/apps/cert-manager/cert-manager/app/values.yaml'
+      - "../../apps/security-system/cert-manager/app/values.yaml"
     needs:
       - kube-system/coredns
 
-  - name: wipe-rook
-    namespace: kube-system
-    atomic: true
-    chart: oci://ghcr.io/bjw-s/helm/app-template
-    version: 3.7.3
-    values:
-      - ./templates/wipe-rook.yaml.gotmpl
-    needs:
-      - kube-system/coredns
+  # only needed if previous rook need wipe, `export ROOK_DISK=` first
+  # - name: wipe-rook
+  #   namespace: kube-system
+  #   atomic: true
+  #   chart: oci://ghcr.io/bjw-s/helm/app-template
+  #   version: 3.7.3
+  #   values:
+  #     - ./templates/wipe-rook.yaml.gotmpl
+  #   needs:
+  #     - kube-system/coredns
 
   - name: flux-operator
     namespace: gitops-system
@@ -82,7 +93,9 @@ releases:
     chart: oci://ghcr.io/controlplaneio-fluxcd/charts/flux-operator
     version: 0.19.0
     values:
-      - '{{ requiredEnv "ROOT_DIR" }}/kubernetes/apps/gitops-system/flux-operator/app/values.yaml'
+      - "../../apps/gitops-system/flux-operator/app/values.yaml"
+    needs:
+      - monitoring-system/prometheus-operator-crds
 
   - name: flux-instance
     namespace: gitops-system
@@ -91,6 +104,6 @@ releases:
     version: 0.19.0
     wait: false
     values:
-      - '{{ requiredEnv "ROOT_DIR" }}/kubernetes/apps/gitops-system/flux-operator/instance/values.yaml'
+      - "../../apps/gitops-system/flux-operator/instance/values.yaml"
     needs:
       - gitops-system/flux-operator

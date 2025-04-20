@@ -9,7 +9,6 @@ bpf:
   datapathMode: netkit
   events:
     monitorInterval: 10s
-  hostLegacyRouting: true
   masquerade: true
   preallocateMaps: true
 bpfClockProbe: true
@@ -28,7 +27,7 @@ dashboards:
     grafana_folder: Cilium
 devices: bond+
 enableIPv4BIGTCP: true
-enableIPv6BIGTCP: true
+# enableIPv6BIGTCP: true
 enableRuntimeDeviceDetection: true
 endpointRoutes:
   enabled: true
@@ -70,13 +69,11 @@ ipv4:
   enabled: true
 ipv4NativeRoutingCIDR: 10.100.0.0/17
 ipv6:
-  enabled: true
+  enabled: false
 k8sServiceHost: localhost
 k8sServicePort: 7445
 kubeProxyReplacement: true
 kubeProxyReplacementHealthzBindAddr: 0.0.0.0:10256
-l2announcements:
-  enabled: false # use bgp instead
 loadBalancer:
   acceleration: native # ms-01, otherwise best-effort
   algorithm: maglev

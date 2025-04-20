@@ -1,15 +1,11 @@
-## Memo (WIP)
+# Memo
 
-- bring up new cluster, using secureboot ISO, not pxe/matchbox
-- add github webooks after deployment, [ref](https://fluxcd.io/flux/guides/webhook-receivers/#define-a-git-repository-receiver);
-- tune monitoring apps
-- relocate privieged apps to "privileged", with "labels.pod-security.kubernetes.io/enforce: privileged", like "spegel".
-- consider adding [MAP](https://github.com/kubernetes/enhancements/tree/master/keps/sig-api-machinery/3962-mutating-admission-policies) when beta, [examples](https://github.com/search?q=repo%3Abjw-s-labs%2Fhomelab-ops+MutatingAdmissionPolicy&type=commits).
-- use "sigs.k8s.io/controller-tools/cmd/controller-gen" to update volsync replicationsource/replicationdestination schema
-- add discord notifications for github actions;
+- bring up new cluster, using secureboot ISO, not pxe/matchbox;
 - migrated from mayastor to ceph; disable ceph-nfs;
+- `hostLegacyRouting: true` conflict wih BIGTCP and BBR, disabled; hence `forwardKubeDNSToHost` is disabled; [ref](https://github.com/siderolabs/talos/issues/10002#issuecomment-2557069620);
+- `namespace.yaml` is needed for namespace resource creation;
 
-### Infra
+## Infra
 
 - `infra/scripts/minio-bucket-keys.sh`, create minio buckets, service accounts and policies for k8s apps, using 1password keys.
 - offsite backup ( volsync ) use minio @ nix-infra;
@@ -17,28 +13,55 @@
 - ceph-block, for database and apps;
 - ceph-fs, for shared-media;
 - ceph-s3, for volsync backup;
-- sops.age for configs, migrating to onepassword;
-- onepassword, main secret store;
-
-### Pre-deployment
-
-- make sure system-upgrade-controller use correct installer and schematicID
-- `172.19.82.10` as nix-infra node, minio / dns / ntp / talos-api / ...
-- `172.19.82.101-103` as k8s nodes;
-- `172.19.82.201-250` as cilium l2 loadbalancer ip;
-- monitoring: `mon.noirprime.com`, `/coroot/` for coroot, `/grafana/` for grafana
-- self-hosted-runner, label:arc-homelab / label:arc-homelab-ops
-
-### defaults
-
-- doamin = "cluster.local"
-- app_uid = app_gid = 2000
-
-### App Memo
-
+- onepassword as main secret store;
 - use Valkey instead of Dragonflydb if apps served <= 2;
 
 ### Overengineering
 
 - NTS support servers in NTP config;
 - Disk encryption for homelab env;
+
+## Deployment
+
+- set `exarch-0n` and `k8s.homelab.internal` to IPs;
+- `10.10.0.10` as nix-infra node, dns / ntp / talos-api / ...;
+- `10.10.0.100` as VIP;
+- `10.10.0.101-103` as k8s nodes;
+- `10.10.0.201-250` as cilium l2 loadbalancer ip;
+- self-hosted-runner, label:arc-homelab / label:arc-homelab-ops;
+
+### Bootstrp
+
+```shell
+# op signin, then
+cd homelab-ops
+eval $(op signin)
+
+## dev-env method-1
+export KUBECONFIG=$PWD/kubernetes/infrastructure/talos/clusterconfig/kubeconfig
+export TALOSCONFIG=$PWD/kubernetes/infrastructure/talos/clusterconfig/talosconfig
+## dev-env method-2
+devenv shell
+
+# init
+task talos:generate-clusterconfig
+task k8s-bootstrap:talos
+task k8s-bootstrap:apps
+
+```
+
+### Flux Debug
+
+```shell
+task reconcile
+flux check
+flux get sources git gitops-system
+flux get ks -A
+flux get hr -A
+
+kubectl -n gitops-system get fluxreport/flux -o yaml
+kubectl -n gitops-system events --for FluxInstance/flux
+kubectl -n gitops-system logs deployment/flux-operator
+flux -n gitops-system get all -A --status-selector ready=false
+
+```

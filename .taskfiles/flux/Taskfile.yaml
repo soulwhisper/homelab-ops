@@ -15,14 +15,15 @@ tasks:
         - DIR
     preconditions:
       - '[[ "{{.OPERATION}}" == "build" || "{{.OPERATION}}" == "apply" || "{{.OPERATION}}" == "delete" ]]'
-      - which kubectl flux-local
-      - test -d {{.KS_DIR}}
+      - which kubectl
+      - test -d "{{.KS_DIR}}"
+      - fish -i -c 'flux-local -h' >/dev/null 2>&1
     cmds:
-      - flux-local build ks --all-namespaces {{.NS}} --path {{.KS_DIR}} {{.NAME}}
+      - fish -i -c 'flux-local build ks --all-namespaces {{.NS}} --path {{.KS_DIR}} {{.NAME}}
         | yq -
         {{ if or (eq .OPERATION "apply") (eq .OPERATION "delete") -}}
         | kubectl {{.OPERATION}} {{- .OPERATION_ARGS}} --filename -
-        {{ end }}
+        {{ end }}'
 
   "*-ks-all":
     desc: Suspend or resume all Flux Kustomizations

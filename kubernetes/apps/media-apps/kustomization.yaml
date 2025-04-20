@@ -9,12 +9,4 @@ resources:
   - ./paperless/ks.yaml
   - ./ytdl-sub/ks.yaml
 components:
-  - ../../infrastructure/components/namespace
   - ../../infrastructure/components/flux/alerts
-patches:
-  - patch: |
-      - op: replace
-        path: /metadata/name
-        value: media-apps
-    target:
-      kind: Namespace

@@ -20,13 +20,12 @@ includes:
 
 vars:
   K8S_DIR: "{{.ROOT_DIR}}/kubernetes"
-  KUBECONFIG: "{{.K8S_DIR}}/kubeconfig"
-  MINIJINJA_CONFIG_FILE: "{{.ROOT_DIR}}/.minijinja.toml"
+  KUBECONFIG: "{{.K8S_DIR}}/infrastructure/talos/clusterconfig/kubeconfig"
+  MINIJINJA_ARGS: "--autoescape none --env --lstrip-blocks --trim-blocks"
   TALOSCONFIG: "{{.K8S_DIR}}/infrastructure/talos/clusterconfig/talosconfig"
 
 env:
   KUBECONFIG: "{{.KUBECONFIG}}"
-  MINIJINJA_CONFIG_FILE: "{{.MINIJINJA_CONFIG_FILE}}"
   TALOSCONFIG: "{{.TALOSCONFIG}}"
 
 tasks:
@@ -34,7 +33,9 @@ tasks:
     silent: true
     cmd: task --list
 
-  noop:
-    internal: true
-    silent: true
-    cmd: noop() { :; }
+  reconcile:
+    desc: Force Flux to pull in changes from your Git repository
+    cmd: flux --namespace gitops-system reconcile kustomization gitops-system --with-source
+    preconditions:
+      - which flux
+      - test -f {{.KUBECONFIG}}
