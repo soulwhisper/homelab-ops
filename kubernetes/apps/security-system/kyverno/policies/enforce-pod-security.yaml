@@ -4,6 +4,11 @@ apiVersion: kyverno.io/v1
 kind: ClusterPolicy
 metadata:
   name: enforce-pod-security
+annotations:
+  policies.kyverno.io/title: Enforce pod security
+  policies.kyverno.io/category: Security
+  policies.kyverno.io/subject: Pod
+  pod-policies.kyverno.io/autogen-controllers: none
 spec:
   rules:
     - name: "enforce-pod-security"
@@ -19,26 +24,47 @@ spec:
                 - kube-system
                 - storage-system
       mutate:
-        patchesJson6902: |-
-          - op: replace
-            path: "/spec/hostUsers"
-            value: false
-          - op: replace
-            path: "/spec/securityContext"
-            value:
-              runAsNonRoot: true
-              runAsUser: 2000
-              runAsGroup: 2000
-              fsGroup: 2000
-              fsGroupChangePolicy: "OnRootMismatch"
         foreach:
-          - list: request.object.spec.containers[]
-            patchesJson6902: |-
-              - op: replace
-                path: "/spec/containers/{{elementIndex}}/securityContext"
-                value:
-                  allowPrivilegeEscalation: false
+        - list: "request.object.spec.containers[]"
+          patchStrategicMerge:
+            spec:
+              containers:
+              - (name): '{{element.name}}'
+                securityContext:
+                  +(allowPrivilegeEscalation): false
+                  +(readOnlyRootFilesystem): true
+                  +(runAsNonRoot): true
                   capabilities:
-                    drop: ["ALL"]
-                  seccompProfile:
+                    drop:
+                      - ALL
+                  +(seccompProfile):
+                    type: RuntimeDefault
+        - list: "request.object.spec.ephemeralContainers[]"
+          patchStrategicMerge:
+            spec:
+              ephemeralContainers:
+              - (name): '{{element.name}}'
+                securityContext:
+                  +(allowPrivilegeEscalation): false
+                  +(readOnlyRootFilesystem): true
+                  +(runAsNonRoot): true
+                  capabilities:
+                    drop:
+                    - ALL
+                  +(seccompProfile):
+                    type: RuntimeDefault
+        - list: "request.object.spec.initContainers[]"
+          skipBackgroundRequests: true
+          patchStrategicMerge:
+            spec:
+              initContainers:
+              - (name): '{{element.name}}'
+                securityContext:
+                  +(allowPrivilegeEscalation): false
+                  +(readOnlyRootFilesystem): true
+                  +(runAsNonRoot): true
+                  capabilities:
+                    drop:
+                    - ALL
+                  +(seccompProfile):
                     type: RuntimeDefault
