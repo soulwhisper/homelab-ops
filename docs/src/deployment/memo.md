@@ -48,6 +48,22 @@ task talos:generate-clusterconfig
 task k8s-bootstrap:talos
 task k8s-bootstrap:apps
 
+## if failed to pull etcd, restart proxy-service, or reduce VM mtu to 1200
+
+# debugging deploy
+task flux:apply-ks DIR=kube-system
+task flux:apply-ks DIR=security-system/onepassword-connect
+task flux:apply-ks DIR=security-system
+
+task flux:apply-ks DIR=storage-system/snapshot-controller
+task flux:apply-ks DIR=storage-system/rook-ceph
+task flux:apply-ks DIR=storage-system/volsync
+task flux:apply-ks DIR=gitops-system
+task flux:apply-ks DIR=database-system
+
+
+
+kubectl get hr -A
 ```
 
 ### Flux Debug
