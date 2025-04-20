@@ -25,46 +25,46 @@ spec:
                 - storage-system
       mutate:
         foreach:
-        - list: "request.object.spec.containers[]"
-          patchStrategicMerge:
-            spec:
-              containers:
-              - (name): '{{element.name}}'
-                securityContext:
-                  +(allowPrivilegeEscalation): false
-                  +(readOnlyRootFilesystem): true
-                  +(runAsNonRoot): true
-                  capabilities:
-                    drop:
-                      - ALL
-                  +(seccompProfile):
-                    type: RuntimeDefault
-        - list: "request.object.spec.ephemeralContainers[]"
-          patchStrategicMerge:
-            spec:
-              ephemeralContainers:
-              - (name): '{{element.name}}'
-                securityContext:
-                  +(allowPrivilegeEscalation): false
-                  +(readOnlyRootFilesystem): true
-                  +(runAsNonRoot): true
-                  capabilities:
-                    drop:
-                    - ALL
-                  +(seccompProfile):
-                    type: RuntimeDefault
-        - list: "request.object.spec.initContainers[]"
-          skipBackgroundRequests: true
-          patchStrategicMerge:
-            spec:
-              initContainers:
-              - (name): '{{element.name}}'
-                securityContext:
-                  +(allowPrivilegeEscalation): false
-                  +(readOnlyRootFilesystem): true
-                  +(runAsNonRoot): true
-                  capabilities:
-                    drop:
-                    - ALL
-                  +(seccompProfile):
-                    type: RuntimeDefault
+          - list: "request.object.spec.containers[]"
+            patchStrategicMerge:
+              spec:
+                containers:
+                  - (name): "{{element.name}}"
+                    securityContext:
+                      +(allowPrivilegeEscalation): false
+                      +(readOnlyRootFilesystem): true
+                      +(runAsNonRoot): true
+                      capabilities:
+                        drop:
+                          - ALL
+                      +(seccompProfile):
+                        type: RuntimeDefault
+          - list: "request.object.spec.ephemeralContainers[]"
+            patchStrategicMerge:
+              spec:
+                ephemeralContainers:
+                  - (name): "{{element.name}}"
+                    securityContext:
+                      +(allowPrivilegeEscalation): false
+                      +(readOnlyRootFilesystem): true
+                      +(runAsNonRoot): true
+                      capabilities:
+                        drop:
+                          - ALL
+                      +(seccompProfile):
+                        type: RuntimeDefault
+          - list: "request.object.spec.initContainers[]"
+            skipBackgroundRequests: true
+            patchStrategicMerge:
+              spec:
+                initContainers:
+                  - (name): "{{element.name}}"
+                    securityContext:
+                      +(allowPrivilegeEscalation): false
+                      +(readOnlyRootFilesystem): true
+                      +(runAsNonRoot): true
+                      capabilities:
+                        drop:
+                          - ALL
+                      +(seccompProfile):
+                        type: RuntimeDefault
