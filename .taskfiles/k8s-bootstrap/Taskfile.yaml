@@ -18,7 +18,7 @@ tasks:
           INSECURE: "true"
       - until talosctl --nodes {{.TALOS_CONTROLLER}} bootstrap; do sleep 5; done
       - talosctl kubeconfig --nodes {{.TALOS_CONTROLLER}} --force ${KUBECONFIG}
-      - fish -i -c 'mkdir -p ~/.kube && cp ${KUBECONFIG} ~/.kube/config'
+      - fish -i -c 'mkdir -p ~/.kube && cp $KUBECONFIG ~/.kube/config'
 
   apps:
     desc: Bootstrap Apps
