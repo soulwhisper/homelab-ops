@@ -14,9 +14,8 @@ spec:
   values:
     defaultPodOptions:
       hostUsers: false
-
     controllers:
-      onepassword:
+      onepassword-connect:
         strategy: RollingUpdate
         annotations:
           reloader.stakater.com/auto: "true"
