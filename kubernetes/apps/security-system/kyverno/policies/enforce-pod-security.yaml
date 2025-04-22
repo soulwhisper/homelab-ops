@@ -4,6 +4,7 @@ apiVersion: kyverno.io/v1
 kind: ClusterPolicy
 metadata:
   name: enforce-pod-security
+  # this policy add default securityContext to pods
 spec:
   rules:
     - name: "enforce-pod-security"

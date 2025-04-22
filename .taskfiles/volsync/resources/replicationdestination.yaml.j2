@@ -14,10 +14,6 @@ spec:
     enableFileDeletion: true
     copyMethod: Direct
     destinationPVC: {{ ENV.CLAIM }}
-    moverSecurityContext:
-      runAsUser: {{ ENV.PUID }}
-      runAsGroup: {{ ENV.PGID }}
-      fsGroup: {{ ENV.PGID }}
     previous: {{ ENV.PREVIOUS }}
     repository: {{ ENV.APP }}-volsync-s3
     storageClassName: {{ ENV.STORAGE_CLASS_NAME }}

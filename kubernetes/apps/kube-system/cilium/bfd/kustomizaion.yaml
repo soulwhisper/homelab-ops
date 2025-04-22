@@ -3,5 +3,8 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-  # - ./enforce-pod-security.yaml
-  - ./user-namespaces.yaml
+  - ./daemonset.yaml
+configMapGenerator:
+  - name: bird-config
+    files:
+      - bird.conf=./bird.conf

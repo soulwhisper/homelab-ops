@@ -66,3 +66,25 @@ spec:
   dependsOn:
     - name: cert-manager-issuers
       namespace: security-system
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: cilium-bfd
+  namespace: &namespace kube-system
+spec:
+  targetNamespace: *namespace
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: cilium
+      app.kubernetes.io/component: bfd
+  interval: 30m
+  timeout: 5m
+  path: "./kubernetes/apps/kube-system/cilium/bfd"
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: gitops-system
+    namespace: gitops-system
+  wait: false
