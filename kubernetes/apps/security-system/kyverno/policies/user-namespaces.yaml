@@ -31,7 +31,7 @@ spec:
                 - kube-system
                 - storage-system
       mutate:
-         patchesJson6902: |-
-           - op: replace
-             path: "/spec/hostUsers"
-             value: false
+        patchesJson6902: |-
+          - op: replace
+            path: "/spec/hostUsers"
+            value: false

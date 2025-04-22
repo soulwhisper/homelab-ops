@@ -18,16 +18,16 @@ spec:
         app.kubernetes.io/name: cilium-bfd
     spec:
       containers:
-      - name: alpine-bird
-        image: "ghcr.io/soulwhisper/alpine-bird:edge"
-        volumeMounts:
-        - name: config
-          mountPath: /etc/bird.conf
-          subPath: bird.conf
-          readOnly: true
+        - name: alpine-bird
+          image: "ghcr.io/soulwhisper/alpine-bird:edge"
+          volumeMounts:
+            - name: config
+              mountPath: /etc/bird.conf
+              subPath: bird.conf
+              readOnly: true
       restartPolicy: Always
       hostNetwork: true
       volumes:
-      - name: config
-        configMap:
-          name: bird-config
+        - name: config
+          configMap:
+            name: bird-config
