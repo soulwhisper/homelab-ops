@@ -20,7 +20,7 @@ spec:
     namespace: gitops-system
   wait: false
   components:
-    - ../../../../infrastructure/components/gatus
+    - ../../../../components/gatus
   postBuild:
     substitute:
       APP: prometheus

@@ -11,6 +11,7 @@ spec:
     labels:
       app.kubernetes.io/name: *appname
   interval: 30m
+  timeout: 5m
   path: "./kubernetes/apps/security-system/cert-manager/app"
   prune: true
   sourceRef:
@@ -31,11 +32,13 @@ spec:
     labels:
       app.kubernetes.io/name: *appname
   interval: 30m
+  timeout: 5m
   path: "./kubernetes/apps/security-system/cert-manager/issuers"
   prune: true
   sourceRef:
     kind: GitRepository
     name: gitops-system
+    namespace: gitops-system
   wait: true
   dependsOn:
     - name: cert-manager

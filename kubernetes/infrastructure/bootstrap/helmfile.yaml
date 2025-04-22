@@ -87,6 +87,26 @@ releases:
   #   needs:
   #     - kube-system/coredns
 
+  - name: kyverno
+    namespace: security-system
+    atomic: true
+    chart: oci://ghcr.io/kyverno/charts/kyverno
+    version: v3.3.7
+    values:
+      - "../../apps/security-system/kyverno/app/values.yaml"
+    hooks:
+      - # Apply kyverno policies
+        events:
+          - postsync
+        command: kubectl
+        args:
+          - apply
+          - --namespace=kube-system
+          - --server-side
+          - --field-manager=kustomize-controller
+          - --kustomize=../../apps/security-system/kyverno/policies/
+        showlogs: true
+
   - name: flux-operator
     namespace: gitops-system
     atomic: true

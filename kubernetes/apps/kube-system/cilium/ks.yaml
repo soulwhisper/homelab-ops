@@ -11,6 +11,7 @@ spec:
     labels:
       app.kubernetes.io/name: *appname
   interval: 30m
+  timeout: 5m
   path: "./kubernetes/apps/kube-system/cilium/app"
   prune: true
   sourceRef:
@@ -32,6 +33,7 @@ spec:
       app.kubernetes.io/name: cilium
       app.kubernetes.io/component: config
   interval: 30m
+  timeout: 5m
   path: "./kubernetes/apps/kube-system/cilium/config"
   prune: true
   sourceRef:

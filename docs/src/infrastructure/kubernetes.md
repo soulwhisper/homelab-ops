@@ -11,7 +11,7 @@ The Kubernetes cluster is deployed using [Talos](https://www.talos.dev), leverag
 - [external-dns](https://github.com/kubernetes-sigs/external-dns): Automatically syncs ingress DNS records to a DNS provider.
 - [external-secrets](https://github.com/external-secrets/external-secrets): Managed Kubernetes secrets using [1Password Connect](https://github.com/1Password/connect).
 - [gateway-api](https://github.com/kubernetes-sigs/gateway-api): Gateway API is the next generation of Kubernetes Ingress, Load Balancing, and Service Mesh APIs.
-- [openebs-mayastor](https://github.com/openebs/mayastor): Distributed block storage for peristent storage.
+- [rook-ceph](https://github.com/rook/rook): Distributed block storage for peristent storage.
 - [spegel](https://github.com/spegel-org/spegel): Stateless cluster local OCI registry mirror.
 - [volsync](https://github.com/backube/volsync): Backup and recovery of persistent volume claims.
 
@@ -32,8 +32,8 @@ This Git repository contains the following directories under [Kubernetes](./kube
 ```sh
 📁 kubernetes
 ├── 📁 apps                          # applications
+├── 📁 components                    # re-useable components
 ├── 📁 infrastructure/bootstrap      # bootstrap procedures
-├── 📁 infrastructure/components     # re-useable components
 ├── 📁 infrastructure/flux           # flux system configuration
 └── 📁 infrastructure/talos          # talos configuration
 ```

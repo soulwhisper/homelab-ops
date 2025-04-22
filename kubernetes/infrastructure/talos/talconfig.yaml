@@ -19,7 +19,7 @@ kubernetesVersion: v1.32.3
 
 additionalApiServerCertSans: &sans
   - k8s.homelab.internal
-  - &talosControlplaneVip 10.10.0.100
+  - &talosControlplaneVip 172.19.82.100
   - 127.0.0.1
 additionalMachineCertSans: *sans
 
@@ -28,7 +28,7 @@ cniConfig:
 
 nodes:
   - hostname: exarch-01
-    ipAddress: 10.10.0.101
+    ipAddress: 172.19.82.101
     controlPlane: true
     nodeLabels:
       intel.feature.node.kubernetes.io/gpu: "true"
@@ -40,15 +40,15 @@ nodes:
           deviceSelectors:
             - permanentAddr: "bc:*" # check MAC of 10G NICs
         addresses:
-          - 10.10.0.101/24
+          - 172.19.82.101/24
         routes: &gateway
           - network: 0.0.0.0/0
-            gateway: 10.10.0.1
+            gateway: 172.19.82.1
         vip:
           ip: *talosControlplaneVip
 
   - hostname: exarch-02
-    ipAddress: 10.10.0.102
+    ipAddress: 172.19.82.102
     controlPlane: true
     nodeLabels:
       intel.feature.node.kubernetes.io/gpu: "true"
@@ -57,14 +57,14 @@ nodes:
       - interface: bond0
         dhcp: false
         addresses:
-          - 10.10.0.102/24
+          - 172.19.82.102/24
         bond: *bond
         routes: *gateway
         vip:
           ip: *talosControlplaneVip
 
   - hostname: exarch-03
-    ipAddress: 10.10.0.103
+    ipAddress: 172.19.82.103
     controlPlane: true
     nodeLabels:
       intel.feature.node.kubernetes.io/gpu: "true"
@@ -73,7 +73,7 @@ nodes:
       - interface: bond0
         dhcp: false
         addresses:
-          - 10.10.0.103/24
+          - 172.19.82.103/24
         bond: *bond
         routes: *gateway
         vip:
@@ -125,7 +125,7 @@ controlPlane:
           extraArgs:
             quota-backend-bytes: 8589934592
           advertisedSubnets:
-            - 10.10.0.0/24
+            - 172.19.82.0/24
 
   # AdmissionControl configuration, disabled; use labels instead
   #  - |-
@@ -146,8 +146,8 @@ patches:
   - |-
     machine:
       env:
-        http_proxy: http://10.10.0.10:1080
-        https_proxy: http://10.10.0.10:1080
+        http_proxy: http://172.19.82.10:1080
+        https_proxy: http://172.19.82.10:1080
         no_proxy: .noirprime.com,.homelab.internal,.cluster.local.,.cluster.local,.svc,localhost,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16
 
   # Enable OpenEBS Storage
@@ -240,7 +240,7 @@ patches:
       time:
         disabled: false
         servers:
-          - 10.10.0.10
+          - 172.19.82.10
 
   # Network configuration
   - |-
@@ -248,21 +248,19 @@ patches:
       network:
         disableSearchDomain: true
         extraHostEntries:
-          - ip: 10.10.0.100
+          - ip: 172.19.82.100
             aliases:
               - k8s.homelab.internal
         nameservers:
-          - 10.10.0.10
+          - 172.19.82.10
 
   # Kubelet configuration
   - |-
     machine:
       kubelet:
-        extraArgs:
-          rotate-server-certificates: "true"
         nodeIP:
           validSubnets:
-            - 10.10.0.0/24
+            - 172.19.82.0/24
 
   # Cluster configuration
   - |-
@@ -278,7 +276,7 @@ patches:
           kubernetes:
             disabled: true
           service:
-            endpoint: http://10.10.0.10:9300
+            endpoint: http://172.19.82.10:9300
       network:
         podSubnets:
           - 10.100.0.0/17

@@ -43,11 +43,16 @@ export TALOSCONFIG=$PWD/kubernetes/infrastructure/talos/clusterconfig/talosconfi
 ## dev-env method-2
 devenv shell
 
-# init
+# bootstrap
 task talos:generate-clusterconfig
 task k8s-bootstrap:talos
 task k8s-bootstrap:apps
 
+## if failed to pull etcd, restart proxy-service, or reduce VM mtu to 1200
+
+# check
+kubectl get ks -A
+kubectl get hr -A
 ```
 
 ### Flux Debug
@@ -56,12 +61,17 @@ task k8s-bootstrap:apps
 task reconcile
 flux check
 flux get sources git gitops-system
-flux get ks -A
-flux get hr -A
 
 kubectl -n gitops-system get fluxreport/flux -o yaml
 kubectl -n gitops-system events --for FluxInstance/flux
 kubectl -n gitops-system logs deployment/flux-operator
 flux -n gitops-system get all -A --status-selector ready=false
 
+```
+
+### Talos Reset
+
+```shell
+## Hic sunt leones.
+talosctl reset --system-labels-to-wipe STATE --system-labels-to-wipe EPHEMERAL --graceful=false --wait=false --reboot
 ```

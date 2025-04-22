@@ -11,6 +11,7 @@ spec:
     labels:
       app.kubernetes.io/name: *appname
   interval: 30m
+  timeout: 5m
   path: ./kubernetes/apps/karmada-system/karmada-operator/app
   prune: false # Never delete this
   sourceRef:

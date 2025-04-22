@@ -9,4 +9,5 @@ resources:
   - ./paperless/ks.yaml
   - ./ytdl-sub/ks.yaml
 components:
-  - ../../infrastructure/components/flux/alerts
+  - ../../components/namespace
+  - ../../components/flux/alerts

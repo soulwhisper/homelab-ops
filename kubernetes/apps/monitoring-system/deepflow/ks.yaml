@@ -11,6 +11,7 @@ spec:
     labels:
       app.kubernetes.io/name: *appname
   interval: 30m
+  timeout: 5m
   path: "./kubernetes/apps/monitoring-system/deepflow/app"
   prune: true
   sourceRef:
@@ -22,7 +23,7 @@ spec:
     - name: rook-ceph-cluster
       namespace: storage-system
   components:
-    - ../../../../infrastructure/components/gatus
+    - ../../../../components/gatus
   postBuild:
     substitute:
       APP: *appname

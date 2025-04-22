@@ -11,6 +11,7 @@ spec:
     labels:
       app.kubernetes.io/name: *appname
   interval: 30m
+  timeout: 5m
   path: ./kubernetes/apps/gitops-system/flux-operator/app
   prune: false # Never delete this
   sourceRef:
@@ -31,6 +32,7 @@ spec:
     labels:
       app.kubernetes.io/name: *appname
   interval: 30m
+  timeout: 5m
   path: ./kubernetes/apps/gitops-system/flux-operator/instance
   prune: false # Never delete this
   sourceRef:

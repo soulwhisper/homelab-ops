@@ -11,6 +11,7 @@ spec:
     labels:
       app.kubernetes.io/name: *appname
   interval: 30m
+  timeout: 5m
   path: "./kubernetes/apps/gitops-system/actions-runner-controller/operator"
   prune: true
   sourceRef:
@@ -34,6 +35,7 @@ spec:
     labels:
       app.kubernetes.io/name: *appname
   interval: 30m
+  timeout: 5m
   path: "./kubernetes/apps/gitops-system/actions-runner-controller/runners"
   prune: true
   sourceRef:

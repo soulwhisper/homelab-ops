@@ -1,0 +1,53 @@
+---
+crds:
+  install: true
+grafana:
+  enabled: true
+admissionController:
+  replicas: 1
+  clusterRole:
+    extraResources:
+      - apiGroups:
+          - "*"
+        resources:
+          - "*"
+        verbs:
+          - get
+          - list
+          - watch
+  serviceMonitor:
+    enabled: true
+backgroundController:
+  clusterRole:
+    extraResources:
+      - apiGroups:
+          - "*"
+        resources:
+          - "*"
+        verbs:
+          - get
+          - list
+          - watch
+  resources:
+    requests:
+      cpu: 100m
+    limits:
+      memory: 1Gi
+  serviceMonitor:
+    enabled: true
+reportsController:
+  clusterRole:
+    extraResources:
+      - apiGroups:
+          - "*"
+        resources:
+          - "*"
+        verbs:
+          - get
+          - list
+          - watch
+  serviceMonitor:
+    enabled: true
+cleanupController:
+  serviceMonitor:
+    enabled: true

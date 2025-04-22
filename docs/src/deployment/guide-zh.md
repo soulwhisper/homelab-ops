@@ -41,7 +41,7 @@
 - 替换以下文档中的内容;
   - `kubernetes/infrastructure/bootstrap/bootstrap.env`
   - `kubernetes/infrastructure/bootstrap/talos/talhelper.env`
-  - `kubernetes/infrastructure/components/flux/sops/secret.sops.yaml`
+  - `kubernetes/components/flux/sops/secret.sops.yaml`
 - 使用 `infra/scripts/minio-bucket-keys.py` 初始化 NAS 上的 Minio;
 
 ### 部署工作

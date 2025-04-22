@@ -33,6 +33,16 @@ tasks:
     silent: true
     cmd: task --list
 
+  env:
+    desc: Restore configuration files from backup location
+    preconditions:
+      - fish -i -c 'test -f ~/.kube/config'
+      - fish -i -c 'test -f ~/.talos/config'
+    cmds:
+      - fish -i -c 'cp ~/.kube/config $KUBECONFIG'
+      - fish -i -c 'cp ~/.talos/config $TALOSCONFIG'
+      - direnv allow
+
   reconcile:
     desc: Force Flux to pull in changes from your Git repository
     cmd: flux --namespace gitops-system reconcile kustomization gitops-system --with-source

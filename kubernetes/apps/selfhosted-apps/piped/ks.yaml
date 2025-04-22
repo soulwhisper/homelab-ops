@@ -27,7 +27,7 @@ spec:
     - name: crunchy-postgres-operator-secretstore
       namespace: database-system
   components:
-    - ../../../../infrastructure/components/gatus
+    - ../../../../components/gatus
   postBuild:
     substitute:
       APP: *appname

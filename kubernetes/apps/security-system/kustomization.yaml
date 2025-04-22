@@ -4,10 +4,10 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 namespace: security-system
 resources:
-  - ./namespace.yaml
   - ./cert-manager/ks.yaml
   - ./external-secrets/ks.yaml
   - ./kyverno/ks.yaml
   - ./onepassword-connect/ks.yaml
 components:
-  - ../../infrastructure/components/flux/alerts
+  - ../../components/namespace
+  - ../../components/flux/alerts
