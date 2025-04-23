@@ -6,5 +6,4 @@ metadata:
   name: volsync
   namespace: storage-system
 spec:
-  interval: 30m
   url: https://backube.github.io/helm-charts/

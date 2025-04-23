@@ -3,8 +3,7 @@
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: HelmRepository
 metadata:
-  name: karmada
-  namespace: karmada-system
+  name: cilium
+  namespace: kube-system
 spec:
-  interval: 30m
-  url: https://github.com/karmada-io/karmada/tree/master/charts
+  url: https://helm.cilium.io

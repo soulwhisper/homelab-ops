@@ -3,7 +3,7 @@
 apiVersion: kyverno.io/v1
 kind: ClusterPolicy
 metadata:
-  name: user-namespaces
+  name: enforce-user-namespaces
   # this policy add more security to pods
   # ref:https://kubernetes.io/docs/concepts/workloads/pods/user-namespaces
   # this policy will block: hostNetwork / hostIPC / hostPID
@@ -18,7 +18,7 @@ metadata:
   #   - spec.ephemeralContainers[*].securityContext.runAsUser
 spec:
   rules:
-    - name: "user-namespaces"
+    - name: "enforce-user-namespaces"
       match:
         any:
           - resources:
@@ -31,7 +31,6 @@ spec:
                 - kube-system
                 - storage-system
       mutate:
-        patchesJson6902: |-
-          - op: replace
-            path: "/spec/hostUsers"
-            value: false
+        patchStrategicMerge:
+          spec:
+            +(hostUsers): false

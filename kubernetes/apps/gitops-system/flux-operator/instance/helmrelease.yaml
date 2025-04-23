@@ -5,10 +5,10 @@ kind: HelmRelease
 metadata:
   name: flux-instance
 spec:
+  interval: 30m
   chartRef:
     kind: OCIRepository
     name: flux-operator
-  interval: 30m
   valuesFrom:
     - kind: ConfigMap
       name: flux-instance-helm-values

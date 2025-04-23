@@ -5,11 +5,11 @@ kind: HelmRelease
 metadata:
   name: piped
 spec:
+  interval: 30m
   chartRef:
     kind: OCIRepository
     name: app-template
     namespace: gitops-system
-  interval: 30m
   values:
     defaultPodOptions:
       automountServiceAccountToken: false

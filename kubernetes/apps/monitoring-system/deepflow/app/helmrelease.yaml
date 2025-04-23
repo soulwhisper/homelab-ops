@@ -9,10 +9,10 @@ spec:
   chart:
     spec:
       chart: deepflow
+      version: 6.5.012
       sourceRef:
         kind: HelmRepository
         name: deepflow
-      version: 6.5.012
 
   values:
     global:

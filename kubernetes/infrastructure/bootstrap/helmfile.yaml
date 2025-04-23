@@ -91,7 +91,7 @@ releases:
     namespace: security-system
     atomic: true
     chart: oci://ghcr.io/kyverno/charts/kyverno
-    version: v3.3.7
+    version: 3.3.7
     values:
       - "../../apps/security-system/kyverno/app/values.yaml"
     hooks:
@@ -116,6 +116,7 @@ releases:
       - "../../apps/gitops-system/flux-operator/app/values.yaml"
     needs:
       - monitoring-system/prometheus-operator-crds
+      - security-system/kyverno
 
   - name: flux-instance
     namespace: gitops-system

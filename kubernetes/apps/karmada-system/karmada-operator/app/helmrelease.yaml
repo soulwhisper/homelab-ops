@@ -8,12 +8,10 @@ spec:
   interval: 30m
   chart:
     spec:
-      chart: karmada-operator
-      version: 1.13.1
+      chart: ./charts/karmada-operator
       sourceRef:
-        kind: HelmRepository
+        kind: GitRepository
         name: karmada
-      interval: 30m
   valuesFrom:
     - kind: ConfigMap
       name: karmada-operator-helm-values

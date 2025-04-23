@@ -5,11 +5,10 @@ kind: HelmRelease
 metadata:
   name: grafana
 spec:
+  interval: 30m
   chartRef:
     kind: OCIRepository
     name: grafana
-  interval: 30m
-  timeout: 20m
   values:
     admin:
       existingSecret: grafana-admin-secret
