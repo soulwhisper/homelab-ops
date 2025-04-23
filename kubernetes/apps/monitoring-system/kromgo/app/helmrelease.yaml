@@ -20,7 +20,6 @@ spec:
           reloader.stakater.com/auto: "true"
 
         pod:
-          hostUsers: false
           topologySpreadConstraints:
             - maxSkew: 1
               topologyKey: kubernetes.io/hostname

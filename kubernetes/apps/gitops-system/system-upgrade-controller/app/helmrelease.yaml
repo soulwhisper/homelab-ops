@@ -15,13 +15,9 @@ spec:
     controllers:
       system-upgrade-controller:
         strategy: RollingUpdate
-        replicas: 2
+        replicas: 3
 
         pod:
-          securityContext:
-            runAsNonRoot: true
-            runAsUser: 65534
-            runAsGroup: 65534
           tolerations:
             - key: CriticalAddonsOnly
               operator: Exists

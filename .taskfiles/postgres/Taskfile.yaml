@@ -13,6 +13,7 @@ tasks:
     desc: Run pg_dump on the master instance of a CrunchyData Postgres cluster. [DB_NAME=required] [OUTPUT_DIR=.] [NS=database-system] [DB_CLUSTER=postgres]
     preconditions:
       - which kubectl
+      - test -f "${KUBECONFIG}"
       - sh: |
           kubectl get pods -n {{.DB_NS}} \
             -l postgres-operator.crunchydata.com/role=master,postgres-operator.crunchydata.com/cluster={{.DB_CLUSTER}} \
@@ -35,6 +36,7 @@ tasks:
     desc: Restore a pg_dump to a CrunchyData Postgres cluster. [DB_NAME=required] [DB_USER=required] [FILE=required] [NS=database-system] [DB_CLUSTER=postgres]
     preconditions:
       - which kubectl
+      - test -f "${KUBECONFIG}"
       - test -f "{{.FILE}}"
       - sh: |
           kubectl get pods -n {{.DB_NS}} \
@@ -60,6 +62,7 @@ tasks:
     desc: Exec into the master instance of a CrunchyData Postgres cluster. [NS=database-system] [DB_CLUSTER=postgres]
     preconditions:
       - which kubectl
+      - test -f "${KUBECONFIG}"
       - sh: |
           kkubectl get pods -n {{.DB_NS}} \
             -l postgres-operator.crunchydata.com/role=master,postgres-operator.crunchydata.com/cluster={{.DB_CLUSTER}} \

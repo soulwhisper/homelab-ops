@@ -17,7 +17,6 @@ spec:
 
         pod:
           restartPolicy: Never
-          hostUsers: false
 
         cronjob:
           schedule: "0 */6 * * *"

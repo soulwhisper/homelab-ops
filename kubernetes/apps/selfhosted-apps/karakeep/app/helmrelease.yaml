@@ -14,9 +14,6 @@ spec:
     - name: rook-ceph-cluster
       namespace: storage-system
   values:
-    defaultPodOptions:
-      hostUsers: false
-
     controllers:
       karakeep:
         annotations:

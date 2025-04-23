@@ -35,9 +35,6 @@ spec:
 
     controllers:
       silence-operator:
-        pod:
-          hostUsers: false
-
         containers:
           silence-operator:
             image:

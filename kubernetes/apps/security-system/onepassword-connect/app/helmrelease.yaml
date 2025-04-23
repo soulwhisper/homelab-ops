@@ -12,8 +12,6 @@ spec:
     namespace: gitops-system
 
   values:
-    defaultPodOptions:
-      hostUsers: false
     controllers:
       onepassword-connect:
         strategy: RollingUpdate

@@ -7,6 +7,7 @@ tasks:
     desc: Clean up pods with a Failed/Pending/Succeeded phase
     preconditions:
       - which kubectl
+      - test -f "${KUBECONFIG}"
     cmds:
       - for:
           matrix:
@@ -20,6 +21,7 @@ tasks:
     desc: Force sync all ExternalSecret resources
     preconditions:
       - which kubectl
+      - test -f "${KUBECONFIG}"
     vars:
       SECRETS:
         sh: kubectl get externalsecret --all-namespaces --no-headers --output=jsonpath='{range .items[*]}{.metadata.namespace},{.metadata.name}{"\n"}{end}'

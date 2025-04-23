@@ -10,6 +10,7 @@ tasks:
         - NAME
     preconditions:
       - which kubectl
+      - test -f "${KUBECONFIG}"
     cmds:
       - echo "Creating Karmada instance {{.NAME}}..."
       - |

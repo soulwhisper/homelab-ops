@@ -17,6 +17,7 @@ tasks:
       - '[[ "{{.OPERATION}}" == "build" || "{{.OPERATION}}" == "apply" || "{{.OPERATION}}" == "delete" ]]'
       - which kubectl
       - test -d "{{.KS_DIR}}"
+      - test -f "${KUBECONFIG}"
       - fish -i -c 'flux-local -h' >/dev/null 2>&1
     cmds:
       - fish -i -c 'flux-local build ks --all-namespaces {{.NS}} --path {{.KS_DIR}} {{.NAME}}
@@ -34,6 +35,7 @@ tasks:
     preconditions:
       - '[[ "{{.STATE}}" == "suspend" || "{{.STATE}}" == "resume" ]]'
       - which flux kubectl
+      - test -f "${KUBECONFIG}"
     cmds:
       - for:
           var: NAMESPACES

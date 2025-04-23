@@ -77,6 +77,7 @@ tasks:
     desc: Apply a single Talos machineConfig to a Talos node
     preconditions:
       - which talosctl
+      - test -f "${TALOSCONFIG}"
       - test -f "{{.FILENAME}}"
     requires:
       vars:

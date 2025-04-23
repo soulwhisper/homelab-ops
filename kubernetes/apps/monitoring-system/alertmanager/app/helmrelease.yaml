@@ -29,9 +29,6 @@ spec:
               globalMounts:
                 - path: /alertmanager
 
-        pod:
-          hostUsers: false
-
         containers:
           alertmanager:
             image:
