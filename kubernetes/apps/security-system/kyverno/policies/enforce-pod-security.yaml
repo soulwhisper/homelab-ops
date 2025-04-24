@@ -13,16 +13,9 @@ spec:
           - resources:
               kinds:
                 - Pod
-      exclude:
-        any:
-          - resources:
               namespaces:
-                - kube-system
-                - storage-system
-          - resources:
-              names:
-                - "flux-*"
-                - "smartctl-exporter-*"
+                - selfhosted-apps
+                - media-apps
       mutate:
         foreach:
           - list: "request.object.spec.containers[]"
