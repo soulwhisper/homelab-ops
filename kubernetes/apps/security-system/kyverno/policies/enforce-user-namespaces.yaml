@@ -30,6 +30,10 @@ spec:
               namespaces:
                 - kube-system
                 - storage-system
+          - resources:
+              names:
+                - "flux-*"
+                - "smartctl-exporter-*"
       mutate:
         patchStrategicMerge:
           spec:
