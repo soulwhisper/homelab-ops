@@ -21,9 +21,7 @@ tasks:
       - test -f "${KUBECONFIG}"
       - test -f "{{.K8S_DIR}}/infrastructure/bootstrap/helmfile.yaml"
     cmds:
-      - helmfile --file {{.K8S_DIR}}/infrastructure/bootstrap/helmfile.yaml apply \
-        -l name=flux-instance sync --include-transitive-needs \
-        --skip-diff-on-install --suppress-diff
+      - helmfile --file {{.K8S_DIR}}/infrastructure/bootstrap/helmfile.yaml apply -l name=flux-instance sync --include-needs --skip-diff-on-install --suppress-diff
 
   "retry-*":
     desc: Retry Certain Flux Helmrelease or Kustomization [NAME=required] [NS=required]
