@@ -70,7 +70,7 @@ releases:
     namespace: security-system
     atomic: true
     chart: oci://quay.io/jetstack/charts/cert-manager
-    version: v1.17.1
+    version: v1.17.2
     values:
       - "../../apps/security-system/cert-manager/app/values.yaml"
     needs:
