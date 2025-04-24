@@ -28,7 +28,7 @@ spec:
       - name: CF_API_TOKEN
         valueFrom:
           secretKeyRef:
-            name: externaldns-cloudflare-secrets
+            name: externaldns-cloudflare-secret
             key: cloudflare-api-token
     extraArgs:
       - --cloudflare-dns-records-per-page=1000
@@ -38,7 +38,7 @@ spec:
       - --events
       - --gateway-name=external
     podAnnotations:
-      secret.reloader.stakater.com/reload: externaldns-cloudflare-secrets
+      secret.reloader.stakater.com/reload: externaldns-cloudflare-secret
     policy: sync
     provider:
       name: cloudflare

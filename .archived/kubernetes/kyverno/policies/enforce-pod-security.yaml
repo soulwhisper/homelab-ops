@@ -5,6 +5,8 @@ kind: ClusterPolicy
 metadata:
   name: enforce-pod-security
   # this policy add default securityContext to pods
+  # ephemeralContainers/initContainers policy will block many '*-system' pods,
+  # use 'enforce-user-namespaces' for those pods.
 spec:
   rules:
     - name: "enforce-pod-security"

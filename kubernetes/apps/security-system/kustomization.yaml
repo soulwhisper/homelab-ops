@@ -6,7 +6,6 @@ namespace: security-system
 resources:
   - ./cert-manager/ks.yaml
   - ./external-secrets/ks.yaml
-  - ./kyverno/ks.yaml
   - ./onepassword-connect/ks.yaml
 components:
   - ../../components/namespace

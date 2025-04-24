@@ -34,10 +34,10 @@ spec:
       - name: EXTERNAL_DNS_RFC2136_TSIG_SECRET
         valueFrom:
           secretKeyRef:
-            name: externaldns-rfc2136-secrets
+            name: externaldns-rfc2136-secret
             key: tsig-secret
     podAnnotations:
-      secret.reloader.stakater.com/reload: externaldns-rfc2136-secrets
+      secret.reloader.stakater.com/reload: externaldns-rfc2136-secret
     policy: sync
     provider: rfc2136
     resources:

@@ -1,0 +1,57 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: talos-backup
+spec:
+  schedule: "0/10 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: talos-backup
+            image: ghcr.io/siderolabs/talos-backup:latest
+            workingDir: /tmp
+            imagePullPolicy: IfNotPresent
+            env:
+              - name: AWS_ACCESS_KEY_ID
+                value: "${TALOS_ACCESS_KEY}"
+              - name: AWS_SECRET_ACCESS_KEY
+                value: "${TALOS_SECRET_KEY}"
+              - name: AWS_REGION
+                value: "us-east-1"
+              - name: CUSTOM_S3_ENDPOINT
+                value: "https://${CF_ACCOUNT_TAG}.r2.cloudflarestorage.com"
+              - name: BUCKET
+                value: "talos-backups"
+              - name: AGE_X25519_PUBLIC_KEY
+                value: "${TALOS_BACKUP_PUBLIC}"
+              - name: USE_PATH_STYLE
+                value: "true"
+            securityContext:
+              runAsNonRoot: true
+              runAsUser: 2000
+              runAsGroup: 2000
+              allowPrivilegeEscalation: false
+              capabilities:
+                drop:
+                  - ALL
+              seccompProfile:
+                type: RuntimeDefault
+            command:
+              - /talos-backup
+            volumeMounts:
+              - name: tmp
+                mountPath: /tmp
+          restartPolicy: OnFailure
+          volumes:
+            - name: tmp
+              emptyDir: {}
+---
+apiVersion: talos.dev/v1alpha1
+kind: ServiceAccount
+metadata:
+    name: talos-backup
+spec:
+    roles:
+        - os:etcd:backup

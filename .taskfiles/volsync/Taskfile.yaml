@@ -101,6 +101,10 @@ tasks:
         sh: kubectl --namespace {{.VOLSYNC_NS}} get replicationsources/{{.APP}} --output=jsonpath="{.spec.restic.accessModes}"
       STORAGE_CLASS_NAME:
         sh: kubectl --namespace {{.VOLSYNC_NS}} get replicationsources/{{.APP}} --output=jsonpath="{.spec.restic.storageClassName}"
+      PUID:
+        sh: kubectl --namespace {{.VOLSYNC_NS}} get replicationsources/{{.APP}} --output=jsonpath="{.spec.restic.moverSecurityContext.runAsUser}"
+      PGID:
+        sh: kubectl --namespace {{.VOLSYNC_NS}} get replicationsources/{{.APP}} --output=jsonpath="{.spec.restic.moverSecurityContext.runAsGroup}"
     cmds:
       # Suspend
       - flux --namespace gitops-system suspend kustomization {{.APP}}

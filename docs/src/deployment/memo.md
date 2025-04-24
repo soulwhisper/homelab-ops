@@ -3,7 +3,7 @@
 - bring up new cluster, using secureboot ISO, not pxe/matchbox;
 - migrated from mayastor to ceph; disable ceph-nfs;
 - `hostLegacyRouting: true` conflict wih BIGTCP and BBR, disabled; hence `forwardKubeDNSToHost` is disabled; [ref](https://github.com/siderolabs/talos/issues/10002#issuecomment-2557069620);
-- `namespace.yaml` is needed for namespace resource creation;
+- use hardcoded securityContext instead of kyverno;
 
 ## Infra
 

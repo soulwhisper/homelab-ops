@@ -14,11 +14,13 @@ spec:
     - name: rook-ceph-cluster
       namespace: storage-system
   values:
+    defaultPodOptions:
+      hostUsers: false
+
     controllers:
       nfs-server:
         annotations:
           reloader.stakater.com/auto: "true"
-
         containers:
           nfs-server:
             image:

@@ -14,6 +14,14 @@ spec:
     - name: rook-ceph-cluster
       namespace: storage-system
   values:
+    defaultPodOptions:
+      hostUsers: false
+    securityContext:
+      runAsUser: 2000
+      runAsGroup: 2000
+      fsGroup: 2000
+      fsGroupChangePolicy: "OnRootMismatch"
+
     controllers:
       freshrss:
         annotations:

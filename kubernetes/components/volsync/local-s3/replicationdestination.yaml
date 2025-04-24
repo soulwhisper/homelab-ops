@@ -19,6 +19,10 @@ spec:
     cleanupTempPVC: true
     enableFileDeletion: true
     copyMethod: "${VOLSYNC_COPYMETHOD:-Snapshot}"
+    moverSecurityContext:
+      runAsUser: ${APP_UID:-2000}
+      runAsGroup: ${APP_GID:-2000}
+      fsGroup: ${APP_GID:-2000}
     repository: "${APP}-volsync-s3"
     storageClassName: "${VOLSYNC_STORAGECLASS:-ceph-block}"
     volumeSnapshotClassName: "${VOLSYNC_SNAPSHOTCLASS:-ceph-block-snapshot}"

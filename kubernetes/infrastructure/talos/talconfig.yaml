@@ -193,6 +193,7 @@ patches:
           enabled: true
           allowedRoles:
             - os:admin
+            - os:etcd:backup
           allowedKubernetesNamespaces:
             - gitops-system
 
