@@ -10,7 +10,7 @@
 
   # replace pre-commit and various linters
   git-hooks = {
-    # exclude = "_assets\/.*";
+    exclude = ".github\/.*";
     hooks = {
       actionlint = {
         enable = false;
