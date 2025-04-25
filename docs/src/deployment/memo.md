@@ -16,7 +16,7 @@
 - onepassword as main secret store;
 - use Valkey instead of Dragonflydb if apps served <= 2;
 
-### Overengineering
+### Over Engineering
 
 - NTS support servers in NTP config;
 - Disk encryption for homelab env;
@@ -30,7 +30,7 @@
 - `10.10.0.201-250` as cilium l2 loadbalancer ip;
 - self-hosted-runner, label:arc-homelab / label:arc-homelab-ops;
 
-### Bootstrp
+### Bootstrap
 
 ```shell
 # op signin, then
