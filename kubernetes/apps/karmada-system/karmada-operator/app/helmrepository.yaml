@@ -6,5 +6,4 @@ metadata:
   name: karmada
   namespace: karmada-system
 spec:
-  interval: 30m
-  url: https://github.com/karmada-io/karmada/tree/master/charts
+  url: https://raw.githubusercontent.com/karmada-io/karmada/master/charts

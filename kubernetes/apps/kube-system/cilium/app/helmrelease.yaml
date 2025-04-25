@@ -8,7 +8,21 @@ spec:
   interval: 30m
   chartRef:
     kind: OCIRepository
-    name: cert-manager
+    name: cilium
+  install:
+    crds: CreateReplace
+    remediation:
+      retries: -1
+  upgrade:
+    cleanupOnFail: true
+    crds: CreateReplace
+    remediation:
+      retries: 3
+
   valuesFrom:
     - kind: ConfigMap
       name: cilium-values
+
+  values:
+    operator:
+      tolerations: [] # ref:https://github.com/cilium/cilium/issues/28549

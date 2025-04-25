@@ -1,0 +1,64 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/kyverno.io/clusterpolicy_v2beta1.json
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: enforce-pod-security
+  # this policy add default securityContext to pods
+  # ephemeralContainers/initContainers policy will block many '*-system' pods,
+  # use 'enforce-user-namespaces' for those pods.
+spec:
+  rules:
+    - name: "enforce-pod-security"
+      match:
+        any:
+          - resources:
+              kinds:
+                - Pod
+              namespaces:
+                - selfhosted-apps
+                - media-apps
+      mutate:
+        foreach:
+          - list: "request.object.spec.containers[]"
+            patchStrategicMerge:
+              spec:
+                containers:
+                  - (name): "{{element.name}}"
+                    securityContext:
+                      +(allowPrivilegeEscalation): false
+                      +(readOnlyRootFilesystem): true
+                      +(runAsNonRoot): true
+                      capabilities:
+                        drop:
+                          - ALL
+                      +(seccompProfile):
+                        type: RuntimeDefault
+          - list: "request.object.spec.ephemeralContainers[]"
+            patchStrategicMerge:
+              spec:
+                ephemeralContainers:
+                  - (name): "{{element.name}}"
+                    securityContext:
+                      +(allowPrivilegeEscalation): false
+                      +(readOnlyRootFilesystem): true
+                      +(runAsNonRoot): true
+                      capabilities:
+                        drop:
+                          - ALL
+                      +(seccompProfile):
+                        type: RuntimeDefault
+          - list: "request.object.spec.initContainers[]"
+            patchStrategicMerge:
+              spec:
+                initContainers:
+                  - (name): "{{element.name}}"
+                    securityContext:
+                      +(allowPrivilegeEscalation): false
+                      +(readOnlyRootFilesystem): true
+                      +(runAsNonRoot): true
+                      capabilities:
+                        drop:
+                          - ALL
+                      +(seccompProfile):
+                        type: RuntimeDefault

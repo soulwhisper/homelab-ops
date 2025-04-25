@@ -12,7 +12,7 @@ spec:
       app.kubernetes.io/name: *appname
   interval: 30m
   timeout: 5m
-  path: ./kubernetes/apps/database-system/crunchy-postgres-operator/operator
+  path: ./kubernetes/apps/database-system/crunchy-postgres-operator/app
   prune: true
   sourceRef:
     kind: GitRepository
@@ -100,3 +100,6 @@ spec:
     name: gitops-system
     namespace: gitops-system
   wait: false
+  dependsOn:
+    - name: crunchy-postgres-operator-cluster
+      namespace: database-system

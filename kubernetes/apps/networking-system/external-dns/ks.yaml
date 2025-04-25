@@ -27,7 +27,7 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &appname externaldns-rfc2136
+  name: &appname externaldns-adguard
   namespace: &namespace networking-system
 spec:
   targetNamespace: *namespace
@@ -36,7 +36,7 @@ spec:
       app.kubernetes.io/name: *appname
   interval: 30m
   timeout: 5m
-  path: "./kubernetes/apps/networking-system/external-dns/rfc2136"
+  path: "./kubernetes/apps/networking-system/external-dns/adguard"
   prune: true
   sourceRef:
     kind: GitRepository

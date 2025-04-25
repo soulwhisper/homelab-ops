@@ -10,15 +10,28 @@ spec:
     kind: OCIRepository
     name: app-template
     namespace: gitops-system
+  install:
+    crds: CreateReplace
+    remediation:
+      retries: -1
+  upgrade:
+    cleanupOnFail: true
+    crds: CreateReplace
+    remediation:
+      retries: 3
+
   dependsOn:
     - name: rook-ceph-cluster
       namespace: storage-system
+
   values:
+    defaultPodOptions:
+      hostUsers: false
+
     controllers:
       nfs-server:
         annotations:
           reloader.stakater.com/auto: "true"
-
         containers:
           nfs-server:
             image:

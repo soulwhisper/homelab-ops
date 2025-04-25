@@ -19,3 +19,6 @@ spec:
     name: gitops-system
     namespace: gitops-system
   wait: false
+  dependsOn:
+    - name: snapshot-controller
+      namespace: storage-system

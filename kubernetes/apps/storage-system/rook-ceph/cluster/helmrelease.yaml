@@ -9,11 +9,16 @@ spec:
   chartRef:
     kind: OCIRepository
     name: rook-ceph-cluster
-  dependsOn:
-    - name: rook-ceph
-      namespace: storage-system
-    - name: snapshot-controller
-      namespace: storage-system
+  install:
+    crds: CreateReplace
+    remediation:
+      retries: -1
+  upgrade:
+    cleanupOnFail: true
+    crds: CreateReplace
+    remediation:
+      retries: 3
+
   values:
     clusterName: &cluster_namespace storage-system
     csiDriverNamePrefix: *cluster_namespace
@@ -81,7 +86,7 @@ spec:
       storage:
         useAllNodes: true
         useAllDevices: false
-        deviceFilter: sdb # test only
+        deviceFilter: ^sd[b-d] # test only; ref:https://rook.io/docs/rook/v1.14/CRDs/Cluster/ceph-cluster-crd/?h=usealldevices#storage-selection-settings
         config:
           osdsPerDevice: "1"
     cephBlockPools:

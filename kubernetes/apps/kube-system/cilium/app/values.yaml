@@ -65,8 +65,6 @@ hubble:
     rollOutPods: true
 ipam:
   mode: "kubernetes"
-ipv4:
-  enabled: true
 ipv4NativeRoutingCIDR: 10.100.0.0/17
 ipv6:
   enabled: false

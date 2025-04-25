@@ -3,7 +3,7 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &appname actions-runner-controller-operator
+  name: &appname actions-runner-controller
   namespace: &namespace gitops-system
 spec:
   targetNamespace: *namespace
@@ -12,7 +12,7 @@ spec:
       app.kubernetes.io/name: *appname
   interval: 30m
   timeout: 5m
-  path: "./kubernetes/apps/gitops-system/actions-runner-controller/operator"
+  path: "./kubernetes/apps/gitops-system/actions-runner-controller/app"
   prune: true
   sourceRef:
     kind: GitRepository
@@ -43,3 +43,8 @@ spec:
     name: gitops-system
     namespace: gitops-system
   wait: false
+  dependsOn:
+    - name: actions-runner-controller
+      namespace: gitops-system
+    - name: rook-ceph-cluster
+      namespace: storage-system

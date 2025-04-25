@@ -6,17 +6,19 @@ metadata:
   name: kube-prometheus-stack
 spec:
   interval: 30m
-  timeout: 15m
   chartRef:
     kind: OCIRepository
     name: kube-prometheus-stack
   install:
     crds: Skip
+    remediation:
+      retries: -1
   upgrade:
+    cleanupOnFail: true
     crds: Skip
-  dependsOn:
-    - name: rook-ceph-cluster
-      namespace: storage-system
+    remediation:
+      retries: 3
+
   values:
     crds:
       enabled: false

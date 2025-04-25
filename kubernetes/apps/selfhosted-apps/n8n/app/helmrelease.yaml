@@ -10,23 +10,35 @@ spec:
     kind: OCIRepository
     name: app-template
     namespace: gitops-system
-  dependsOn:
-    - name: rook-ceph-cluster
-      namespace: storage-system
+  install:
+    crds: CreateReplace
+    remediation:
+      retries: -1
+  upgrade:
+    cleanupOnFail: true
+    crds: CreateReplace
+    remediation:
+      retries: 3
+
   values:
+    defaultPodOptions:
+      hostUsers: false
+    securityContext:
+      runAsUser: 2000
+      runAsGroup: 2000
+      fsGroup: 2000
+      fsGroupChangePolicy: "OnRootMismatch"
+
     controllers:
       n8n:
         annotations:
           reloader.stakater.com/auto: "true"
 
-        pod:
-          hostUsers: false
-
         containers:
           app:
             image:
               repository: ghcr.io/n8n-io/n8n
-              tag: 1.89.0
+              tag: 1.90.0
             env:
               DB_SQLITE_VACUUM_ON_STARTUP: true
               EXECUTIONS_DATA_PRUNE: true

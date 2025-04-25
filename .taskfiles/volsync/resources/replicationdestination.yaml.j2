@@ -15,5 +15,9 @@ spec:
     copyMethod: Direct
     destinationPVC: {{ ENV.CLAIM }}
     previous: {{ ENV.PREVIOUS }}
+    moverSecurityContext:
+      runAsUser: {{ ENV.PUID }}
+      runAsGroup: {{ ENV.PGID }}
+      fsGroup: {{ ENV.PGID }}
     repository: {{ ENV.APP }}-volsync-s3
     storageClassName: {{ ENV.STORAGE_CLASS_NAME }}

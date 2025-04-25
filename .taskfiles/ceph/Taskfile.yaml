@@ -9,6 +9,7 @@ tasks:
       NS: "{{.NS | default .storage-system }}" # ceph namespace
     preconditions:
       - which kubectl
+      - test -f "${KUBECONFIG}"
       - kubectl rook-ceph rook version --namespace {{.NS}}
       - kubectl rook-ceph ceph versions --namespace {{.NS}}
     cmds:
@@ -20,6 +21,7 @@ tasks:
       NS: "{{.NS | default .storage-system }}" # ceph namespace
     preconditions:
       - which kubectl
+      - test -f "${KUBECONFIG}"
       - kubectl rook-ceph rook version --namespace {{.NS}}
       - kubectl rook-ceph ceph versions --namespace {{.NS}}
     cmds:

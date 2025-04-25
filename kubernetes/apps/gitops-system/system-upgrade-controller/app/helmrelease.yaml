@@ -3,25 +3,37 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: system-upgrade-controller
+  name: &name system-upgrade-controller
 spec:
   interval: 30m
   chartRef:
     kind: OCIRepository
     name: app-template
     namespace: gitops-system
+  install:
+    crds: CreateReplace
+    remediation:
+      retries: -1
+  upgrade:
+    cleanupOnFail: true
+    crds: CreateReplace
+    remediation:
+      retries: 3
 
   values:
+    defaultPodOptions:
+      hostUsers: false
+    securityContext:
+      runAsUser: 2000
+      runAsGroup: 2000
+      fsGroup: 2000
+      fsGroupChangePolicy: OnRootMismatch
+
     controllers:
       system-upgrade-controller:
         strategy: RollingUpdate
-        replicas: 2
-
+        replicas: 3
         pod:
-          securityContext:
-            runAsNonRoot: true
-            runAsUser: 65534
-            runAsGroup: 65534
           tolerations:
             - key: CriticalAddonsOnly
               operator: Exists
@@ -31,14 +43,14 @@ spec:
             - key: node-role.kubernetes.io/master
               operator: Exists
               effect: NoSchedule
-
         containers:
           app:
             image:
               repository: docker.io/rancher/system-upgrade-controller
               tag: v0.15.2@sha256:3e899833afcea9a8788d384ce976df9a05be84636fe5c01ec2307b5bd8fe9810
             env:
-              SYSTEM_UPGRADE_CONTROLLER_NAME: system-upgrade-controller
+              SYSTEM_UPGRADE_CONTROLLER_LEADER_ELECT: true
+              SYSTEM_UPGRADE_CONTROLLER_NAME: *name
               SYSTEM_UPGRADE_CONTROLLER_NAMESPACE:
                 valueFrom:
                   fieldRef:
@@ -47,7 +59,6 @@ spec:
                 valueFrom:
                   fieldRef:
                     fieldPath: spec.nodeName
-              SYSTEM_UPGRADE_CONTROLLER_LEADER_ELECT: true
               SYSTEM_UPGRADE_JOB_BACKOFF_LIMIT: "99"
               SYSTEM_UPGRADE_JOB_PRIVILEGED: false
             securityContext:
@@ -61,4 +72,4 @@ spec:
 
     serviceAccount:
       create: true
-      name: system-upgrade-controller
+      name: *name

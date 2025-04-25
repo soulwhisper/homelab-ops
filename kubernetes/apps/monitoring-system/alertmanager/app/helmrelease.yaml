@@ -10,10 +10,20 @@ spec:
     kind: OCIRepository
     name: app-template
     namespace: gitops-system
-  dependsOn:
-    - name: rook-ceph-cluster
-      namespace: storage-system
+  install:
+    crds: CreateReplace
+    remediation:
+      retries: -1
+  upgrade:
+    cleanupOnFail: true
+    crds: CreateReplace
+    remediation:
+      retries: 3
+
   values:
+    defaultPodOptions:
+      hostUsers: false
+
     controllers:
       alertmanager:
         type: statefulset
@@ -28,9 +38,6 @@ spec:
               storageClass: ceph-block
               globalMounts:
                 - path: /alertmanager
-
-        pod:
-          hostUsers: false
 
         containers:
           alertmanager:

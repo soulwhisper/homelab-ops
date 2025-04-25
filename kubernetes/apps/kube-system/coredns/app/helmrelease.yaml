@@ -5,10 +5,20 @@ kind: HelmRelease
 metadata:
   name: coredns
 spec:
+  interval: 30m
   chartRef:
     kind: OCIRepository
     name: coredns
-  interval: 30m
+  install:
+    crds: CreateReplace
+    remediation:
+      retries: -1
+  upgrade:
+    cleanupOnFail: true
+    crds: CreateReplace
+    remediation:
+      retries: 3
+
   valuesFrom:
     - kind: ConfigMap
       name: coredns-values

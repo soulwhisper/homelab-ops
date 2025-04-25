@@ -5,11 +5,20 @@ kind: HelmRelease
 metadata:
   name: grafana
 spec:
+  interval: 30m
   chartRef:
     kind: OCIRepository
     name: grafana
-  interval: 30m
-  timeout: 20m
+  install:
+    crds: CreateReplace
+    remediation:
+      retries: -1
+  upgrade:
+    cleanupOnFail: true
+    crds: CreateReplace
+    remediation:
+      retries: 3
+
   values:
     admin:
       existingSecret: grafana-admin-secret
@@ -298,6 +307,10 @@ spec:
       enabled: true
 
     sidecar:
+      image:
+         registry: ghcr.io
+         repository: home-operations/k8s-sidecar
+         tag: 1.30.3@sha256:39cca7abcad8f1621b9462d95f7d0e60301b92fcb0ff4de0ad4561859011cddf
       dashboards:
         enabled: true
         searchNamespace: ALL

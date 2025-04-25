@@ -5,19 +5,36 @@ kind: HelmRelease
 metadata:
   name: ytdl-sub
 spec:
+  interval: 30m
   chartRef:
     kind: OCIRepository
     name: app-template
     namespace: gitops-system
-  interval: 30m
+  install:
+    crds: CreateReplace
+    remediation:
+      retries: -1
+  upgrade:
+    cleanupOnFail: true
+    crds: CreateReplace
+    remediation:
+      retries: 3
+
   values:
+    defaultPodOptions:
+      hostUsers: false
+    securityContext:
+      runAsUser: 2000
+      runAsGroup: 2000
+      fsGroup: 2000
+      fsGroupChangePolicy: OnRootMismatch
+
     controllers:
       ytdl-sub:
         type: cronjob
 
         pod:
           restartPolicy: Never
-          hostUsers: false
 
         cronjob:
           schedule: "0 */6 * * *"

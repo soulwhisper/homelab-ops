@@ -1,6 +1,6 @@
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/budimanjojo/talhelper/master/pkg/config/schemas/talconfig.json
-clusterName: &clusterName homelab
+clusterName: &clusterName main # same in cilium
 endpoint: "https://k8s.homelab.internal:6443"
 
 # Current stage = ms-01;
@@ -15,7 +15,7 @@ endpoint: "https://k8s.homelab.internal:6443"
 # renovate: depName=ghcr.io/siderolabs/installer datasource=docker
 talosVersion: v1.9.5
 # renovate: depName=ghcr.io/siderolabs/kubelet datasource=docker
-kubernetesVersion: v1.32.3
+kubernetesVersion: v1.33.0
 
 additionalApiServerCertSans: &sans
   - k8s.homelab.internal
@@ -89,7 +89,7 @@ controlPlane:
     useUKI: true
   nodeLabels:
     topology.kubernetes.io/region: *clusterName
-    topology.kubernetes.io/zone: central
+    topology.kubernetes.io/zone: homelab
   schematic: &talos-schema
     customization:
       extraKernelArgs:
@@ -193,6 +193,7 @@ patches:
           enabled: true
           allowedRoles:
             - os:admin
+            - os:etcd:backup
           allowedKubernetesNamespaces:
             - gitops-system
 
@@ -317,14 +318,22 @@ patches:
   - |-
     machine:
       sysctls:
-        fs.inotify.max_queued_events: "65535"
-        fs.inotify.max_user_instances: "8192"
-        fs.inotify.max_user_watches: "524288"
-        fs.file-max: "1048576"
-        fs.nr_open: "1048576"
-        net.core.rmem_max: "16777216"
-        net.core.wmem_max: "16777216"
-        net.netfilter.nf_conntrack_max: "2000000" # ram_32g = 1048576
+        fs.file-max: 1048576
+        fs.nr_open: 1048576
+        fs.inotify.max_queued_events: 65535
+        fs.inotify.max_user_watches: 1048576      # Watchdog
+        fs.inotify.max_user_instances: 8192       # Watchdog
+        net.core.default_qdisc: fq                # 10Gb/s
+        net.core.rmem_max: 67108864               # 10Gb/s | Cloudflared / QUIC
+        net.core.wmem_max: 67108864               # 10Gb/s | Cloudflared / QUIC
+        net.ipv4.tcp_congestion_control: bbr      # 10Gb/s
+        net.ipv4.tcp_fastopen: 3                  # Send and accept data in the opening SYN packet
+        net.ipv4.tcp_mtu_probing: 1               # 10Gb/s | Jumbo frames
+        net.ipv4.tcp_rmem: 4096 87380 33554432    # 10Gb/s
+        net.ipv4.tcp_wmem: 4096 65536 33554432    # 10Gb/s
+        net.ipv4.tcp_window_scaling: 1            # 10Gb/s
+        vm.nr_hugepages: 1024                     # PostgreSQL
+        net.netfilter.nf_conntrack_max: 2000000   # ram_32g = 1048576
 
   # Udev configuration, thunderbolt & i915
   - |-

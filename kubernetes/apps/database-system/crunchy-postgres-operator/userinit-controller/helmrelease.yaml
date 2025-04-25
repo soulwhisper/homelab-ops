@@ -13,8 +13,15 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: crunchy-userinit
-  dependsOn:
-    - name: crunchy-postgres-operator-cluster
-      namespace: database-system
+  install:
+    crds: CreateReplace
+    remediation:
+      retries: -1
+  upgrade:
+    cleanupOnFail: true
+    crds: CreateReplace
+    remediation:
+      retries: 3
+
   values:
     fullnameOverride: crunchy-userinit-controller

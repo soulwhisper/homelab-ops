@@ -13,6 +13,15 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: external-dns
+  install:
+    crds: CreateReplace
+    remediation:
+      retries: -1
+  upgrade:
+    cleanupOnFail: true
+    crds: CreateReplace
+    remediation:
+      retries: 3
 
   values:
     fullnameOverride: *name
@@ -34,10 +43,10 @@ spec:
       - name: EXTERNAL_DNS_RFC2136_TSIG_SECRET
         valueFrom:
           secretKeyRef:
-            name: externaldns-rfc2136-secrets
+            name: externaldns-rfc2136-secret
             key: tsig-secret
     podAnnotations:
-      secret.reloader.stakater.com/reload: externaldns-rfc2136-secrets
+      secret.reloader.stakater.com/reload: externaldns-rfc2136-secret
     policy: sync
     provider: rfc2136
     resources:

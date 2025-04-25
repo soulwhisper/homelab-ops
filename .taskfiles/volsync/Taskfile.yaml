@@ -11,6 +11,7 @@ tasks:
     desc: Unlock all restic source repos
     preconditions:
       - which kubectl
+      - test -f "${KUBECONFIG}"
     vars:
       SOURCES:
         sh: kubectl get replicationsources --all-namespaces --no-headers --output=jsonpath='{range .items[*]}{.metadata.namespace},{.metadata.name}{"\n"}{end}'
@@ -24,6 +25,7 @@ tasks:
     desc: List snapshots for an app [APP=required]
     preconditions:
       - which kubectl minijinja-cli
+      - test -f "${KUBECONFIG}"
       - test -f "{{.VOLSYNC_TASK_RESOURCES_DIR}}/list-snapshots.yaml.j2"
       - kubectl --namespace {{.VOLSYNC_NS}} get replicationsources {{.APP}}
     requires:
@@ -45,6 +47,7 @@ tasks:
     desc: Snapshot an app [NS=default] [APP=required]
     preconditions:
       - which kubectl
+      - test -f "${KUBECONFIG}"
       - kubectl --namespace {{.VOLSYNC_NS}} get replicationsources {{.APP}}
     requires:
       vars:
@@ -61,6 +64,7 @@ tasks:
     desc: Snapshot all apps across all namespaces
     preconditions:
       - which kubectl
+      - test -f "${KUBECONFIG}"
     vars:
       ALL_APPS:
         sh: |
@@ -78,6 +82,7 @@ tasks:
     desc: Restore an app [APP=required] [PREVIOUS=required]
     preconditions:
       - which flux kubectl minijinja-cli
+      - test -f "${KUBECONFIG}"
       - test -f "{{.VOLSYNC_TASK_RESOURCES_DIR}}/replicationdestination.yaml.j2"
     requires:
       vars:
@@ -96,6 +101,10 @@ tasks:
         sh: kubectl --namespace {{.VOLSYNC_NS}} get replicationsources/{{.APP}} --output=jsonpath="{.spec.restic.accessModes}"
       STORAGE_CLASS_NAME:
         sh: kubectl --namespace {{.VOLSYNC_NS}} get replicationsources/{{.APP}} --output=jsonpath="{.spec.restic.storageClassName}"
+      PUID:
+        sh: kubectl --namespace {{.VOLSYNC_NS}} get replicationsources/{{.APP}} --output=jsonpath="{.spec.restic.moverSecurityContext.runAsUser}"
+      PGID:
+        sh: kubectl --namespace {{.VOLSYNC_NS}} get replicationsources/{{.APP}} --output=jsonpath="{.spec.restic.moverSecurityContext.runAsGroup}"
     cmds:
       # Suspend
       - flux --namespace gitops-system suspend kustomization {{.APP}}

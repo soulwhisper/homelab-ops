@@ -5,12 +5,12 @@ kind: OCIRepository
 metadata:
   name: coredns
 spec:
-  interval: 10m
+  interval: 5m
   layerSelector:
     mediaType: application/vnd.cncf.helm.chart.content.v1.tar+gzip
     operation: copy
   url: oci://ghcr.io/coredns/charts/coredns
   ref:
-    tag: 1.39.2
+    tag: 1.40.0
   verify:
     provider: cosign

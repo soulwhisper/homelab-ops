@@ -51,7 +51,7 @@ jobs:
           ref: "${{ matrix.branches == 'default' && github.event.repository.default_branch || '' }}"
 
       - name: Gather Images
-        uses: docker://ghcr.io/allenporter/flux-local:v7.3.0
+        uses: docker://ghcr.io/allenporter/flux-local:v7.4.0
         with:
           args: >-
             get cluster
@@ -96,7 +96,7 @@ jobs:
     if: ${{ needs.compare-images.outputs.images != '[]' }}
     name: Pre-pull images
     runs-on:
-      - arc-homelab-ops
+      - homelab-ops-runner
     needs:
       - compare-images
     strategy:

@@ -21,6 +21,9 @@ spec:
   wait: false
   components:
     - ../../../../components/gatus
+  dependsOn:
+    - name: rook-ceph-cluster
+      namespace: storage-system
   postBuild:
     substitute:
       APP: prometheus

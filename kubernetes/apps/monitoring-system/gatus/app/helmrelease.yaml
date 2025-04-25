@@ -11,17 +11,24 @@ spec:
     name: app-template
     namespace: gitops-system
   install:
+    crds: CreateReplace
     remediation:
-      retries: 3
+      retries: -1
   upgrade:
     cleanupOnFail: true
+    crds: CreateReplace
     remediation:
-      strategy: rollback
       retries: 3
-  dependsOn:
-    - name: rook-ceph-cluster
-      namespace: storage-system
+
   values:
+    defaultPodOptions:
+      hostUsers: false
+    securityContext:
+      runAsUser: 2000
+      runAsGroup: 2000
+      fsGroup: 2000
+      fsGroupChangePolicy: OnRootMismatch
+
     controllers:
       gatus:
         annotations:
@@ -29,8 +36,8 @@ spec:
         initContainers:
           init-config:
             image:
-              repository: ghcr.io/kiwigrid/k8s-sidecar
-              tag: 1.30.3@sha256:49dcce269568b1645b0050f296da787c99119647965229919a136614123f0627
+              repository: ghcr.io/home-operations/k8s-sidecar
+              tag: 1.30.3@sha256:39cca7abcad8f1621b9462d95f7d0e60301b92fcb0ff4de0ad4561859011cddf
             env:
               FOLDER: /config
               LABEL: gatus.io/enabled
@@ -50,7 +57,7 @@ spec:
               repository: ghcr.io/twin/gatus
               tag: v5.17.0@sha256:a8c53f9e9f1a3876cd00e44a42c80fc984e118d5ba0bdbaf08980cb627d61512
             env:
-              TZ: America/New_York
+              TZ: Asia/Shanghai
               GATUS_CONFIG_PATH: /config
               GATUS_DELAY_START_SECONDS: 5
               WEB_PORT: &port 80
@@ -82,8 +89,6 @@ spec:
                 cpu: 100m
               limits:
                 memory: 256Mi
-    defaultPodOptions:
-      hostUsers: false
     service:
       app:
         controller: gatus

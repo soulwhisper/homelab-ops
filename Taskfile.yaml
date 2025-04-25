@@ -9,6 +9,7 @@ shopt:
 
 includes:
   ceph: .taskfiles/ceph/Taskfile.yaml
+  fix: .taskfiles/fix/Taskfile.yaml
   flux: .taskfiles/flux/Taskfile.yaml
   k8s: .taskfiles/k8s/Taskfile.yaml
   k8s-bootstrap: .taskfiles/k8s-bootstrap/Taskfile.yaml
@@ -32,16 +33,6 @@ tasks:
   default:
     silent: true
     cmd: task --list
-
-  env:
-    desc: Restore configuration files from backup location
-    preconditions:
-      - fish -i -c 'test -f ~/.kube/config'
-      - fish -i -c 'test -f ~/.talos/config'
-    cmds:
-      - fish -i -c 'cp ~/.kube/config $KUBECONFIG'
-      - fish -i -c 'cp ~/.talos/config $TALOSCONFIG'
-      - direnv allow
 
   reconcile:
     desc: Force Flux to pull in changes from your Git repository

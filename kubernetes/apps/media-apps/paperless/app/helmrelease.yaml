@@ -10,18 +10,29 @@ spec:
     kind: OCIRepository
     name: app-template
     namespace: gitops-system
-  dependsOn:
-    - name: rook-ceph-cluster
-      namespace: storage-system
+  install:
+    crds: CreateReplace
+    remediation:
+      retries: -1
+  upgrade:
+    cleanupOnFail: true
+    crds: CreateReplace
+    remediation:
+      retries: 3
+
   values:
+    defaultPodOptions:
+      hostUsers: false
+    securityContext:
+      runAsUser: 2000
+      runAsGroup: 2000
+      fsGroup: 2000
+      fsGroupChangePolicy: OnRootMismatch
+
     controllers:
       paperless:
         annotations:
           reloader.stakater.com/auto: "true"
-
-        pod:
-          hostUsers: false
-
         containers:
           app:
             image:
@@ -89,13 +100,11 @@ spec:
                 type: RuntimeDefault
 
       redis:
-        pod:
-          hostUsers: false
         containers:
           redis:
             image:
               repository: docker.io/valkey/valkey
-              tag: 8.1.0
+              tag: 8.1.1
             resources:
               requests:
                 cpu: 5m

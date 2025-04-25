@@ -9,6 +9,15 @@ spec:
   chartRef:
     kind: OCIRepository
     name: kube-state-metrics
+  install:
+    crds: CreateReplace
+    remediation:
+      retries: -1
+  upgrade:
+    cleanupOnFail: true
+    crds: CreateReplace
+    remediation:
+      retries: 3
 
   values:
     fullnameOverride: kube-state-metrics

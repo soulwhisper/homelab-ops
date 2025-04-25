@@ -10,7 +10,25 @@ spec:
     kind: OCIRepository
     name: app-template
     namespace: gitops-system
+  install:
+    crds: CreateReplace
+    remediation:
+      retries: -1
+  upgrade:
+    cleanupOnFail: true
+    crds: CreateReplace
+    remediation:
+      retries: 3
+
   values:
+    defaultPodOptions:
+      hostUsers: false
+    securityContext:
+      runAsUser: 2000
+      runAsGroup: 2000
+      fsGroup: 2000
+      fsGroupChangePolicy: OnRootMismatch
+
     configMaps:
       config:
         enabled: true
@@ -35,14 +53,11 @@ spec:
 
     controllers:
       silence-operator:
-        pod:
-          hostUsers: false
-
         containers:
           silence-operator:
             image:
               repository: quay.io/giantswarm/silence-operator
-              tag: 0.14.0
+              tag: 0.14.1
             args:
               - daemon
               - --config.dirs=/var/run/silence-operator/configmap/

@@ -1,0 +1,67 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrelease-helm-v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &name homelab-ops-runner
+spec:
+  interval: 30m
+  chartRef:
+    kind: OCIRepository
+    name: actions-runner-controller
+  install:
+    crds: CreateReplace
+    remediation:
+      retries: -1
+  upgrade:
+    cleanupOnFail: true
+    crds: CreateReplace
+    remediation:
+      retries: 3
+
+  driftDetection:
+    mode: enabled
+
+  values:
+    githubConfigUrl: https://github.com/soulwhisper/homelab-ops
+    githubConfigSecret: homelab-ops-runner-secret
+
+    minRunners: 0
+    maxRunners: 3
+
+    containerMode:
+      type: kubernetes
+      kubernetesModeWorkVolumeClaim:
+        accessModes: ["ReadWriteOnce"]
+        storageClassName: ceph-block
+        resources:
+          requests:
+            storage: 10Gi
+
+    controllerServiceAccount:
+      name: actions-runner-controller
+      namespace: gitops-system
+
+    template:
+      spec:
+        containers:
+          - name: runner
+            image: ghcr.io/home-operations/actions-runner:2.323.0@sha256:6d878ca00ecd301a5e5dab006d3ea96083e92f64e364a578f7b42bbc47ba738e
+            command:
+              - /homelab/runner/run.sh
+            env:
+              - name: ACTIONS_RUNNER_REQUIRE_JOB_CONTAINER
+                value: "false"
+              - name: NODE
+                valueFrom:
+                  fieldRef:
+                    fieldPath: status.hostIP
+            volumeMounts:
+              - mountPath: /var/run/secrets/talos.dev
+                name: talos
+                readOnly: true
+        serviceAccountName: *name
+        volumes:
+          - name: talos
+            secret:
+              secretName: *name
