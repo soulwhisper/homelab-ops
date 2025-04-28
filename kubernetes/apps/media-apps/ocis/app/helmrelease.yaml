@@ -114,7 +114,7 @@ spec:
       app:
         existingClaim: ocis-app
         advancedMounts:
-          paperless:
+          ocis:
             app:
               - path: /etc/ocis
       data:
