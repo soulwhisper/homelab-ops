@@ -12,5 +12,3 @@ spec:
   ref:
     tag: 6.16.6
   url: oci://ghcr.io/grafana/helm-charts/promtail
-  verify:
-    provider: cosign

@@ -12,5 +12,3 @@ spec:
   ref:
     tag: 70.10.0
   url: oci://ghcr.io/prometheus-community/charts/kube-prometheus-stack
-  verify:
-    provider: cosign

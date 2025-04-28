@@ -12,5 +12,3 @@ spec:
   ref:
     tag: 5.8.1
   url: oci://registry.developers.crunchydata.com/crunchydata/pgo
-  verify:
-    provider: cosign

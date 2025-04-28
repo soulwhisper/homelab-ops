@@ -12,5 +12,3 @@ spec:
   ref:
     tag: 0.15.0
   url: oci://ghcr.io/prometheus-community/charts/prometheus-smartctl-exporter
-  verify:
-    provider: cosign

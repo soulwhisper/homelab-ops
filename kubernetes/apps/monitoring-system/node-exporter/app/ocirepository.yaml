@@ -12,5 +12,3 @@ spec:
   ref:
     tag: 4.45.3
   url: oci://ghcr.io/prometheus-community/charts/prometheus-node-exporter
-  verify:
-    provider: cosign
