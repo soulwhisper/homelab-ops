@@ -24,22 +24,24 @@ spec:
     domainFilters:
       - noirprime.com
     extraArgs:
-      webhook-provider-url:
-        - http://localhost:8888
+      - --webhook-provider-url=http://localhost:8888
+      - --gateway-name=internal
     podAnnotations:
       secret.reloader.stakater.com/reload: externaldns-adguard-secret
+    policy: upsert-only
     provider:
       name: webhook
-    sidecars:
-      - name: adguard-webhook
+      webhook:
         image:
           repository: ghcr.io/muhlba91/external-dns-provider-adguard
           tag: v8.0.1@sha256:267761a55dde38b7cba7b3bff59d0437402538a29659b03144dc9c132c887444
         ports:
           - containerPort: 8888
             name: http
+            protocol: TCP
           - containerPort: 8080
             name: healthz
+            protocol: TCP
         livenessProbe:
           httpGet:
             path: /healthz
@@ -53,10 +55,12 @@ spec:
           initialDelaySeconds: 10
           timeoutSeconds: 5
         env:
-          - name: DOMAIN_FILTER
-            value: "noirprime.com"
+          - name: DRY_RUN
+            value: "false"
           - name: LOG_LEVEL
             value: debug
+          - name: SERVER_HOST
+            value: 0.0.0.0
           - name: ADGUARD_URL
             value: http://172.19.82.10
           - name: ADGUARD_USER
@@ -66,8 +70,6 @@ spec:
               secretKeyRef:
                 name: externaldns-adguard-secret
                 key: adguard-password
-          - name: DRY_RUN
-            value: "false"
     resources:
       requests:
         cpu: 16m
@@ -79,5 +81,4 @@ spec:
     sources:
       - gateway-httproute
       - service
-    triggerLoopOnEvent: true
     txtPrefix: "k8s-int."
