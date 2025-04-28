@@ -27,15 +27,15 @@ tasks:
   "retry-*":
     desc: Retry Certain Flux Helmrelease or Kustomization [NAME=required] [NS=required]
     vars:
-      OPERATION: "{{index .MATCH 0}}"
+      RESOURCE: "{{index .MATCH 0}}"
     requires:
       vars:
         - NAME
         - NS
     preconditions:
-      - '[[ "{{.OPERATION}}" == "hr" || "{{.OPERATION}}" == "ks" ]]'
+      - '[[ "{{.RESOURCE}}" == "hr" || "{{.RESOURCE}}" == "ks" ]]'
       - which flux
       - test -f "${KUBECONFIG}"
     cmds:
-      - flux suspend {{.OPERATION}} {{.NAME}} -n {{.NS}}
-      - flux resume {{.OPERATION}} {{.NAME}} -n {{.NS}}
+      - flux suspend {{.RESOURCE}} {{.NAME}} -n {{.NS}}
+      - flux resume {{.RESOURCE}} {{.NAME}} -n {{.NS}}
