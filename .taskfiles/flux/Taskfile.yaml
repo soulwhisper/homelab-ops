@@ -26,17 +26,19 @@ tasks:
         | kubectl {{.OPERATION}} {{- .OPERATION_ARGS}} --filename -
         {{ end }}'
 
-  "*-ks-all":
-    desc: Suspend or resume all Flux Kustomizations
+  "*-*-all":
+    desc: Suspend or resume Flux Resources
     vars:
-      STATE: "{{index .MATCH 0}}"
+      OPERATION: "{{index .MATCH 0}}"
+      RESOURCE: "{{index .MATCH 1}}"
       NAMESPACES:
         sh: kubectl get ns --no-headers -o custom-columns='NAME:.metadata.name'
     preconditions:
-      - '[[ "{{.STATE}}" == "suspend" || "{{.STATE}}" == "resume" ]]'
+      - '[[ "{{.OPERATION}}" == "resume" || "{{.OPERATION}}" == "suspend" ]]'
+      - '[[ "{{.RESOURCE}}" == "hr" || "{{.RESOURCE}}" == "ks" ]]'
       - which flux kubectl
       - test -f "${KUBECONFIG}"
     cmds:
       - for:
           var: NAMESPACES
-        cmd: flux {{.STATE}} ks -n "{{.ITEM}}" --all || true
+        cmd: flux {{.OPERATION}} {{.RESOURCE}} -n "{{.ITEM}}" --all || true
