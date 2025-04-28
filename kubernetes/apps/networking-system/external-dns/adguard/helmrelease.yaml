@@ -24,7 +24,8 @@ spec:
     domainFilters:
       - noirprime.com
     extraArgs:
-      webhook-provider-url: http://localhost:8888
+      webhook-provider-url:
+        - http://localhost:8888
     podAnnotations:
       secret.reloader.stakater.com/reload: externaldns-adguard-secret
     provider:
