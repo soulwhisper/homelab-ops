@@ -6,13 +6,9 @@ metadata:
   name: &name externaldns-adguard
 spec:
   interval: 30m
-  chart:
-    spec:
-      chart: external-dns
-      version: 1.15.2
-      sourceRef:
-        kind: HelmRepository
-        name: external-dns
+  chartRef:
+    kind: OCIRepository
+    name: external-dns
   install:
     crds: CreateReplace
     remediation:
@@ -28,9 +24,11 @@ spec:
     domainFilters:
       - noirprime.com
     extraArgs:
-      - webhook-provider-url: http://localhost:8888
+      - --webhook-provider-url=http://localhost:8888
+      - --gateway-name=internal
     podAnnotations:
       secret.reloader.stakater.com/reload: externaldns-adguard-secret
+    policy: upsert-only
     provider:
       name: webhook
       webhook:
@@ -40,25 +38,24 @@ spec:
         ports:
           - containerPort: 8888
             name: http
+            protocol: TCP
           - containerPort: 8080
             name: healthz
-        livenessProbe:
+        livenessProbe: &probes
           httpGet:
             path: /healthz
             port: healthz
-          initialDelaySeconds: 10
-          timeoutSeconds: 5
-        readinessProbe:
-          httpGet:
-            path: /healthz
-            port: healthz
-          initialDelaySeconds: 10
-          timeoutSeconds: 5
+          initialDelaySeconds: 30
+          periodSeconds: 20
+          timeoutSeconds: 10
+        readinessProbe: *probes
         env:
-          - name: DOMAIN_FILTER
-            value: "noirprime.com"
+          - name: DRY_RUN
+            value: "false"
           - name: LOG_LEVEL
             value: debug
+          - name: SERVER_HOST
+            value: 0.0.0.0
           - name: ADGUARD_URL
             value: http://172.19.82.10
           - name: ADGUARD_USER
@@ -68,8 +65,6 @@ spec:
               secretKeyRef:
                 name: externaldns-adguard-secret
                 key: adguard-password
-          - name: DRY_RUN
-            value: "false"
     resources:
       requests:
         cpu: 16m
@@ -81,5 +76,4 @@ spec:
     sources:
       - gateway-httproute
       - service
-    triggerLoopOnEvent: true
     txtPrefix: "k8s-int."

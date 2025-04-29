@@ -24,9 +24,10 @@ spec:
     defaultPodOptions:
       hostUsers: false
     securityContext:
-      runAsUser: 2000
-      runAsGroup: 2000
-      fsGroup: 2000
+      runAsNonRoot: true
+      runAsUser: 1000
+      runAsGroup: 1000
+      fsGroup: 1000
       fsGroupChangePolicy: OnRootMismatch
 
     controllers:
@@ -65,10 +66,9 @@ spec:
                   httpGet:
                     path: /readyz
                     port: *hport
-                  initialDelaySeconds: 0
-                  periodSeconds: 10
-                  timeoutSeconds: 1
-                  failureThreshold: 3
+                  initialDelaySeconds: 30
+                  periodSeconds: 20
+                  timeoutSeconds: 10
               readiness: *probes
             securityContext:
               allowPrivilegeEscalation: false

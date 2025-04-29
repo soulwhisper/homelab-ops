@@ -24,9 +24,10 @@ spec:
     defaultPodOptions:
       hostUsers: false
     securityContext:
-      runAsUser: 2000
-      runAsGroup: 2000
-      fsGroup: 2000
+      runAsNonRoot: true
+      runAsUser: 1000
+      runAsGroup: 1000
+      fsGroup: 1000
       fsGroupChangePolicy: "OnRootMismatch"
 
     controllers:
@@ -37,7 +38,7 @@ spec:
           app:
             image:
               repository: ghcr.io/karakeep-app/karakeep
-              tag: 0.23.2
+              tag: 0.24.1
             env:
               BROWSER_WEB_URL: http://karakeep-chrome.selfhosted-apps.svc.cluster.local:9222
               CRAWLER_DOWNLOAD_BANNER_IMAGE: true

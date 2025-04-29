@@ -6,7 +6,6 @@ namespace: media-apps
 resources:
   - ./ceph-fs.yaml
   - ./ocis/ks.yaml
-  - ./paperless/ks.yaml
   - ./ytdl-sub/ks.yaml
 components:
   - ../../components/namespace
