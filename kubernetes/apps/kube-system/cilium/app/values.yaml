@@ -34,12 +34,15 @@ endpointRoutes:
 envoy:
   enabled: true
   rollOutPods: true
+  prometheus:
+     serviceMonitor:
+       enabled: true
 gatewayAPI:
   enabled: true
   enableAlpn: true
   xffNumTrustedHops: 1
 hubble:
-  enabled: true
+  enabled: false
   eventQueueSize: 32768
   metrics:
     enabled:
