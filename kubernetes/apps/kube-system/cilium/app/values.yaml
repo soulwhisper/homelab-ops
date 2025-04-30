@@ -43,29 +43,29 @@ gatewayAPI:
   xffNumTrustedHops: 1
 hubble:
   enabled: false
-  eventQueueSize: 32768
-  metrics:
-    enabled:
-      - dns:query
-      - drop
-      - tcp
-      - flow
-      - port-distribution
-      - icmp
-      - http
-    serviceMonitor:
-      enabled: true
-    dashboards:
-      enabled: true
-  relay:
-    enabled: true
-    rollOutPods: true
-    prometheus:
-      serviceMonitor:
-        enabled: true
-  ui:
-    enabled: true
-    rollOutPods: true
+#   eventQueueSize: 32768
+#   metrics:
+#     enabled:
+#       - dns:query
+#       - drop
+#       - tcp
+#       - flow
+#       - port-distribution
+#       - icmp
+#       - http
+#     serviceMonitor:
+#       enabled: true
+#     dashboards:
+#       enabled: true
+#   relay:
+#     enabled: true
+#     rollOutPods: true
+#     prometheus:
+#       serviceMonitor:
+#         enabled: true
+#   ui:
+#     enabled: true
+#     rollOutPods: true
 ipam:
   mode: "kubernetes"
 ipv4NativeRoutingCIDR: 10.100.0.0/17
