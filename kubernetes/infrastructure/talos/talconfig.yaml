@@ -4,7 +4,8 @@ clusterName: &clusterName main # same in cilium
 endpoint: "https://k8s.homelab.internal:6443"
 
 # Current stage = ms-01;
-# schematic_ID = 622253f1ab573d6baa9d8d70afb6588ea9e7d8884328e5a8fdfddaf83becebcb
+# baremetal 1.10 schema = 4a82835fd6519841f504efe09fb3dab69050c99b2a3c1be18b5336bac62ef30c
+# pve-vm 1.10 schema = 622253f1ab573d6baa9d8d70afb6588ea9e7d8884328e5a8fdfddaf83becebcb
 # enabled features:
 #   - predictable ifnames
 #   - disk-encryption
@@ -99,7 +100,7 @@ controlPlane:
         - intel_iommu=on # pci passthrough, intel
         - init_on_alloc=0 # memory optimize
         - init_on_free=0 # memory optimize
-      #  - console=ttyS0 # disable if barematel
+        - console=ttyS0 # disable if barematel
       systemExtensions:
         officialExtensions:
           - siderolabs/intel-ucode
@@ -331,8 +332,6 @@ patches:
         net.ipv4.tcp_mtu_probing: 1               # 10Gb/s | Jumbo frames
         net.ipv4.tcp_rmem: 4096 87380 33554432    # 10Gb/s
         net.ipv4.tcp_wmem: 4096 65536 33554432    # 10Gb/s
-        net.ipv4.tcp_window_scaling: 1            # 10Gb/s
-        vm.nr_hugepages: 1024                     # PostgreSQL
         net.netfilter.nf_conntrack_max: 2000000   # ram_32g = 1048576
 
   # Udev configuration, thunderbolt & i915
