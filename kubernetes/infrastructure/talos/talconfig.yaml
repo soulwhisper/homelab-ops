@@ -4,7 +4,8 @@ clusterName: &clusterName main # same in cilium
 endpoint: "https://k8s.homelab.internal:6443"
 
 # Current stage = ms-01;
-# schematic_ID = 622253f1ab573d6baa9d8d70afb6588ea9e7d8884328e5a8fdfddaf83becebcb
+# baremetal 1.10 schema = 4a82835fd6519841f504efe09fb3dab69050c99b2a3c1be18b5336bac62ef30c
+# pve-vm 1.10 schema = 622253f1ab573d6baa9d8d70afb6588ea9e7d8884328e5a8fdfddaf83becebcb
 # enabled features:
 #   - predictable ifnames
 #   - disk-encryption
@@ -13,7 +14,7 @@ endpoint: "https://k8s.homelab.internal:6443"
 # disabled features:
 
 # renovate: depName=ghcr.io/siderolabs/installer datasource=docker
-talosVersion: v1.9.5
+talosVersion: v1.10.0
 # renovate: depName=ghcr.io/siderolabs/kubelet datasource=docker
 kubernetesVersion: v1.33.0
 
@@ -93,13 +94,13 @@ controlPlane:
   schematic: &talos-schema
     customization:
       extraKernelArgs:
-        #  - cpufreq.default_governor=performance # cost more power
-        #  - intel_idle.max_cstate=0 # cost more power
-        - iommu.passthrough=1 # pci passthrough
-        - intel_iommu=on # pci passthrough, intel
-        - init_on_alloc=0 # memory optimize
-        - init_on_free=0 # memory optimize
-      #  - console=ttyS0 # disable if barematel
+      # - cpufreq.default_governor=performance       # cost more power
+      # - intel_idle.max_cstate=0                    # cost more power
+        - iommu.passthrough=1                        # pci passthrough
+        - intel_iommu=on                             # pci passthrough, intel
+        - init_on_alloc=0                            # memory optimize
+        - init_on_free=0                             # memory optimize
+        - console=ttyS0                              # disable if barematel
       systemExtensions:
         officialExtensions:
           - siderolabs/intel-ucode
@@ -178,6 +179,20 @@ patches:
   #         - name: drbd_transport_tcp
   #         - name: dm_thin_pool
 
+  # Configure NFS mount options
+  - |
+    machine:
+      files:
+        - op: overwrite
+          path: /etc/nfsmount.conf
+          permissions: 0o644
+          content: |
+            [ NFSMount_Global_Options ]
+            nfsvers=4.2
+            hard=True
+            noatime=True
+            nconnect=16
+
   # Enable features
   ## https://github.com/siderolabs/talos/issues/10002#issuecomment-2557069620;
   ## hostLegacyRouting=true conflict with BIGTCP and BBR
@@ -197,13 +212,14 @@ patches:
           allowedKubernetesNamespaces:
             - gitops-system
 
-  # Enable userspaces, isolate privileged containers
+  # Enable MutatingAdmissionPolicy and User-Namespaces
   # https://kubernetes.io/docs/tasks/configure-pod-container/user-namespaces/
   - |-
     cluster:
       apiServer:
         extraArgs:
-          feature-gates: UserNamespacesSupport=true,UserNamespacesPodSecurityStandards=true
+          runtime-config: admissionregistration.k8s.io/v1alpha1=true
+          feature-gates: MutatingAdmissionPolicy=true,UserNamespacesSupport=true,UserNamespacesPodSecurityStandards=true
     machine:
       sysctls:
         user.max_user_namespaces: "11255"
@@ -331,8 +347,6 @@ patches:
         net.ipv4.tcp_mtu_probing: 1               # 10Gb/s | Jumbo frames
         net.ipv4.tcp_rmem: 4096 87380 33554432    # 10Gb/s
         net.ipv4.tcp_wmem: 4096 65536 33554432    # 10Gb/s
-        net.ipv4.tcp_window_scaling: 1            # 10Gb/s
-        vm.nr_hugepages: 1024                     # PostgreSQL
         net.netfilter.nf_conntrack_max: 2000000   # ram_32g = 1048576
 
   # Udev configuration, thunderbolt & i915

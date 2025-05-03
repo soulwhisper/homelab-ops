@@ -4,6 +4,8 @@
 - migrated from mayastor to ceph; disable ceph-nfs;
 - `hostLegacyRouting: true` conflict wih BIGTCP and BBR, disabled; hence `forwardKubeDNSToHost` is disabled; [ref](https://github.com/siderolabs/talos/issues/10002#issuecomment-2557069620);
 - use hardcoded securityContext instead of kyverno;
+- external nfs_v4.2 backup using `uid:gid = 2000:2000`;
+- media stored in external nas-nfs, using `documents,movie,music,tv-shows` folders;
 
 ## Infra
 
@@ -11,8 +13,9 @@
 - offsite backup ( volsync ) use minio @ nix-infra;
 - openebs-hostpath, disabled due to MS-01 using 256G system disk;
 - ceph-block, for database and apps;
-- ceph-fs, for shared-media;
-- ceph-s3, for volsync backup;
+- ceph-fs, deprecated, use nas-nfs for shared-media;
+- ceph-s3, deprecated, use nas-nfs for volsync backup;
+- volsync nfs-backup using mutatingAdmissionPolicy;
 - onepassword as main secret store;
 - use Valkey instead of Dragonflydb if apps served <= 2;
 
