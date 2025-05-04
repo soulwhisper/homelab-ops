@@ -4,10 +4,8 @@
 # Recommendation:netkit, host-routing, bbr, ebpf-backend-memory, ebpf-clock-probe;
 # maglev-hashing, preallocate-maps;
 # :: features
-# hubble:disabled, hostLegacyRouting:disabled;
-# ipam:kubernetes, watch:multi-pool;
+# hubble:disabled, hostLegacyRouting:disabled, ipam:kubernetes;
 # ::
-# autoDirectNodeRoutes: true
 bandwidthManager:
   enabled: true
   bbr: true
@@ -20,9 +18,6 @@ bpf:
   masquerade: true
   preallocateMaps: true
 bpfClockProbe: true
-cluster:
-  id: 1
-  name: main
 cgroup:
   autoMount:
     enabled: false
@@ -35,10 +30,7 @@ dashboards:
     grafana_folder: Cilium
 devices: bond+
 # enableIPv4BIGTCP: true  # disable for test only
-# enableIPv6BIGTCP: true
 enableRuntimeDeviceDetection: true
-# endpointRoutes:
-#   enabled: true
 envoy:
   enabled: true
   rollOutPods: true
@@ -51,29 +43,6 @@ gatewayAPI:
   xffNumTrustedHops: 1
 hubble:
   enabled: false
-#   eventQueueSize: 32768
-#   metrics:
-#     enabled:
-#       - dns:query
-#       - drop
-#       - tcp
-#       - flow
-#       - port-distribution
-#       - icmp
-#       - http
-#     serviceMonitor:
-#       enabled: true
-#     dashboards:
-#       enabled: true
-#   relay:
-#     enabled: true
-#     rollOutPods: true
-#     prometheus:
-#       serviceMonitor:
-#         enabled: true
-#   ui:
-#     enabled: true
-#     rollOutPods: true
 ipam:
   mode: "kubernetes"
 ipv4NativeRoutingCIDR: 10.100.0.0/17
@@ -84,7 +53,7 @@ k8sServicePort: 7445
 kubeProxyReplacement: true
 kubeProxyReplacementHealthzBindAddr: 0.0.0.0:10256
 loadBalancer:
-  acceleration: best-effort # native if not test
+  acceleration: best-effort
   algorithm: maglev
   mode: hybrid
 maglev:
