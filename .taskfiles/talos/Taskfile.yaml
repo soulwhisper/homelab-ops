@@ -10,9 +10,12 @@ tasks:
       - test -f "{{.K8S_DIR}}/infrastructure/talos/talconfig.yaml"
       - test -f "{{.K8S_DIR}}/infrastructure/talos/talsecret.yaml"
       - test -f "{{.K8S_DIR}}/infrastructure/talos/talhelper.env"
+      - '[[ "{{.MODE}}" == "test" || "{{.MODE}}" == "prod" ]]'
+    vars:
+      MODE: '{{.MODE | default "prod"}}'
     cmds:
       - op run --env-file {{.K8S_DIR}}/infrastructure/talos/talhelper.env --no-masking -- talhelper genconfig
-        --config-file {{.K8S_DIR}}/infrastructure/talos/talconfig.yaml
+        --config-file {{.K8S_DIR}}/infrastructure/talos/talconfig.{{.MODE}}.yaml
         --secret-file {{.K8S_DIR}}/infrastructure/talos/talsecret.yaml
         --out-dir {{.K8S_DIR}}/infrastructure/talos/clusterconfig
       - fish -i -c 'mkdir -p ~/.talos && cp $TALOSCONFIG ~/.talos/config'

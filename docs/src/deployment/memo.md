@@ -27,12 +27,13 @@
 
 ## Deployment
 
-- set `exarch-0n` and `k8s.homelab.internal` to IPs at DNS node;
+- set `exarch-0n.homelab.internal` and `k8s.homelab.internal` to IPs at DNS node;
 - `10.10.0.10` as `nas.homelab.internal`, provide `dns` / `ntp` / `talos-api` / `nfs` / ...;
 - `10.10.0.100` as VIP;
 - `10.10.0.101-103` as k8s nodes;
 - `10.10.0.201-250` as cilium l2 loadbalancer ip;
 - self-hosted-runners, label:arc-homelab / label:arc-homelab-ops;
+- production subnet needs dhcp;
 
 ### Bootstrap
 
@@ -49,10 +50,11 @@ devenv shell
 
 # bootstrap
 task talos:generate-clusterconfig
+## if test
+task talos:generate-clusterconfig MODE=test
+
 task k8s-bootstrap:talos
 task k8s-bootstrap:apps
-
-## if failed to pull etcd, restart proxy-service, or reduce VM mtu to 1200
 
 # check
 kubectl get ks -A

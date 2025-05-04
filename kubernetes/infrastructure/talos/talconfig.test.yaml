@@ -3,8 +3,7 @@
 clusterName: &clusterName main # same in cilium
 endpoint: "https://k8s.homelab.internal:6443"
 
-# Current stage = ms-01;
-# baremetal 1.10 schema = 4a82835fd6519841f504efe09fb3dab69050c99b2a3c1be18b5336bac62ef30c
+# test on proxmox-vm
 # pve-vm 1.10 schema = 622253f1ab573d6baa9d8d70afb6588ea9e7d8884328e5a8fdfddaf83becebcb
 # enabled features:
 #   - predictable ifnames
@@ -28,7 +27,7 @@ cniConfig:
   name: none
 
 nodes:
-  - hostname: exarch-01
+  - hostname: exarch-01.homelab.internal
     ipAddress: 172.19.82.101
     controlPlane: true
     nodeLabels:
@@ -48,7 +47,7 @@ nodes:
         vip:
           ip: *talosControlplaneVip
 
-  - hostname: exarch-02
+  - hostname: exarch-02.homelab.internal
     ipAddress: 172.19.82.102
     controlPlane: true
     nodeLabels:
@@ -64,7 +63,7 @@ nodes:
         vip:
           ip: *talosControlplaneVip
 
-  - hostname: exarch-03
+  - hostname: exarch-03.homelab.internal
     ipAddress: 172.19.82.103
     controlPlane: true
     nodeLabels:
@@ -91,11 +90,9 @@ controlPlane:
   nodeLabels:
     topology.kubernetes.io/region: *clusterName
     topology.kubernetes.io/zone: homelab
-  schematic: &talos-schema
+  schematic:
     customization:
       extraKernelArgs:
-      # - cpufreq.default_governor=performance       # cost more power
-      # - intel_idle.max_cstate=0                    # cost more power
         - iommu.passthrough=1                        # pci passthrough
         - intel_iommu=on                             # pci passthrough, intel
         - init_on_alloc=0                            # memory optimize
@@ -109,7 +106,7 @@ controlPlane:
           - siderolabs/thunderbolt
           - siderolabs/nut-client
           - siderolabs/qemu-guest-agent
-  extensionServices: &talos-ext
+  extensionServices:
     - name: nut-client
       configFiles:
         - content: |-
@@ -128,11 +125,6 @@ controlPlane:
           advertisedSubnets:
             - 172.19.82.0/24
 
-  # AdmissionControl configuration, disabled; use labels instead
-  #  - |-
-  #    - op: remove
-  #      path: /cluster/apiServer/admissionControl
-
 # general patches
 patches:
   # Kernel modules, Enable thunderbolt/USB4 networking support
@@ -150,34 +142,6 @@ patches:
         http_proxy: http://172.19.82.10:1080
         https_proxy: http://172.19.82.10:1080
         no_proxy: .noirprime.com,.homelab.internal,.cluster.local.,.cluster.local,.svc,localhost,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16
-
-  # Enable OpenEBS Storage
-  # - |-
-  #   machine:
-  #     sysctls:
-  #       vm.nr_hugepages: "1024"
-  #     nodeLabels:
-  #       openebs.io/engine: mayastor
-  #     kubelet:
-  #       extraMounts:
-  #         - destination: /var/local/openebs
-  #           type: bind
-  #           source: /var/local/openebs
-  #           options:
-  #             - rbind
-  #             - rshared
-  #             - rw
-
-  # Enable DRBD and LVM-Thin
-  # - |-
-  #   machine:
-  #     kernel:
-  #       modules:
-  #         - name: drbd
-  #           parameters:
-  #             - usermode_helper=disabled
-  #         - name: drbd_transport_tcp
-  #         - name: dm_thin_pool
 
   # Configure NFS mount options
   - |
