@@ -3,14 +3,13 @@
 clusterName: &clusterName main
 endpoint: "https://k8s.homelab.internal:6443"
 
-# Current stage = ms-01;
-# baremetal 1.10 schema = 4a82835fd6519841f504efe09fb3dab69050c99b2a3c1be18b5336bac62ef30c
 # enabled features:
 #   - predictable ifnames
 #   - disk-encryption
 #   - secureboot
 #   - nut
 # disabled features:
+# cni,coredns,forwardKubeDNSToHost,kube-proxy
 
 # renovate: depName=ghcr.io/siderolabs/installer datasource=docker
 talosVersion: v1.10.0
@@ -33,7 +32,7 @@ nodes:
     nodeLabels:
       intel.feature.node.kubernetes.io/gpu: "true"
     installDiskSelector: &installDisk
-      model: not_finished # not_finished
+      model: not_finished # todo
     networkInterfaces:
       - interface: bond0
         bond: &bond
@@ -45,16 +44,14 @@ nodes:
           miimon: 100
           updelay: 200
           downdelay: 200
-        dhcp: true
+        dhcp: false
+        addresses:
+          - 10.10.0.101/24
+        routes: &gateway
+          - network: 0.0.0.0/0
+            gateway: 10.10.0.1
         vip:
           ip: *talosControlplaneVip
-        vlans:
-          - &vlan100
-            vlanId: 100
-            mtu: 1500
-            dhcp: false
-            dhcpOptions:
-              routeMetric: 4096
 
   - hostname: exarch-02.homelab.internal
     ipAddress: 10.10.0.102
@@ -65,11 +62,12 @@ nodes:
     networkInterfaces:
       - interface: bond0
         bond: *bond
-        dhcp: true
+        dhcp: false
+        addresses:
+          - 10.10.0.102/24
+        routes: *gateway
         vip:
           ip: *talosControlplaneVip
-        vlans:
-          - *vlan100
 
   - hostname: exarch-03.homelab.internal
     ipAddress: 10.10.0.103
@@ -81,10 +79,11 @@ nodes:
       - interface: bond0
         bond: *bond
         dhcp: false
+        addresses:
+          - 10.10.0.103/24
+        routes: *gateway
         vip:
           ip: *talosControlplaneVip
-        vlans:
-          - *vlan100
 
 # put general nodes configs here since allowSchedulingOnControlPlanes
 controlPlane:
@@ -104,6 +103,7 @@ controlPlane:
         - intel_iommu=on                             # pci passthrough, intel
         - init_on_alloc=0                            # memory optimize
         - init_on_free=0                             # memory optimize
+        - talos.network.interface.ignore=            # block i226-lm in ms-01, todo
       systemExtensions:
         officialExtensions:
           - siderolabs/intel-ucode
@@ -316,7 +316,7 @@ patches:
         net.ipv4.tcp_mtu_probing: 1               # 10Gb/s | Jumbo frames
         net.ipv4.tcp_rmem: 4096 87380 33554432    # 10Gb/s
         net.ipv4.tcp_wmem: 4096 65536 33554432    # 10Gb/s
-        net.netfilter.nf_conntrack_max: 2000000   # ram_32g = 1048576
+        net.netfilter.nf_conntrack_max: 2000000    # ram_32g = 1048576
 
   # Udev configuration, thunderbolt & i915
   - |-

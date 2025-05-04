@@ -3,14 +3,13 @@
 clusterName: &clusterName main # same in cilium
 endpoint: "https://k8s.homelab.internal:6443"
 
-# baremetal 1.10 schema = 4a82835fd6519841f504efe09fb3dab69050c99b2a3c1be18b5336bac62ef30c
-# pve-vm 1.10 schema = 622253f1ab573d6baa9d8d70afb6588ea9e7d8884328e5a8fdfddaf83becebcb
 # enabled features:
 #   - predictable ifnames
 #   - disk-encryption
 #   - secureboot
 #   - nut
 # disabled features:
+# cni,coredns,forwardKubeDNSToHost,kube-proxy
 
 # renovate: depName=ghcr.io/siderolabs/installer datasource=docker
 talosVersion: v1.10.0
@@ -19,7 +18,7 @@ kubernetesVersion: v1.33.0
 
 additionalApiServerCertSans: &sans
   - k8s.homelab.internal
-  - &talosControlplaneVip 172.19.82.100
+  - &talosControlplaneVip 10.10.0.100
   - 127.0.0.1
 additionalMachineCertSans: *sans
 
@@ -27,16 +26,15 @@ cniConfig:
   name: none
 
 nodes:
-  - hostname: exarch-01
-    ipAddress: 172.19.82.101
+  - hostname: exarch-01.homelab.internal
+    ipAddress: 10.10.0.101
     controlPlane: true
     nodeLabels:
       intel.feature.node.kubernetes.io/gpu: "true"
     installDiskSelector: &installDisk
-      model: not_finished
+      model: not_finished # todo
     networkInterfaces:
       - interface: bond0
-        dhcp: false
         bond: &bond
           deviceSelectors:
             - permanentAddr: "bc:*" # check MAC of 10G NICs
@@ -46,56 +44,46 @@ nodes:
           miimon: 100
           updelay: 200
           downdelay: 200
+        dhcp: false
         addresses:
-          - 172.19.82.101/24
+          - 10.10.0.101/24
         routes: &gateway
           - network: 0.0.0.0/0
-            gateway: 172.19.82.1
+            gateway: 10.10.0.1
         vip:
           ip: *talosControlplaneVip
-        vlans:
-          - &vlan100
-            vlanId: 100
-            mtu: 1500
-            dhcp: false
-            dhcpOptions:
-              routeMetric: 4096
 
-  - hostname: exarch-02
-    ipAddress: 172.19.82.102
+  - hostname: exarch-02.homelab.internal
+    ipAddress: 10.10.0.102
     controlPlane: true
     nodeLabels:
       intel.feature.node.kubernetes.io/gpu: "true"
     installDiskSelector: *installDisk
     networkInterfaces:
       - interface: bond0
+        bond: *bond
         dhcp: false
         addresses:
-          - 172.19.82.102/24
-        bond: *bond
+          - 10.10.0.102/24
         routes: *gateway
         vip:
           ip: *talosControlplaneVip
-        vlans:
-          - *vlan100
 
-  - hostname: exarch-03
-    ipAddress: 172.19.82.103
+  - hostname: exarch-03.homelab.internal
+    ipAddress: 10.10.0.103
     controlPlane: true
     nodeLabels:
       intel.feature.node.kubernetes.io/gpu: "true"
     installDiskSelector: *installDisk
     networkInterfaces:
       - interface: bond0
+        bond: *bond
         dhcp: false
         addresses:
-          - 172.19.82.103/24
-        bond: *bond
+          - 10.10.0.103/24
         routes: *gateway
         vip:
           ip: *talosControlplaneVip
-        vlans:
-          - *vlan100
 
 # put general nodes configs here since allowSchedulingOnControlPlanes
 controlPlane:
@@ -118,6 +106,7 @@ controlPlane:
         - init_on_alloc=0                            # memory optimize
         - init_on_free=0                             # memory optimize
         - console=ttyS0                              # disable if barematel
+      # - talos.network.interface.ignore=            # block i226-lm in ms-01
       systemExtensions:
         officialExtensions:
           - siderolabs/intel-ucode
@@ -143,7 +132,7 @@ controlPlane:
           extraArgs:
             quota-backend-bytes: 8589934592
           advertisedSubnets:
-            - 172.19.82.0/24
+            - 10.10.0.0/24
 
   # AdmissionControl configuration, disabled; use labels instead
   #  - |-
@@ -164,8 +153,8 @@ patches:
   - |-
     machine:
       env:
-        http_proxy: http://172.19.82.10:1080
-        https_proxy: http://172.19.82.10:1080
+        http_proxy: http://10.10.0.10:1080
+        https_proxy: http://10.10.0.10:1080
         no_proxy: .noirprime.com,.homelab.internal,.cluster.local.,.cluster.local,.svc,localhost,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16
 
   # Enable OpenEBS Storage
@@ -274,7 +263,7 @@ patches:
       time:
         disabled: false
         servers:
-          - 172.19.82.10
+          - 10.10.0.10
 
   # Network configuration
   - |-
@@ -282,11 +271,11 @@ patches:
       network:
         disableSearchDomain: true
         extraHostEntries:
-          - ip: 172.19.82.100
+          - ip: 10.10.0.100
             aliases:
               - k8s.homelab.internal
         nameservers:
-          - 172.19.82.10
+          - 10.10.0.10
 
   # Kubelet configuration
   - |-
@@ -294,7 +283,7 @@ patches:
       kubelet:
         nodeIP:
           validSubnets:
-            - 172.19.82.0/24
+            - 10.10.0.0/24
 
   # Cluster configuration
   - |-
@@ -310,7 +299,7 @@ patches:
           kubernetes:
             disabled: true
           service:
-            endpoint: http://172.19.82.10:9300
+            endpoint: http://10.10.0.10:9300
       network:
         podSubnets:
           - 10.100.0.0/17
@@ -364,7 +353,7 @@ patches:
         net.ipv4.tcp_mtu_probing: 1               # 10Gb/s | Jumbo frames
         net.ipv4.tcp_rmem: 4096 87380 33554432    # 10Gb/s
         net.ipv4.tcp_wmem: 4096 65536 33554432    # 10Gb/s
-        net.netfilter.nf_conntrack_max: 2000000   # ram_32g = 1048576
+        net.netfilter.nf_conntrack_max: 2000000    # ram_32g = 1048576
 
   # Udev configuration, thunderbolt & i915
   - |-

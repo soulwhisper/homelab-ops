@@ -11,6 +11,7 @@ endpoint: "https://k8s.homelab.internal:6443"
 #   - secureboot
 #   - nut
 # disabled features:
+# cni,coredns,forwardKubeDNSToHost,kube-proxy
 
 # renovate: depName=ghcr.io/siderolabs/installer datasource=docker
 talosVersion: v1.10.0
