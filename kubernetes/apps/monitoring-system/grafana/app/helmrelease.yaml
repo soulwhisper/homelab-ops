@@ -77,7 +77,7 @@ spec:
     dashboards:
       default:
         cert-manager:
-          # renovate: depName="Cert-manager-Kubernetes"
+          # renovate: dashboardName="Cert-manager-Kubernetes"
           gnetId: 20842
           revision: 3
           datasource: Prometheus
@@ -107,7 +107,7 @@ spec:
             - { name: DS_PROMETHEUS, value: Prometheus }
 
         smartctl-exporter:
-          # renovate: depName="SMARTctl Exporter Dashboard"
+          # renovate: dashboardName="SMARTctl Exporter Dashboard"
           gnetId: 22604
           revision: 2
           datasource:
@@ -122,7 +122,7 @@ spec:
               value: Prometheus
 
         volsync:
-          # removate: dashboardName="VolSync Dashboard"
+          # renovate: dashboardName="VolSync Dashboard"
           gnetId: 21356
           revision: 2
           datasource:
