@@ -50,7 +50,7 @@ spec:
               OCIS_INSECURE: true
 
         containers:
-          ocis:
+          app:
             image:
               repository: docker.io/owncloud/ocis
               tag: 7.1.2
@@ -122,6 +122,6 @@ spec:
         server: nas.homelab.internal
         path: /mnt/Arcanum/shared/media
         advancedMounts:
-          paperless:
+          ocis:
             app:
               - path: /var/lib/ocis

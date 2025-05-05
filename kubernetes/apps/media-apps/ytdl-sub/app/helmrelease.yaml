@@ -86,7 +86,7 @@ spec:
         server: nas.homelab.internal
         path: /mnt/Arcanum/shared/media
         advancedMounts:
-          paperless:
+          ytdl-sub:
             app:
               - path: /media/movie
                 subPath: movie
