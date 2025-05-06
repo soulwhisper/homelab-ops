@@ -1,6 +1,11 @@
 ---
 # yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
 name: "Make Docs"
+permissions:
+  actions: write
+  contents: read
+  id-token: write
+  pages: write
 
 on:
   workflow_dispatch:
@@ -9,12 +14,6 @@ on:
     paths:
       - .github/workflows/make-docs.yaml
       - docs/**
-
-permissions:
-  actions: write
-  contents: read
-  id-token: write
-  pages: write
 
 jobs:
   Make-Docs:

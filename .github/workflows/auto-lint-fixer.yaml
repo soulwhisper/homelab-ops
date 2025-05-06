@@ -1,6 +1,8 @@
 ---
 # yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
 name: Auto-Lint-Fixer
+permissions:
+  contents: write
 
 # this action will trigger PR for fix, if lint fails
 
@@ -13,8 +15,6 @@ on:
 jobs:
   auto-lint-fixer:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
     steps:
       - name: Generate Token
         uses: actions/create-github-app-token@df432ceedc7162793a195dd1713ff69aefc7379e # v2

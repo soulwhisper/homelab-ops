@@ -1,6 +1,9 @@
 ---
 # yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
 name: Flux Local
+permissions:
+  contents: read
+  pull-requests: write
 
 on:
   pull_request:
@@ -20,7 +23,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
-
       - name: Get changed files
         id: changed-files
         uses: tj-actions/changed-files@ed68ef82c095e0d48ec87eccea555d944a631a4c # v46
@@ -36,7 +38,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
-
       - name: Run flux-local test
         uses: docker://ghcr.io/allenporter/flux-local:v7.5.0
         with:
@@ -63,13 +64,11 @@ jobs:
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
         with:
           path: pull
-
       - name: Checkout Default Branch
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
         with:
           ref: "${{ github.event.repository.default_branch }}"
           path: default
-
       - name: Run flux-local diff
         uses: docker://ghcr.io/allenporter/flux-local:v7.5.0
         with:
@@ -83,7 +82,6 @@ jobs:
             --all-namespaces
             --sources "gitops-system"
             --output-file diff.patch
-
       - name: Generate Diff
         id: diff
         run: |
@@ -98,7 +96,6 @@ jobs:
               cat diff.patch
               echo '```'
           } >> "${GITHUB_STEP_SUMMARY}"
-
       - name: Generate Token
         uses: actions/create-github-app-token@df432ceedc7162793a195dd1713ff69aefc7379e # v2
         if: ${{ github.event.pull_request.head.repo.full_name == github.repository && steps.diff.outputs.diff != '' }}
@@ -106,7 +103,6 @@ jobs:
         with:
           app-id: ${{ secrets.PRIVATE_APP_ID }}
           private-key: ${{ secrets.PRIVATE_APP_KEY }}
-
       - if: ${{ steps.diff.outputs.diff != '' }}
         name: Add Comment
         uses: marocchino/sticky-pull-request-comment@52423e01640425a022ef5fd42c6fb5f633a02728 # v2
