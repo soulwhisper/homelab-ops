@@ -10,13 +10,11 @@ permissions:
 on:
   workflow_dispatch:
   pull_request:
-    branches:
-      - main
+    branches: ["main"]
+    paths: [".github/workflows/**"]
   push:
-    branches:
-      - main
-  schedule:
-    - cron: '30 6 * * *'
+    branches: ["main"]
+    paths: [".github/workflows/**"]
 
 jobs:
   analyze:
