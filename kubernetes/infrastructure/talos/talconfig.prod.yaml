@@ -103,6 +103,7 @@ controlPlane:
         - intel_iommu=on                             # pci passthrough, intel
         - init_on_alloc=0                            # memory optimize
         - init_on_free=0                             # memory optimize
+        - net.ifnames=1                              # predictable interface naming
         - talos.network.interface.ignore=            # block i226-lm in ms-01, todo
       systemExtensions:
         officialExtensions:

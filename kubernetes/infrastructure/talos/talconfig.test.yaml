@@ -98,6 +98,7 @@ controlPlane:
         - intel_iommu=on                             # pci passthrough, intel
         - init_on_alloc=0                            # memory optimize
         - init_on_free=0                             # memory optimize
+        - net.ifnames=1                              # predictable interface naming
         - console=ttyS0                              # disable if barematel
       systemExtensions:
         officialExtensions:
