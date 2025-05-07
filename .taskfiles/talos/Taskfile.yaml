@@ -5,6 +5,7 @@ version: "3"
 tasks:
   getimage:
     desc: Get latest ISO for talos
+    silent: true
     preconditions:
       - '[[ "{{.MODE}}" == "test" || "{{.MODE}}" == "prod" ]]'
       - '[[ "{{.SECUREBOOT}}" == "true" || "{{.SECUREBOOT}}" == "false" ]]'
@@ -26,7 +27,8 @@ tasks:
         echo "Latest version: {{.VERSION}}"
         echo "Schema ID: {{.ID}}"
         echo "Image Downloading: talos-{{.VERSION}}-{{.IMAGE}}"
-        curl --progress-bar -L "https://factory.talos.dev/image/{{.ID}}/{{.VERSION}}/{{.IMAGE}}" -o "talos-{{.VERSION}}-{{.IMAGE}}" || (echo "Download failed"; exit 1)
+        curl --progress-bar -L "https://factory.talos.dev/image/{{.ID}}/{{.VERSION}}/{{.IMAGE}}" -o /tmp/talos-{{.VERSION}}-{{.IMAGE}} || (echo "Download failed"; exit 1)
+      - mv /tmp/talos-{{.VERSION}}-{{.IMAGE}} ./
 
   generate-clusterconfig:
     desc: Generate clusterconfig for Talos
