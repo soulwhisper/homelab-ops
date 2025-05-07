@@ -3,6 +3,7 @@
 clusterName: &clusterName main
 endpoint: "https://k8s.homelab.internal:6443"
 
+# schema = 567dbfa10c6acc76460aecdd8378a137e3f0bc3b4bc92a20d1dfd244be00cd5c
 # enabled features:
 #   - predictable ifnames
 #   - disk-encryption
@@ -32,12 +33,13 @@ nodes:
     nodeLabels:
       intel.feature.node.kubernetes.io/gpu: "true"
     installDiskSelector: &installDisk
-      model: not_finished # todo
+      model: SQF-C3AV1-256GDEDM
     networkInterfaces:
       - interface: bond0
         bond: &bond
-          deviceSelectors:
-            - permanentAddr: "bc:*" # check MAC of 10G NICs
+          interfaces:
+            - enp2s0f0np0
+            - enp2s0f0np1
           mode: 802.3ad
           lacpRate: fast
           xmitHashPolicy: layer3+4
@@ -104,7 +106,7 @@ controlPlane:
         - init_on_alloc=0                            # memory optimize
         - init_on_free=0                             # memory optimize
         - net.ifnames=1                              # predictable interface naming
-        - talos.network.interface.ignore=            # block i226-lm in ms-01, todo
+        - talos.network.interface.ignore=enp88s0     # block i226-lm in ms-01
       systemExtensions:
         officialExtensions:
           - siderolabs/intel-ucode
@@ -116,7 +118,7 @@ controlPlane:
     - name: nut-client
       configFiles:
         - content: |-
-            MONITOR santak-box@10.0.0.10 1 upsmon sEcr3T! secondary
+            MONITOR santak-box@10.10.0.10 1 monuser monuser secondary
             SHUTDOWNCMD "/sbin/poweroff"
           mountPath: /usr/local/etc/nut/upsmon.conf
 
