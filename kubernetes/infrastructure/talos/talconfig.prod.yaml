@@ -13,7 +13,7 @@ endpoint: "https://k8s.homelab.internal:6443"
 # cni,coredns,forwardKubeDNSToHost,kube-proxy
 
 # renovate: depName=ghcr.io/siderolabs/installer datasource=docker
-talosVersion: v1.10.0
+talosVersion: v1.10.1
 # renovate: depName=ghcr.io/siderolabs/kubelet datasource=docker
 kubernetesVersion: v1.33.0
 
