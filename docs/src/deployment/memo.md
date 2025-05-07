@@ -5,6 +5,7 @@
 - external nfs_v4.2 backup using `uid:gid = 2000:2000`;
 - media stored in external nas-nfs, using `documents,movie,music,tv-shows` folders;
 - test env using proxmox-vm, with secureboot enabled, subnet `172.19.82.0/24`;
+- `v1.10+` will ignore `.machine.install.extraKernelArgs` and `.machine.install.extensions` fields in talconfig;
 
 ## Infra
 

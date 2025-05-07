@@ -38,6 +38,7 @@ nodes:
       - interface: bond0
         dhcp: false
         bond: &bond
+          mode: active-backup
           deviceSelectors:
             - permanentAddr: "bc:*" # check MAC of 10G NICs
         addresses:

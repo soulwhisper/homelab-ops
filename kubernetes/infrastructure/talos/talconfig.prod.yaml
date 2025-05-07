@@ -39,7 +39,7 @@ nodes:
         bond: &bond
           interfaces:
             - enp2s0f0np0
-            - enp2s0f0np1
+            - enp2s0f1np1
           mode: 802.3ad
           lacpRate: fast
           xmitHashPolicy: layer3+4

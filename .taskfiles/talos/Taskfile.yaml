@@ -3,14 +3,39 @@
 version: "3"
 
 tasks:
+  getimage:
+    desc: Get latest ISO for talos
+    preconditions:
+      - '[[ "{{.MODE}}" == "test" || "{{.MODE}}" == "prod" ]]'
+      - '[[ "{{.SECUREBOOT}}" == "true" || "{{.SECUREBOOT}}" == "false" ]]'
+      - which curl jq
+      - test -f "{{.K8S_DIR}}/infrastructure/talos/schematic/{{.MODE}}.yaml"
+    vars:
+      MODE: '{{.MODE | default "prod"}}'
+      ARCH: '{{.ARCH | default "amd64"}}'
+      PLATFORM: '{{.PLATFORM | default "metal"}}'
+      SECUREBOOT: '{{.SECUREBOOT | default "true"}}'
+      VERSION:
+        sh: curl -s https://factory.talos.dev/versions | jq -r '
+          map(select(test("^v[0-9.]+$"))) | sort_by(. | ltrimstr("v") | split(".") | map(tonumber)) | reverse | .[0]' | tail -n1
+      ID:
+        sh: curl -s -X POST --data-binary @"{{.K8S_DIR}}/infrastructure/talos/schematic/{{.MODE}}.yaml" https://factory.talos.dev/schematics | jq -r '.id'
+      IMAGE: '{{if .SECUREBOOT}}{{.PLATFORM}}-{{.ARCH}}-secureboot.iso{{else}}{{.PLATFORM}}-{{.ARCH}}.iso{{end}}'
+    cmds:
+      - |
+        echo "Latest version: {{.VERSION}}"
+        echo "Schema ID: {{.ID}}"
+        echo "Image Downloading: talos-{{.VERSION}}-{{.IMAGE}}"
+        curl --progress-bar -L "https://factory.talos.dev/image/{{.ID}}/{{.VERSION}}/{{.IMAGE}}" -o "talos-{{.VERSION}}-{{.IMAGE}}" || (echo "Download failed"; exit 1)
+
   generate-clusterconfig:
     desc: Generate clusterconfig for Talos
     preconditions:
+      - '[[ "{{.MODE}}" == "test" || "{{.MODE}}" == "prod" ]]'
       - which op talhelper
-      - test -f "{{.K8S_DIR}}/infrastructure/talos/talconfig.yaml"
+      - test -f "{{.K8S_DIR}}/infrastructure/talos/talconfig.{{.MODE}}.yaml"
       - test -f "{{.K8S_DIR}}/infrastructure/talos/talsecret.yaml"
       - test -f "{{.K8S_DIR}}/infrastructure/talos/talhelper.env"
-      - '[[ "{{.MODE}}" == "test" || "{{.MODE}}" == "prod" ]]'
     vars:
       MODE: '{{.MODE | default "prod"}}'
     cmds:
@@ -34,7 +59,7 @@ tasks:
         vars:
           FILENAME: "{{.ITEM}}"
           HOSTNAME: |-
-            {{ trimPrefix (printf "homelab-") (base .ITEM) | trimSuffix ".yaml" }}
+            {{ trimPrefix (printf "main-") (base .ITEM) | trimSuffix ".yaml" }}
           DRY_RUN: "{{ .DRY_RUN }}"
           INSECURE: "{{ .INSECURE }}"
 
@@ -86,12 +111,9 @@ tasks:
       vars:
         - HOSTNAME
         - FILENAME
-    vars:
-      MODE: '{{.MODE | default "auto"}}'
     cmds:
       - talosctl apply-config
         --nodes "{{.HOSTNAME}}"
         --file "{{.FILENAME}}"
-        --mode="{{.MODE}}"
         {{ if eq "true" .INSECURE }}--insecure{{ end }}
         {{ if eq "true" .DRY_RUN }}--dry-run{{ end }}
