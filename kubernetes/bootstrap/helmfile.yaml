@@ -18,7 +18,7 @@ releases:
     atomic: true
     chart: oci://ghcr.io/home-operations/charts-mirror/cilium
     version: 1.17.3
-    values: ['../../apps/kube-system/cilium/app/values.yaml']
+    values: ['../apps/kube-system/cilium/app/values.yaml']
     hooks:
       - # Install gateway-api CRDs
         events:
@@ -37,15 +37,26 @@ releases:
     atomic: true
     chart: oci://ghcr.io/coredns/charts/coredns
     version: 1.42.1
-    values: ['../../apps/kube-system/coredns/app/values.yaml']
+    values: ['../apps/kube-system/coredns/app/values.yaml']
     needs: ['kube-system/cilium']
+
+  # require `rook disk model` for env "ROOK_DISK"
+  - name: wipe-rook
+    namespace: kube-system
+    atomic: true
+    labels:
+      wipe-rook.enabled: true
+    chart: oci://ghcr.io/bjw-s/helm/app-template
+    version: 3.7.3
+    values: ['./templates/wipe-rook.yaml.gotmpl']
+    needs: ['kube-system/coredns']
 
   - name: spegel
     namespace: kube-system
     atomic: true
     chart: oci://ghcr.io/spegel-org/helm-charts/spegel
     version: 0.2.0
-    values: ['../../apps/kube-system/spegel/app/values.yaml']
+    values: ['../apps/kube-system/spegel/app/values.yaml']
     needs: ['kube-system/coredns']
 
   - name: flux-operator
@@ -53,7 +64,7 @@ releases:
     atomic: true
     chart: oci://ghcr.io/controlplaneio-fluxcd/charts/flux-operator
     version: 0.19.0
-    values: ['../../apps/gitops-system/flux-operator/app/values.yaml']
+    values: ['../apps/gitops-system/flux-operator/app/values.yaml']
     needs: ['kube-system/spegel']
 
   - name: flux-instance
@@ -62,5 +73,5 @@ releases:
     chart: oci://ghcr.io/controlplaneio-fluxcd/charts/flux-instance
     version: 0.19.0
     wait: false
-    values: ['../../apps/gitops-system/flux-operator/instance/values.yaml']
+    values: ['../apps/gitops-system/flux-operator/instance/values.yaml']
     needs: ['gitops-system/flux-operator']

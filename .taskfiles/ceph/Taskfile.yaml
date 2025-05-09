@@ -10,19 +10,8 @@ tasks:
     preconditions:
       - which kubectl
       - test -f "${KUBECONFIG}"
-      - kubectl rook-ceph rook version --namespace {{.NS}}
-      - kubectl rook-ceph ceph versions --namespace {{.NS}}
+      - kubectl rook-ceph -n {{.NS}} rook version
+      - kubectl rook-ceph -n {{.NS}} ceph versions
     cmds:
-      - kubectl rook-ceph rook status all --namespace {{.NS}}
-
-  health:
-    desc: check health of the cluster and common configuration issues
-    vars:
-      NS: "{{.NS | default .storage-system }}" # ceph namespace
-    preconditions:
-      - which kubectl
-      - test -f "${KUBECONFIG}"
-      - kubectl rook-ceph rook version --namespace {{.NS}}
-      - kubectl rook-ceph ceph versions --namespace {{.NS}}
-    cmds:
-      - kubectl rook-ceph health --namespace {{.NS}}
+      - kubectl rook-ceph -n {{.NS}} rook status all
+      - kubectl rook-ceph -n {{.NS}} health

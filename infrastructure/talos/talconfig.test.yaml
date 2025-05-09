@@ -1,9 +1,10 @@
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/budimanjojo/talhelper/master/pkg/config/schemas/talconfig.json
-clusterName: &clusterName main
+clusterName: &clusterName main # same in cilium
 endpoint: "https://k8s.homelab.internal:6443"
 
-# schema = 567dbfa10c6acc76460aecdd8378a137e3f0bc3b4bc92a20d1dfd244be00cd5c
+# test on proxmox-vm
+# pve-vm 1.10 schema = 622253f1ab573d6baa9d8d70afb6588ea9e7d8884328e5a8fdfddaf83becebcb
 # enabled features:
 #   - predictable ifnames
 #   - disk-encryption
@@ -19,7 +20,7 @@ kubernetesVersion: v1.33.0
 
 additionalApiServerCertSans: &sans
   - k8s.homelab.internal
-  - &talosControlplaneVip 10.10.0.100
+  - &talosControlplaneVip 172.19.82.100
   - 127.0.0.1
 additionalMachineCertSans: *sans
 
@@ -28,61 +29,54 @@ cniConfig:
 
 nodes:
   - hostname: exarch-01.homelab.internal
-    ipAddress: 10.10.0.101
+    ipAddress: 172.19.82.101
     controlPlane: true
     nodeLabels:
       intel.feature.node.kubernetes.io/gpu: "true"
-    installDiskSelector: &installDisk
-      model: SQF-C3AV1-256GDEDM
+    installDisk: /dev/sda
     networkInterfaces:
       - interface: bond0
-        bond: &bond
-          interfaces:
-            - enp2s0f0np0
-            - enp2s0f1np1
-          mode: 802.3ad
-          lacpRate: fast
-          xmitHashPolicy: layer3+4
-          miimon: 100
-          updelay: 200
-          downdelay: 200
         dhcp: false
+        bond: &bond
+          mode: active-backup
+          deviceSelectors:
+            - permanentAddr: "bc:*" # check MAC of 10G NICs
         addresses:
-          - 10.10.0.101/24
+          - 172.19.82.101/24
         routes: &gateway
           - network: 0.0.0.0/0
-            gateway: 10.10.0.1
+            gateway: 172.19.82.1
         vip:
           ip: *talosControlplaneVip
 
   - hostname: exarch-02.homelab.internal
-    ipAddress: 10.10.0.102
+    ipAddress: 172.19.82.102
     controlPlane: true
     nodeLabels:
       intel.feature.node.kubernetes.io/gpu: "true"
-    installDiskSelector: *installDisk
+    installDisk: /dev/sda
     networkInterfaces:
       - interface: bond0
-        bond: *bond
         dhcp: false
         addresses:
-          - 10.10.0.102/24
+          - 172.19.82.102/24
+        bond: *bond
         routes: *gateway
         vip:
           ip: *talosControlplaneVip
 
   - hostname: exarch-03.homelab.internal
-    ipAddress: 10.10.0.103
+    ipAddress: 172.19.82.103
     controlPlane: true
     nodeLabels:
       intel.feature.node.kubernetes.io/gpu: "true"
-    installDiskSelector: *installDisk
+    installDisk: /dev/sda
     networkInterfaces:
       - interface: bond0
-        bond: *bond
         dhcp: false
         addresses:
-          - 10.10.0.103/24
+          - 172.19.82.103/24
+        bond: *bond
         routes: *gateway
         vip:
           ip: *talosControlplaneVip
@@ -98,15 +92,13 @@ controlPlane:
   nodeLabels:
     topology.kubernetes.io/region: *clusterName
     topology.kubernetes.io/zone: homelab
-  schematic: &talos-schema
+  schematic:
     customization:
       extraKernelArgs:
-        - iommu.passthrough=1                        # pci passthrough
-        - intel_iommu=on                             # pci passthrough, intel
-        - init_on_alloc=0                            # memory optimize
-        - init_on_free=0                             # memory optimize
-        - net.ifnames=1                              # predictable interface naming
-        - talos.network.interface.ignore=enp88s0     # block i226-lm in ms-01
+        - iommu.passthrough=1                     # pci passthrough
+        - intel_iommu=on                          # pci passthrough, intel
+        - net.ifnames=1                           # predictable interface naming
+        - console=ttyS0                           # disable if barematel
       systemExtensions:
         officialExtensions:
           - siderolabs/intel-ucode
@@ -114,11 +106,12 @@ controlPlane:
           - siderolabs/mei
           - siderolabs/thunderbolt
           - siderolabs/nut-client
-  extensionServices: &talos-ext
+          - siderolabs/qemu-guest-agent
+  extensionServices:
     - name: nut-client
       configFiles:
         - content: |-
-            MONITOR santak-box@10.10.0.10 1 monuser monuser secondary
+            MONITOR santak-box@172.19.82.10 1 upsmon sEcr3T! secondary
             SHUTDOWNCMD "/sbin/poweroff"
           mountPath: /usr/local/etc/nut/upsmon.conf
 
@@ -131,7 +124,7 @@ controlPlane:
           extraArgs:
             quota-backend-bytes: 8589934592
           advertisedSubnets:
-            - 10.10.0.0/24
+            - 172.19.82.0/24
 
 # general patches
 patches:
@@ -147,8 +140,8 @@ patches:
   - |-
     machine:
       env:
-        http_proxy: http://10.10.0.10:1080
-        https_proxy: http://10.10.0.10:1080
+        http_proxy: http://172.19.82.10:1080
+        https_proxy: http://172.19.82.10:1080
         no_proxy: .noirprime.com,.homelab.internal,localhost,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16
 
   # Configure NFS mount options
@@ -229,7 +222,7 @@ patches:
       time:
         disabled: false
         servers:
-          - 10.10.0.10
+          - 172.19.82.10
 
   # Network configuration
   - |-
@@ -237,11 +230,11 @@ patches:
       network:
         disableSearchDomain: true
         extraHostEntries:
-          - ip: 10.10.0.100
+          - ip: 172.19.82.100
             aliases:
               - k8s.homelab.internal
         nameservers:
-          - 10.10.0.10
+          - 172.19.82.10
 
   # Kubelet configuration
   - |-
@@ -249,7 +242,7 @@ patches:
       kubelet:
         nodeIP:
           validSubnets:
-            - 10.10.0.0/24
+            - 172.19.82.0/24
 
   # Cluster configuration
   - |-
@@ -265,7 +258,7 @@ patches:
           kubernetes:
             disabled: true
           service:
-            endpoint: http://10.10.0.10:9300
+            endpoint: http://172.19.82.10:9300
       network:
         podSubnets:
           - 10.100.0.0/17
@@ -319,7 +312,7 @@ patches:
         net.ipv4.tcp_mtu_probing: 1               # 10Gb/s | Jumbo frames
         net.ipv4.tcp_rmem: 4096 87380 33554432    # 10Gb/s
         net.ipv4.tcp_wmem: 4096 65536 33554432    # 10Gb/s
-        net.netfilter.nf_conntrack_max: 2000000    # ram_32g = 1048576
+        net.netfilter.nf_conntrack_max: 2000000   # ram_32g = 1048576
 
   # Udev configuration, thunderbolt & i915
   - |-

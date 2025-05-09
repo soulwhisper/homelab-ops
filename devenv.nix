@@ -5,8 +5,8 @@
   ...
 }:
 {
-  env.KUBECONFIG = "./kubernetes/infrastructure/talos/clusterconfig/kubeconfig";
-  env.TALOSCONFIG = "./kubernetes/infrastructure/talos/clusterconfig/talosconfig";
+  env.KUBECONFIG = "./infrastructure/talos/clusterconfig/kubeconfig";
+  env.TALOSCONFIG = "./infrastructure/talos/clusterconfig/talosconfig";
 
   # replace pre-commit and various linters
   git-hooks = {

@@ -1,7 +1,7 @@
 ---
 area/bootstrap:
   - changed-files:
-      - any-glob-to-any-file: "kubernetes/infrastructure/bootstrap/**/*"
+      - any-glob-to-any-file: "kubernetes/bootstrap/**/*"
 area/docs:
   - changed-files:
       - any-glob-to-any-file:
@@ -14,7 +14,7 @@ area/kubernetes:
       - any-glob-to-any-file:
           - "kubernetes/apps/**/*"
           - "kubernetes/components/**/*"
-          - "kubernetes/infrastructure/flux/**/*"
+          - "kubernetes/flux/**/*"
 area/renovate:
   - changed-files:
       - any-glob-to-any-file:
@@ -22,7 +22,7 @@ area/renovate:
           - "renovate.json5"
 area/talos:
   - changed-files:
-      - any-glob-to-any-file: "kubernetes/infrastructure/talos/**/*"
+      - any-glob-to-any-file: "infrastructure/talos/**/*"
 area/taskfile:
   - changed-files:
       - any-glob-to-any-file:

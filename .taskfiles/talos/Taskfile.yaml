@@ -9,8 +9,8 @@ tasks:
     preconditions:
       - '[[ "{{.MODE}}" == "test" || "{{.MODE}}" == "prod" ]]'
       - '[[ "{{.SECUREBOOT}}" == "true" || "{{.SECUREBOOT}}" == "false" ]]'
-      - which curl jq
-      - test -f "{{.K8S_DIR}}/infrastructure/talos/schematic/{{.MODE}}.yaml"
+      - which curl jq yq
+      - test -f "{{.TALOS_DIR}}/talconfig.{{.MODE}}.yaml"
     vars:
       MODE: '{{.MODE | default "prod"}}'
       ARCH: '{{.ARCH | default "amd64"}}'
@@ -20,7 +20,9 @@ tasks:
         sh: curl -s https://factory.talos.dev/versions | jq -r '
           map(select(test("^v[0-9.]+$"))) | sort_by(. | ltrimstr("v") | split(".") | map(tonumber)) | reverse | .[0]' | tail -n1
       ID:
-        sh: curl -s -X POST --data-binary @"{{.K8S_DIR}}/infrastructure/talos/schematic/{{.MODE}}.yaml" https://factory.talos.dev/schematics | jq -r '.id'
+        sh: |
+          yq '.controlPlane.schematic' "{{.TALOS_DIR}}/talconfig.{{.MODE}}.yaml" > /tmp/schematic.yaml
+          curl -s -X POST --data-binary @/tmp/schematic.yaml https://factory.talos.dev/schematics | jq -r '.id'
       IMAGE: '{{if .SECUREBOOT}}{{.PLATFORM}}-{{.ARCH}}-secureboot.iso{{else}}{{.PLATFORM}}-{{.ARCH}}.iso{{end}}'
     cmds:
       - |
@@ -35,23 +37,23 @@ tasks:
     preconditions:
       - '[[ "{{.MODE}}" == "test" || "{{.MODE}}" == "prod" ]]'
       - which op talhelper
-      - test -f "{{.K8S_DIR}}/infrastructure/talos/talconfig.{{.MODE}}.yaml"
-      - test -f "{{.K8S_DIR}}/infrastructure/talos/talsecret.yaml"
-      - test -f "{{.K8S_DIR}}/infrastructure/talos/talhelper.env"
+      - test -f "{{.TALOS_DIR}}/talconfig.{{.MODE}}.yaml"
+      - test -f "{{.TALOS_DIR}}/talsecret.yaml"
+      - test -f "{{.TALOS_DIR}}/talhelper.env"
     vars:
       MODE: '{{.MODE | default "prod"}}'
     cmds:
-      - op run --env-file {{.K8S_DIR}}/infrastructure/talos/talhelper.env --no-masking -- talhelper genconfig
-        --config-file {{.K8S_DIR}}/infrastructure/talos/talconfig.{{.MODE}}.yaml
-        --secret-file {{.K8S_DIR}}/infrastructure/talos/talsecret.yaml
-        --out-dir {{.K8S_DIR}}/infrastructure/talos/clusterconfig
+      - op run --env-file {{.TALOS_DIR}}/talhelper.env --no-masking -- talhelper genconfig
+        --config-file {{.TALOS_DIR}}/talconfig.{{.MODE}}.yaml
+        --secret-file {{.TALOS_DIR}}/talsecret.yaml
+        --out-dir {{.TALOS_DIR}}/clusterconfig
       - fish -i -c 'mkdir -p ~/.talos && cp $TALOSCONFIG ~/.talos/config'
 
   apply-clusterconfig:
     desc: Apply clusterconfig for a Talos cluster
     vars:
       CLUSTERCONFIG_FILES:
-        sh: ls {{.K8S_DIR}}/infrastructure/talos/clusterconfig/*.yaml
+        sh: ls {{.TALOS_DIR}}/clusterconfig/*.yaml
     preconditions:
       - test -f "${TALOSCONFIG}"
     cmds:
@@ -76,7 +78,7 @@ tasks:
         - NODE
     vars:
       FILE:
-        sh: ls {{.K8S_DIR}}/infrastructure/talos/clusterconfig/homelab-{{.NODE}}*.yaml
+        sh: ls {{.TALOS_DIR}}/clusterconfig/homelab-{{.NODE}}*.yaml
     cmds:
       - task: _apply-machineconfig
         vars:
@@ -95,7 +97,7 @@ tasks:
         - NODE
     vars:
       FILE:
-        sh: ls {{.K8S_DIR}}/infrastructure/talos/clusterconfig/homelab-{{.NODE}}*.yaml
+        sh: ls {{.TALOS_DIR}}/clusterconfig/homelab-{{.NODE}}*.yaml
       TALOS_IMAGE:
         sh: yq '.machine.install.image' < "{{.FILE}}"
     cmds:

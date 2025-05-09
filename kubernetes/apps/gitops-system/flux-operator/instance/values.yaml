@@ -15,7 +15,7 @@ instance:
     kind: GitRepository
     url: https://github.com/soulwhisper/homelab-ops.git
     ref: refs/heads/main
-    path: kubernetes/infrastructure/flux/cluster
+    path: kubernetes/flux/cluster
     interval: 1h
   commonMetadata:
     labels:

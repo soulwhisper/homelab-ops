@@ -8,12 +8,11 @@ shopt:
   - globstar
 
 includes:
+  bootstrap: .taskfiles/bootstrap/Taskfile.yaml
   ceph: .taskfiles/ceph/Taskfile.yaml
   fix: .taskfiles/fix/Taskfile.yaml
   flux: .taskfiles/flux/Taskfile.yaml
   k8s: .taskfiles/k8s/Taskfile.yaml
-  k8s-bootstrap: .taskfiles/k8s-bootstrap/Taskfile.yaml
-  karmada: .taskfiles/karmada/Taskfile.yaml
   postgres: .taskfiles/postgres/Taskfile.yaml
   sops: .taskfiles/sops/Taskfile.yaml
   talos: .taskfiles/talos/Taskfile.yaml
@@ -21,9 +20,10 @@ includes:
 
 vars:
   K8S_DIR: "{{.ROOT_DIR}}/kubernetes"
-  KUBECONFIG: "{{.K8S_DIR}}/infrastructure/talos/clusterconfig/kubeconfig"
+  TALOS_DIR: "{{.ROOT_DIR}}/infrastructure/talos"
+  KUBECONFIG: "{{.TALOS_DIR}}/clusterconfig/kubeconfig"
+  TALOSCONFIG: "{{.TALOS_DIR}}/clusterconfig/talosconfig"
   MINIJINJA_ARGS: "--autoescape none --env --lstrip-blocks --trim-blocks"
-  TALOSCONFIG: "{{.K8S_DIR}}/infrastructure/talos/clusterconfig/talosconfig"
 
 env:
   KUBECONFIG: "{{.KUBECONFIG}}"

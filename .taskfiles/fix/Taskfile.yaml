@@ -15,18 +15,6 @@ tasks:
       - direnv allow
       - echo "K8S environment restored."
 
-  flux:
-    desc: Restore flux if it uninstalled itself
-    silent: true
-    preconditions:
-      - which helmfile
-      - test -f "${KUBECONFIG}"
-      - test -f "{{.K8S_DIR}}/infrastructure/bootstrap/helmfile.yaml"
-    cmds:
-      - helmfile --file {{.K8S_DIR}}/infrastructure/bootstrap/helmfile.yaml apply -l name=flux-operator sync --skip-diff-on-install --suppress-diff
-      - helmfile --file {{.K8S_DIR}}/infrastructure/bootstrap/helmfile.yaml apply -l name=flux-instance sync --skip-diff-on-install --suppress-diff
-      - echo "flux re-installed."
-
   "retry-*":
     desc: Retry Certain Flux Helmrelease or Kustomization [NAME=required] [NS=required]
     vars:

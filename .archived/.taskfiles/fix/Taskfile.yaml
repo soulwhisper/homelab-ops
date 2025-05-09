@@ -1,0 +1,17 @@
+---
+# yaml-language-server: $schema=https://taskfile.dev/schema.json
+version: "3"
+
+tasks:
+
+  flux:
+    desc: Restore flux if it uninstalled itself
+    silent: true
+    preconditions:
+      - which helmfile
+      - test -f "${KUBECONFIG}"
+      - test -f "{{.K8S_DIR}}/bootstrap/helmfile.yaml"
+    cmds:
+      - helmfile --file {{.K8S_DIR}}/bootstrap/helmfile.yaml apply -l name=flux-operator sync --skip-diff-on-install --suppress-diff
+      - helmfile --file {{.K8S_DIR}}/bootstrap/helmfile.yaml apply -l name=flux-instance sync --skip-diff-on-install --suppress-diff
+      - echo "flux re-installed."

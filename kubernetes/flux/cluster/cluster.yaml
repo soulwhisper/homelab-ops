@@ -8,7 +8,7 @@ metadata:
 spec:
   targetNamespace: gitops-system
   interval: 30m
-  path: ./kubernetes/infrastructure/flux/repositories
+  path: ./kubernetes/flux/repositories
   prune: true
   wait: false
   sourceRef:

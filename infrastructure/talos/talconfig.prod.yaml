@@ -1,8 +1,9 @@
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/budimanjojo/talhelper/master/pkg/config/schemas/talconfig.json
-clusterName: &clusterName main # same in cilium
+clusterName: &clusterName main
 endpoint: "https://k8s.homelab.internal:6443"
 
+# schema = 567dbfa10c6acc76460aecdd8378a137e3f0bc3b4bc92a20d1dfd244be00cd5c
 # enabled features:
 #   - predictable ifnames
 #   - disk-encryption
@@ -100,15 +101,10 @@ controlPlane:
   schematic:
     customization:
       extraKernelArgs:
-      # - cpufreq.default_governor=performance       # cost more power
-      # - intel_idle.max_cstate=0                    # cost more power
-        - iommu.passthrough=1                        # pci passthrough
-        - intel_iommu=on                             # pci passthrough, intel
-        - init_on_alloc=0                            # memory optimize
-        - init_on_free=0                             # memory optimize
-        - net.ifnames=1                              # predictable interface naming
-        - console=ttyS0                              # disable if barematel
-        - talos.network.interface.ignore=enp88s0     # block i226-lm in ms-01
+        - iommu.passthrough=1                     # pci passthrough
+        - intel_iommu=on                          # pci passthrough, intel
+        - net.ifnames=1                           # predictable interface naming
+        - talos.network.interface.ignore=enp88s0  # block i226-lm in ms-01
       systemExtensions:
         officialExtensions:
           - siderolabs/intel-ucode
@@ -116,7 +112,6 @@ controlPlane:
           - siderolabs/mei
           - siderolabs/thunderbolt
           - siderolabs/nut-client
-          - siderolabs/qemu-guest-agent
   extensionServices:
     - name: nut-client
       configFiles:
@@ -136,11 +131,6 @@ controlPlane:
           advertisedSubnets:
             - 10.10.0.0/24
 
-  # AdmissionControl configuration, disabled; use labels instead
-  #  - |-
-  #    - op: remove
-  #      path: /cluster/apiServer/admissionControl
-
 # general patches
 patches:
   # Kernel modules, Enable thunderbolt/USB4 networking support
@@ -158,34 +148,6 @@ patches:
         http_proxy: http://10.10.0.10:1080
         https_proxy: http://10.10.0.10:1080
         no_proxy: .noirprime.com,.homelab.internal,localhost,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16
-
-  # Enable OpenEBS Storage
-  # - |-
-  #   machine:
-  #     sysctls:
-  #       vm.nr_hugepages: "1024"
-  #     nodeLabels:
-  #       openebs.io/engine: mayastor
-  #     kubelet:
-  #       extraMounts:
-  #         - destination: /var/local/openebs
-  #           type: bind
-  #           source: /var/local/openebs
-  #           options:
-  #             - rbind
-  #             - rshared
-  #             - rw
-
-  # Enable DRBD and LVM-Thin
-  # - |-
-  #   machine:
-  #     kernel:
-  #       modules:
-  #         - name: drbd
-  #           parameters:
-  #             - usermode_helper=disabled
-  #         - name: drbd_transport_tcp
-  #         - name: dm_thin_pool
 
   # Configure NFS mount options
   - |
