@@ -44,15 +44,27 @@ spec:
               volumeMounts:
                 - name: tmp
                   mountPath: /tmp
+                - mountPath: /var/run/secrets/talos.dev
+                  name: talos-secrets
           restartPolicy: OnFailure
           volumes:
             - name: tmp
               emptyDir: {}
+            - name: talos-secrets
+              secret:
+                secretName: talos-backup-secrets
 ---
 apiVersion: talos.dev/v1alpha1
 kind: ServiceAccount
 metadata:
-  name: talos-backup
+    name: talos-backup-secrets
 spec:
-  roles:
-    - os:etcd:backup
+    roles:
+        - os:etcd:backup
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: talos-backup-secrets
+  annotations:
+    kubernetes.io/service-account.name: talos-backup-secrets
