@@ -1,4 +1,11 @@
 ---
+# :: enabled tunning
+# BIGTCP, xdp, for Intel-x710(ice);
+# Recommendation:netkit, host-routing, bbr, ebpf-backend-memory, ebpf-clock-probe;
+# maglev-hashing, preallocate-maps;
+# :: features
+# hubble:disabled, hostLegacyRouting:disabled, ipam:kubernetes;
+# ::
 autoDirectNodeRoutes: true
 bandwidthManager:
   enabled: true
@@ -7,14 +14,11 @@ bgpControlPlane:
   enabled: true
 bpf:
   datapathMode: netkit
-  events:
-    monitorInterval: 10s
+  distributedLRU.enabled: true
+  mapDynamicSizeRatio: 0.08
   masquerade: true
   preallocateMaps: true
 bpfClockProbe: true
-cluster:
-  id: 1
-  name: main
 cgroup:
   autoMount:
     enabled: false
@@ -26,43 +30,22 @@ dashboards:
   annotations:
     grafana_folder: Cilium
 devices: bond+
-enableIPv4BIGTCP: true
-# enableIPv6BIGTCP: true
+# enableIPv4BIGTCP: true  # disable for test only
 enableRuntimeDeviceDetection: true
 endpointRoutes:
   enabled: true
 envoy:
   enabled: true
   rollOutPods: true
+  prometheus:
+     serviceMonitor:
+       enabled: true
 gatewayAPI:
   enabled: true
   enableAlpn: true
   xffNumTrustedHops: 1
 hubble:
-  enabled: true
-  eventQueueSize: 32768
-  metrics:
-    enabled:
-      - dns:query
-      - drop
-      - tcp
-      - flow
-      - port-distribution
-      - icmp
-      - http
-    serviceMonitor:
-      enabled: true
-    dashboards:
-      enabled: true
-  relay:
-    enabled: true
-    rollOutPods: true
-    prometheus:
-      serviceMonitor:
-        enabled: true
-  ui:
-    enabled: true
-    rollOutPods: true
+  enabled: false
 ipam:
   mode: "kubernetes"
 ipv4NativeRoutingCIDR: 10.100.0.0/17
@@ -73,7 +56,7 @@ k8sServicePort: 7445
 kubeProxyReplacement: true
 kubeProxyReplacementHealthzBindAddr: 0.0.0.0:10256
 loadBalancer:
-  acceleration: native # ms-01, otherwise best-effort
+  acceleration: best-effort
   algorithm: maglev
   mode: hybrid
 maglev:

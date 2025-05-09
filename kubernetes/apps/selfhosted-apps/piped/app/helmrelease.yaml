@@ -26,9 +26,9 @@ spec:
       hostUsers: false
     securityContext:
       runAsNonRoot: true
-      runAsUser: 1000
-      runAsGroup: 1000
-      fsGroup: 1000
+      runAsUser: 2000
+      runAsGroup: 2000
+      fsGroup: 2000
       fsGroupChangePolicy: "OnRootMismatch"
 
     controllers:
@@ -88,7 +88,7 @@ spec:
           app:
             image:
               repository: 1337kavin/piped-proxy
-              tag: latest@sha256:84888008b229b422ac16795429cd154ca90f5e361a794c9b14dc43047d602314
+              tag: latest@sha256:ef68dc896ce2e3c0e4abda7eda99dbf3272262be490c0b4b3cd54c36a357c264
             command:
               - /app/piped-proxy
             probes:
@@ -110,7 +110,7 @@ spec:
           app:
             image:
               repository: 1337kavin/bg-helper-server
-              tag: latest@sha256:853859d75bc24d0779c4a6e75051dc3cc5e165a6ccf54977d9276ccbf75291d2
+              tag: latest@sha256:5c7e03f5c1115fb53828385bb6e1a45009aa781a5e09594fcd1019b28813962e
             probes:
               liveness:
                 enabled: true

@@ -8,7 +8,7 @@ spec:
   interval: 30m
   chartRef:
     kind: OCIRepository
-    name: flux-operator
+    name: flux-instance
   install:
     crds: CreateReplace
     remediation:

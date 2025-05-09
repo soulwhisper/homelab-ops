@@ -25,9 +25,9 @@ spec:
       hostUsers: false
     securityContext:
       runAsNonRoot: true
-      runAsUser: 1000
-      runAsGroup: 1000
-      fsGroup: 1000
+      runAsUser: 2000
+      runAsGroup: 2000
+      fsGroup: 2000
       fsGroupChangePolicy: "OnRootMismatch"
 
     controllers:
@@ -38,7 +38,7 @@ spec:
           app:
             image:
               repository: freshrss/freshrss
-              tag: 1.26.1-alpine
+              tag: 1.26.2-alpine
             env:
               CRON_MIN: "*"
               DOMAIN: freshrss.noirprime.com
@@ -77,7 +77,7 @@ spec:
 
     persistence:
       data:
-        existingClaim: freshrss
+        existingClaim: freshrss-app
         advancedMounts:
           freshrss:
             app:

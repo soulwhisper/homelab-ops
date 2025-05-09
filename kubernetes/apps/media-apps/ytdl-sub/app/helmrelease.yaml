@@ -25,9 +25,9 @@ spec:
       hostUsers: false
     securityContext:
       runAsNonRoot: true
-      runAsUser: 1000
-      runAsGroup: 1000
-      fsGroup: 1000
+      runAsUser: 2000
+      runAsGroup: 2000
+      fsGroup: 2000
       fsGroupChangePolicy: OnRootMismatch
 
     controllers:
@@ -48,7 +48,7 @@ spec:
           app:
             image:
               repository: ghcr.io/jmbannon/ytdl-sub
-              tag: 2025.04.02
+              tag: 2025.05.01
             command:
               - bash
               - -c
@@ -82,11 +82,15 @@ spec:
                 readOnly: true
 
       media:
-        existingClaim: shared-media
+        type: nfs
+        server: nas.homelab.internal
+        path: /mnt/Arcanum/shared/media
         advancedMounts:
           ytdl-sub:
             app:
-              - path: /music
-                subPath: /media/music
-              - path: /tv_shows
-                subPath: /media/tv_shows
+              - path: /media/movie
+                subPath: movie
+              - path: /media/music
+                subPath: music
+              - path: /media/tv_shows
+                subPath: tv-shows

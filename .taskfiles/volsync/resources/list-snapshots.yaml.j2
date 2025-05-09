@@ -20,13 +20,12 @@ spec:
             - snapshots
           envFrom:
             - secretRef:
-                name: {{ ENV.APP }}-volsync-s3
+                name: {{ ENV.APP }}-volsync-nfs
           volumeMounts:
             - mountPath: /repository
               name: repository
       volumes:
         - name: repository
-          # this is the fallback endpoint
           nfs:
-            server: "nix-infra.homelab.internal"
-            path: "/persist/shared/nfs"
+            server: "nas.homelab.internal"
+            path: "/mnt/Arcanum/shared/k8s"

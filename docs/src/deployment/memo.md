@@ -1,34 +1,36 @@
 # Memo
 
-- bring up new cluster, using secureboot ISO, not pxe/matchbox;
-- migrated from mayastor to ceph; disable ceph-nfs;
-- `hostLegacyRouting: true` conflict wih BIGTCP and BBR, disabled; hence `forwardKubeDNSToHost` is disabled; [ref](https://github.com/siderolabs/talos/issues/10002#issuecomment-2557069620);
+- `hostLegacyRouting:true` conflict wih BIGTCP and BBR, disabled; hence `forwardKubeDNSToHost` is disabled; [ref](https://github.com/siderolabs/talos/issues/10002#issuecomment-2557069620);
 - use hardcoded securityContext instead of kyverno;
+- external nfs_v4.2 backup using `uid:gid = 2000:2000`;
+- media stored in external nas-nfs, using `documents,movie,music,tv-shows` folders;
+- test env using proxmox-vm, with secureboot enabled, subnet `172.19.82.0/24`;
+- `v1.10+` will ignore `.machine.install.extraKernelArgs` and `.machine.install.extensions` fields in talconfig;
 
 ## Infra
 
-- `infra/scripts/minio-bucket-keys.sh`, create minio buckets, service accounts and policies for k8s apps, using 1password keys.
-- offsite backup ( volsync ) use minio @ nix-infra;
-- openebs-hostpath, disabled due to MS-01 using 256G system disk;
+- vlan is managed by switch as ACCESS mode;
+- openebs-hostpath, deprecated due to MS-01 using 256G system disk;
 - ceph-block, for database and apps;
-- ceph-fs, for shared-media;
-- ceph-s3, for volsync backup;
-- onepassword as main secret store;
+- ceph-fs, deprecated, use nas-nfs for shared media;
+- ceph-s3, deprecated, use nas-nfs for volsync backup;
+- volsync nfs-backup using mutatingAdmissionPolicy;
+- onepassword as main secret store; sync might need proxy;
 - use Valkey instead of Dragonflydb if apps served <= 2;
-
-### Over Engineering
-
-- NTS support servers in NTP config;
-- Disk encryption for homelab env;
 
 ## Deployment
 
-- set `exarch-0n` and `k8s.homelab.internal` to IPs;
-- `10.10.0.10` as nix-infra node, dns / ntp / talos-api / ...;
-- `10.10.0.100` as VIP;
-- `10.10.0.101-103` as k8s nodes;
+- `10.10.0.10` as `nas.homelab.internal`, provide `dns` / `ntp` / `talos-api` / `nfs` / ...;
+- `10.10.0.100` as `k8s.homelab.internal`, VIP;
+- `10.10.0.101-103` as `exarch-0n.homelab.internal`, nodes;
 - `10.10.0.201-250` as cilium l2 loadbalancer ip;
-- self-hosted-runner, label:arc-homelab / label:arc-homelab-ops;
+- self-hosted-runners, label:arc-homelab / label:arc-homelab-ops;
+
+### Proxy
+
+- `cert-manager`, `fluxcd`, `onepassword-sync` using `HTTPS GET`, should set `https_proxy`;
+-  no_proxy = `.cluster.local.,.cluster.local,.svc,localhost,127.0.0.1,{pod-subnet},{svc-subnet}`;
+- talos env.proxy for container pulling;
 
 ### Bootstrap
 
@@ -37,7 +39,7 @@
 cd homelab-ops
 eval $(op signin)
 
-## dev-env method-1
+## dev-env method-1, or direnv
 export KUBECONFIG=$PWD/kubernetes/infrastructure/talos/clusterconfig/kubeconfig
 export TALOSCONFIG=$PWD/kubernetes/infrastructure/talos/clusterconfig/talosconfig
 ## dev-env method-2
@@ -45,33 +47,43 @@ devenv shell
 
 # bootstrap
 task talos:generate-clusterconfig
+## if test
+task talos:generate-clusterconfig MODE=test
+
 task k8s-bootstrap:talos
 task k8s-bootstrap:apps
-
-## if failed to pull etcd, restart proxy-service, or reduce VM mtu to 1200
 
 # check
 kubectl get ks -A
 kubectl get hr -A
-```
 
-### Flux Debug
-
-```shell
+## Flux Debug
 task reconcile
-flux check
 flux get sources git gitops-system
+flux get all -A --status-selector ready=false
 
 kubectl -n gitops-system get fluxreport/flux -o yaml
 kubectl -n gitops-system events --for FluxInstance/flux
 kubectl -n gitops-system logs deployment/flux-operator
-flux -n gitops-system get all -A --status-selector ready=false
 
 ```
 
-### Talos Reset
+## Talos Reset
 
 ```shell
 ## Hic sunt leones.
 talosctl reset --system-labels-to-wipe STATE --system-labels-to-wipe EPHEMERAL --graceful=false --wait=false --reboot
 ```
+
+## VM test issues
+
+- only `proxmox` support secureboot test, for now;
+- virtual disks, will make rook-ceph-osd-prepare `0/1 completed` forever;
+- virtual nic not support BIGTCP and XDP;
+
+## Multi-Sites plan
+
+- homelab using talconfig `prod`; corplab using talconfig `test`;
+- [ ] add `MODE` / `SITE` to `task:k8s-bootstrap`;
+- [ ] seperate workloads between `prod` and `test`;
+- [ ] refractor folders if needed;

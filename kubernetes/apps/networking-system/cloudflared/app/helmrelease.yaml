@@ -25,9 +25,9 @@ spec:
       hostUsers: false
     securityContext:
       runAsNonRoot: true
-      runAsUser: 1000
-      runAsGroup: 1000
-      fsGroup: 1000
+      runAsUser: 2000
+      runAsGroup: 2000
+      fsGroup: 2000
       fsGroupChangePolicy: OnRootMismatch
 
     controllers:
@@ -40,7 +40,7 @@ spec:
           app:
             image:
               repository: docker.io/cloudflare/cloudflared
-              tag: 2025.4.0@sha256:522827fe6220249d72ade9a85cf5bdcc52c18ef1d13c7a3bb7480f56a0fd36e6
+              tag: 2025.4.2@sha256:698f5c59bf0b9ece62f8c60061004bdfcf7718fbac5d72b87e214af7b9d1d7ac
             args: ["tunnel", "run"]
             env:
               NO_AUTOUPDATE: "true"

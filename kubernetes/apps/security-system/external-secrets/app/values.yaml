@@ -7,6 +7,8 @@ image:
 serviceMonitor:
   enabled: true
   interval: 1m
+grafanaDashboard:
+  enabled: true
 certController:
   image:
     repository: ghcr.io/external-secrets/external-secrets

@@ -1,6 +1,8 @@
 ---
 # yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
 name: Label Sync
+permissions:
+  issues: write
 
 on:
   workflow_dispatch:
@@ -9,9 +11,6 @@ on:
     paths: [".github/labels.yaml"]
   schedule:
     - cron: "0 0 * * *" # Every day at midnight
-
-permissions:
-  issues: write
 
 jobs:
   main:

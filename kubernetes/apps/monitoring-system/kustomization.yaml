@@ -6,7 +6,6 @@ namespace: monitoring-system
 resources:
   - ./alertmanager/ks.yaml
   - ./coroot/ks.yaml
-  - ./deepflow/ks.yaml
   - ./gatus/ks.yaml
   - ./grafana/ks.yaml
   - ./kube-prometheus-stack/ks.yaml

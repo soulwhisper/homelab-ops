@@ -9,7 +9,7 @@ spec:
   chart:
     spec:
       chart: deepflow
-      version: 6.5.012
+      version: 7.0.006 # non-semver
       sourceRef:
         kind: HelmRepository
         name: deepflow

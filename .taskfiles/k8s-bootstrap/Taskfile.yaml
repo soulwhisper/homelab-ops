@@ -24,6 +24,8 @@ tasks:
   apps:
     desc: Bootstrap Apps
     prompt: Bootstrap apps into Talos cluster?
+    vars:
+      FIX: '{{.FIX | default "false"}}'
     preconditions:
       - which helmfile kubectl minijinja-cli op
       - test -f "${KUBECONFIG}"
@@ -32,6 +34,8 @@ tasks:
       - test -f "{{.K8S_DIR}}/infrastructure/bootstrap/resources.yaml.j2"
       - op user get --me
     cmds:
-      - until kubectl wait nodes --for=condition=Ready=False --all --timeout=10m; do sleep 5; done
+      - |
+        {{if ne .FIX "true"}} until kubectl wait nodes --for=condition=Ready=False --all --timeout=10m; do sleep 5; done {{end}}
+      - kubectl label namespace kube-system pod-security.kubernetes.io/enforce=privileged
       - op run --env-file {{.K8S_DIR}}/infrastructure/bootstrap/bootstrap.env --no-masking -- minijinja-cli {{.MINIJINJA_ARGS}} "{{.K8S_DIR}}/infrastructure/bootstrap/resources.yaml.j2" | kubectl apply --server-side --filename -
       - helmfile --file {{.K8S_DIR}}/infrastructure/bootstrap/helmfile.yaml apply --skip-diff-on-install --suppress-diff

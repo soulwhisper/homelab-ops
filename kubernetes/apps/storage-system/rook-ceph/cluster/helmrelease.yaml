@@ -103,6 +103,7 @@ spec:
           allowVolumeExpansion: true
           volumeBindingMode: WaitForFirstConsumer
           parameters:
+            compression_mode: aggressive # algorithm=snappy
             imageFormat: "2"
             imageFeatures: layering,fast-diff,object-map,deep-flatten,exclusive-lock
             csi.storage.k8s.io/provisioner-secret-name: rook-csi-rbd-provisioner
@@ -114,78 +115,8 @@ spec:
             csi.storage.k8s.io/fstype: ext4
     cephBlockPoolsVolumeSnapshotClass:
       enabled: true
-      name: ceph-block
-      isDefault: false
+      name: ceph-block-snapshot
+      isDefault: true
       deletionPolicy: Delete
-    cephFileSystems:
-      - name: ceph-filesystem
-        spec:
-          metadataPool:
-            replicated:
-              size: 3
-          dataPools:
-            - name: data0
-              failureDomain: host
-              replicated:
-                size: 3
-          metadataServer:
-            # Active/passive
-            activeCount: 1
-            activeStandby: true
-            resources:
-              limits:
-                memory: 1Gi
-              requests:
-                cpu: 100m
-                memory: 1Gi
-            priorityClassName: system-cluster-critical
-        storageClass:
-          enabled: true
-          isDefault: false
-          name: ceph-fs
-          pool: data0
-          reclaimPolicy: Delete
-          allowVolumeExpansion: true
-          volumeBindingMode: Immediate
-          parameters:
-            csi.storage.k8s.io/provisioner-secret-name: rook-csi-cephfs-provisioner
-            csi.storage.k8s.io/provisioner-secret-namespace: *cluster_namespace
-            csi.storage.k8s.io/controller-expand-secret-name: rook-csi-cephfs-provisioner
-            csi.storage.k8s.io/controller-expand-secret-namespace: *cluster_namespace
-            csi.storage.k8s.io/node-stage-secret-name: rook-csi-cephfs-node
-            csi.storage.k8s.io/node-stage-secret-namespace: *cluster_namespace
-            csi.storage.k8s.io/fstype: ext4
-    cephFileSystemVolumeSnapshotClass:
-      enabled: true
-      name: ceph-fs
-      isDefault: false
-      deletionPolicy: Delete
-    cephObjectStores:
-      - name: ceph-objectstore
-        spec:
-          metadataPool:
-            failureDomain: host
-            replicated:
-              size: 3
-          dataPool:
-            failureDomain: host
-            replicated:
-              size: 3
-          preservePoolsOnDelete: true
-          gateway:
-            port: 80
-            resources:
-              limits:
-                memory: 1Gi
-              requests:
-                cpu: 100m
-                memory: 1Gi
-            instances: 1
-            priorityClassName: system-cluster-critical
-        storageClass:
-          enabled: true
-          name: ceph-s3
-          reclaimPolicy: Delete
-          volumeBindingMode: Immediate
-        ingress:
-          enabled: false
+    cephFileSystems: []
+    cephObjectStores: []

@@ -25,25 +25,15 @@ spec:
       hostUsers: false
     securityContext:
       runAsNonRoot: true
-      runAsUser: 1000
-      runAsGroup: 1000
-      fsGroup: 1000
+      runAsUser: 2000
+      runAsGroup: 2000
+      fsGroup: 2000
       fsGroupChangePolicy: OnRootMismatch
 
     controllers:
       system-upgrade-controller:
         strategy: RollingUpdate
         replicas: 3
-        pod:
-          tolerations:
-            - key: CriticalAddonsOnly
-              operator: Exists
-            - key: node-role.kubernetes.io/control-plane
-              operator: Exists
-              effect: NoSchedule
-            - key: node-role.kubernetes.io/master
-              operator: Exists
-              effect: NoSchedule
         containers:
           app:
             image:
@@ -60,7 +50,6 @@ spec:
                 valueFrom:
                   fieldRef:
                     fieldPath: spec.nodeName
-              SYSTEM_UPGRADE_JOB_BACKOFF_LIMIT: "99"
               SYSTEM_UPGRADE_JOB_PRIVILEGED: false
             securityContext:
               allowPrivilegeEscalation: false
@@ -68,8 +57,6 @@ spec:
               capabilities:
                 drop:
                   - ALL
-              seccompProfile:
-                type: RuntimeDefault
 
     serviceAccount:
       create: true
