@@ -5,3 +5,5 @@ kind: Kustomization
 resources:
   - ./helmrepository.yaml
   - ./helmrelease.yaml
+  - ./config.yaml
+  - ./httproute.yaml
