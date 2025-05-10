@@ -47,6 +47,3 @@ inhibit_rules:
     target_matchers:
       - severity = "warning"
     equal: ["alertname", "namespace"]
-
-
-# msg="Loading configuration file failed" component=configuration file=/etc/alertmanager/alertmanager.yml err="yaml: unmarshal errors:\n  line 12: field text not found in type config.plain"
