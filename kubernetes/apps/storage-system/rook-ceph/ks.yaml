@@ -53,6 +53,7 @@ spec:
     - apiVersion: ceph.rook.io/v1
       kind: CephCluster
       name: *namespace
+      # name: rook-ceph # for prod
       namespace: *namespace
   healthCheckExprs:
     - apiVersion: ceph.rook.io/v1
