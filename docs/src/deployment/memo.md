@@ -15,8 +15,10 @@
 - ceph-fs, deprecated, use nas-nfs for shared media;
 - ceph-s3, deprecated, use nas-nfs for volsync backup;
 - volsync nfs-backup using mutatingAdmissionPolicy;
-- onepassword as main secret store; sync might need proxy;
+- onepassword as main secret store;
+- externaldns-adguard store records in `custom-adblock` field;
 - use Valkey instead of Dragonflydb if apps served <= 2;
+- [ ] use `Bump-in-the-Wire Routing` replace https_proxy;
 
 ## Deployment
 
@@ -28,7 +30,7 @@
 
 ### Proxy
 
-- `cert-manager`, `fluxcd`, `onepassword-sync` using `HTTPS GET`, should set `https_proxy`;
+- `cert-manager`, `coroot-operator`, `externaldns-cloudflare`, `flux-operator`, `grafana`, `onepassword-sync`, `pgo` using `HTTPS GET`, should set `https_proxy`;
 -  no_proxy = `.cluster.local.,.cluster.local,.svc,localhost,127.0.0.1,{pod-subnet},{svc-subnet}`;
 - talos env.proxy for container pulling;
 

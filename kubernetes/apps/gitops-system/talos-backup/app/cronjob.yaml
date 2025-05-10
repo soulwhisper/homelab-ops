@@ -44,11 +44,15 @@ spec:
               volumeMounts:
                 - name: tmp
                   mountPath: /tmp
-                - mountPath: /var/run/secrets/talos.dev
-                  name: talos-secrets
+                - name: talos
+                  mountPath: /.talos
+                - name: talos-secrets
+                  mountPath: /var/run/secrets/talos.dev
           restartPolicy: OnFailure
           volumes:
             - name: tmp
+              emptyDir: {}
+            - name: talos
               emptyDir: {}
             - name: talos-secrets
               secret:

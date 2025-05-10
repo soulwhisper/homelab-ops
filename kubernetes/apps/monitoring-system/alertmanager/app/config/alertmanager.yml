@@ -9,7 +9,7 @@ receivers:
           {{ if eq .Status "firing" }}🔥 **ALERT: {{ .CommonLabels.alertname }} ({{ .Alerts.Firing | len }} Active)** 🔥
           {{ else }}✅ **RESOLVED: {{ .CommonLabels.alertname }}** ✅
           {{ end }}
-        text: |-
+        content: |-
           {{- range .Alerts }}
           ---
           **🔔 Alert Details:**
@@ -47,3 +47,6 @@ inhibit_rules:
     target_matchers:
       - severity = "warning"
     equal: ["alertname", "namespace"]
+
+
+# msg="Loading configuration file failed" component=configuration file=/etc/alertmanager/alertmanager.yml err="yaml: unmarshal errors:\n  line 12: field text not found in type config.plain"
