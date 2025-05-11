@@ -25,10 +25,7 @@ spec:
       hostUsers: false
     securityContext:
       runAsNonRoot: true
-      runAsUser: 2000
-      runAsGroup: 2000
-      fsGroup: 2000
-      fsGroupChangePolicy: OnRootMismatch
+      runAsGroup: 65534 # icmp_ping_group
 
     controllers:
       cloudflared:
@@ -44,14 +41,10 @@ spec:
             args: ["tunnel", "run"]
             env:
               NO_AUTOUPDATE: "true"
-              TUNNEL_CRED_FILE: /etc/cloudflared/creds/credentials.json
               TUNNEL_METRICS: 0.0.0.0:8080
-              TUNNEL_ORIGIN_ENABLE_HTTP2: true
-              TUNNEL_POST_QUANTUM: true
-              TUNNEL_TRANSPORT_PROTOCOL: quic
             envFrom:
               - secretRef:
-                  name: cloudflared-secret
+                  name: cloudflared-token
             probes:
               liveness: &probes
                 enabled: true

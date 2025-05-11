@@ -91,7 +91,7 @@ jobs:
           } >> "${GITHUB_STEP_SUMMARY}"
 
   pre-pull-images:
-    timeout-minutes: 120
+    timeout-minutes: 30
     if: ${{ needs.compare-images.outputs.images != '[]' }}
     name: Pre-pull images
     runs-on:

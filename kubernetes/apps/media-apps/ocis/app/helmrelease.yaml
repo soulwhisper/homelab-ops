@@ -113,15 +113,13 @@ spec:
             readOnly: true
       app:
         existingClaim: ocis-app
-        advancedMounts:
-          ocis:
-            app:
-              - path: /etc/ocis
-      data:
-        type: nfs
-        server: nas.homelab.internal
-        path: /mnt/Arcanum/shared/media
-        advancedMounts:
-          ocis:
-            app:
-              - path: /var/lib/ocis
+        globalMounts:
+          - path: /var/lib/ocis
+            subPath: data
+          - path: /etc/ocis
+            subPath: config
+      tmpfs:
+        type: emptyDir
+        globalMounts:
+          - path: /tmp
+            subPath: tmp

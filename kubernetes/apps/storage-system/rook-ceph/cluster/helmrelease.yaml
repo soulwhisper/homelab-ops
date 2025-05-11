@@ -29,6 +29,7 @@ spec:
     toolbox:
       enabled: false
     cephClusterSpec:
+      name: rook-ceph
       cephConfig:
         global:
           bdev_enable_discard: "true"

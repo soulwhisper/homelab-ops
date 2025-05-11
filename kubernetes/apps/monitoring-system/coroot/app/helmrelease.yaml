@@ -9,7 +9,7 @@ spec:
   chart:
     spec:
       chart: coroot-operator
-      version: 0.3.0
+      version: 0.3.1
       sourceRef:
         kind: HelmRepository
         name: coroot
@@ -24,20 +24,8 @@ spec:
       retries: 3
 
   values:
-    corootCE:
-      env:
-        - name: AUTH_ANONYMOUS_ROLE
-          value: Admin
-
-    route:
-      main:
-        hostnames:
-          - coroot.noirprime.com
-        parentRefs:
-          - name: internal
-            namespace: kube-system
-            sectionName: https
-        rules:
-          - backendRefs:
-              - name: coroot
-                port: 80
+    spec:
+      containers:
+        - name: coroot
+          image: ghcr.io/coroot/coroot
+          args: ["--disable-usage-statistics"]

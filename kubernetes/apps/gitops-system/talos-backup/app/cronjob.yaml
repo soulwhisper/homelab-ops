@@ -11,7 +11,7 @@ spec:
         spec:
           containers:
             - name: talos-backup
-              image: ghcr.io/siderolabs/talos-backup:latest
+              image: ghcr.io/siderolabs/talos-backup:v0.1.0-beta.3
               workingDir: /tmp
               imagePullPolicy: IfNotPresent
               env:
@@ -29,6 +29,9 @@ spec:
                   value: "${TALOS_BACKUP_PUBLIC}"
                 - name: USE_PATH_STYLE
                   value: "true"
+              envFrom:
+                - secretRef:
+                  name: talos-backup-s3
               securityContext:
                 runAsNonRoot: true
                 runAsUser: 2000
@@ -44,20 +47,24 @@ spec:
               volumeMounts:
                 - name: tmp
                   mountPath: /tmp
-                - mountPath: /var/run/secrets/talos.dev
-                  name: talos-secrets
+                - name: talos
+                  mountPath: /.talos
+                - name: sa-token
+                  mountPath: /var/run/secrets/talos.dev
           restartPolicy: OnFailure
           volumes:
             - name: tmp
               emptyDir: {}
-            - name: talos-secrets
+            - name: talos
+              emptyDir: {}
+            - name: sa-token
               secret:
-                secretName: talos-backup-secrets
+                secretName: talos-backup-sa-token
 ---
 apiVersion: talos.dev/v1alpha1
 kind: ServiceAccount
 metadata:
-    name: talos-backup-secrets
+    name: talos-backup
 spec:
     roles:
         - os:etcd:backup
@@ -65,6 +72,6 @@ spec:
 apiVersion: v1
 kind: Secret
 metadata:
-  name: talos-backup-secrets
+  name: talos-backup-sa-token
   annotations:
-    kubernetes.io/service-account.name: talos-backup-secrets
+    kubernetes.io/service-account.name: talos-backup
