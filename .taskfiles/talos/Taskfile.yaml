@@ -40,6 +40,7 @@ tasks:
       - test -f "{{.TALOS_DIR}}/talconfig.{{.MODE}}.yaml"
       - test -f "{{.TALOS_DIR}}/talsecret.yaml"
       - test -f "{{.TALOS_DIR}}/talhelper.env"
+      - op user get --me
     vars:
       MODE: '{{.MODE | default "prod"}}'
     cmds:
