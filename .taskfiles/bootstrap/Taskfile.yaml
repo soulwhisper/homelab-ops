@@ -38,7 +38,6 @@ tasks:
     cmds:
       - |
         {{if ne .FIX "true"}} until kubectl wait nodes --for=condition=Ready=False --all --timeout=10m; do sleep 5; done {{end}}
-      - kubectl label namespace kube-system pod-security.kubernetes.io/enforce=privileged
       - op run --env-file {{.K8S_DIR}}/bootstrap/bootstrap.env --no-masking -- minijinja-cli {{.MINIJINJA_ARGS}} "{{.K8S_DIR}}/bootstrap/templates/resources.yaml.j2" | kubectl apply --server-side --filename -
       - |
         export ROOK_DISK={{.WIPE}}

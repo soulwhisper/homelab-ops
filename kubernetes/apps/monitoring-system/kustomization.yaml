@@ -18,10 +18,3 @@ resources:
 components:
   - ../../components/namespace
   - ../../components/flux/alerts
-patches:
-  - patch: |
-      - op: add
-        path: /metadata/labels/pod-security.kubernetes.io~1enforce
-        value: privileged
-    target:
-      kind: Namespace

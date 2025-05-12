@@ -1,9 +1,8 @@
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/budimanjojo/talhelper/master/pkg/config/schemas/talconfig.json
-clusterName: &clusterName main
+clusterName: &clusterName main # same in cilium
 endpoint: "https://k8s.homelab.internal:6443"
 
-# schema = 567dbfa10c6acc76460aecdd8378a137e3f0bc3b4bc92a20d1dfd244be00cd5c
 # enabled features:
 #   - predictable ifnames
 #   - disk-encryption
@@ -101,17 +100,14 @@ controlPlane:
   schematic:
     customization:
       extraKernelArgs:
-        - iommu.passthrough=1                     # pci passthrough
-        - intel_iommu=on                          # pci passthrough, intel
-        - net.ifnames=1                           # predictable interface naming
         - talos.network.interface.ignore=enp88s0  # block i226-lm in ms-01
       systemExtensions:
         officialExtensions:
           - siderolabs/intel-ucode
           - siderolabs/i915
           - siderolabs/mei
-          - siderolabs/thunderbolt
           - siderolabs/nut-client
+          - siderolabs/thunderbolt
   extensionServices:
     - name: nut-client
       configFiles:
@@ -122,6 +118,23 @@ controlPlane:
 
   # controlPlane only patches
   patches:
+    # ApiServer configuration
+    # Enable MutatingAdmissionPolicy and User-Namespaces
+    - |-
+      cluster:
+        apiServer:
+          admissionControl:
+            - name: PodSecurity
+              configuration:
+                exemptions:
+                  namespaces:
+                    - kube-system
+                    - monitoring-system
+                    - storage-system
+          extraArgs:
+            runtime-config: admissionregistration.k8s.io/v1alpha1=true
+            feature-gates: MutatingAdmissionPolicy=true,UserNamespacesSupport=true,UserNamespacesPodSecurityStandards=true
+
     # ETCD configuration, increase etcd quota to 8G, keep advertisedSubnets if using tailscale / kubespan
     - |-
       cluster:
@@ -133,13 +146,40 @@ controlPlane:
 
 # general patches
 patches:
-  # Kernel modules, Enable thunderbolt/USB4 networking support
+  # Cluster configuration
   - |-
-    machine:
-      kernel:
-        modules:
-          - name: thunderbolt
-          - name: thunderbolt_net
+    cluster:
+      allowSchedulingOnControlPlanes: true
+      coreDNS:
+        disabled: true
+      proxy:
+        disabled: true
+      discovery:
+        enabled: true
+        registries:
+          kubernetes:
+            disabled: true
+          service:
+            endpoint: http://10.10.0.10:9300
+      network:
+        podSubnets:
+          - 10.100.0.0/17
+        serviceSubnets:
+          - 10.100.128.0/17
+      scheduler:
+        config:
+          apiVersion: kubescheduler.config.k8s.io/v1
+          kind: KubeSchedulerConfiguration
+          profiles:
+            - schedulerName: default-scheduler
+              pluginConfig:
+                - name: PodTopologySpread
+                  args:
+                    defaultingType: List
+                    defaultConstraints:
+                      - maxSkew: 1
+                        topologyKey: kubernetes.io/hostname
+                        whenUnsatisfiable: ScheduleAnyway
 
   # Enable Proxy, http proxy is more stable than tproxy gateway
   - |-
@@ -148,78 +188,6 @@ patches:
         http_proxy: http://10.10.0.10:1080
         https_proxy: http://10.10.0.10:1080
         no_proxy: .noirprime.com,.homelab.internal,localhost,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16
-
-  # Configure NFS mount options
-  - |
-    machine:
-      files:
-        - op: overwrite
-          path: /etc/nfsmount.conf
-          permissions: 0o644
-          content: |
-            [ NFSMount_Global_Options ]
-            nfsvers=4.2
-            hard=True
-            noatime=True
-            nconnect=16
-
-  # Enable features
-  ## https://github.com/siderolabs/talos/issues/10002#issuecomment-2557069620;
-  ## hostLegacyRouting=true conflict with BIGTCP and BBR
-  - |-
-    machine:
-      features:
-        nodeAddressSortAlgorithm: v2
-        hostDNS:
-          enabled: true
-          forwardKubeDNSToHost: false
-          resolveMemberNames: true
-        kubernetesTalosAPIAccess:
-          enabled: true
-          allowedRoles:
-            - os:admin
-            - os:etcd:backup
-          allowedKubernetesNamespaces:
-            - gitops-system
-
-  # Enable MutatingAdmissionPolicy and User-Namespaces
-  # https://kubernetes.io/docs/tasks/configure-pod-container/user-namespaces/
-  - |-
-    cluster:
-      apiServer:
-        extraArgs:
-          runtime-config: admissionregistration.k8s.io/v1alpha1=true
-          feature-gates: MutatingAdmissionPolicy=true,UserNamespacesSupport=true,UserNamespacesPodSecurityStandards=true
-    machine:
-      sysctls:
-        user.max_user_namespaces: "11255"
-      kubelet:
-        extraConfig:
-          featureGates:
-            UserNamespacesSupport: true
-            UserNamespacesPodSecurityStandards: true
-
-  # Enable disk encryption with better encyption method, pass >= 20 characters
-  # https://github.com/siderolabs/talos/issues/8972
-  # https://en.m.wikipedia.org/wiki/Evil_maid_attack
-  - |-
-    machine:
-      systemDiskEncryption:
-        ephemeral:
-          cipher: aes-xts-plain64
-          keySize: 256
-          keys:
-            - slot: 1
-              static:
-                passphrase: ${DISK_ENCRYPTION_PASS}
-          provider: luks2
-        state:
-          cipher: aes-xts-plain64
-          keySize: 256
-          keys:
-            - slot: 0
-              tpm: {}
-          provider: luks2
 
   # NTP configuration, ip for baremetal, '/dev/ptp0' for proxmox
   - |-
@@ -248,41 +216,73 @@ patches:
         nodeIP:
           validSubnets:
             - 10.10.0.0/24
+        extraConfig:
+          featureGates:
+            UserNamespacesSupport: true
+            UserNamespacesPodSecurityStandards: true
 
-  # Cluster configuration
+  # Configure NFS mount options
+  - |
+    machine:
+      files:
+        - op: overwrite
+          path: /etc/nfsmount.conf
+          permissions: 0o644
+          content: |
+            [ NFSMount_Global_Options ]
+            nfsvers=4.2
+            hard=True
+            noatime=True
+            nconnect=16
+
+  # Kernel modules, Enable thunderbolt/USB4 networking support
   - |-
-    cluster:
-      allowSchedulingOnControlPlanes: true
-      coreDNS:
-        disabled: true
-      proxy:
-        disabled: true
-      discovery:
-        enabled: true
-        registries:
-          kubernetes:
-            disabled: true
-          service:
-            endpoint: http://10.10.0.10:9300
-      network:
-        podSubnets:
-          - 10.100.0.0/17
-        serviceSubnets:
-          - 10.100.128.0/17
-      scheduler:
-          config:
-            apiVersion: kubescheduler.config.k8s.io/v1
-            kind: KubeSchedulerConfiguration
-            profiles:
-              - schedulerName: default-scheduler
-                pluginConfig:
-                  - name: PodTopologySpread
-                    args:
-                      defaultingType: List
-                      defaultConstraints:
-                        - maxSkew: 1
-                          topologyKey: kubernetes.io/hostname
-                          whenUnsatisfiable: ScheduleAnyway
+    machine:
+      kernel:
+        modules:
+          - name: thunderbolt
+          - name: thunderbolt_net
+
+  # Enable features
+  ## https://github.com/siderolabs/talos/issues/10002#issuecomment-2557069620;
+  ## hostLegacyRouting=true conflict with BIGTCP and BBR
+  - |-
+    machine:
+      features:
+        nodeAddressSortAlgorithm: v2
+        hostDNS:
+          enabled: true
+          forwardKubeDNSToHost: false
+          resolveMemberNames: true
+        kubernetesTalosAPIAccess:
+          enabled: true
+          allowedRoles:
+            - os:admin
+            - os:etcd:backup
+          allowedKubernetesNamespaces:
+            - gitops-system
+
+  # Enable disk encryption with better encyption method, pass >= 20 characters
+  # https://github.com/siderolabs/talos/issues/8972
+  # https://en.m.wikipedia.org/wiki/Evil_maid_attack
+  - |-
+    machine:
+      systemDiskEncryption:
+        ephemeral:
+          cipher: aes-xts-plain64
+          keySize: 256
+          keys:
+            - slot: 1
+              static:
+                passphrase: ${DISK_ENCRYPTION_PASS}
+          provider: luks2
+        state:
+          cipher: aes-xts-plain64
+          keySize: 256
+          keys:
+            - slot: 0
+              tpm: {}
+          provider: luks2
 
   # Containerd configuration
   - |-
@@ -304,20 +304,13 @@ patches:
   - |-
     machine:
       sysctls:
-        fs.file-max: 1048576
-        fs.nr_open: 1048576
-        fs.inotify.max_queued_events: 65535
-        fs.inotify.max_user_watches: 1048576      # Watchdog
-        fs.inotify.max_user_instances: 8192       # Watchdog
-        net.core.default_qdisc: fq                # 10Gb/s
-        net.core.rmem_max: 67108864               # 10Gb/s | Cloudflared / QUIC
-        net.core.wmem_max: 67108864               # 10Gb/s | Cloudflared / QUIC
-        net.ipv4.tcp_congestion_control: bbr      # 10Gb/s
-        net.ipv4.tcp_fastopen: 3                  # Send and accept data in the opening SYN packet
-        net.ipv4.tcp_mtu_probing: 1               # 10Gb/s | Jumbo frames
-        net.ipv4.tcp_rmem: 4096 87380 33554432    # 10Gb/s
-        net.ipv4.tcp_wmem: 4096 65536 33554432    # 10Gb/s
-        net.netfilter.nf_conntrack_max: 2000000    # ram_32g = 1048576
+        net.core.rmem_max: 134217728              # 10G NIC, tunning
+        net.core.wmem_max: 134217728              # 10G NIC, tunning
+        net.ipv4.tcp_rmem: 4096 87380 67108864    # 10G NIC, tunning
+        net.ipv4.tcp_wmem: 4096 65536 67108864    # 10G NIC, tunning
+        net.ipv4.tcp_mtu_probing: 1               # 10G NIC, tunning
+        net.core.default_qdisc: fq                # 10G NIC, tunning
+        user.max_user_namespaces: 11255           # User-Namespaces
 
   # Udev configuration, thunderbolt & i915
   - |-
