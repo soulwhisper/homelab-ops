@@ -113,6 +113,7 @@ controlPlane:
   # controlPlane only patches
   patches:
     # ApiServer configuration
+    # Admission exemptions, default:kube-system
     # Enable MutatingAdmissionPolicy and User-Namespaces
     - |-
       cluster:
@@ -122,7 +123,6 @@ controlPlane:
               configuration:
                 exemptions:
                   namespaces:
-                    - kube-system
                     - monitoring-system
                     - storage-system
           extraArgs:
