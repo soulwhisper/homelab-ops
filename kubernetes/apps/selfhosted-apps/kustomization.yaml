@@ -7,7 +7,6 @@ resources:
   - ./freshrss/ks.yaml
   - ./karakeep/ks.yaml
   - ./n8n/ks.yaml
-  - ./piped/ks.yaml
 components:
   - ../../components/namespace
   - ../../components/flux/alerts

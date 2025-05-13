@@ -20,8 +20,8 @@ spec:
       retries: 3
 
   values:
-    clusterName: &cluster_namespace storage-system
-    csiDriverNamePrefix: *cluster_namespace
+    clusterName: rook-ceph
+    csiDriverNamePrefix: &cluster_namespace storage-system
     operatorNamespace: *cluster_namespace
     monitoring:
       enabled: true

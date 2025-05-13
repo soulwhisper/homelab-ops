@@ -15,7 +15,7 @@ instance:
     kind: GitRepository
     url: https://github.com/soulwhisper/homelab-ops.git
     ref: refs/heads/main
-    path: kubernetes/infrastructure/flux/cluster
+    path: kubernetes/flux/cluster
     interval: 1h
   commonMetadata:
     labels:
@@ -34,6 +34,8 @@ instance:
                 containers:
                   - name: manager
                     env:
+                      - name: "HTTP_PROXY"
+                        value: "http://172.19.82.10:1080"
                       - name: "HTTPS_PROXY"
                         value: "http://172.19.82.10:1080"
                       - name: "NO_PROXY"

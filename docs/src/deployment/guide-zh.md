@@ -32,15 +32,15 @@
 ### 初始化
 
 - 使用 git 下载 gitops 目录到本地;
-- 修改 `https://github.com/soulwhisper/homelab-ops/tree/main/kubernetes/infrastructure/bootstrap/talos` 目录下的 K8S 配置;
+- 修改 `https://github.com/soulwhisper/homelab-ops/tree/main/kubernetes/bootstrap/talos` 目录下的 K8S 配置;
   - 替换 `172.19.82.` 为自己的子网, 根据需要调整主机 IP 地址 ( `.100-.200` );
   - 如不需要 Tailscale, 段落 `extensionServices` 可删除;
   - 其他配置无需修改;
 - 使用 `talhelper gen secret > talsecret.sops.yaml` 生成自己的 `talsecret.sops.yaml`;
 - 使用 age 生成自己的密钥, 参照 `ExternalSecret.md` 生成自己的 1password 密钥;
 - 替换以下文档中的内容;
-  - `kubernetes/infrastructure/bootstrap/bootstrap.env`
-  - `kubernetes/infrastructure/bootstrap/talos/talhelper.env`
+  - `kubernetes/bootstrap/bootstrap.env`
+  - `kubernetes/bootstrap/talos/talhelper.env`
   - `kubernetes/components/flux/sops/secret.sops.yaml`
 - 使用 `infra/scripts/minio-bucket-keys.py` 初始化 NAS 上的 Minio;
 

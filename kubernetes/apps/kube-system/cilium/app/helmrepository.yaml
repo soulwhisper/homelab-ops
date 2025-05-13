@@ -3,7 +3,8 @@
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: HelmRepository
 metadata:
-  name: deepflow
-  namespace: monitoring-system
+  name: cilium
+  namespace: kube-system
 spec:
-  url: https://deepflowio.github.io/deepflow
+  interval: 30m
+  url: https://helm.cilium.io

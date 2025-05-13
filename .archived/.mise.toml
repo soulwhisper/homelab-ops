@@ -1,4 +1,4 @@
 [env]
 # below env only for mise tools
-KUBECONFIG = '{{config_root}}/kubernetes/talos/clusterconfig/kubeconfig'
-TALOSCONFIG = '{{config_root}}/kubernetes/talos/clusterconfig/talosconfig'
+KUBECONFIG = '{{config_root}}/infrastructure/talos/clusterconfig/kubeconfig'
+TALOSCONFIG = '{{config_root}}/infrastructure/talos/clusterconfig/talosconfig'

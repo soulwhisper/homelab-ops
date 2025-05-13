@@ -1,34 +1,31 @@
 ---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/master-standalone/cronjob-batch-v1.json
 apiVersion: batch/v1
 kind: CronJob
 metadata:
   name: talos-backup
 spec:
-  schedule: "0/10 * * * *"
+  schedule: "0 2 * * *"
   jobTemplate:
     spec:
       template:
         spec:
           containers:
             - name: talos-backup
-              image: ghcr.io/siderolabs/talos-backup:latest
+              image: ghcr.io/siderolabs/talos-backup:v0.1.0-beta.3
               workingDir: /tmp
               imagePullPolicy: IfNotPresent
               env:
-                - name: AWS_ACCESS_KEY_ID
-                  value: "${TALOS_ACCESS_KEY}"
-                - name: AWS_SECRET_ACCESS_KEY
-                  value: "${TALOS_SECRET_KEY}"
-                - name: AWS_REGION
-                  value: "us-east-1"
-                - name: CUSTOM_S3_ENDPOINT
-                  value: "https://${CF_ACCOUNT_TAG}.r2.cloudflarestorage.com"
-                - name: BUCKET
-                  value: "talos-backups"
-                - name: AGE_X25519_PUBLIC_KEY
-                  value: "${TALOS_BACKUP_PUBLIC}"
-                - name: USE_PATH_STYLE
-                  value: "true"
+                - name: "HTTP_PROXY"
+                  value: "http://172.19.82.10:1080"
+                - name: "HTTPS_PROXY"
+                  value: "http://172.19.82.10:1080"
+                - name: "NO_PROXY"
+                  value: ".cluster.local.,.cluster.local,.svc,localhost,127.0.0.1,10.100.0.0/16"
+              envFrom:
+                - secretRef:
+                    name: talos-backup-s3
+                    optional: false
               securityContext:
                 runAsNonRoot: true
                 runAsUser: 2000
@@ -39,20 +36,20 @@ spec:
                     - ALL
                 seccompProfile:
                   type: RuntimeDefault
-              command:
-                - /talos-backup
+              command: [/talos-backup]
               volumeMounts:
                 - name: tmp
                   mountPath: /tmp
+                - name: talos
+                  mountPath: /.talos
+                - name: talos-backup
+                  mountPath: /var/run/secrets/talos.dev
           restartPolicy: OnFailure
           volumes:
             - name: tmp
               emptyDir: {}
----
-apiVersion: talos.dev/v1alpha1
-kind: ServiceAccount
-metadata:
-  name: talos-backup
-spec:
-  roles:
-    - os:etcd:backup
+            - name: talos
+              emptyDir: {}
+            - name: talos-backup
+              secret:
+                secretName: talos-backup

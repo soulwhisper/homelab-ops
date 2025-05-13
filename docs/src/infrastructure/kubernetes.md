@@ -27,15 +27,16 @@ This GitOps workflow enables a fully automated and declarative approach to manag
 
 ### Directories
 
-This Git repository contains the following directories under [Kubernetes](./kubernetes/).
+This Git repository contains following directories.
 
 ```sh
 📁 kubernetes
-├── 📁 apps                          # applications
-├── 📁 components                    # re-useable components
-├── 📁 infrastructure/bootstrap      # bootstrap procedures
-├── 📁 infrastructure/flux           # flux system configuration
-└── 📁 infrastructure/talos          # talos configuration
+├── 📁 apps                   # applications
+├── 📁 bootstrap              # bootstrap procedures
+├── 📁 components             # re-useable components
+└── 📁 flux                    # flux configuration
+📁 infrastructure
+└── 📁 talos                  # talos configuration
 ```
 
 ### Flux Workflow

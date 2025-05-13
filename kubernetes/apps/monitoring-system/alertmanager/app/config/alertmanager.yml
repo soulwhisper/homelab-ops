@@ -9,7 +9,7 @@ receivers:
           {{ if eq .Status "firing" }}🔥 **ALERT: {{ .CommonLabels.alertname }} ({{ .Alerts.Firing | len }} Active)** 🔥
           {{ else }}✅ **RESOLVED: {{ .CommonLabels.alertname }}** ✅
           {{ end }}
-        text: |-
+        content: |-
           {{- range .Alerts }}
           ---
           **🔔 Alert Details:**

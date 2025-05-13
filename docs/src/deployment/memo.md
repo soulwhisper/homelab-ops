@@ -6,6 +6,7 @@
 - media stored in external nas-nfs, using `documents,movie,music,tv-shows` folders;
 - test env using proxmox-vm, with secureboot enabled, subnet `172.19.82.0/24`;
 - `v1.10+` will ignore `.machine.install.extraKernelArgs` and `.machine.install.extensions` fields in talconfig;
+- cilium stays at `v1.16.9` until cloudflared mtu issue fixed, [ref](https://github.com/cilium/cilium/issues/37529);
 
 ## Infra
 
@@ -15,8 +16,10 @@
 - ceph-fs, deprecated, use nas-nfs for shared media;
 - ceph-s3, deprecated, use nas-nfs for volsync backup;
 - volsync nfs-backup using mutatingAdmissionPolicy;
-- onepassword as main secret store; sync might need proxy;
+- onepassword as main secret store;
+- externaldns-adguard store records in `custom-adblock` field;
 - use Valkey instead of Dragonflydb if apps served <= 2;
+- [ ] use `Bump-in-the-Wire Routing` replace https_proxy;
 
 ## Deployment
 
@@ -28,7 +31,7 @@
 
 ### Proxy
 
-- `cert-manager`, `fluxcd`, `onepassword-sync` using `HTTPS GET`, should set `https_proxy`;
+- `cert-manager`, `coroot-operator`, `externaldns-cloudflare`, `flux-operator`, `grafana`, `onepassword-sync`, `pgo` using `HTTPS GET`, should set `https_proxy`;
 -  no_proxy = `.cluster.local.,.cluster.local,.svc,localhost,127.0.0.1,{pod-subnet},{svc-subnet}`;
 - talos env.proxy for container pulling;
 
@@ -40,8 +43,8 @@ cd homelab-ops
 eval $(op signin)
 
 ## dev-env method-1, or direnv
-export KUBECONFIG=$PWD/kubernetes/infrastructure/talos/clusterconfig/kubeconfig
-export TALOSCONFIG=$PWD/kubernetes/infrastructure/talos/clusterconfig/talosconfig
+export KUBECONFIG=$PWD/infrastructure/talos/clusterconfig/kubeconfig
+export TALOSCONFIG=$PWD/infrastructure/talos/clusterconfig/talosconfig
 ## dev-env method-2
 devenv shell
 
@@ -50,8 +53,8 @@ task talos:generate-clusterconfig
 ## if test
 task talos:generate-clusterconfig MODE=test
 
-task k8s-bootstrap:talos
-task k8s-bootstrap:apps
+task bootstrap:talos
+task bootstrap:apps
 
 # check
 kubectl get ks -A
@@ -84,6 +87,6 @@ talosctl reset --system-labels-to-wipe STATE --system-labels-to-wipe EPHEMERAL -
 ## Multi-Sites plan
 
 - homelab using talconfig `prod`; corplab using talconfig `test`;
-- [ ] add `MODE` / `SITE` to `task:k8s-bootstrap`;
+- [ ] add `MODE` / `SITE` to `task:bootstrap`;
 - [ ] seperate workloads between `prod` and `test`;
 - [ ] refractor folders if needed;

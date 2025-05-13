@@ -1,0 +1,43 @@
+---
+apiVersion: coroot.com/v1
+kind: Coroot
+metadata:
+  name: coroot
+  namespace: coroot
+spec:
+  authAnonymousRole: Admin
+  env:
+    - name: HTTP_PROXY
+      value: http://172.19.82.10:1080
+    - name: HTTPS_PROXY
+      value: http://172.19.82.10:1080
+    - name: NO_PROXY
+      value: .cluster.local.,.cluster.local,.svc,localhost,127.0.0.1,10.100.0.0/16
+  externalPrometheus:
+    url: http://prometheus-operated.monitoring-system.svc.cluster.local:9090
+    tlsSkipVerify: true
+
+# Use an external ClickHouse instance instead of deploying one.
+#  externalClickhouse:
+#    address: # Address of the external ClickHouse instance.
+#    database: # Name of the database to be used.
+#    user: # Username for accessing the external ClickHouse.
+#    password: # Password for accessing the external ClickHouse (plain-text, not recommended).
+#    passwordSecret: # Secret containing password.
+#      name: # Name of the secret to select from.
+#      key:  # Key of the secret to select from.
+
+#  replicas: 1 # Number of Coroot StatefulSet pods.
+
+# Store configuration in a Postgres DB instead of SQLite (required if `replicas` > 1).
+#  postgres:
+#    host: # Postgres host or service name.
+#    port: # Postgres port (optional, default 5432).
+#    database: # Name of the database.
+#    user: # Username for accessing Postgres.
+#    password: # Password for accessing postgres (plain-text, not recommended).
+#    passwordSecret: # Secret containing password.
+#      name: # Name of the secret to select from.
+#      key:  # Key of the secret to select from.
+#    params: # Extra parameters, e.g., sslmode and connect_timeout.
+#      sslmode: disable

@@ -21,19 +21,17 @@ spec:
       retries: 3
 
   values:
-    defaultPodOptions:
-      hostUsers: false
-    securityContext:
-      runAsNonRoot: true
-      runAsUser: 2000
-      runAsGroup: 2000
-      fsGroup: 2000
-      fsGroupChangePolicy: OnRootMismatch
-
     controllers:
       ocis:
         annotations:
           reloader.stakater.com/auto: "true"
+        pod:
+          securityContext:
+            runAsUser: 2000
+            runAsGroup: 2000
+            runAsNonRoot: true
+            fsGroup: 2000
+            fsGroupChangePolicy: OnRootMismatch
 
         initContainers:
           init-config:
@@ -113,15 +111,13 @@ spec:
             readOnly: true
       app:
         existingClaim: ocis-app
-        advancedMounts:
-          ocis:
-            app:
-              - path: /etc/ocis
-      data:
-        type: nfs
-        server: nas.homelab.internal
-        path: /mnt/Arcanum/shared/media
-        advancedMounts:
-          ocis:
-            app:
-              - path: /var/lib/ocis
+        globalMounts:
+          - path: /var/lib/ocis
+            subPath: data
+          - path: /etc/ocis
+            subPath: config
+      tmpfs:
+        type: emptyDir
+        globalMounts:
+          - path: /tmp
+            subPath: tmp

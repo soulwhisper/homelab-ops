@@ -88,7 +88,7 @@ spec:
           app:
             image:
               repository: 1337kavin/piped-proxy
-              tag: latest@sha256:ef68dc896ce2e3c0e4abda7eda99dbf3272262be490c0b4b3cd54c36a357c264
+              tag: latest@sha256:2f5a22f889f2cc131af55e2650de76af5ed7a387ab0a14b787dac99477255afc
             command:
               - /app/piped-proxy
             probes:
@@ -110,7 +110,7 @@ spec:
           app:
             image:
               repository: 1337kavin/bg-helper-server
-              tag: latest@sha256:5c7e03f5c1115fb53828385bb6e1a45009aa781a5e09594fcd1019b28813962e
+              tag: latest@sha256:814cd474347e54705c8067293c5a4702934d1e7f8dac596b56d8d040035bbff2
             probes:
               liveness:
                 enabled: true
