@@ -6,9 +6,17 @@ metadata:
   name: cilium
 spec:
   interval: 30m
-  chartRef:
-    kind: OCIRepository
-    name: cilium
+  # chartRef:
+  #   kind: OCIRepository
+  #   name: cilium
+  chart:
+    spec:
+      chart: cilium
+      interval: 30m
+      sourceRef:
+        kind: HelmRepository
+        name: cilium
+      version: 1.16.9
   install:
     crds: CreateReplace
     remediation:
