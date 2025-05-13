@@ -20,16 +20,15 @@ spec:
       retries: 3
 
   values:
-    clusterName: &cluster_namespace storage-system
-    csiDriverNamePrefix: *cluster_namespace
-    operatorNamespace: *cluster_namespace
+    clusterName: rook-ceph
+    csiDriverNamePrefix: rook-ceph
+    operatorNamespace: &cluster_namespace storage-system
     monitoring:
       enabled: true
       createPrometheusRules: true
     toolbox:
       enabled: false
     cephClusterSpec:
-      name: rook-ceph
       cephConfig:
         global:
           bdev_enable_discard: "true"
