@@ -21,12 +21,6 @@ spec:
       retries: 3
 
   values:
-    defaultPodOptions:
-      hostUsers: false
-    securityContext:
-      runAsNonRoot: true
-      runAsGroup: 65534 # icmp_ping_group
-
     controllers:
       cloudflared:
         replicas: 2
