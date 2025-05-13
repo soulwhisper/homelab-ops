@@ -22,7 +22,7 @@ releases:
     atomic: true
     # chart: oci://ghcr.io/home-operations/charts-mirror/cilium
     chart: cilium/cilium
-    version: 1.16.9
+    version: 1.17.3
     values: ['../apps/kube-system/cilium/app/values.yaml']
     hooks:
       - # Install gateway-api CRDs
