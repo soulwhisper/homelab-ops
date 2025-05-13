@@ -32,7 +32,7 @@ spec:
             image:
               repository: docker.io/cloudflare/cloudflared
               tag: 2025.4.2@sha256:698f5c59bf0b9ece62f8c60061004bdfcf7718fbac5d72b87e214af7b9d1d7ac
-            args: ["tunnel", "run"] # mtu issue, ref:https://github.com/cilium/cilium/issues/37529
+            args: ["tunnel", "run"]
             env:
               NO_AUTOUPDATE: "true"
               TUNNEL_METRICS: 0.0.0.0:8080

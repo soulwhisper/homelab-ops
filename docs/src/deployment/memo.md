@@ -6,6 +6,7 @@
 - media stored in external nas-nfs, using `documents,movie,music,tv-shows` folders;
 - test env using proxmox-vm, with secureboot enabled, subnet `172.19.82.0/24`;
 - `v1.10+` will ignore `.machine.install.extraKernelArgs` and `.machine.install.extensions` fields in talconfig;
+- cilium stays at `v1.16.9` until cloudflared mtu issue fixed, [ref](https://github.com/cilium/cilium/issues/37529);
 
 ## Infra
 
