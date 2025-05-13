@@ -50,11 +50,11 @@ spec:
             name: webhook
             protocol: TCP
           - containerPort: 8080
-            name: http
+            name: healthz
         livenessProbe: &probes
           httpGet:
             path: /healthz
-            port: http
+            port: 8080
           initialDelaySeconds: 30
           periodSeconds: 20
           timeoutSeconds: 10
