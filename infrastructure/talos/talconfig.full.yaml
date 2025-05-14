@@ -5,7 +5,7 @@ endpoint: "https://k8s.homelab.internal:6443"
 
 # This is a "full" config template
 # enabled features:
-# nut; bond,vip;
+# nut; bond;
 # disabled features:
 # vip; cni,coredns,forwardKubeDNSToHost,kube-proxy;
 # controlPlane-only:
@@ -158,9 +158,8 @@ patches:
         registries:
           kubernetes:
             disabled: true
-          # use official service instead
-          # service:
-          #   endpoint: http://10.10.0.10:9300
+          service:
+            endpoint: http://10.10.0.10:9300
       network:
         podSubnets:
           - 10.100.0.0/17
