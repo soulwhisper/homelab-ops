@@ -21,6 +21,11 @@
 - use Valkey instead of Dragonflydb if apps served <= 2;
 - [ ] use `Bump-in-the-Wire Routing` replace https_proxy;
 
+### Cloudflare
+
+- cloudflared-tunnel => zero-trust / networks / tunnels => gateway-ext, gateway-ext.noirprime.com
+- cloudflare, dns-01, noirprime.com: user-profile =>api-tokens, ZONE:READ / DNS:EDIT
+
 ## Deployment
 
 - `10.10.0.10` as `nas.homelab.internal`, provide `dns` / `ntp` / `talos-api` / `nfs` / ...;
