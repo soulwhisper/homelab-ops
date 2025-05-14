@@ -30,9 +30,7 @@
 ## Deployment
 
 - `10.10.0.10` as `nas.homelab.internal`, provide `dns` / `minio` / `nfs` / `ntp` / `talos-api` / ...;
-- `10.10.0.100` as `k8s.homelab.internal`, VIP;
-- `10.10.0.101-103` as `exarch-0n.homelab.internal`, nodes;
-- `10.10.0.203` as `postgres.homelab.internal`, for crunchy-pgo;
+- `10.10.0.101-103` as `exarch-0n.homelab.internal` and `k8s.homelab.internal`, nodes;
 - `10.10.0.201-250` as cilium l2 loadbalancer ip;
 - self-hosted-runners, label:arc-homelab / label:arc-homelab-ops;
 
@@ -87,7 +85,7 @@ talosctl reset --system-labels-to-wipe STATE --system-labels-to-wipe EPHEMERAL -
 
 ## VM test issues
 
-- only `proxmox` support secureboot test, for now;
+- only `proxmox` support secureboot and vip;
 - virtual disks, will make rook-ceph-osd-prepare `0/1 completed` forever;
 - virtual nic not support BIGTCP and XDP;
 
