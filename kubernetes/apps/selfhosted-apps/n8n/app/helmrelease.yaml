@@ -22,13 +22,12 @@ spec:
 
   values:
     defaultPodOptions:
-      hostUsers: false
-    securityContext:
-      runAsNonRoot: true
-      runAsUser: 2000
-      runAsGroup: 2000
-      fsGroup: 2000
-      fsGroupChangePolicy: "OnRootMismatch"
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 2000
+        runAsGroup: 2000
+        fsGroup: 2000
+        fsGroupChangePolicy: "OnRootMismatch"
 
     controllers:
       n8n:
@@ -45,7 +44,7 @@ spec:
               EXECUTIONS_DATA_PRUNE: true
               EXECUTIONS_DATA_MAX_AGE: 7
               EXECUTIONS_DATA_PRUNE_MAX_COUNT: 50000
-              GENERIC_TIMEZONE: "Europe/Amsterdam"
+              GENERIC_TIMEZONE: "Asia/Shanghai"
               N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS: false
               N8N_PROTOCOL: "https"
               N8N_PORT: &port 8080
