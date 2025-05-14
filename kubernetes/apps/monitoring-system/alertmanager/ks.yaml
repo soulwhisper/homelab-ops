@@ -24,9 +24,3 @@ spec:
       namespace: security-system
     - name: rook-ceph-cluster
       namespace: storage-system
-  components:
-    - ../../../../components/gatus
-  postBuild:
-    substitute:
-      APP: *appname
-      GATUS_GROUP: monitoring

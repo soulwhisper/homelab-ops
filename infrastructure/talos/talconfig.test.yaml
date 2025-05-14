@@ -1,16 +1,14 @@
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/budimanjojo/talhelper/master/pkg/config/schemas/talconfig.json
-clusterName: &clusterName main # same in cilium
+clusterName: &clusterName main
 endpoint: "https://k8s.homelab.internal:6443"
 
-# test on proxmox vm
 # enabled features:
-#   - predictable ifnames
-#   - disk-encryption
-#   - secureboot
-#   - nut
+# nut; bond;
 # disabled features:
-# cni,coredns,forwardKubeDNSToHost,kube-proxy
+# vip; cni,coredns,forwardKubeDNSToHost,kube-proxy;
+# controlPlane-only:
+# secureboot, disk-encryption;
 
 # renovate: depName=ghcr.io/siderolabs/installer datasource=docker
 talosVersion: v1.10.1
@@ -19,7 +17,6 @@ kubernetesVersion: v1.33.0
 
 additionalApiServerCertSans: &sans
   - k8s.homelab.internal
-  - &talosControlplaneVip 172.19.82.100
   - 127.0.0.1
 additionalMachineCertSans: *sans
 
@@ -38,6 +35,7 @@ nodes:
         bond: &bond
           mode: active-backup
           deviceSelectors:
+            - permanentAddr: "00:*" # vmware
             - permanentAddr: "bc:*" # proxmox
         dhcp: false
         addresses:
@@ -45,8 +43,6 @@ nodes:
         routes: &gateway
           - network: 0.0.0.0/0
             gateway: 172.19.82.1
-        vip:
-          ip: *talosControlplaneVip
 
   - hostname: exarch-02.homelab.internal
     ipAddress: 172.19.82.102
@@ -61,8 +57,6 @@ nodes:
         addresses:
           - 172.19.82.102/24
         routes: *gateway
-        vip:
-          ip: *talosControlplaneVip
 
   - hostname: exarch-03.homelab.internal
     ipAddress: 172.19.82.103
@@ -77,17 +71,11 @@ nodes:
         addresses:
           - 172.19.82.103/24
         routes: *gateway
-        vip:
-          ip: *talosControlplaneVip
 
-# put general nodes configs here since allowSchedulingOnControlPlanes
 controlPlane:
-  # secureboot configuration
   machineSpec:
     mode: metal
     arch: amd64
-    secureboot: true
-    useUKI: true
   nodeLabels:
     topology.kubernetes.io/region: *clusterName
     topology.kubernetes.io/zone: homelab
@@ -97,8 +85,8 @@ controlPlane:
         - console=ttyS0                           # proxmox only
       systemExtensions:
         officialExtensions:
-          - siderolabs/i915
           - siderolabs/intel-ucode
+          - siderolabs/i915
           - siderolabs/mei
           - siderolabs/nut-client
           - siderolabs/thunderbolt
@@ -113,8 +101,7 @@ controlPlane:
   # controlPlane only patches
   patches:
     # ApiServer configuration
-    # Admission exemptions, default:kube-system
-    # Enable MutatingAdmissionPolicy and User-Namespaces
+    # Enable MutatingAdmissionPolicy; user-Namespaces deprecated;
     - |-
       cluster:
         apiServer:
@@ -127,7 +114,7 @@ controlPlane:
                     - storage-system
           extraArgs:
             runtime-config: admissionregistration.k8s.io/v1alpha1=true
-            feature-gates: MutatingAdmissionPolicy=true,UserNamespacesSupport=true,UserNamespacesPodSecurityStandards=true
+            feature-gates: MutatingAdmissionPolicy=true
 
     # ETCD configuration, increase etcd quota to 8G, keep advertisedSubnets if using tailscale / kubespan
     - |-
@@ -196,10 +183,6 @@ patches:
     machine:
       network:
         disableSearchDomain: true
-        extraHostEntries:
-          - ip: 172.19.82.100
-            aliases:
-              - k8s.homelab.internal
         nameservers:
           - 172.19.82.10
 
@@ -210,10 +193,6 @@ patches:
         nodeIP:
           validSubnets:
             - 172.19.82.0/24
-        extraConfig:
-          featureGates:
-            UserNamespacesSupport: true
-            UserNamespacesPodSecurityStandards: true
 
   # Configure NFS mount options
   - |
@@ -256,28 +235,6 @@ patches:
           allowedKubernetesNamespaces:
             - gitops-system
 
-  # Enable disk encryption with better encyption method, pass >= 20 characters
-  # https://github.com/siderolabs/talos/issues/8972
-  # https://en.m.wikipedia.org/wiki/Evil_maid_attack
-  - |-
-    machine:
-      systemDiskEncryption:
-        ephemeral:
-          cipher: aes-xts-plain64
-          keySize: 256
-          keys:
-            - slot: 1
-              static:
-                passphrase: ${DISK_ENCRYPTION_PASS}
-          provider: luks2
-        state:
-          cipher: aes-xts-plain64
-          keySize: 256
-          keys:
-            - slot: 0
-              tpm: {}
-          provider: luks2
-
   # Containerd configuration
   - |-
     machine:
@@ -302,7 +259,6 @@ patches:
         net.core.wmem_max: 134217728              # 10G NIC, tunning
         net.ipv4.tcp_rmem: 4096 87380 67108864    # 10G NIC, tunning
         net.ipv4.tcp_wmem: 4096 65536 67108864    # 10G NIC, tunning
-        user.max_user_namespaces: 11255           # User-Namespaces
 
   # Udev configuration, thunderbolt & i915
   - |-

@@ -26,14 +26,14 @@ spec:
   values:
     fullnameOverride: *name
     domainFilters:
-      - noirprime.com
+      - homelab.internal
     env:
       - name: EXTERNAL_DNS_RFC2136_HOST
         value: "172.19.82.1"
       - name: EXTERNAL_DNS_RFC2136_PORT
         value: "53"
       - name: EXTERNAL_DNS_RFC2136_ZONE
-        value: "noirprime.com"
+        value: "homelab.internal"
       - name: EXTERNAL_DNS_RFC2136_TSIG_AXFR
         value: "true"
       - name: EXTERNAL_DNS_RFC2136_TSIG_KEYNAME

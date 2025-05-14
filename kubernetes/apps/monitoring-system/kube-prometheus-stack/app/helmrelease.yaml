@@ -135,11 +135,11 @@ spec:
       route:
         main:
           hostnames:
-            - prom.noirprime.com
+            - prom.homelab.internal
           parentRefs:
             - name: internal
               namespace: kube-system
-              sectionName: https
+              sectionName: http
           rules:
             - backendRefs:
                 - name: prometheus

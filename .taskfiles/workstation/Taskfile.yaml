@@ -1,0 +1,18 @@
+---
+# yaml-language-server: $schema=https://taskfile.dev/schema.json
+version: "3"
+
+vars:
+  ARCHFILE: "{{.ROOT_DIR}}/.taskfiles/workstation/Archfile"
+
+tasks:
+  bootstrap:
+    desc: Install Arch workstation dependencies with Yay
+    preconditions:
+      - which yay
+      - test -f {{.ARCHFILE}}
+    cmds:
+      - "yay -Syu --needed --noconfirm --noprogressbar $(cat {{.ARCHFILE}} | xargs)"
+      - fish -i -c "fish alias --save k=kubectl"
+      - fish -i -c "fish alias --save kubectl=kubecolor"
+      - fish -i -c "fish alias --save flux-local='uvx flux-local'"
