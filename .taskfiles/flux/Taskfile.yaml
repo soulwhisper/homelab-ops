@@ -26,6 +26,22 @@ tasks:
         | kubectl {{.OPERATION}} {{- .OPERATION_ARGS}} --filename -
         {{ end }}'
 
+  "retry-*":
+    desc: Retry Certain Flux Helmrelease or Kustomization [NAME=required] [NS=required]
+    vars:
+      RESOURCE: "{{index .MATCH 0}}"
+    requires:
+      vars:
+        - NAME
+        - NS
+    preconditions:
+      - '[[ "{{.RESOURCE}}" == "hr" || "{{.RESOURCE}}" == "ks" ]]'
+      - which flux
+      - test -f "${KUBECONFIG}"
+    cmds:
+      - flux suspend {{.RESOURCE}} {{.NAME}} -n {{.NS}}
+      - flux resume {{.RESOURCE}} {{.NAME}} -n {{.NS}}
+
   "*-*-all":
     desc: Suspend or resume Flux Resources
     vars:

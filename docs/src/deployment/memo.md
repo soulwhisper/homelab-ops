@@ -91,9 +91,9 @@ talosctl reset --system-labels-to-wipe STATE --system-labels-to-wipe EPHEMERAL -
 - virtual disks, will make rook-ceph-osd-prepare `0/1 completed` forever;
 - virtual nic not support BIGTCP and XDP;
 
-## Multi-Sites plan
+## Multi-Cluster plan
 
 - homelab using talconfig `prod`; corplab using talconfig `test`;
-- [ ] add `MODE` / `SITE` to `task:bootstrap`;
-- [ ] seperate workloads between `prod` and `test`;
-- [ ] refractor folders if needed;
+- multi-cluster flux, [ref](https://github.com/h-wb/home-ops/tree/main);
+- multi-cluster talos task, [ref](https://github.com/h-wb/home-ops/blob/main/.taskfiles/Talos/Taskfile.yaml);
+- multi-cluster volsync task, [ref](https://github.com/h-wb/home-ops/blob/main/.taskfiles/VolSync/Taskfile.yaml);
