@@ -1,0 +1,49 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/refs/heads/master/v1.32.0/mutatingadmissionpolicybinding-admissionregistration-v1alpha1.json
+apiVersion: admissionregistration.k8s.io/v1alpha1
+kind: MutatingAdmissionPolicyBinding
+metadata:
+  name: volsync-movers-add-jitter
+spec:
+  policyName: volsync-movers-add-jitter
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/refs/heads/master/v1.32.0/mutatingadmissionpolicy-admissionregistration-v1alpha1.json
+apiVersion: admissionregistration.k8s.io/v1alpha1
+kind: MutatingAdmissionPolicy
+metadata:
+  name: volsync-movers-add-jitter
+spec:
+  matchConstraints:
+    resourceRules:
+      - apiGroups: ["batch"]
+        apiVersions: ["v1"]
+        operations: ["CREATE", "UPDATE"]
+        resources: ["jobs"]
+  matchConditions:
+    - name: has-volsync-job-name-prefix
+      expression: >
+        object.metadata.name.startsWith("volsync-src-")
+    - name: has-volsync-created-by-labels
+      expression: >
+        object.metadata.labels["app.kubernetes.io/created-by"] == "volsync"
+  failurePolicy: Fail
+  reinvocationPolicy: IfNeeded
+  mutations:
+    - patchType: "JSONPatch"
+      jsonPatch:
+        expression: >
+          [
+            JSONPatch{
+              op: "add", path: "/spec/template/spec/initContainers",
+              value: []
+            },
+            JSONPatch{
+              op: "add", path: "/spec/template/spec/initContainers/-",
+              value: Object.spec.template.spec.initContainers{
+                name: "jitter",
+                image: "docker.io/library/busybox:1.37.0@sha256:37f7b378a29ceb4c551b1b5582e27747b855bbfaa73fa11914fe0df028dc581f",
+                imagePullPolicy: "IfNotPresent",
+                command: ["sh", "-c", "sleep $(shuf -i 0-90 -n 1)"]
+              }
+            }
+          ]

@@ -13,7 +13,8 @@
 
 ### Minio
 
-- endpoint = `http://s3.noirprime.com:9000`
+- minio-app on truenas-scale;
+- endpoint = `http://s3.homelab.internal:9000`
 - region = us-east-1
 - versioning = disabled; object-locking = disabled; quota = disabled;
 
@@ -29,3 +30,10 @@
   ]
 }
 ```
+
+## NFS
+
+- use truenas-scale as main nas;
+- nfs-endpoint: `nas.homelab.internal`;
+- nfs-shares: `/mnt/Arcanum/shared/media`;
+- nfs-permissions: `uid:gid=2000:2000`;

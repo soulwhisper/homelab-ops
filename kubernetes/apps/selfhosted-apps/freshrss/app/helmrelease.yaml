@@ -41,7 +41,7 @@ spec:
               tag: 1.26.2-alpine
             env:
               CRON_MIN: "*"
-              DOMAIN: freshrss.noirprime.com
+              DOMAIN: freshrss.homelab.internal
               LISTEN: 8080
             probes:
               liveness:
@@ -65,11 +65,11 @@ spec:
     route:
       app:
         hostnames:
-          - freshrss.noirprime.com
+          - freshrss.homelab.internal
         parentRefs:
           - name: internal
             namespace: kube-system
-            sectionName: https
+            sectionName: http
         rules:
           - backendRefs:
               - name: freshrss

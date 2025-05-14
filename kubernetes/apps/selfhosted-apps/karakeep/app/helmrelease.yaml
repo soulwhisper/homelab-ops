@@ -57,7 +57,7 @@ spec:
                   secretKeyRef:
                     name: karakeep-secret
                     key: encryption_key
-              NEXTAUTH_URL: https://karakeep.noirprime.com
+              NEXTAUTH_URL: https://karakeep.homelab.internal
               DISABLE_NEW_RELEASE_CHECK: true
               COREPACK_INTEGRITY_KEYS: 0
             probes:
@@ -158,11 +158,11 @@ spec:
     route:
       app:
         hostnames:
-          - karakeep.noirprime.com
+          - karakeep.homelab.internal
         parentRefs:
           - name: internal
             namespace: kube-system
-            sectionName: https
+            sectionName: http
         rules:
           - backendRefs:
               - name: karakeep

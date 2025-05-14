@@ -19,7 +19,8 @@
 - onepassword as main secret store;
 - externaldns-adguard store records in `custom-adblock` field;
 - use Valkey instead of Dragonflydb if apps served <= 2;
-- [ ] use `Bump-in-the-Wire Routing` replace https_proxy;
+- internal domains using `homelab.internal`;
+- external doamins using `noirprime.com`, powered by cloudflared;
 
 ### Cloudflare
 
@@ -28,9 +29,10 @@
 
 ## Deployment
 
-- `10.10.0.10` as `nas.homelab.internal`, provide `dns` / `ntp` / `talos-api` / `nfs` / ...;
+- `10.10.0.10` as `nas.homelab.internal`, provide `dns` / `minio` / `nfs` / `ntp` / `talos-api` / ...;
 - `10.10.0.100` as `k8s.homelab.internal`, VIP;
 - `10.10.0.101-103` as `exarch-0n.homelab.internal`, nodes;
+- `10.10.0.203` as `postgres.homelab.internal`, for crunchy-pgo;
 - `10.10.0.201-250` as cilium l2 loadbalancer ip;
 - self-hosted-runners, label:arc-homelab / label:arc-homelab-ops;
 

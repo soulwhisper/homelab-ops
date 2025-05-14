@@ -81,11 +81,11 @@ spec:
     route:
       app:
         hostnames:
-          - alm.noirprime.com
+          - alm.homelab.internal
         parentRefs:
           - name: internal
             namespace: kube-system
-            sectionName: https
+            sectionName: http
         rules:
           - backendRefs:
               - name: alertmanager

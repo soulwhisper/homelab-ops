@@ -49,7 +49,7 @@ spec:
               N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS: false
               N8N_PROTOCOL: "https"
               N8N_PORT: &port 8080
-              N8N_HOST: &hostName n8n.noirprime.com
+              N8N_HOST: n8n.homelab.internal
               N8N_LOG_LEVEL: info
               N8N_LOG_OUTPUT: console
               N8N_ENCRYPTION_KEY:
@@ -81,11 +81,11 @@ spec:
     route:
       app:
         hostnames:
-          - *hostName
+          - n8n.homelab.internal
         parentRefs:
           - name: internal
             namespace: kube-system
-            sectionName: https
+            sectionName: http
         rules:
           - backendRefs:
               - name: n8n

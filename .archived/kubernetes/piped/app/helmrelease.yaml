@@ -68,7 +68,7 @@ spec:
               repository: ghcr.io/bjw-s-labs/piped-frontend
               tag: 2025.3.17@sha256:8ed05c7df0bc8899e54a3952a99b63d55cdc7669d759beeb9370fbb32330468b
             env:
-              BACKEND_HOSTNAME: piped-api.noirprime.com
+              BACKEND_HOSTNAME: piped-api.homelab.internal
             probes:
               liveness:
                 enabled: true
@@ -180,13 +180,13 @@ spec:
         annotations:
           # gateway-api cors support will be v1.3, ref:https://github.com/kubernetes-sigs/gateway-api/pull/3637
           nginx.ingress.kubernetes.io/enable-cors: "true"
-          nginx.ingress.kubernetes.io/cors-allow-origin: "https://piped.noirprime.com, https://piped-api.noirprime.com, https://piped-proxy.noirprime.com"
+          nginx.ingress.kubernetes.io/cors-allow-origin: "https://piped.homelab.internal, https://piped-api.homelab.internal, https://piped-proxy.homelab.internal"
         hostnames:
-          - piped-api.noirprime.com
+          - piped-api.homelab.internal
         parentRefs:
           - name: internal
             namespace: kube-system
-            sectionName: https
+            sectionName: http
         rules:
           - backendRefs:
               - name: piped-backend
@@ -196,13 +196,13 @@ spec:
         annotations:
           # gateway-api cors support will be v1.3, ref:https://github.com/kubernetes-sigs/gateway-api/pull/3637
           nginx.ingress.kubernetes.io/enable-cors: "true"
-          nginx.ingress.kubernetes.io/cors-allow-origin: "https://piped.noirprime.com, https://piped-api.noirprime.com, https://piped-proxy.noirprime.com"
+          nginx.ingress.kubernetes.io/cors-allow-origin: "https://piped.homelab.internal, https://piped-api.homelab.internal, https://piped-proxy.homelab.internal"
         hostnames:
-          - piped.noirprime.com
+          - piped.homelab.internal
         parentRefs:
           - name: internal
             namespace: kube-system
-            sectionName: https
+            sectionName: http
         rules:
           - backendRefs:
               - name: piped-frontend
@@ -211,13 +211,13 @@ spec:
         annotations:
           # gateway-api cors support will be v1.3, ref:https://github.com/kubernetes-sigs/gateway-api/pull/3637
           nginx.ingress.kubernetes.io/enable-cors: "true"
-          nginx.ingress.kubernetes.io/cors-allow-origin: "https://piped.noirprime.com, https://piped-api.noirprime.com, https://piped-proxy.noirprime.com"
+          nginx.ingress.kubernetes.io/cors-allow-origin: "https://piped.homelab.internal, https://piped-api.homelab.internal, https://piped-proxy.homelab.internal"
         hostnames:
-          - piped-proxy.noirprime.com
+          - piped-proxy.homelab.internal
         parentRefs:
           - name: internal
             namespace: kube-system
-            sectionName: https
+            sectionName: http
         rules:
           - backendRefs:
               - name: piped-ytproxy

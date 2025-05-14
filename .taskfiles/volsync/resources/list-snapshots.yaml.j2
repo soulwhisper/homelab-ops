@@ -20,12 +20,4 @@ spec:
             - snapshots
           envFrom:
             - secretRef:
-                name: {{ ENV.APP }}-volsync-nfs
-          volumeMounts:
-            - mountPath: /repository
-              name: repository
-      volumes:
-        - name: repository
-          nfs:
-            server: "nas.homelab.internal"
-            path: "/mnt/Arcanum/shared/k8s"
+                name: {{ ENV.APP }}-volsync-s3

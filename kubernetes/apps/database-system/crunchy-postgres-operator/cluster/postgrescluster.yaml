@@ -16,7 +16,7 @@ spec:
     type: LoadBalancer
     metadata:
       annotations:
-        external-dns.alpha.kubernetes.io/hostname: "postgres.noirprime.com"
+        external-dns.alpha.kubernetes.io/hostname: "postgres.homelab.internal"
         lbipam.cilium.io/ips: "172.19.82.203"
 
   patroni: # turn on sync writes to at least 1 other replica
@@ -106,7 +106,7 @@ spec:
         - name: repo1
           s3: &minio
             bucket: "postgres"
-            endpoint: "s3.noirprime.com:9000"
+            endpoint: "s3.homelab.internal:9000"
             region: "us-east-1"
           schedules:
             full: "30 1 * * 0" # Sunday at 01:30
