@@ -6,6 +6,10 @@ helmDefaults:
   waitForJobs: true
   timeout: 3600
 
+repositories:
+  - name: cilium
+    url: https://helm.cilium.io
+
 releases:
   - name: prometheus-operator-crds
     namespace: monitoring-system
@@ -16,8 +20,9 @@ releases:
   - name: cilium
     namespace: kube-system
     atomic: true
-    chart: oci://ghcr.io/home-operations/charts-mirror/cilium
-    version: 1.17.3
+    # chart: oci://ghcr.io/home-operations/charts-mirror/cilium
+    chart: cilium/cilium
+    version: 1.16.6
     values: ['../apps/kube-system/cilium/app/values.yaml']
     hooks:
       - # Install gateway-api CRDs
