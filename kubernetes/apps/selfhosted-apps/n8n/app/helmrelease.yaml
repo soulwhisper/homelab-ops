@@ -111,4 +111,4 @@ spec:
         advancedMounts:
           n8n:
             app:
-              - path: /homelab/node/.n8n
+              - path: /.n8n
