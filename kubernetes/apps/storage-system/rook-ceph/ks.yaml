@@ -52,7 +52,7 @@ spec:
       namespace: *namespace
     - apiVersion: ceph.rook.io/v1
       kind: CephCluster
-      name: rook-ceph
+      name: *namespace
       namespace: *namespace
   healthCheckExprs:
     - apiVersion: ceph.rook.io/v1

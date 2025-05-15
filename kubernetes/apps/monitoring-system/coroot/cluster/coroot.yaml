@@ -17,6 +17,16 @@ spec:
     url: http://prometheus-operated.monitoring-system.svc.cluster.local:9090
     tlsSkipVerify: true
 
+  clickhouse:
+    shards: 1
+    replicas: 1
+    storage:
+      size: 100Gi
+    keeper:
+      replicas: 3
+      storage:
+        size: 10Gi
+
 # Use an external ClickHouse instance instead of deploying one.
 #  externalClickhouse:
 #    address: # Address of the external ClickHouse instance.

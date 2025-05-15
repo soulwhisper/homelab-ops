@@ -22,7 +22,7 @@ spec:
   values:
     fullnameOverride: *name
     domainFilters:
-      - noirprime.com
+      - homelab.internal
     extraArgs:
       - --webhook-provider-url=http://localhost:8888
       - --gateway-name=internal
@@ -45,16 +45,10 @@ spec:
         image:
           repository: ghcr.io/muhlba91/external-dns-provider-adguard
           tag: v8.0.1@sha256:267761a55dde38b7cba7b3bff59d0437402538a29659b03144dc9c132c887444
-        ports:
-          - containerPort: 8888
-            name: webhook
-            protocol: TCP
-          - containerPort: 8080
-            name: healthz
         livenessProbe: &probes
           httpGet:
             path: /healthz
-            port: 8080
+            port: http-webhook
           initialDelaySeconds: 30
           periodSeconds: 20
           timeoutSeconds: 10

@@ -8,4 +8,4 @@ spec:
   endpoints:
     - dnsName: gateway-ext.noirprime.com
       recordType: CNAME
-      targets: ["${CLOUDFLARE_TUNNEL_ID}.cfargotunnel.com"]
+      targets: ["9fa6f6e3-834f-45e7-9745-6fb545153647.cfargotunnel.com"]

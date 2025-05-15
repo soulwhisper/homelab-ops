@@ -258,7 +258,10 @@ spec:
       GF_NEWS_NEWS_FEED_ENABLED: false
       GF_PLUGINS_ALLOW_LOADING_UNSIGNED_PLUGINS: natel-discrete-panel,pr0ps-trackmap-panel,panodata-map-panel
       GF_SECURITY_COOKIE_SAMESITE: grafana
-      GF_SERVER_ROOT_URL: https://grafana.noirprime.com
+      GF_SERVER_ROOT_URL: http://grafana.homelab.internal
+      HTTP_PROXY: http://172.19.82.10:1080
+      HTTPS_PROXY: http://172.19.82.10:1080
+      NO_PROXY: .cluster.local.,.cluster.local,.svc,localhost,127.0.0.1,10.100.0.0/16
 
     downloadDashboards:
       env:
@@ -272,14 +275,16 @@ spec:
     route:
       main:
         hostnames:
-          - grafana.noirprime.com
+          - grafana.homelab.internal
         parentRefs:
           - name: internal
             namespace: kube-system
-            sectionName: https
+            sectionName: http
 
     persistence:
-      enabled: false
+      enabled: true
+      storageClassName: ceph-block
+      size: 5Gi
 
     plugins:
       - grafana-clock-panel

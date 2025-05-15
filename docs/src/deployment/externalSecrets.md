@@ -1,6 +1,6 @@
-## Externalsecret
+# Externalsecret
 
-### 1Password
+## 1Password
 
 - 1password compatible items: secret, document;
 - in this repo, all password use `secret` item;
@@ -47,36 +47,4 @@ spec:
       remoteRef:
         key: encryption_cipher
         property: paperless
-```
-
-### S3 Storage
-
-| app              | bucket           | key-name         |
-| ---------------- | ---------------- | ---------------- |
-| crunchy-postgres | crunchy-postgres | crunchy-postgres |
-| volsync          | volsync          | volsync          |
-
-### Cloudflare
-
-- cloudflared-tunnel => zero-trust / networks / tunnels => gateway-ext, gateway-ext.noirprime.com
-- cloudflare, dns-01, noirprime.com: user-profile =>api-tokens, ZONE:READ / DNS:EDIT
-- CLUSTER_SECRET_CPGO_R2_ENDPOINT = https://${CF_ACCOUNT_TAG}.r2.cloudflarestorage.com
-
-### Minio
-
-- endpoint = `https://s3.noirprime.com`
-- region = us-east-1
-- versioning = disabled; object-locking = disabled; quota = disabled;
-
-```json
-{
-  "Version": "",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Action": ["s3:*"],
-      "Resource": ["arn:aws:s3:::volsync/*", "arn:aws:s3:::volsync"]
-    }
-  ]
-}
 ```

@@ -5,7 +5,7 @@ metadata:
   name: &app_name rook-ceph-rgw-ceph-objectstore
 spec:
   hostnames:
-    - s3.noirprime.com
+    - s3.homelab.internal
   parentRefs:
     - name: internal
       namespace: kube-system
@@ -22,7 +22,7 @@ metadata:
   name: rook-ceph-dashboard
 spec:
   hostnames:
-    - rook.noirprime.com
+    - rook.homelab.internal
   parentRefs:
     - name: internal
       namespace: kube-system

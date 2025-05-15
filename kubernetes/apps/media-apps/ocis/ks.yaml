@@ -27,10 +27,8 @@ spec:
     - name: volsync
       namespace: storage-system
   components:
-    - ../../../../components/gatus
     - ../../../../components/volsync
   postBuild:
     substitute:
       APP: *appname
       VOLSYNC_CAPACITY: 10Gi
-      GATUS_GROUP: media

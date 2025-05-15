@@ -22,13 +22,13 @@ spec:
 
   values:
     defaultPodOptions:
-      hostUsers: false
-    securityContext:
-      runAsNonRoot: true
-      runAsUser: 2000
-      runAsGroup: 2000
-      fsGroup: 2000
-      fsGroupChangePolicy: "OnRootMismatch"
+      securityContext:
+        runAsNonRoot: true
+        # node user = 1000:1000
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        fsGroupChangePolicy: "OnRootMismatch"
 
     controllers:
       n8n:
@@ -45,11 +45,11 @@ spec:
               EXECUTIONS_DATA_PRUNE: true
               EXECUTIONS_DATA_MAX_AGE: 7
               EXECUTIONS_DATA_PRUNE_MAX_COUNT: 50000
-              GENERIC_TIMEZONE: "Europe/Amsterdam"
+              GENERIC_TIMEZONE: "Asia/Shanghai"
               N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS: false
               N8N_PROTOCOL: "https"
               N8N_PORT: &port 8080
-              N8N_HOST: &hostName n8n.noirprime.com
+              N8N_HOST: n8n.homelab.internal
               N8N_LOG_LEVEL: info
               N8N_LOG_OUTPUT: console
               N8N_ENCRYPTION_KEY:
@@ -81,11 +81,11 @@ spec:
     route:
       app:
         hostnames:
-          - *hostName
+          - n8n.homelab.internal
         parentRefs:
           - name: internal
             namespace: kube-system
-            sectionName: https
+            sectionName: http
         rules:
           - backendRefs:
               - name: n8n
@@ -112,4 +112,4 @@ spec:
         advancedMounts:
           n8n:
             app:
-              - path: /homelab/node/.n8n
+              - path: /home/node/.n8n

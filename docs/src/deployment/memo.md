@@ -6,7 +6,7 @@
 - media stored in external nas-nfs, using `documents,movie,music,tv-shows` folders;
 - test env using proxmox-vm, with secureboot enabled, subnet `172.19.82.0/24`;
 - `v1.10+` will ignore `.machine.install.extraKernelArgs` and `.machine.install.extensions` fields in talconfig;
-- cilium stays at `v1.16.9` until cloudflared mtu issue fixed, [ref](https://github.com/cilium/cilium/issues/37529);
+- cilium stays at `v1.16.6` until cloudflared mtu issue fixed, [ref](https://github.com/cilium/cilium/issues/37529);
 
 ## Infra
 
@@ -19,13 +19,18 @@
 - onepassword as main secret store;
 - externaldns-adguard store records in `custom-adblock` field;
 - use Valkey instead of Dragonflydb if apps served <= 2;
-- [ ] use `Bump-in-the-Wire Routing` replace https_proxy;
+- internal domains using `homelab.internal`;
+- external doamins using `noirprime.com`, powered by cloudflared;
+
+### Cloudflare
+
+- cloudflared-tunnel => zero-trust / networks / tunnels => gateway-ext, gateway-ext.noirprime.com
+- cloudflare, dns-01, noirprime.com: user-profile =>api-tokens, ZONE:READ / DNS:EDIT
 
 ## Deployment
 
-- `10.10.0.10` as `nas.homelab.internal`, provide `dns` / `ntp` / `talos-api` / `nfs` / ...;
-- `10.10.0.100` as `k8s.homelab.internal`, VIP;
-- `10.10.0.101-103` as `exarch-0n.homelab.internal`, nodes;
+- `10.10.0.10` as `nas.homelab.internal`, provide `dns` / `minio` / `nfs` / `ntp` / `talos-api` / ...;
+- `10.10.0.101-103` as `exarch-0n.homelab.internal` and `k8s.homelab.internal`, nodes;
 - `10.10.0.201-250` as cilium l2 loadbalancer ip;
 - self-hosted-runners, label:arc-homelab / label:arc-homelab-ops;
 
@@ -80,13 +85,13 @@ talosctl reset --system-labels-to-wipe STATE --system-labels-to-wipe EPHEMERAL -
 
 ## VM test issues
 
-- only `proxmox` support secureboot test, for now;
+- only `proxmox` support secureboot and vip;
 - virtual disks, will make rook-ceph-osd-prepare `0/1 completed` forever;
 - virtual nic not support BIGTCP and XDP;
 
-## Multi-Sites plan
+## Multi-Cluster plan
 
 - homelab using talconfig `prod`; corplab using talconfig `test`;
-- [ ] add `MODE` / `SITE` to `task:bootstrap`;
-- [ ] seperate workloads between `prod` and `test`;
-- [ ] refractor folders if needed;
+- multi-cluster flux, [ref](https://github.com/h-wb/home-ops/tree/main);
+- multi-cluster talos task, [ref](https://github.com/h-wb/home-ops/blob/main/.taskfiles/Talos/Taskfile.yaml);
+- multi-cluster volsync task, [ref](https://github.com/h-wb/home-ops/blob/main/.taskfiles/VolSync/Taskfile.yaml);

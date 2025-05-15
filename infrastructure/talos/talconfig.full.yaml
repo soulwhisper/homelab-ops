@@ -1,15 +1,13 @@
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/budimanjojo/talhelper/master/pkg/config/schemas/talconfig.json
-clusterName: &clusterName main # same in cilium
+clusterName: &clusterName main
 endpoint: "https://k8s.homelab.internal:6443"
 
+# This is a "full" config template
 # enabled features:
-#   - predictable ifnames
-#   - disk-encryption
-#   - secureboot
-#   - nut
+# secureboot,nut; bond,disk-encryption;
 # disabled features:
-# cni,coredns,forwardKubeDNSToHost,kube-proxy
+# vip; cni,coredns,forwardKubeDNSToHost,kube-proxy;
 
 # renovate: depName=ghcr.io/siderolabs/installer datasource=docker
 talosVersion: v1.10.1
@@ -18,7 +16,7 @@ kubernetesVersion: v1.33.0
 
 additionalApiServerCertSans: &sans
   - k8s.homelab.internal
-  - &talosControlplaneVip 10.10.0.100
+  # - &talosControlplaneVip 10.10.0.100
   - 127.0.0.1
 additionalMachineCertSans: *sans
 
@@ -51,8 +49,8 @@ nodes:
         routes: &gateway
           - network: 0.0.0.0/0
             gateway: 10.10.0.1
-        vip:
-          ip: *talosControlplaneVip
+        # vip:
+        #   ip: *talosControlplaneVip
 
   - hostname: exarch-02.homelab.internal
     ipAddress: 10.10.0.102
@@ -67,8 +65,8 @@ nodes:
         addresses:
           - 10.10.0.102/24
         routes: *gateway
-        vip:
-          ip: *talosControlplaneVip
+        # vip:
+        #   ip: *talosControlplaneVip
 
   - hostname: exarch-03.homelab.internal
     ipAddress: 10.10.0.103
@@ -83,12 +81,10 @@ nodes:
         addresses:
           - 10.10.0.103/24
         routes: *gateway
-        vip:
-          ip: *talosControlplaneVip
+        # vip:
+        #   ip: *talosControlplaneVip
 
-# put general nodes configs here since allowSchedulingOnControlPlanes
 controlPlane:
-  # secureboot configuration
   machineSpec:
     mode: metal
     arch: amd64
@@ -100,15 +96,18 @@ controlPlane:
   schematic:
     customization:
       extraKernelArgs:
-        - console=ttyS0                           # proxmox only
+        - -lockdown                               # secureboot
+        - lockdown=integrity                      # secureboot
+        - console=ttyS0                           # hci only
         - talos.network.interface.ignore=enp88s0  # block i226-lm in ms-01
       systemExtensions:
         officialExtensions:
-          - siderolabs/i915
           - siderolabs/intel-ucode
+          - siderolabs/i915
           - siderolabs/mei
           - siderolabs/nut-client
           - siderolabs/thunderbolt
+          - siderolabs/cloudflared
   extensionServices:
     - name: nut-client
       configFiles:
@@ -116,12 +115,16 @@ controlPlane:
             MONITOR santak-box@10.10.0.10 1 monuser monuser secondary
             SHUTDOWNCMD "/sbin/poweroff"
           mountPath: /usr/local/etc/nut/upsmon.conf
+    - name: cloudflared
+      environment:
+        - TUNNEL_EDGE_IP_VERSION=auto
+        - TUNNEL_METRICS=localhost:2000
+        - TUNNEL_TOKEN=${CLOUDFLARED_TOKEN}
 
   # controlPlane only patches
   patches:
     # ApiServer configuration
-    # Admission exemptions, default:kube-system
-    # Enable MutatingAdmissionPolicy and User-Namespaces
+    # Enable MutatingAdmissionPolicy and UserNamespaces;
     - |-
       cluster:
         apiServer:
@@ -203,10 +206,10 @@ patches:
     machine:
       network:
         disableSearchDomain: true
-        extraHostEntries:
-          - ip: 10.10.0.100
-            aliases:
-              - k8s.homelab.internal
+        # extraHostEntries:
+        #   - ip: 10.10.0.100
+        #     aliases:
+        #       - k8s.homelab.internal
         nameservers:
           - 10.10.0.10
 
@@ -221,34 +224,6 @@ patches:
           featureGates:
             UserNamespacesSupport: true
             UserNamespacesPodSecurityStandards: true
-
-  # Enable OpenEBS Storage
-  # - |-
-  #   machine:
-  #     sysctls:
-  #       vm.nr_hugepages: "1024"
-  #     nodeLabels:
-  #       openebs.io/engine: mayastor
-  #     kubelet:
-  #       extraMounts:
-  #         - destination: /var/local/openebs
-  #           type: bind
-  #           source: /var/local/openebs
-  #           options:
-  #             - rbind
-  #             - rshared
-  #             - rw
-
-  # Enable DRBD and LVM-Thin
-  # - |-
-  #   machine:
-  #     kernel:
-  #       modules:
-  #         - name: drbd
-  #           parameters:
-  #             - usermode_helper=disabled
-  #         - name: drbd_transport_tcp
-  #         - name: dm_thin_pool
 
   # Configure NFS mount options
   - |
@@ -291,28 +266,6 @@ patches:
           allowedKubernetesNamespaces:
             - gitops-system
 
-  # Enable disk encryption with better encyption method, pass >= 20 characters
-  # https://github.com/siderolabs/talos/issues/8972
-  # https://en.m.wikipedia.org/wiki/Evil_maid_attack
-  - |-
-    machine:
-      systemDiskEncryption:
-        ephemeral:
-          cipher: aes-xts-plain64
-          keySize: 256
-          keys:
-            - slot: 1
-              static:
-                passphrase: ${DISK_ENCRYPTION_PASS}
-          provider: luks2
-        state:
-          cipher: aes-xts-plain64
-          keySize: 256
-          keys:
-            - slot: 0
-              tpm: {}
-          provider: luks2
-
   # Containerd configuration
   - |-
     machine:
@@ -337,7 +290,7 @@ patches:
         net.core.wmem_max: 134217728              # 10G NIC, tunning
         net.ipv4.tcp_rmem: 4096 87380 67108864    # 10G NIC, tunning
         net.ipv4.tcp_wmem: 4096 65536 67108864    # 10G NIC, tunning
-        user.max_user_namespaces: 11255           # User-Namespaces
+        user.max_user_namespaces: 11255           # UserNamespaces
 
   # Udev configuration, thunderbolt & i915
   - |-
@@ -346,3 +299,53 @@ patches:
         rules:
           - ACTION=="add", SUBSYSTEM=="thunderbolt", ATTR{authorized}=="0", ATTR{authorized}="1"
           - SUBSYSTEM=="drm", KERNEL=="renderD*", GROUP="44", MODE="0660"
+
+  # Enable disk encryption with better encyption method, passphrase >= 20 characters
+  # https://github.com/siderolabs/talos/issues/8972
+  # https://en.m.wikipedia.org/wiki/Evil_maid_attack
+  - |-
+    machine:
+      systemDiskEncryption:
+        ephemeral:
+          cipher: aes-xts-plain64
+          keySize: 256
+          keys:
+            - slot: 1
+              static:
+                passphrase: ${DISK_ENCRYPTION_PASS}
+          provider: luks2
+        state:
+          cipher: aes-xts-plain64
+          keySize: 256
+          keys:
+            - slot: 0
+             tpm: {}
+          provider: luks2
+
+  # Enable OpenEBS Storage
+  # - |-
+  #   machine:
+  #     sysctls:
+  #       vm.nr_hugepages: "1024"
+  #     nodeLabels:
+  #       openebs.io/engine: mayastor
+  #     kubelet:
+  #       extraMounts:
+  #         - destination: /var/local/openebs
+  #           type: bind
+  #           source: /var/local/openebs
+  #           options:
+  #             - rbind
+  #             - rshared
+  #             - rw
+
+  # Enable DRBD and LVM-Thin
+  # - |-
+  #   machine:
+  #     kernel:
+  #       modules:
+  #         - name: drbd
+  #           parameters:
+  #             - usermode_helper=disabled
+  #         - name: drbd_transport_tcp
+  #         - name: dm_thin_pool

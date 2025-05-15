@@ -5,7 +5,7 @@ kind: PostgresCluster
 metadata:
   name: &name postgres
 spec:
-  postgresVersion: 16
+  postgresVersion: 17
 
   metadata:
     labels:
@@ -16,7 +16,7 @@ spec:
     type: LoadBalancer
     metadata:
       annotations:
-        external-dns.alpha.kubernetes.io/hostname: "postgres.noirprime.com"
+        external-dns.alpha.kubernetes.io/hostname: "postgres.homelab.internal"
         lbipam.cilium.io/ips: "172.19.82.203"
 
   patroni: # turn on sync writes to at least 1 other replica
@@ -28,6 +28,8 @@ spec:
         pg_hba:
           - hostnossl all all 10.100.0.0/17 md5 # Needed because dbman does not support SSL yet
           - hostssl all all all md5
+        parameters:
+          max_connections: 500
 
   instances:
     - name: postgres
@@ -76,21 +78,23 @@ spec:
         compress-type: "bz2"
         compress-level: "9"
         # Minio
-        # repo1-block: "y"
-        # repo1-bundle: "y"
-        # repo1-path: /crunchy-pgo
-        # repo1-retention-full: "30" # days
-        # repo1-retention-full-type: "time"
-        # repo1-s3-uri-style: path
+        repo1-block: "y"
+        repo1-bundle: "y"
+        repo1-path: /crunchy-pgo
+        repo1-retention-full: "30" # days
+        repo1-retention-full-type: "time"
+        repo1-s3-uri-style: path
         # R2
-        repo2-block: "y"
-        repo2-bundle: "y"
-        repo2-path: /crunchy-pgo
-        repo2-retention-full: "7" # days
-        repo2-retention-full-type: time
-        repo2-s3-uri-style: path
+        # repo2-block: "y"
+        # repo2-bundle: "y"
+        # repo2-path: /crunchy-pgo
+        # repo2-retention-full: "7" # days
+        # repo2-retention-full-type: "time"
+        # repo2-s3-uri-style: path
         # NFS
-        # repo1-bundle: "y"
+        # repo3-block: "y"
+        # repo3-bundle: "y"
+        # repo3-path: /crunchy-pgo
         # repo3-retention-full: "30" # days
         # repo3-retention-full-type: "time"
       manual:
@@ -101,28 +105,28 @@ spec:
         labels:
           app.kubernetes.io/name: crunchy-postgres-backup
       repos:
-        # - name: repo1
-        #   s3: &minio
-        #     bucket: postgresql
-        #     endpoint: s3.jory.dev
-        #     region: ca-west-1
-        #   schedules:
-        #     full: "30 1 * * 0" # Sunday at 01:30
-        #     differential: "30 1 * * 1-6" # Mon-Sat at 01:30
-        #     incremental: "30 3-23 * * *" # Every hour except 01:30-2:30
-        - name: repo2 # R2
-          s3: &r2
-            bucket: "crunchy-postgres"
-            endpoint: "${CF_ACCOUNT_TAG}.r2.cloudflarestorage.com"
+        - name: repo1
+          s3: &minio
+            bucket: "postgres"
+            endpoint: "s3.homelab.internal:9000"
             region: "us-east-1"
           schedules:
-            full: "0 2 * * 0" # Sunday at 02:00
-            incremental: "0 2 * * 1-6/2" # Mon-Sat at 02:00, every 2nd day
+            full: "30 1 * * 0" # Sunday at 01:30
+            differential: "30 1 * * 1-6" # Mon-Sat at 01:30
+            incremental: "30 3-23 * * *" # Every hour except 01:30-2:30
+        # - name: repo2 # R2
+        #   s3: &r2
+        #     bucket: "postgres"
+        #     endpoint: "${CF_ACCOUNT_TAG}.r2.cloudflarestorage.com"
+        #     region: "us-east-1"
+        #   schedules:
+        #     full: "0 2 * * 0" # Sunday at 02:00
+        #     incremental: "0 2 * * 1-6/2" # Mon-Sat at 02:00, every 2nd day
         # - name: repo3
         #   volume: &nfs
         #     volumeClaimSpec:
         #       storageClassName: ""
-        #       volumeName: "postgres-nfs"
+        #       volumeName: "postgres"
         #       accessModes: ["ReadWriteMany"]
         #       resources:
         #         requests:
@@ -132,14 +136,15 @@ spec:
         #     differential: "15 1 * * 1-6" # Mon-Sat at 01:15
         #     incremental: "15 3-23 * * *" # Every hour except 01:30-2:30
 
+  # enable only if need imports
   # dataSource:
   #   pgbackrest:
   #     stanza: db
   #     configuration: *backupConfig
   #     global: *backupFlag
   #     repo:
-  #       name: repo3
-  #       # s3: *minio
+  #       name: repo1
+  #       s3: *minio
 
   monitoring:
     pgmonitor:
@@ -162,6 +167,8 @@ spec:
         global:
           pool_mode: "transaction" # pgBouncer is set to transaction for Authentik. Grafana requires session https://github.com/grafana/grafana/issues/74260#issuecomment-1702795311. Everything else is happy with transaction
           client_tls_sslmode: prefer
+          default_pool_size: "100"
+          max_client_conn: "500"
       topologySpreadConstraints:
         - maxSkew: 1
           topologyKey: "kubernetes.io/hostname"

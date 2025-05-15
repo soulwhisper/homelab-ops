@@ -62,11 +62,11 @@ spec:
     route:
       app:
         hostnames:
-          - echo-server.noirprime.com
+          - echo-server.homelab.internal
         parentRefs:
           - name: internal
             namespace: kube-system
-            sectionName: https
+            sectionName: http
         rules:
           - backendRefs:
               - name: echo-server
