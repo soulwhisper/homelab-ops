@@ -35,6 +35,7 @@ spec:
             args: ["tunnel", "run"]
             env:
               NO_AUTOUPDATE: "true"
+              TUNNEL_LOGLEVEL: "debug"
               TUNNEL_METRICS: 0.0.0.0:8080
             envFrom:
               - secretRef:
