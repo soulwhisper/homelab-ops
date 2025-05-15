@@ -300,5 +300,5 @@ patches:
           keySize: 256
           keys:
             - slot: 0
-             tpm: {}
+              tpm: {}
           provider: luks2
