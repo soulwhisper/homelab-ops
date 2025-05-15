@@ -14,7 +14,7 @@
 ### Minio
 
 - minio-app on truenas-scale;
-- endpoint = `http://s3.homelab.internal:9000`
+- endpoint = `s3:http://s3.homelab.internal:9000`
 - region = us-east-1
 - versioning = disabled; object-locking = disabled; quota = disabled;
 
