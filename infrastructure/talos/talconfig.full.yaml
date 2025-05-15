@@ -5,11 +5,9 @@ endpoint: "https://k8s.homelab.internal:6443"
 
 # This is a "full" config template
 # enabled features:
-# nut; bond;
+# secureboot,nut; bond,disk-encryption;
 # disabled features:
 # vip; cni,coredns,forwardKubeDNSToHost,kube-proxy;
-# controlPlane-only:
-# secureboot, disk-encryption;
 
 # renovate: depName=ghcr.io/siderolabs/installer datasource=docker
 talosVersion: v1.10.1
@@ -90,16 +88,17 @@ controlPlane:
   machineSpec:
     mode: metal
     arch: amd64
-    # secureboot configuration
-    # secureboot: true
-    # useUKI: true
+    secureboot: true
+    useUKI: true
   nodeLabels:
     topology.kubernetes.io/region: *clusterName
     topology.kubernetes.io/zone: homelab
   schematic:
     customization:
       extraKernelArgs:
-        - console=ttyS0                           # proxmox only
+        - -lockdown                               # secureboot
+        - lockdown=integrity                      # secureboot
+        - console=ttyS0                           # hci only
         - talos.network.interface.ignore=enp88s0  # block i226-lm in ms-01
       systemExtensions:
         officialExtensions:
@@ -293,24 +292,24 @@ patches:
   # Enable disk encryption with better encyption method, passphrase >= 20 characters
   # https://github.com/siderolabs/talos/issues/8972
   # https://en.m.wikipedia.org/wiki/Evil_maid_attack
-  # - |-
-  #   machine:
-  #     systemDiskEncryption:
-  #       ephemeral:
-  #         cipher: aes-xts-plain64
-  #         keySize: 256
-  #         keys:
-  #           - slot: 1
-  #             static:
-  #               passphrase: ${DISK_ENCRYPTION_PASS}
-  #         provider: luks2
-  #       state:
-  #         cipher: aes-xts-plain64
-  #         keySize: 256
-  #         keys:
-  #           - slot: 0
-  #             tpm: {}
-  #         provider: luks2
+  - |-
+    machine:
+      systemDiskEncryption:
+        ephemeral:
+          cipher: aes-xts-plain64
+          keySize: 256
+          keys:
+            - slot: 1
+              static:
+                passphrase: ${DISK_ENCRYPTION_PASS}
+          provider: luks2
+        state:
+          cipher: aes-xts-plain64
+          keySize: 256
+          keys:
+            - slot: 0
+             tpm: {}
+          provider: luks2
 
   # Enable OpenEBS Storage
   # - |-

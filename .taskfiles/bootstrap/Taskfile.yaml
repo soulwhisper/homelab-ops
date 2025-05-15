@@ -41,4 +41,4 @@ tasks:
       - op run --env-file {{.K8S_DIR}}/bootstrap/bootstrap.env --no-masking -- minijinja-cli {{.MINIJINJA_ARGS}} "{{.K8S_DIR}}/bootstrap/templates/resources.yaml.j2" | kubectl apply --server-side --filename -
       - |
         export ROOK_DISK={{.WIPE}}
-        {{if eq .WIPE "false"}} helmfile --file {{.K8S_DIR}}/bootstrap/helmfile.yaml apply -l wipe-rook.enabled!=true {{.HELMFILE_ARGS}} {{end}}
+        helmfile --file {{.K8S_DIR}}/bootstrap/helmfile.yaml apply {{if eq .WIPE "false"}} -l wipe-rook.enabled!=true {{end}} {{.HELMFILE_ARGS}}

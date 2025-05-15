@@ -4,11 +4,9 @@ clusterName: &clusterName main
 endpoint: "https://k8s.homelab.internal:6443"
 
 # enabled features:
-# nut; bond;
+# secureboot,nut; bond,disk-encryption;
 # disabled features:
 # vip; cni,coredns,forwardKubeDNSToHost,kube-proxy;
-# controlPlane-only:
-# secureboot, disk-encryption;
 
 # renovate: depName=ghcr.io/siderolabs/installer datasource=docker
 talosVersion: v1.10.1
@@ -76,13 +74,17 @@ controlPlane:
   machineSpec:
     mode: metal
     arch: amd64
+    secureboot: true
+    useUKI: true
   nodeLabels:
     topology.kubernetes.io/region: *clusterName
     topology.kubernetes.io/zone: homelab
   schematic:
     customization:
       extraKernelArgs:
-        - console=ttyS0                           # proxmox only
+        - -lockdown                               # secureboot
+        - lockdown=integrity                      # secureboot
+        - console=ttyS0                           # hci only
       systemExtensions:
         officialExtensions:
           - siderolabs/intel-ucode
@@ -267,3 +269,25 @@ patches:
         rules:
           - ACTION=="add", SUBSYSTEM=="thunderbolt", ATTR{authorized}=="0", ATTR{authorized}="1"
           - SUBSYSTEM=="drm", KERNEL=="renderD*", GROUP="44", MODE="0660"
+
+  # Enable disk encryption with better encyption method, passphrase >= 20 characters
+  # https://github.com/siderolabs/talos/issues/8972
+  # https://en.m.wikipedia.org/wiki/Evil_maid_attack
+  - |-
+    machine:
+      systemDiskEncryption:
+        ephemeral:
+          cipher: aes-xts-plain64
+          keySize: 256
+          keys:
+            - slot: 1
+              static:
+                passphrase: ${DISK_ENCRYPTION_PASS}
+          provider: luks2
+        state:
+          cipher: aes-xts-plain64
+          keySize: 256
+          keys:
+            - slot: 0
+             tpm: {}
+          provider: luks2
