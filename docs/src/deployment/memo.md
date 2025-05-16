@@ -18,14 +18,18 @@
 - volsync nfs-backup using mutatingAdmissionPolicy;
 - onepassword as main secret store;
 - externaldns-adguard store records in `custom-adblock` field;
-- use Valkey instead of Dragonflydb if apps served <= 2;
 - internal domains using `homelab.internal`;
 - external doamins using `noirprime.com`, powered by cloudflared;
 
 ### Cloudflare
 
-- cloudflared-tunnel => zero-trust / networks / tunnels => gateway-ext, gateway-ext.noirprime.com
+- cloudflared-tunnel => zero-trust / networks / tunnels
 - cloudflare, dns-01, noirprime.com: user-profile =>api-tokens, ZONE:READ / DNS:EDIT
+
+### Database
+
+- postgres, cpgo; app:immich;
+- redis, dragonfly; 0:immich;
 
 ## Deployment
 

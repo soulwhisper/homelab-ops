@@ -5,7 +5,7 @@ kind: Kustomization
 namespace: database-system
 resources:
   - ./crunchy-postgres-operator/ks.yaml
-  # - ./dragonfly-cluster/ks.yaml
+  - ./dragonfly-operator/ks.yaml
 components:
   - ../../components/namespace
   - ../../components/flux/alerts

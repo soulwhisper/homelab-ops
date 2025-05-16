@@ -50,7 +50,7 @@ releases:
     atomic: true
     labels:
       wipe-rook.enabled: true
-    chart: oci://ghcr.io/bjw-s/helm/app-template
+    chart: oci://ghcr.io/bjw-s-labs/helm/app-template
     version: 3.7.3
     values: ['./templates/wipe-rook.yaml.gotmpl']
     needs: ['kube-system/coredns']

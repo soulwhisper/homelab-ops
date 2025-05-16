@@ -1,5 +1,5 @@
 ---
-# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
@@ -22,6 +22,7 @@ spec:
 
   values:
     defaultPodOptions:
+      enableServiceLinks: false
       securityContext:
         runAsUser: 2000
         runAsGroup: 2000
@@ -31,8 +32,6 @@ spec:
 
     controllers:
       immich-server:
-        pod:
-          enableServiceLinks: false
         annotations:
           reloader.stakater.com/auto: "true"
         containers:
@@ -40,73 +39,108 @@ spec:
             image:
               repository: ghcr.io/immich-app/immich-server
               tag: 1.132.3
-            env:
+            env: &shared-env
               TZ: Asia/Shanghai
               UID: 2000
               GID: 2000
               UPLOAD_LOCATION: /upload
               IMMICH_SERVER_URL: http://immich-server.media-apps.svc.cluster.local:2283
               IMMICH_MACHINE_LEARNING_URL: http://immich-machine-learning.media-apps.svc.cluster.local:3003
-              PUBLIC_IMMICH_SERVER_URL: http://immich.homelab.internal
+              PUBLIC_IMMICH_SERVER_URL: http://photo.homelab.internal
               DISABLE_REVERSE_GEOCODING: true
               ENABLE_MAPBOX: false
               LOG_LEVEL: log
               NODE_ENV: production
               REDIS_HOSTNAME: dragonfly.database-system.svc.cluster.local
-              REDIS_DBINDEX: 1
+              REDIS_DBINDEX: 0
               REDIS_PORT: 6379
             envFrom:
               - secretRef:
                   name: immich
             probes:
-              liveness: &probes
+              liveness: &probes-app
                 enabled: true
                 custom: true
                 spec:
                   httpGet:
                     path: /api/server/ping
-                    port: &port 2283
+                    port: &port-app 2283
                   initialDelaySeconds: 0
                   periodSeconds: 10
                   timeoutSeconds: 1
                   failureThreshold: 3
-              readiness: *probes
+              readiness: *probes-app
               startup:
                 enabled: true
                 custom: true
                 spec:
                   httpGet:
                     path: /api/server/ping
-                    port: *port
+                    port: *port-app
                   failureThreshold: 30
                   periodSeconds: 5
                   successThreshold: 1
                   timeoutSeconds: 1
-            securityContext:
+            securityContext: &securityContext
               allowPrivilegeEscalation: false
               capabilities:
                 drop:
                   - ALL
               seccompProfile:
                 type: RuntimeDefault
-            resources:
+            resources: &resources
               requests:
                 cpu: 15m
                 memory: 1Gi
               limits:
-                gpu.intel.com/i915: 1
                 memory: 4Gi
 
+      immich-machine-learning:
+        annotations:
+          reloader.stakater.com/auto: "true"
+        containers:
+          app:
+            image:
+              repository: ghcr.io/immich-app/immich-machine-learning
+              tag: v1.131.2
+            env: *shared-env
+            envFrom:
+              - secretRef:
+                  name: immich
+            probes:
+              liveness: &probes-ml
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /ping
+                    port: &port-ml 3003
+                  initialDelaySeconds: 0
+                  periodSeconds: 10
+                  timeoutSeconds: 1
+                  failureThreshold: 5
+              readiness: *probes-ml
+              startup:
+                enabled: false
+            resources: *resources
+            securityContext: *securityContext
+
     service:
-      app:
-        controller: &app immich
+      immich-app:
+        controller: &app immich-server
         ports:
           http:
-            port: *port
+            port: *port-app
+      immich-ml:
+        controller: immich-machine-learning
+        ports:
+          http:
+            port: *port-ml
+
     route:
       app:
         hostnames:
-          - immich.homelab.internal
+          - photo.homelab.internal
         parentRefs:
           - name: internal
             namespace: kube-system
@@ -114,7 +148,7 @@ spec:
         rules:
           - backendRefs:
               - name: *app
-                port: *port
+                port: *port-app
 
     persistence:
       media:
@@ -126,3 +160,15 @@ spec:
             app:
               - path: /upload
                 subPath: photo
+      cache:
+        type: emptyDir
+        globalMounts:
+          - path: /cache
+      geocoding-dump:
+        type: emptyDir
+        globalMounts:
+          - path: /usr/src/app/.reverse-geocoding-dump
+      tmp:
+        type: emptyDir
+        globalMounts:
+          - path: /tmp

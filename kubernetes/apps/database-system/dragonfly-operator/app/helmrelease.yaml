@@ -1,0 +1,32 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrelease-helm-v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: dragonfly-operator
+spec:
+  interval: 30m
+  chartRef:
+    kind: OCIRepository
+    name: dragonfly-operator
+  install:
+    crds: CreateReplace
+    remediation:
+      retries: -1
+  upgrade:
+    cleanupOnFail: true
+    crds: CreateReplace
+    remediation:
+      retries: 3
+
+  values:
+    additionalLabels:
+      app.kubernetes.io/name: dragonfly-operator
+    serviceMonitor:
+      enabled: true
+    grafanaDashboard:
+      enabled: true
+      annotations:
+        name: Dragonfly
+      labels:
+        name: grafana_dashboard

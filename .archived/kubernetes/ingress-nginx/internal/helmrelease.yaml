@@ -103,7 +103,7 @@ spec:
           labelSelector:
             matchLabels:
               app.kubernetes.io/instance: nginx-internal
-              app.kubernetes.io/component: controller
+              app.kubernetes.io/controller: controller
 
       resources:
         requests:
