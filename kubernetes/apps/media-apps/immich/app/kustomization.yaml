@@ -1,0 +1,10 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/kustomization
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - ./helmrelease.yaml
+  - ./externalsecret.yaml
+
+# not finished
+# https://github.com/frantathefranta/home-ops/blob/main/kubernetes/apps/default/immich/app/machine-learning/helmrelease.yaml

@@ -62,9 +62,9 @@ spec:
       password:
         type: AlphaNumeric
     # Applications
-    - name: piped
+    - name: immich
       databases:
-        - piped
+        - immich
       password:
         type: AlphaNumeric
 

@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: ytdl-sub
+  name: auto-bangumi
 spec:
   interval: 30m
   chartRef:
@@ -22,36 +22,26 @@ spec:
 
   values:
     controllers:
-      ytdl-sub:
-        type: cronjob
-
+      auto-bangumi:
         pod:
-          restartPolicy: Never
           securityContext:
             runAsUser: 2000
             runAsGroup: 2000
             runAsNonRoot: true
             fsGroup: 2000
             fsGroupChangePolicy: OnRootMismatch
-
-        cronjob:
-          schedule: "0 */6 * * *"
-          backoffLimit: 0
-          concurrencyPolicy: Forbid
-          failedJobsHistory: 1
-          successfulJobsHistory: 0
-
+        annotations:
+          reloader.stakater.com/auto: "true"
         containers:
           app:
             image:
-              repository: ghcr.io/jmbannon/ytdl-sub
-              tag: 2025.05.01
-            command:
-              - bash
-              - -c
-            args:
-              - |
-                ytdl-sub --log-level=debug --config=/config/config.yaml sub /media/youtube/subscriptions.yaml
+              repository: ghcr.io/estrellaxd/auto_bangumi
+              tag: 3.1.18
+            env:
+              TZ: Asia/Shanghai
+              PUID: 2000
+              GUID: 2000
+              UMASK: 022
             securityContext:
               allowPrivilegeEscalation: false
               capabilities:
@@ -61,33 +51,45 @@ spec:
                 type: RuntimeDefault
             resources:
               requests:
-                cpu: 10m
-                memory: 256Mi
+                cpu: 15m
+                memory: 1Gi
               limits:
-                gpu.intel.com/i915: 1
-                memory: 2Gi
+                memory: 4Gi
+
+    service:
+      app:
+        controller: &app auto-bangumi
+        ports:
+          http:
+            port: &port 7892
+    route:
+      app:
+        hostnames:
+          - bangumi.homelab.internal
+        parentRefs:
+          - name: internal
+            namespace: kube-system
+            sectionName: http
+        rules:
+          - backendRefs:
+              - name: *app
+                port: *port
 
     persistence:
-      config:
-        name: ytdl-sub
-        type: configMap
-        advancedMounts:
-          ytdl-sub:
-            app:
-              - path: /config/config.yaml
-                subPath: config.yaml
-                readOnly: true
+      app:
+        existingClaim: auto-bangumi-app
+        globalMounts:
+          - path: /app/config
+            subPath: config
+          - path: /app/data
+            subPath: data
 
       media:
         type: nfs
         server: nas.homelab.internal
         path: /mnt/Arcanum/shared/media
         advancedMounts:
-          ytdl-sub:
+          auto-bangumi:
             app:
-              - path: /media/movie
-                subPath: movie
-              - path: /media/music
-                subPath: music
-              - path: /media/tv_show
-                subPath: tv-show
+              - path: /media/comic
+                subPath: comic
