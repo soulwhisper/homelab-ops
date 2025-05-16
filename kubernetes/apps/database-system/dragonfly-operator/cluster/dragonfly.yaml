@@ -26,6 +26,7 @@ spec:
     - --cluster_mode=emulated
     - --default_lua_flags=allow-undeclared-keys
     - --lock_on_hashtags
+    # - --snapshot_cron="0 2 * * *"
     - --s3_endpoint=s3.homelab.internal:9000
     - --s3_use_https=false
   snapshot:
