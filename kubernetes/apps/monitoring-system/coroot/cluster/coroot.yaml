@@ -5,6 +5,7 @@ metadata:
   name: coroot
   namespace: coroot
 spec:
+  replicas: 1
   authAnonymousRole: Admin
   env:
     - name: HTTP_PROXY
@@ -36,8 +37,6 @@ spec:
 #    passwordSecret: # Secret containing password.
 #      name: # Name of the secret to select from.
 #      key:  # Key of the secret to select from.
-
-#  replicas: 1 # Number of Coroot StatefulSet pods.
 
 # Store configuration in a Postgres DB instead of SQLite (required if `replicas` > 1).
 #  postgres:

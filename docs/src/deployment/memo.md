@@ -74,13 +74,20 @@ kubectl -n gitops-system get fluxreport/flux -o yaml
 kubectl -n gitops-system events --for FluxInstance/flux
 kubectl -n gitops-system logs deployment/flux-operator
 
-```
-
 ## Talos Reset
-
-```shell
-## Hic sunt leones.
 talosctl reset --system-labels-to-wipe STATE --system-labels-to-wipe EPHEMERAL --graceful=false --wait=false --reboot
+
+## Node-level cloudflared debug, with v2024.12.2+
+curl -L https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64 -o /usr/bin/cloudflared
+chmod +x /usr/bin/cloudflared
+curl 172.19.82.101:2000/diag/tunnel
+cloudflared tunnel diag --metrics 172.19.82.101:2000
+
+## update flux-webhook
+## https://fluxcd.io/flux/guides/webhook-receivers/
+kubectl -n gitops-system get receivers.notification.toolkit.fluxcd.io
+svc/webhook-receiver/webapp
+
 ```
 
 ## VM test issues
