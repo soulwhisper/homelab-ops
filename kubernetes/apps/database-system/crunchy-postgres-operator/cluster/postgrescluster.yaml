@@ -108,7 +108,7 @@ spec:
         - name: repo1
           s3: &minio
             bucket: "postgres"
-            endpoint: "s3.homelab.internal:9000"
+            endpoint: "http://s3.homelab.internal:9000"
             region: "us-east-1"
           schedules:
             full: "30 1 * * 0" # Sunday at 01:30
