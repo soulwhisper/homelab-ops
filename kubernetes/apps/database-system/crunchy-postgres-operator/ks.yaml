@@ -43,11 +43,6 @@ spec:
     name: gitops-system
     namespace: gitops-system
   wait: true
-  postBuild:
-    substituteFrom:
-      - kind: Secret
-        name: cloudflare-account-tag
-        optional: false
   dependsOn:
     - name: crunchy-postgres-operator
       namespace: database-system

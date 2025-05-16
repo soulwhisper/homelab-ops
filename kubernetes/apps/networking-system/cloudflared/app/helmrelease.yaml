@@ -40,7 +40,7 @@ spec:
               TUNNEL_METRICS: 0.0.0.0:8080
             envFrom:
               - secretRef:
-                  name: cloudflared-token
+                  name: cloudflared
             probes:
               liveness: &probes
                 enabled: true

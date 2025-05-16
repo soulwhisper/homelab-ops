@@ -13,7 +13,7 @@ spec:
       - dns01:
           cloudflare:
             apiTokenSecretRef:
-              name: cloudflare-api-token
+              name: certmanager-cloudflare-api
               key: cloudflare-api-token
         selector:
           dnsZones:

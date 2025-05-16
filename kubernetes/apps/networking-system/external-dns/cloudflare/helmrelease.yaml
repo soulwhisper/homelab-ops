@@ -27,7 +27,7 @@ spec:
       - name: CF_API_TOKEN
         valueFrom:
           secretKeyRef:
-            name: externaldns-cloudflare-secret
+            name: externaldns-cloudflare
             key: cloudflare-api-token
       - name: HTTP_PROXY
         value: http://172.19.82.10:1080
@@ -43,7 +43,7 @@ spec:
       - --events
       - --gateway-name=external
     podAnnotations:
-      secret.reloader.stakater.com/reload: externaldns-cloudflare-secret
+      secret.reloader.stakater.com/reload: externaldns-cloudflare
     podSecurityContext:
       runAsNonRoot: true
       runAsUser: 2000

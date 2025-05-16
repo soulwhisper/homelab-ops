@@ -4,7 +4,7 @@
 # Recommendation:netkit, host-routing, bbr, ebpf-backend-memory, ebpf-clock-probe;
 # maglev-hashing, preallocate-maps;
 # :: features
-# hubble:disabled, hostLegacyRouting:disabled, ipam:kubernetes;
+# hubble:enabled, hostLegacyRouting:disabled, ipam:kubernetes;
 # ::
 autoDirectNodeRoutes: true
 bandwidthManager:
@@ -45,7 +45,29 @@ gatewayAPI:
   enableAlpn: true
   xffNumTrustedHops: 1
 hubble:
-  enabled: false
+  enabled: true
+  metrics:
+    enabled:
+      - dns:query
+      - drop
+      - flow
+      - httpV2
+      - icmp
+      - port-distribution
+      - tcp
+    serviceMonitor:
+      enabled: true
+    dashboards:
+      enabled: true
+  relay:
+    enabled: true
+    rollOutPods: true
+    prometheus:
+      serviceMonitor:
+        enabled: true
+  ui:
+    enabled: true
+    rollOutPods: true
 ipam:
   mode: "kubernetes"
 ipv4NativeRoutingCIDR: 10.100.0.0/17

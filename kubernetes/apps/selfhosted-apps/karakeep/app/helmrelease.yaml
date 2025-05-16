@@ -49,12 +49,12 @@ spec:
               MEILI_MASTER_KEY:
                 valueFrom:
                   secretKeyRef:
-                    name: karakeep-secret
+                    name: karakeep
                     key: meilisearch_master_key
               NEXTAUTH_SECRET:
                 valueFrom:
                   secretKeyRef:
-                    name: karakeep-secret
+                    name: karakeep
                     key: encryption_key
               NEXTAUTH_URL: https://karakeep.homelab.internal
               DISABLE_NEW_RELEASE_CHECK: true
@@ -129,7 +129,7 @@ spec:
               MEILI_MASTER_KEY:
                 valueFrom:
                   secretKeyRef:
-                    name: karakeep-secret
+                    name: karakeep
                     key: meilisearch_master_key
             resources:
               requests:

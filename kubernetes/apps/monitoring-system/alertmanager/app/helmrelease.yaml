@@ -97,7 +97,7 @@ spec:
             readOnly: true
       secrets:
         type: secret
-        name: alertmanager-secret
+        name: alertmanager
         globalMounts:
           - path: /etc/secrets
             readOnly: true

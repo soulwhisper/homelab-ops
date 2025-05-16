@@ -12,7 +12,13 @@
 | password.title | password.label     | password.new_field    | password.section/notes/tags |
 | document.title | document.file_name | document.file_content | document.section/notes/tags |
 
-#### Example
+### Naming
+
+- externalSecret and Secret name should be same
+- secrets refers to app itself, use appname
+- secrets refers to using other services, use `appname`-`service`-`usage`
+
+### Example
 
 ```yaml
 ---
@@ -27,7 +33,7 @@ spec:
     kind: ClusterSecretStore
     name: onepassword
   target:
-    name: paperless-secret
+    name: paperless
     creationPolicy: Owner
     template:
       data:

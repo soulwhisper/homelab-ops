@@ -27,7 +27,7 @@ spec:
       - --webhook-provider-url=http://localhost:8888
       - --gateway-name=internal
     podAnnotations:
-      secret.reloader.stakater.com/reload: externaldns-adguard-secret
+      secret.reloader.stakater.com/reload: externaldns-adguard
     podSecurityContext:
       runAsNonRoot: true
       runAsUser: 2000
@@ -67,7 +67,7 @@ spec:
           - name: ADGUARD_PASSWORD
             valueFrom:
               secretKeyRef:
-                name: externaldns-adguard-secret
+                name: externaldns-adguard
                 key: adguard-password
     resources:
       requests:

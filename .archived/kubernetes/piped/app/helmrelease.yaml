@@ -34,7 +34,7 @@ spec:
       backend:
         strategy: RollingUpdate
         annotations:
-          secret.reloader.stakater.com/reload: piped-secret
+          secret.reloader.stakater.com/reload: piped
         containers:
           app:
             image:
@@ -143,7 +143,7 @@ spec:
               MAX_SLEEP_BETWEEN_FEEDS: 120
             envFrom:
               - secretRef:
-                  name: piped-db-secret
+                  name: piped
             resources:
               requests:
                 cpu: 10m
@@ -225,7 +225,7 @@ spec:
     persistence:
       config:
         type: secret
-        name: piped-secret
+        name: piped
         advancedMounts:
           backend:
             app:

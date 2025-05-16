@@ -62,7 +62,7 @@ spec:
               PROXY_TLS: false
             envFrom:
               - secretRef:
-                  name: ocis-secret
+                  name: ocis
             probes:
               liveness:
                 enabled: true

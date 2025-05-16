@@ -6,6 +6,7 @@ namespace: selfhosted-apps
 resources:
   - ./karakeep/ks.yaml
   - ./n8n/ks.yaml
+  - ./ocis/ks.yaml
 components:
   - ../../components/namespace
   - ../../components/flux/alerts

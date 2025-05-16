@@ -24,7 +24,7 @@ spec:
 
   values:
     githubConfigUrl: https://github.com/soulwhisper/homelab-ops
-    githubConfigSecret: homelab-ops-runner-secret
+    githubConfigSecret: actions-runner-controller-github-app
 
     minRunners: 0
     maxRunners: 3
