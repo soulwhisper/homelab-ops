@@ -86,7 +86,6 @@ cloudflared tunnel diag --metrics 172.19.82.101:2000
 ## update flux-webhook
 ## https://fluxcd.io/flux/guides/webhook-receivers/
 kubectl -n gitops-system get receivers.notification.toolkit.fluxcd.io
-
 ```
 
 ## VM test issues

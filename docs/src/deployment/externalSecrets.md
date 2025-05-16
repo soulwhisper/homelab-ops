@@ -15,7 +15,7 @@
 ### Naming
 
 - externalSecret and Secret name should be same
-- secrets refers to app itself, use appname
+- secrets refers to app itself, use `appname`
 - secrets refers to using other services, use `appname`-`service`-`usage`
 
 ### Example
