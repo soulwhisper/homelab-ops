@@ -10,6 +10,7 @@
 
 > kubernetes
 
+- apps:alist
 - apps:echo-server
 - apps:freshrss
 - apps:gatus

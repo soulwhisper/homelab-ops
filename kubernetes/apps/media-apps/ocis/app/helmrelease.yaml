@@ -122,3 +122,11 @@ spec:
         globalMounts:
           - path: /tmp
             subPath: tmp
+      media:
+        type: nfs
+        server: nas.homelab.internal
+        path: /mnt/Arcanum/shared/media
+        advancedMounts:
+          auto-bangumi:
+            app:
+              - path: /media

@@ -6,6 +6,7 @@ namespace: database-system
 resources:
   - ./crunchy-postgres-operator/ks.yaml
   - ./dragonfly-operator/ks.yaml
+  - ./emqx-operator/ks.yaml
 components:
   - ../../components/namespace
   - ../../components/flux/alerts
