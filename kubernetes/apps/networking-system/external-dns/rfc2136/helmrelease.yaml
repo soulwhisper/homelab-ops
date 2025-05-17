@@ -46,7 +46,7 @@ spec:
             name: externaldns-rfc2136
             key: tsig-secret
     podAnnotations:
-      secret.reloader.stakater.com/reload: externaldns-rfc2136
+      reloader.stakater.com/auto: "true"
     podSecurityContext:
       runAsNonRoot: true
       runAsUser: 2000

@@ -34,7 +34,7 @@ spec:
       backend:
         strategy: RollingUpdate
         annotations:
-          secret.reloader.stakater.com/reload: piped
+          reloader.stakater.com/auto: "true"
         containers:
           app:
             image:
