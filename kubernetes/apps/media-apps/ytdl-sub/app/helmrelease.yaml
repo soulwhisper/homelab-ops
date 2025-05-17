@@ -85,9 +85,9 @@ spec:
         advancedMounts:
           ytdl-sub:
             app:
-              - path: /media/movie
+              - path: /movie
                 subPath: movie
-              - path: /media/music
+              - path: /music
                 subPath: music
-              - path: /media/tv_show
+              - path: /tv_show
                 subPath: tv-show

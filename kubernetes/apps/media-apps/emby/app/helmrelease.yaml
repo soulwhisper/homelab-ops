@@ -91,9 +91,9 @@ spec:
         advancedMounts:
           emby:
             app:
-              - path: /media/comic
+              - path: /comic
                 subPath: comic
-              - path: /media/movie
+              - path: /movie
                 subPath: movie
-              - path: /media/tvshow
+              - path: /tvshow
                 subPath: tvshow

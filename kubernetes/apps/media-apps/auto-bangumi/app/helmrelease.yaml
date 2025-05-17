@@ -91,5 +91,5 @@ spec:
         advancedMounts:
           auto-bangumi:
             app:
-              - path: /media/comic
+              - path: /comic
                 subPath: comic

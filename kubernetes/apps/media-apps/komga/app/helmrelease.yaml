@@ -90,7 +90,7 @@ spec:
         advancedMounts:
           komga:
             app:
-              - path: /media/manga
+              - path: /manga
                 subPath: manga
-              - path: /media/ebook
+              - path: /ebook
                 subPath: ebook
