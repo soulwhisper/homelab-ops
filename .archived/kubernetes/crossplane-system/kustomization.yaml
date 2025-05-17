@@ -2,14 +2,11 @@
 # yaml-language-server: $schema=https://json.schemastore.org/kustomization
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-namespace: media-apps
+namespace: crossplane-system
 resources:
-  - ./alist/ks.yaml
-  - ./auto-bangumi/ks.yaml
-  - ./emby/ks.yaml
-  - ./immich/ks.yaml
-  - ./komga/ks.yaml
-  - ./ytdl-sub/ks.yaml
+  - ./crossplane/ks.yaml
 components:
   - ../../components/namespace
   - ../../components/flux/alerts
+
+## what and why? ref:https://www.linode.com/docs/guides/getting-started-with-crossplane/
