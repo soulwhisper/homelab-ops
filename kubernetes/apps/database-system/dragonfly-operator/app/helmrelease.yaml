@@ -20,8 +20,6 @@ spec:
       retries: 3
 
   values:
-    additionalLabels:
-      app.kubernetes.io/name: dragonfly-operator
     serviceMonitor:
       enabled: true
     grafanaDashboard:
