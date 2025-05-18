@@ -19,4 +19,4 @@ spec:
       matches:
         - path:
             type: PathPrefix
-            value: /main/
+            value: /hook/

@@ -30,7 +30,7 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: openebs
-      app.kubernetes.io/component: replicated
+      app.kubernetes.io/controller: replicated
   interval: 30m
   path: "./kubernetes/apps/storage-system/openebs/replicated"
   prune: false # Never delete this

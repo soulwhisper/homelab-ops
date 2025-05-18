@@ -1,0 +1,26 @@
+# Archived
+
+- This folder contains operational but deprecated configs
+
+## List
+
+> components
+
+- ceph-s3
+
+> kubernetes
+
+- apps:alist
+- apps:echo-server
+- apps:freshrss
+- apps:gatus
+- apps:ingress-nginx
+- apps:kyverno
+- apps:openebs
+- apps:rook-ceph(w/ fs & s3)
+- ns:karmada-system
+- ns:crossplane-system
+
+> scripts
+
+- minio-bucket-init

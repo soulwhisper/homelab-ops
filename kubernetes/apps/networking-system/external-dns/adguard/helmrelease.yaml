@@ -27,7 +27,7 @@ spec:
       - --webhook-provider-url=http://localhost:8888
       - --gateway-name=internal
     podAnnotations:
-      secret.reloader.stakater.com/reload: externaldns-adguard
+      reloader.stakater.com/auto: "true"
     podSecurityContext:
       runAsNonRoot: true
       runAsUser: 2000

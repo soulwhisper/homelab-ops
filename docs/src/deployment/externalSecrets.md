@@ -15,7 +15,7 @@
 ### Naming
 
 - externalSecret and Secret name should be same
-- secrets refers to app itself, use appname
+- secrets refers to app itself, use `appname`
 - secrets refers to using other services, use `appname`-`service`-`usage`
 
 ### Example
@@ -28,28 +28,23 @@ kind: ExternalSecret
 metadata:
   name: paperless
 spec:
-  refreshInterval: 5m
+  refreshInterval: 30m
   secretStoreRef:
     kind: ClusterSecretStore
     name: onepassword
   target:
     name: paperless
     creationPolicy: Owner
-    template:
-      data:
-        PAPERLESS_ADMIN_USER: "{{ .paperless_username }}"
-        PAPERLESS_ADMIN_PASSWORD: "{{ .paperless_password }}"
-        PAPERLESS_SECRET_KEY: "{{ .paperless_encryption_cipher }}"
   data:
-    - secretKey: paperless_username
+    - secretKey: PAPERLESS_ADMIN_USER
       remoteRef:
         key: app_admin
         property: admin_user
-    - secretKey: paperless_password
+    - secretKey: PAPERLESS_ADMIN_PASSWORD
       remoteRef:
         key: app_admin
         property: admin_pass
-    - secretKey: paperless_encryption_cipher
+    - secretKey: PAPERLESS_SECRET_KEY
       remoteRef:
         key: encryption_cipher
         property: paperless

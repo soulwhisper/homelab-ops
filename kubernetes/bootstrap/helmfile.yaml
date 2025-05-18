@@ -15,7 +15,7 @@ releases:
     namespace: monitoring-system
     atomic: true
     chart: oci://ghcr.io/prometheus-community/charts/prometheus-operator-crds
-    version: 19.1.0
+    version: 20.0.0
 
   - name: cilium
     namespace: kube-system
@@ -50,7 +50,7 @@ releases:
     atomic: true
     labels:
       wipe-rook.enabled: true
-    chart: oci://ghcr.io/bjw-s/helm/app-template
+    chart: oci://ghcr.io/bjw-s-labs/helm/app-template
     version: 3.7.3
     values: ['./templates/wipe-rook.yaml.gotmpl']
     needs: ['kube-system/coredns']

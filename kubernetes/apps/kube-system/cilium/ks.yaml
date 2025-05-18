@@ -31,7 +31,7 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: cilium
-      app.kubernetes.io/component: config
+      app.kubernetes.io/controller: config
   interval: 30m
   timeout: 5m
   path: "./kubernetes/apps/kube-system/cilium/config"
@@ -53,7 +53,7 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: cilium
-      app.kubernetes.io/component: gateway
+      app.kubernetes.io/controller: gateway
   interval: 30m
   timeout: 5m
   path: "./kubernetes/apps/kube-system/cilium/gateway"

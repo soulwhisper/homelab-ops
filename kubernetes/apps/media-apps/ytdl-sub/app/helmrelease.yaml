@@ -1,5 +1,5 @@
 ---
-# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
@@ -85,9 +85,9 @@ spec:
         advancedMounts:
           ytdl-sub:
             app:
-              - path: /media/movie
+              - path: /movie
                 subPath: movie
-              - path: /media/music
+              - path: /music
                 subPath: music
-              - path: /media/tv_shows
-                subPath: tv-shows
+              - path: /tv_show
+                subPath: tv-show

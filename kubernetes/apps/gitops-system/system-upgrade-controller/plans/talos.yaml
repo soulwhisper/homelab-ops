@@ -12,12 +12,12 @@ spec:
       - key: kubernetes.io/hostname
         operator: Exists
   secrets:
-    - name: system-upgrade
+    - name: system-upgrade-controller
       path: /var/run/secrets/talos.dev
       ignoreUpdates: true
   serviceAccountName: system-upgrade-controller
   upgrade:
-    image: ghcr.io/jfroy/tnu:0.4.0
+    image: ghcr.io/jfroy/tnu:0.4.2
     args:
       - --node=$(SYSTEM_UPGRADE_NODE_NAME)
       - --tag=$(SYSTEM_UPGRADE_PLAN_LATEST_VERSION)

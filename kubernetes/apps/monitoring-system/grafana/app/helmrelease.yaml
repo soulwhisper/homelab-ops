@@ -24,8 +24,7 @@ spec:
       existingSecret: grafana
 
     annotations:
-      configmap.reloader.stakater.com/reload: grafana
-      secret.reloader.stakater.com/reload: grafana
+      reloader.stakater.com/auto: "true"
 
     replicas: 1
 
@@ -120,7 +119,7 @@ spec:
         volsync:
           # renovate: dashboardName="VolSync Dashboard"
           gnetId: 21356
-          revision: 2
+          revision: 3
           datasource:
             - { name: DS_PROMETHEUS, value: Prometheus }
             - { name: VAR_REPLICATIONDESTNAME, value: .*-bootstrap }
