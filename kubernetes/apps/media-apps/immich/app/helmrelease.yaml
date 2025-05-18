@@ -31,7 +31,7 @@ spec:
         fsGroupChangePolicy: OnRootMismatch
 
     controllers:
-      immich-server:
+      immich:
         annotations:
           reloader.stakater.com/auto: "true"
         containers:
@@ -95,11 +95,7 @@ spec:
               limits:
                 memory: 4Gi
 
-      immich-machine-learning:
-        annotations:
-          reloader.stakater.com/auto: "true"
-        containers:
-          app:
+          machine-learning:
             image:
               repository: ghcr.io/immich-app/immich-machine-learning
               tag: v1.131.2
@@ -126,15 +122,13 @@ spec:
             securityContext: *securityContext
 
     service:
-      immich-app:
-        controller: &app immich-server
+      app:
+        controller: immich
         ports:
           http:
             port: *port-app
-      immich-ml:
-        controller: immich-machine-learning
-        ports:
-          http:
+            primary: true
+          machine-learning:
             port: *port-ml
 
     route:
@@ -147,7 +141,7 @@ spec:
             sectionName: http
         rules:
           - backendRefs:
-              - name: *app
+              - identifier: app
                 port: *port-app
 
     persistence:
@@ -160,6 +154,10 @@ spec:
             app:
               - path: /upload
                 subPath: photo
+            machine-learning:
+              - path: /upload
+                subPath: photo
+
       cache:
         type: emptyDir
         globalMounts:
