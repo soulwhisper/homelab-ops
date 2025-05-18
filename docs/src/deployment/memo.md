@@ -28,8 +28,8 @@
 
 ### Database
 
-- postgres, cpgo; app:immich;
-- redis, dragonfly; 0:immich;
+- postgres, cpgo; app:immich,maybe;
+- redis, dragonfly; 0:immich, 1:maybe;
 
 ## Deployment
 
