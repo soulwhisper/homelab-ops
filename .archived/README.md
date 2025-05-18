@@ -12,7 +12,6 @@
 
 - apps:alist
 - apps:echo-server
-- apps:freshrss
 - apps:gatus
 - apps:ingress-nginx
 - apps:kyverno
