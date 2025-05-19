@@ -47,7 +47,7 @@ spec:
               privileged: true
 
     persistence:
-      run:
+      tmp:
         type: emptyDir
         globalMounts:
           - path: /run/irqbalance

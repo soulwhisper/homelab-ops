@@ -4,7 +4,7 @@ crds:
 grafana:
   enabled: true
 admissionController:
-  replicas: 3
+  replicas: 2
   clusterRole:
     extraResources:
       - apiGroups:

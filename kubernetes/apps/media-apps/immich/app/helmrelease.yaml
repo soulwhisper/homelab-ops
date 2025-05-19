@@ -29,7 +29,6 @@ spec:
         runAsNonRoot: true
         fsGroup: 2000
         fsGroupChangePolicy: OnRootMismatch
-
     controllers:
       immich:
         annotations:
@@ -38,11 +37,9 @@ spec:
           app:
             image:
               repository: ghcr.io/immich-app/immich-server
-              tag: 1.132.3
+              tag: v1.132.3
             env: &shared-env
               TZ: Asia/Shanghai
-              UID: 2000
-              GID: 2000
               UPLOAD_LOCATION: /upload
               IMMICH_SERVER_URL: http://immich-server.media-apps.svc.cluster.local:2283
               IMMICH_MACHINE_LEARNING_URL: http://immich-machine-learning.media-apps.svc.cluster.local:3003
@@ -88,17 +85,17 @@ spec:
                   - ALL
               seccompProfile:
                 type: RuntimeDefault
-            resources: &resources
+            resources:
               requests:
                 cpu: 15m
-                memory: 1Gi
+                memory: 128Mi
               limits:
-                memory: 4Gi
+                memory: 512Mi
 
           machine-learning:
             image:
               repository: ghcr.io/immich-app/immich-machine-learning
-              tag: v1.131.2
+              tag: v1.132.3
             env: *shared-env
             envFrom:
               - secretRef:
@@ -118,8 +115,13 @@ spec:
               readiness: *probes-ml
               startup:
                 enabled: false
-            resources: *resources
             securityContext: *securityContext
+            resources:
+              requests:
+                cpu: 15m
+                memory: 4Gi
+              limits:
+                memory: 6Gi
 
     service:
       app:
@@ -158,15 +160,12 @@ spec:
               - path: /upload
                 subPath: photo
 
-      cache:
-        type: emptyDir
-        globalMounts:
-          - path: /cache
-      geocoding-dump:
-        type: emptyDir
-        globalMounts:
-          - path: /usr/src/app/.reverse-geocoding-dump
       tmp:
         type: emptyDir
         globalMounts:
+          - path: /cache
+            subPath: cache
           - path: /tmp
+            subPath: tmp
+          - path: /usr/src/app/.reverse-geocoding-dump
+            subPath: geocoding-dump

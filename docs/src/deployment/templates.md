@@ -1,9 +1,14 @@
+# Templates
+
+- This is a template for most self-hosted apps without its own charts
+
+```yaml
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: maybe
+  name: example-app
 spec:
   interval: 30m
   chartRef:
@@ -22,90 +27,77 @@ spec:
 
   values:
     defaultPodOptions:
-      enableServiceLinks: false
-      hostUsers: false
+      # hostUsers: false   # if root, most self-hosted apps
+      securityContext:     # if non-root, most media-apps
+        runAsUser: 2000
+        runAsGroup: 2000
+        runAsNonRoot: true
+        fsGroup: 2000
+        fsGroupChangePolicy: OnRootMismatch
 
     controllers:
-      maybe:
+      example-app:
         annotations:
           reloader.stakater.com/auto: "true"
         containers:
           app:
             image:
-              repository: ghcr.io/maybe-finance/maybe
-              tag: 0.5.0
-            env: &shared-env
+              repository: path/to/repo
+              tag: 1.0.0
+            env:
               TZ: Asia/Shanghai
-              SELF_HOSTED: "true"
-              RAILS_FORCE_SSL: "false"
-              RAILS_ASSUME_SSL: "false"
-              DB_PORT: 5432
-              REDIS_URL: redis://dragonfly.database-system.svc.cluster.local:6379/1
-            envFrom:
-              - secretRef:
-                  name: maybe
-              - secretRef:
-                  name: maybe-db
-            securityContext: &securityContext
+            securityContext:
               allowPrivilegeEscalation: false
               capabilities:
                 drop:
                   - ALL
               seccompProfile:
                 type: RuntimeDefault
-            resources: &resources
+            resources:
               requests:
                 cpu: 15m
                 memory: 128Mi
               limits:
                 memory: 512Mi
 
-          worker:
-            image:
-              repository: ghcr.io/maybe-finance/maybe
-              tag: 0.5.0
-            command: ["bundle", "exec", "sidekiq"]
-            env: *shared-env
-            envFrom:
-              - secretRef:
-                  name: maybe
-              - secretRef:
-                  name: maybe-db
-            resources: *resources
-            securityContext: *securityContext
-
     service:
       app:
-        controller: maybe
+        controller: &app example-app
         ports:
           http:
-            port: &port 3000
-
+            port: &port 8080
     route:
       app:
         hostnames:
-          - maybe.homelab.internal
+          - sub.example.com
         parentRefs:
           - name: internal
             namespace: kube-system
             sectionName: http
         rules:
           - backendRefs:
-              - identifier: app
+              - name: *app
                 port: *port
 
     persistence:
       app:
-        existingClaim: maybe-app
-        advancedMounts:
-          maybe:
-            app:
-              - path: /rails/storage
+        existingClaim: example-app
+        globalMounts:
+          - path: /app/data
+            subPath: data
       tmp:
-        enabled: true
         type: emptyDir
         globalMounts:
-          - path: /rails/tmp
-            subPath: rails-tmp
           - path: /tmp
             subPath: tmp
+      media:
+        type: nfs
+        server: nas.homelab.internal
+        path: /mnt/Arcanum/shared/media
+        advancedMounts:
+          auto-bangumi:
+            app:
+              - path: /data
+                subPath: data
+
+```

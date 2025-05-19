@@ -98,7 +98,6 @@ controlPlane:
           - siderolabs/mei
           - siderolabs/nut-client
           - siderolabs/thunderbolt
-        #   - siderolabs/cloudflared
   extensionServices:
     - name: nut-client
       configFiles:
@@ -106,11 +105,6 @@ controlPlane:
             MONITOR santak-box@10.10.0.10 1 monuser monuser secondary
             SHUTDOWNCMD "/sbin/poweroff"
           mountPath: /usr/local/etc/nut/upsmon.conf
-    # - name: cloudflared
-    #   environment:
-    #     - TUNNEL_EDGE_IP_VERSION=auto
-    #     - TUNNEL_METRICS=0.0.0.0:2000
-    #     - TUNNEL_TOKEN=${CLOUDFLARED_TOKEN}
 
   # controlPlane only patches
   patches:
@@ -124,6 +118,7 @@ controlPlane:
               configuration:
                 exemptions:
                   namespaces:
+                    - gitops-system
                     - monitoring-system
                     - storage-system
           extraArgs:

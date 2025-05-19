@@ -21,15 +21,15 @@ spec:
       retries: 3
 
   values:
+    defaultPodOptions:
+      securityContext:
+        runAsUser: 2000
+        runAsGroup: 2000
+        runAsNonRoot: true
+        fsGroup: 2000
+        fsGroupChangePolicy: OnRootMismatch
     controllers:
       komga:
-        pod:
-          securityContext:
-            runAsUser: 2000
-            runAsGroup: 2000
-            runAsNonRoot: true
-            fsGroup: 2000
-            fsGroupChangePolicy: OnRootMismatch
         annotations:
           reloader.stakater.com/auto: "true"
         containers:
@@ -39,8 +39,6 @@ spec:
               tag: 1.21.3@sha256:72dc9f81a0a528752e953028a7d3ca6a83f8eabe2a617e3c7e53cfa594c84256
             env:
               TZ: Asia/Shanghai
-              UID: 2000
-              GID: 2000
             securityContext:
               allowPrivilegeEscalation: false
               capabilities:
@@ -51,9 +49,9 @@ spec:
             resources:
               requests:
                 cpu: 15m
-                memory: 1Gi
+                memory: 128Mi
               limits:
-                memory: 4Gi
+                memory: 512Mi
 
     service:
       app:

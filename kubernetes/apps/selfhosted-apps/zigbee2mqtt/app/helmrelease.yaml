@@ -22,12 +22,7 @@ spec:
 
   values:
     defaultPodOptions:
-      securityContext:
-        runAsNonRoot: true
-        runAsUser: 2000
-        runAsGroup: 2000
-        fsGroup: 2000
-        fsGroupChangePolicy: "OnRootMismatch"
+      hostUsers: false
 
     controllers:
       zigbee2mqtt:
@@ -141,16 +136,6 @@ spec:
           code-server:
             port: 12321
 
-    persistence:
-      data:
-        existingClaim: zigbee2mqtt-app
-        advancedMounts:
-          zigbee2mqtt:
-            app:
-              - path: /data
-            code-server:
-              - path: /data
-
     route:
       app:
         hostnames:
@@ -176,3 +161,13 @@ spec:
           - backendRefs:
               - identifier: app
                 port: *httpPort
+
+    persistence:
+      app:
+        existingClaim: zigbee2mqtt-app
+        advancedMounts:
+          zigbee2mqtt:
+            app:
+              - path: /data
+            code-server:
+              - path: /data

@@ -9,6 +9,7 @@
 - [Kubernetes](./infrastructure/kubernetes.md)
   - [Backup](./deployment/backup.md)
   - [External Secrets](./deployment/externalSecrets.md)
+  - [Templates](./deployment/templates.md)
 - [Networking](./infrastructure/networking.md)
 - [Hardware](./deployment/hardware.md)
 

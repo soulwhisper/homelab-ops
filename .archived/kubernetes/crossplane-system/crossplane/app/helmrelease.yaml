@@ -24,4 +24,4 @@ spec:
       retries: 3
 
   values:
-    replicas: 3
+    replicas: 1

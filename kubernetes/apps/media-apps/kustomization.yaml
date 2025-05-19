@@ -9,7 +9,6 @@ resources:
   - ./immich/ks.yaml
   - ./komga/ks.yaml
   - ./ocis/ks.yaml
-  - ./ytdl-sub/ks.yaml
 components:
   - ../../components/namespace
   - ../../components/flux/alerts

@@ -133,6 +133,7 @@ controlPlane:
               configuration:
                 exemptions:
                   namespaces:
+                    - gitops-system
                     - monitoring-system
                     - storage-system
           extraArgs:
