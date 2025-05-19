@@ -49,6 +49,8 @@ spec:
             envFrom:
               - secretRef:
                   name: maybe
+              - secretRef:
+                  name: maybe-db
             probes:
               liveness: &probes
                 enabled: true
@@ -96,6 +98,8 @@ spec:
             envFrom:
               - secretRef:
                   name: maybe
+              - secretRef:
+                  name: maybe-db
             probes:
               liveness: *probes
               readiness: *probes
