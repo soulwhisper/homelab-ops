@@ -21,26 +21,17 @@ spec:
       retries: 3
 
   values:
+    defaultPodOptions:
+      hostUsers: false
     controllers:
       ytdl-sub:
         type: cronjob
-
-        pod:
-          restartPolicy: Never
-          securityContext:
-            runAsUser: 2000
-            runAsGroup: 2000
-            runAsNonRoot: true
-            fsGroup: 2000
-            fsGroupChangePolicy: OnRootMismatch
-
         cronjob:
           schedule: "0 */6 * * *"
           backoffLimit: 0
           concurrencyPolicy: Forbid
           failedJobsHistory: 1
           successfulJobsHistory: 0
-
         containers:
           app:
             image:

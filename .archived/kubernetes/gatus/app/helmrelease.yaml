@@ -103,7 +103,7 @@ spec:
     serviceAccount:
       gatus: {}
     persistence:
-      config-file:
+      config:
         type: configMap
         name: gatus-configmap
         globalMounts:

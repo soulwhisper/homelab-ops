@@ -26,7 +26,7 @@ spec:
       namespace: database-system
     - name: crunchy-postgres-operator-secretstore
       namespace: database-system
-    - name: dragonfly-cluster
+    - name: dragonfly-operator-cluster
       namespace: database-system
     - name: rook-ceph-cluster
       namespace: storage-system

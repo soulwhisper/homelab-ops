@@ -23,12 +23,7 @@ spec:
   values:
     defaultPodOptions:
       enableServiceLinks: false
-      securityContext:
-        runAsUser: 2000
-        runAsGroup: 2000
-        runAsNonRoot: true
-        fsGroup: 2000
-        fsGroupChangePolicy: OnRootMismatch
+      hostUsers: false
 
     controllers:
       maybe:
@@ -49,30 +44,8 @@ spec:
             envFrom:
               - secretRef:
                   name: maybe
-            probes:
-              liveness: &probes
-                enabled: true
-                custom: true
-                spec:
-                  httpGet:
-                    path: /up
-                    port: &port 3000
-                  initialDelaySeconds: 0
-                  periodSeconds: 10
-                  timeoutSeconds: 1
-                  failureThreshold: 3
-              readiness: *probes
-              startup:
-                enabled: true
-                custom: true
-                spec:
-                  httpGet:
-                    path: /up
-                    port: *port
-                  failureThreshold: 30
-                  periodSeconds: 5
-                  successThreshold: 1
-                  timeoutSeconds: 1
+              - secretRef:
+                  name: maybe-db
             securityContext: &securityContext
               allowPrivilegeEscalation: false
               capabilities:
@@ -83,9 +56,9 @@ spec:
             resources: &resources
               requests:
                 cpu: 15m
-                memory: 200Mi
+                memory: 128Mi
               limits:
-                memory: 1Gi
+                memory: 512Mi
 
           worker:
             image:
@@ -96,11 +69,8 @@ spec:
             envFrom:
               - secretRef:
                   name: maybe
-            probes:
-              liveness: *probes
-              readiness: *probes
-              startup:
-                enabled: false
+              - secretRef:
+                  name: maybe-db
             resources: *resources
             securityContext: *securityContext
 
@@ -109,7 +79,7 @@ spec:
         controller: maybe
         ports:
           http:
-            port: *port
+            port: &port 3000
 
     route:
       app:
@@ -131,3 +101,11 @@ spec:
           maybe:
             app:
               - path: /rails/storage
+      tmp:
+        enabled: true
+        type: emptyDir
+        globalMounts:
+          - path: /rails/tmp
+            subPath: rails-tmp
+          - path: /tmp
+            subPath: tmp

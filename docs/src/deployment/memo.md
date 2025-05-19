@@ -31,6 +31,12 @@
 - postgres, cpgo; app:immich,maybe;
 - redis, dragonfly; 0:immich, 1:maybe;
 
+### NFS
+
+- shared-media: /mnt/Arcanum/shared/media
+- sub-folders: comic,ebook,manga,movie,music,photo,tvshow
+- permissions: 2000:2000
+
 ## Deployment
 
 - `10.10.0.10` as `nas.homelab.internal`, provide `dns` / `minio` / `nfs` / `ntp` / `talos-api` / ...;
@@ -40,7 +46,7 @@
 
 ### Proxy
 
-- `cert-manager`, `coroot-operator`, `externaldns-cloudflare`, `flux-operator`, `grafana`, `onepassword-sync`, `pgo` using `HTTPS GET`, should set `https_proxy`;
+- `cert-manager`, `coroot-operator`, `externaldns-cloudflare`, `flux-operator`, `grafana`, `karakeep`, `onepassword-sync`, `pgo` using `HTTPS GET`, should set `https_proxy`;
 -  no_proxy = `.cluster.local.,.cluster.local,.svc,localhost,127.0.0.1,{pod-subnet},{svc-subnet}`;
 - talos env.proxy for container pulling;
 
@@ -90,6 +96,11 @@ cloudflared tunnel diag --metrics 172.19.82.101:2000
 ## update flux-webhook
 ## https://fluxcd.io/flux/guides/webhook-receivers/
 kubectl -n gitops-system get receivers.notification.toolkit.fluxcd.io
+
+## resource optimization
+popeye -A -s statefulsets
+kubectl resource-capacity --available
+kubectl resource-capacity -p -c -u -n database-system
 ```
 
 ## VM test issues

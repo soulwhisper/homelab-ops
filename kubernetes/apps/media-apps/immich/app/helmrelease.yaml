@@ -23,12 +23,7 @@ spec:
   values:
     defaultPodOptions:
       enableServiceLinks: false
-      securityContext:
-        runAsUser: 2000
-        runAsGroup: 2000
-        runAsNonRoot: true
-        fsGroup: 2000
-        fsGroupChangePolicy: OnRootMismatch
+      hostUsers: false
 
     controllers:
       immich:
@@ -41,8 +36,6 @@ spec:
               tag: 1.132.3
             env: &shared-env
               TZ: Asia/Shanghai
-              UID: 2000
-              GID: 2000
               UPLOAD_LOCATION: /upload
               IMMICH_SERVER_URL: http://immich-server.media-apps.svc.cluster.local:2283
               IMMICH_MACHINE_LEARNING_URL: http://immich-machine-learning.media-apps.svc.cluster.local:3003
@@ -88,12 +81,12 @@ spec:
                   - ALL
               seccompProfile:
                 type: RuntimeDefault
-            resources: &resources
+            resources:
               requests:
                 cpu: 15m
-                memory: 1Gi
+                memory: 128Mi
               limits:
-                memory: 4Gi
+                memory: 512Mi
 
           machine-learning:
             image:
@@ -118,8 +111,13 @@ spec:
               readiness: *probes-ml
               startup:
                 enabled: false
-            resources: *resources
             securityContext: *securityContext
+            resources:
+              requests:
+                cpu: 15m
+                memory: 1Gi
+              limits:
+                memory: 4Gi
 
     service:
       app:
@@ -158,15 +156,12 @@ spec:
               - path: /upload
                 subPath: photo
 
-      cache:
-        type: emptyDir
-        globalMounts:
-          - path: /cache
-      geocoding-dump:
-        type: emptyDir
-        globalMounts:
-          - path: /usr/src/app/.reverse-geocoding-dump
       tmp:
         type: emptyDir
         globalMounts:
+          - path: /cache
+            subPath: cache
           - path: /tmp
+            subPath: tmp
+          - path: /usr/src/app/.reverse-geocoding-dump
+            subPath: geocoding-dump

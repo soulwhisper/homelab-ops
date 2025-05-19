@@ -21,28 +21,19 @@ spec:
       retries: 3
 
   values:
+    defaultPodOptions:
+      hostUsers: false
     controllers:
       emby:
-        pod:
-          securityContext:
-            runAsUser: 2000
-            runAsGroup: 2000
-            runAsNonRoot: true
-            fsGroup: 2000
-            fsGroupChangePolicy: OnRootMismatch
         annotations:
           reloader.stakater.com/auto: "true"
         containers:
           app:
             image:
               repository: docker.io/emby/embyserver
-              tag: 4.9.0.56
+              tag: 4.9.0.58
             env:
               TZ: Asia/Shanghai
-              UID: 2000
-              GID: 2000
-              # GIDLIST: 1001
-              UMASK: 022
             securityContext:
               allowPrivilegeEscalation: false
               capabilities:

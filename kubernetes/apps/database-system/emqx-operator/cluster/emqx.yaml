@@ -40,7 +40,7 @@ spec:
         storageClassName: ceph-block
         resources:
           requests:
-            storage: 20Mi
+            storage: 100Mi
         accessModes:
           - ReadWriteOnce
       replicas: 2

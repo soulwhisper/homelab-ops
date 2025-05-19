@@ -117,7 +117,7 @@ spec:
           http:
             port: *apiPort
     persistence:
-      config:
+      tmp:
         type: emptyDir
         globalMounts:
           - path: *configDir

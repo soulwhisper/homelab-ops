@@ -22,13 +22,7 @@ spec:
 
   values:
     defaultPodOptions:
-      securityContext:
-        runAsNonRoot: true
-        # node user = 1000:1000
-        runAsUser: 1000
-        runAsGroup: 1000
-        fsGroup: 1000
-        fsGroupChangePolicy: "OnRootMismatch"
+      hostUsers: false
 
     controllers:
       n8n:
