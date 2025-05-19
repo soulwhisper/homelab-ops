@@ -41,16 +41,14 @@ spec:
             env: &shared-env
               TZ: Asia/Shanghai
               UPLOAD_LOCATION: /upload
-              IMMICH_SERVER_URL: http://immich-server.media-apps.svc.cluster.local:2283
-              IMMICH_MACHINE_LEARNING_URL: http://immich-machine-learning.media-apps.svc.cluster.local:3003
+              IMMICH_SERVER_URL: http://immich.media-apps.svc.cluster.local:2283
+              IMMICH_MACHINE_LEARNING_URL: http://immich.media-apps.svc.cluster.local:3003
               PUBLIC_IMMICH_SERVER_URL: http://photo.homelab.internal
               DISABLE_REVERSE_GEOCODING: true
               ENABLE_MAPBOX: false
               LOG_LEVEL: log
               NODE_ENV: production
-              REDIS_HOSTNAME: dragonfly.database-system.svc.cluster.local
-              REDIS_DBINDEX: 0
-              REDIS_PORT: 6379
+              REDIS_URL: redis://dragonfly.database-system.svc.cluster.local:6379/0
             envFrom:
               - secretRef:
                   name: immich
