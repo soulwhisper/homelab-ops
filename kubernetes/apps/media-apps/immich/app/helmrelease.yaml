@@ -54,30 +54,6 @@ spec:
             envFrom:
               - secretRef:
                   name: immich
-            probes:
-              liveness: &probes-app
-                enabled: true
-                custom: true
-                spec:
-                  httpGet:
-                    path: /api/server/ping
-                    port: &port-app 2283
-                  initialDelaySeconds: 0
-                  periodSeconds: 10
-                  timeoutSeconds: 1
-                  failureThreshold: 3
-              readiness: *probes-app
-              startup:
-                enabled: true
-                custom: true
-                spec:
-                  httpGet:
-                    path: /api/server/ping
-                    port: *port-app
-                  failureThreshold: 30
-                  periodSeconds: 5
-                  successThreshold: 1
-                  timeoutSeconds: 1
             securityContext: &securityContext
               allowPrivilegeEscalation: false
               capabilities:
@@ -100,21 +76,6 @@ spec:
             envFrom:
               - secretRef:
                   name: immich
-            probes:
-              liveness: &probes-ml
-                enabled: true
-                custom: true
-                spec:
-                  httpGet:
-                    path: /ping
-                    port: &port-ml 3003
-                  initialDelaySeconds: 0
-                  periodSeconds: 10
-                  timeoutSeconds: 1
-                  failureThreshold: 5
-              readiness: *probes-ml
-              startup:
-                enabled: false
             securityContext: *securityContext
             resources:
               requests:
