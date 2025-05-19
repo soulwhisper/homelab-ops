@@ -67,6 +67,11 @@ spec:
         - immich
       password:
         type: AlphaNumeric
+    - name: maybe
+      databases:
+        - maybe
+      password:
+        type: AlphaNumeric
 
   backups:
     pgbackrest:
