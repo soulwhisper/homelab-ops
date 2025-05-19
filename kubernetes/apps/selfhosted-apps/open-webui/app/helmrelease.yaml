@@ -38,16 +38,35 @@ spec:
             image:
               repository: ghcr.io/open-webui/open-webui
               tag: main
-            env:
-              OLLAMA_BASE_URL: http://10.20.0.101:11434
+            # env:
+            #  OLLAMA_BASE_URL: http://10.20.0.101:11434
             envFrom:
               - secretRef:
                   name: open-webui
             probes:
-              liveness:
+              liveness: &probes
                 enabled: true
-              readiness:
+                custom: true
+                spec:
+                  httpGet:
+                    path: /health
+                    port: &port 8080
+                  initialDelaySeconds: 0
+                  periodSeconds: 10
+                  timeoutSeconds: 1
+                  failureThreshold: 3
+              readiness: *probes
+              startup:
                 enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /health
+                    port: *port
+                  failureThreshold: 30
+                  periodSeconds: 5
+                  successThreshold: 1
+                  timeoutSeconds: 1
             resources:
               requests:
                 cpu: 50m
