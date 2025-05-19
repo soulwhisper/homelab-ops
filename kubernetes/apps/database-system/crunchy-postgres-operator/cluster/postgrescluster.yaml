@@ -7,6 +7,10 @@ metadata:
 spec:
   postgresVersion: 17
 
+  config:
+    parameters:
+      shared_preload_libraries: pgvector
+
   metadata:
     labels:
       crunchy-userinit.ramblurr.github.com/enabled: "true"
