@@ -31,7 +31,7 @@ spec:
           app:
             image:
               repository: docker.io/emby/embyserver
-              tag: 4.9.0.58
+              tag: 4.9.0.59
             env:
               TZ: Asia/Shanghai
             securityContext:
