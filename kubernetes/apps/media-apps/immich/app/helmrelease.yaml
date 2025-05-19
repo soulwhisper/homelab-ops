@@ -88,12 +88,12 @@ spec:
                   - ALL
               seccompProfile:
                 type: RuntimeDefault
-            resources: &resources
+            resources:
               requests:
                 cpu: 15m
-                memory: 1Gi
+                memory: 128Mi
               limits:
-                memory: 4Gi
+                memory: 512Mi
 
           machine-learning:
             image:
@@ -118,8 +118,13 @@ spec:
               readiness: *probes-ml
               startup:
                 enabled: false
-            resources: *resources
             securityContext: *securityContext
+            resources:
+              requests:
+                cpu: 15m
+                memory: 1Gi
+              limits:
+                memory: 4Gi
 
     service:
       app:

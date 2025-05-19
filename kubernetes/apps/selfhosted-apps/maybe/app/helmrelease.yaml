@@ -83,9 +83,9 @@ spec:
             resources: &resources
               requests:
                 cpu: 15m
-                memory: 200Mi
+                memory: 128Mi
               limits:
-                memory: 1Gi
+                memory: 512Mi
 
           worker:
             image:
