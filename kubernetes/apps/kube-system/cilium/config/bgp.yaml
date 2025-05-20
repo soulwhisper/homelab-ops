@@ -1,28 +1,30 @@
 ---
-# yaml-language-server: $schema=https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/cilium.io/ciliumbgpclusterconfig_v2alpha1.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/cilium.io/ciliumbgpadvertisement_v2alpha1.json
 apiVersion: cilium.io/v2alpha1
-kind: CiliumBGPClusterConfig
+kind: CiliumBGPAdvertisement
 metadata:
-  name: cilium-bgp
+  name: cilium-bgp-advertisement
+  labels:
+    advertise: "bgp"
 spec:
-  nodeSelector:
-    matchLabels:
-      kubernetes.io/os: linux
-  bgpInstances:
-  - name: "instance-65512"
-    localASN: 65512
-    peers:
-    - name: "peer-65510"
-      peerASN: 65510
-      peerAddress: 172.19.82.2
-      peerConfigRef:
-        name: "cilium-bgp-peer"
+  advertisements:
+    - advertisementType: "Service"
+      service:
+        addresses:
+          - ClusterIP
+          - LoadBalancerIP
+          - ExternalIP
+      selector:
+        matchExpressions:
+          - key: thisFakeSelector
+            operator: NotIn
+            values: ["will-match-and-announce-all-services"]
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/cilium.io/ciliumbgppeerconfig_v2alpha1.json
 apiVersion: cilium.io/v2alpha1
 kind: CiliumBGPPeerConfig
 metadata:
-  name: cilium-bgp-peer
+  name: cilium-bgp-peer-config
 spec:
   timers:
     # use this instead of bfd
@@ -43,23 +45,21 @@ spec:
         matchLabels:
           advertise: "bgp"
 ---
-# yaml-language-server: $schema=https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/cilium.io/ciliumbgpadvertisement_v2alpha1.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/cilium.io/ciliumbgpclusterconfig_v2alpha1.json
 apiVersion: cilium.io/v2alpha1
-kind: CiliumBGPAdvertisement
+kind: CiliumBGPClusterConfig
 metadata:
-  name: service-advertisements
-  labels:
-    advertise: "bgp"
+  name: cilium-bgp-cluster-config
 spec:
-  advertisements:
-    - advertisementType: "Service"
-      service:
-        addresses:
-          - ClusterIP
-          - LoadBalancerIP
-          - ExternalIP
-      selector:
-        matchExpressions:
-          - key: thisFakeSelector
-            operator: NotIn
-            values: ["will-match-and-announce-all-services"]
+  nodeSelector:
+    matchLabels:
+      kubernetes.io/os: linux
+  bgpInstances:
+  - name: "instance-65512"
+    localASN: 65512
+    peers:
+    - name: "peer-65510"
+      peerASN: 65510
+      peerAddress: 172.19.82.2
+      peerConfigRef:
+        name: "cilium-bgp-peer-config"

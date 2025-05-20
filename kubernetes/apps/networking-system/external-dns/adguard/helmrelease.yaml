@@ -25,7 +25,7 @@ spec:
   values:
     fullnameOverride: *name
     domainFilters:
-      - homelab.internal
+      - noirprime.com
     extraArgs:
       - --webhook-provider-url=http://localhost:8888
       - --gateway-name=internal

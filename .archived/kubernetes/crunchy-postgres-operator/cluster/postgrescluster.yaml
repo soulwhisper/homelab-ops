@@ -20,7 +20,7 @@ spec:
     type: LoadBalancer
     metadata:
       annotations:
-        external-dns.alpha.kubernetes.io/hostname: "postgres.homelab.internal"
+        external-dns.alpha.kubernetes.io/hostname: "postgres.noirprime.com"
         lbipam.cilium.io/ips: "172.19.82.203"
 
   patroni: # turn on sync writes to at least 1 other replica
@@ -121,7 +121,7 @@ spec:
         # - name: repo2 # R2
         #   s3: &r2
         #     bucket: "postgres"
-        #     endpoint: "d731264a492abbb86331957efddf5445.r2.cloudflarestorage.com"
+        #     endpoint: "${CF_ACCOUNT_ID}.r2.cloudflarestorage.com"
         #     region: "us-east-1"
         #   schedules:
         #     full: "0 2 * * 0" # Sunday at 02:00

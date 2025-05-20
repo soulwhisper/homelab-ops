@@ -18,7 +18,7 @@
 - volsync nfs-backup using mutatingAdmissionPolicy;
 - onepassword as main secret store;
 - externaldns-adguard store records in `custom-adblock` field;
-- internal domains using `homelab.internal`;
+- internal domains using `noirprime.com`;
 - external doamins using `noirprime.com`, powered by cloudflared;
 
 ### Cloudflare
@@ -28,15 +28,8 @@
 
 ### Database
 
-- postgres, cpgo; app:immich,maybe;
-- redis, dragonfly; 0:immich, 1:maybe;
-
-## Deployment
-
-- `10.10.0.10` as `nas.homelab.internal`, provide `dns` / `minio` / `nfs` / `ntp` / `talos-api` / ...;
-- `10.10.0.101-103` as `exarch-0n.homelab.internal` and `k8s.homelab.internal`, nodes;
-- `10.10.0.201-250` as cilium l2 loadbalancer ip;
-- self-hosted-runners, label:arc-homelab / label:arc-homelab-ops;
+- postgres; app:immich,maybe;
+- dragonfly; app:immich,maybe;
 
 ### Proxy
 

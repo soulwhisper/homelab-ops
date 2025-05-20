@@ -42,7 +42,7 @@ spec:
         enabled: true
         type: LoadBalancer
         annotations:
-          external-dns.alpha.kubernetes.io/hostname: "ingress-int.homelab.internal"
+          external-dns.alpha.kubernetes.io/hostname: "ingress-int.noirprime.com"
           lbipam.cilium.io/ips: "172.19.82.201"
 
       publishService:

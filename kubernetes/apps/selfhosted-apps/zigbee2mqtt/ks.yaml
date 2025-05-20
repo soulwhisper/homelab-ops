@@ -20,10 +20,10 @@ spec:
     namespace: gitops-system
   wait: false
   dependsOn:
-    - name: onepassword-store
-      namespace: security-system
     - name: emqx-operator-cluster
       namespace: database-system
+    - name: onepassword-store
+      namespace: security-system
     - name: rook-ceph-cluster
       namespace: storage-system
     - name: volsync

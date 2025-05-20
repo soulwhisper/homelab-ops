@@ -65,7 +65,7 @@ spec:
     route:
       app:
         hostnames:
-          - echo-server.homelab.internal
+          - echo-server.noirprime.com
         parentRefs:
           - name: internal
             namespace: kube-system

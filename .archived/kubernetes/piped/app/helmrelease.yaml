@@ -70,7 +70,7 @@ spec:
               repository: ghcr.io/bjw-s-labs/piped-frontend
               tag: 2025.3.17@sha256:8ed05c7df0bc8899e54a3952a99b63d55cdc7669d759beeb9370fbb32330468b
             env:
-              BACKEND_HOSTNAME: piped-api.homelab.internal
+              BACKEND_HOSTNAME: piped-api.noirprime.com
             probes:
               liveness:
                 enabled: true
@@ -182,9 +182,9 @@ spec:
         annotations:
           # gateway-api cors support will be v1.3, ref:https://github.com/kubernetes-sigs/gateway-api/pull/3637
           nginx.ingress.kubernetes.io/enable-cors: "true"
-          nginx.ingress.kubernetes.io/cors-allow-origin: "https://piped.homelab.internal, https://piped-api.homelab.internal, https://piped-proxy.homelab.internal"
+          nginx.ingress.kubernetes.io/cors-allow-origin: "https://piped.noirprime.com, https://piped-api.noirprime.com, https://piped-proxy.noirprime.com"
         hostnames:
-          - piped-api.homelab.internal
+          - piped-api.noirprime.com
         parentRefs:
           - name: internal
             namespace: kube-system
@@ -198,9 +198,9 @@ spec:
         annotations:
           # gateway-api cors support will be v1.3, ref:https://github.com/kubernetes-sigs/gateway-api/pull/3637
           nginx.ingress.kubernetes.io/enable-cors: "true"
-          nginx.ingress.kubernetes.io/cors-allow-origin: "https://piped.homelab.internal, https://piped-api.homelab.internal, https://piped-proxy.homelab.internal"
+          nginx.ingress.kubernetes.io/cors-allow-origin: "https://piped.noirprime.com, https://piped-api.noirprime.com, https://piped-proxy.noirprime.com"
         hostnames:
-          - piped.homelab.internal
+          - piped.noirprime.com
         parentRefs:
           - name: internal
             namespace: kube-system
@@ -213,9 +213,9 @@ spec:
         annotations:
           # gateway-api cors support will be v1.3, ref:https://github.com/kubernetes-sigs/gateway-api/pull/3637
           nginx.ingress.kubernetes.io/enable-cors: "true"
-          nginx.ingress.kubernetes.io/cors-allow-origin: "https://piped.homelab.internal, https://piped-api.homelab.internal, https://piped-proxy.homelab.internal"
+          nginx.ingress.kubernetes.io/cors-allow-origin: "https://piped.noirprime.com, https://piped-api.noirprime.com, https://piped-proxy.noirprime.com"
         hostnames:
-          - piped-proxy.homelab.internal
+          - piped-proxy.noirprime.com
         parentRefs:
           - name: internal
             namespace: kube-system

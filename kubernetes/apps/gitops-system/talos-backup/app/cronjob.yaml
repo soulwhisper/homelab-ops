@@ -15,17 +15,11 @@ spec:
               image: ghcr.io/siderolabs/talos-backup:v0.1.0-beta.3
               workingDir: /tmp
               imagePullPolicy: IfNotPresent
-              env:
-                - name: "HTTP_PROXY"
-                  value: "http://172.19.82.10:1080"
-                - name: "HTTPS_PROXY"
-                  value: "http://172.19.82.10:1080"
-                - name: "NO_PROXY"
-                  value: ".cluster.local.,.cluster.local,.svc,localhost,127.0.0.1,10.100.0.0/16"
               envFrom:
                 - secretRef:
                     name: talos-backup-minio-s3
-                    optional: false
+                - configMapRef:
+                    name: http-proxy
               securityContext:
                 runAsNonRoot: true
                 runAsUser: 2000

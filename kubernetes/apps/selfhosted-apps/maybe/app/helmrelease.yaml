@@ -87,7 +87,7 @@ spec:
     route:
       app:
         hostnames:
-          - maybe.homelab.internal
+          - maybe.noirprime.com
         parentRefs:
           - name: internal
             namespace: kube-system

@@ -63,7 +63,7 @@ spec:
     route:
       app:
         hostnames:
-          - emby.homelab.internal
+          - emby.noirprime.com
         parentRefs:
           - name: internal
             namespace: kube-system

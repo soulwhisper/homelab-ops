@@ -14,7 +14,7 @@ bgpControlPlane:
   enabled: true
 bpf:
   datapathMode: netkit
-  distributedLRU.enabled: true
+  distributedLRU.enabled: true # cost more memory
   mapDynamicSizeRatio: 0.08
   masquerade: true
   preallocateMaps: true
@@ -23,6 +23,9 @@ cgroup:
   autoMount:
     enabled: false
   hostRoot: /sys/fs/cgroup
+cluster:
+  id: 1
+  name: main
 cni:
   exclusive: false
 dashboards:
@@ -31,59 +34,27 @@ dashboards:
     grafana_folder: Cilium
 devices: bond+
 # enableIPv4BIGTCP: true  # disable for test only
-enableRuntimeDeviceDetection: true
 endpointRoutes:
   enabled: true
 envoy:
-  enabled: true
-  rollOutPods: true
-  prometheus:
-     serviceMonitor:
-       enabled: true
+  enabled: false
 gatewayAPI:
-  enabled: true
-  enableAlpn: true
-  xffNumTrustedHops: 1
+  enabled: false
 hubble:
-  enabled: true
-  metrics:
-    enabled:
-      - dns:query
-      - drop
-      - flow
-      - httpV2
-      - icmp
-      - port-distribution
-      - tcp
-    serviceMonitor:
-      enabled: true
-    dashboards:
-      enabled: true
-  relay:
-    enabled: true
-    rollOutPods: true
-    prometheus:
-      serviceMonitor:
-        enabled: true
-  ui:
-    enabled: true
-    rollOutPods: true
+  enabled: false
 ipam:
   mode: "kubernetes"
 ipv4NativeRoutingCIDR: 10.100.0.0/17
-ipv6:
-  enabled: false
 k8sServiceHost: localhost
 k8sServicePort: 7445
 kubeProxyReplacement: true
 kubeProxyReplacementHealthzBindAddr: 0.0.0.0:10256
+l2announcements:
+  enabled: false
 loadBalancer:
   acceleration: best-effort
   algorithm: maglev
   mode: hybrid
-maglev:
-  tableSize: 65521
-  hashSeed: 8zdzvOS4yeYFjkj8
 operator:
   dashboards:
     enabled: true

@@ -23,14 +23,164 @@ spec:
     keepHistory: false
 
   values:
-    admin:
-      existingSecret: grafana
+    # ref:https://github.com/mchestr/home-cluster/blob/main/kubernetes/apps/observability/grafana/app/helmrelease.yaml
 
+    # defaults
     annotations:
       reloader.stakater.com/auto: "true"
-
+    imageRenderer:
+      enabled: true
+    persistence:
+      enabled: false
+    plugins:
+      - grafana-clock-panel
+      - grafana-piechart-panel
+      - grafana-worldmap-panel
+      - natel-discrete-panel
+      - pr0ps-trackmap-panel
+      - vonage-status-panel
     replicas: 1
+    resources:
+      limits:
+        memory: 512Mi
+      requests:
+        cpu: 50m
+        memory: 128Mi
+    rbac:
+      pspEnabled: false
+    serviceAccount:
+      create: true
+      autoMount: true
+    serviceMonitor:
+      enabled: true
+    testFramework:
+      enabled: false
 
+    # environments
+    admin:
+      existingSecret: grafana
+    envFromSecrets:
+      - name: grafana
+    envFromConfigMaps:
+      - name: http-proxy
+    env:
+      GF_EXPLORE_ENABLED: true
+      GF_SECURITY_ALLOW_EMBEDDING: true
+      GF_PANELS_DISABLE_SANITIZE_HTML: true
+      GF_DISABLE_SANITIZE_HTML: true
+      GF_LOG_FILTERS: rendering:debug
+      GF_DASHBOARDS_MIN_REFRESH_INTERVAL: 2s
+      # Grafana
+      GF_DATABASE_NAME: grafana
+      GF_DATABASE_HOST: postgres-rw.database-system.svc.cluster.local:5432
+      GF_DATABASE_SSL_MODE: disable
+      GF_DATABASE_TYPE: postgres
+
+    downloadDashboards:
+      envValueFrom:
+        HTTP_PROXY:
+          configMapKeyRef:
+            name: http-proxy
+            key: HTTP_PROXY
+        HTTPS_PROXY:
+          configMapKeyRef:
+            name: http-proxy
+            key: HTTPS_PROXY
+        NO_PROXY:
+          configMapKeyRef:
+            name: http-proxy
+            key: NO_PROXY
+
+    # env:
+    #  GF_DATE_FORMATS_USE_BROWSER_LOCALE: true
+    #  GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH: /tmp/dashboards/homelab.json
+    #  GF_FEATURE_TOGGLES_ENABLE: publicDashboards
+    #  GF_PLUGINS_ALLOW_LOADING_UNSIGNED_PLUGINS: natel-discrete-panel,pr0ps-trackmap-panel,panodata-map-panel
+    #  GF_SECURITY_COOKIE_SAMESITE: grafana
+
+    grafana.ini:
+      news:
+        news_feed_enabled: false
+      server:
+        root_url: https://grafana.noirprime.com
+      analytics:
+        check_for_updates: false
+        check_for_plugin_updates: false
+        reporting_enabled: false
+      log:
+        mode: console
+      panels:
+        disable_sanitize_html: true
+      auth:
+        signout_redirect_url: "https://auth.noirprime.com/logout"
+        oauth_auto_login: true
+      auth.generic_oauth:
+        enabled: true
+        name: Authelia
+        scopes: openid profile email groups
+        empty_scopes: false
+        auth_url: https://auth.noirprime.com/api/oidc/authorization
+        token_url: https://auth.noirprime.com/api/oidc/token
+        api_url: https://auth.noirprime.com/api/oidc/userinfo
+        login_attribute_path: preferred_username
+        groups_attribute_path: groups
+        name_attribute_path: name
+        use_pkce: true
+      auth.generic_oauth.group_mapping:
+        role_attribute_path: |
+          contains(groups[*], 'admin') && 'Admin' || contains(groups[*], 'people') && 'Viewer'
+        org_id: 1
+      auth.basic:
+        enabled: true
+      auth.anonymous:
+        enabled: false
+
+    # images
+    image:
+      repository: grafana/grafana
+      tag: 12.0.0
+    extraInitContainers:
+      - name: init-db
+        image: ghcr.io/home-operations/postgres-init:17
+        imagePullPolicy: IfNotPresent
+        envFrom:
+          - secretRef:
+              name: grafana-initdb
+    sidecar:
+      image:
+         registry: ghcr.io
+         repository: home-operations/k8s-sidecar
+         tag: 1.30.3@sha256:39cca7abcad8f1621b9462d95f7d0e60301b92fcb0ff4de0ad4561859011cddf
+      dashboards:
+        enabled: true
+        searchNamespace: ALL
+        labelValue: ""
+        label: grafana_dashboard
+        folderAnnotation: grafana_folder
+        provider:
+          disableDelete: true
+          foldersFromFilesStructure: true
+      datasources:
+        enabled: true
+        searchNamespace: ALL
+        labelValue: ""
+        label: grafana_datasource
+
+    # route
+    route:
+      main:
+        hostnames: ["{{ .Release.Name }}.noirprime.com"]
+        annotations:
+          gethomepage.dev/enabled: "true"
+          gethomepage.dev/icon: grafana.png
+          gethomepage.dev/name: Grafana
+          gethomepage.dev/group: Observability
+        parentRefs:
+          - name: internal
+            namespace: networking
+            sectionName: https
+
+    # dashboards
     dashboardProviders:
       dashboardproviders.yaml:
         apiVersion: 1
@@ -75,6 +225,22 @@ spec:
             editable: true
             options:
               path: /var/lib/grafana/dashboards/postgres
+          - name: emqx
+            orgId: 1
+            folder: Emqx
+            type: file
+            disableDeletion: false
+            editable: true
+            options:
+              path: /var/lib/grafana/dashboards/emqx
+          - name: envoy
+            orgId: 1
+            folder: Envoy
+            type: file
+            disableDeletion: false
+            editable: true
+            options:
+              path: /var/lib/grafana/dashboards/envoy
 
     dashboards:
       default:
@@ -216,6 +382,43 @@ spec:
           url: https://raw.githubusercontent.com/CrunchyData/postgres-operator-examples/main/kustomize/monitoring/grafana/dashboards/query_statistics.json
           datasource: Prometheus
 
+      emqx:
+        emqx-authentication:
+          url: https://raw.githubusercontent.com/emqx/emqx-exporter/main/grafana-dashboard/template/emqx-5/authentication.json
+          datasource: Prometheus
+        emqx-authorization:
+          url: https://raw.githubusercontent.com/emqx/emqx-exporter/main/grafana-dashboard/template/emqx-5/authorization.json
+          datasource: Prometheus
+        emqx-client-events:
+          url: https://raw.githubusercontent.com/emqx/emqx-exporter/main/grafana-dashboard/template/emqx-5/client-events.json
+          datasource: Prometheus
+        emqx-messages:
+          url: https://raw.githubusercontent.com/emqx/emqx-exporter/main/grafana-dashboard/template/emqx-5/messages.json
+          datasource: Prometheus
+        emqx-overview:
+          url: https://raw.githubusercontent.com/emqx/emqx-exporter/main/grafana-dashboard/template/emqx-5/overview.json
+          datasource: Prometheus
+        emqx-rule-engine-count:
+          url: https://raw.githubusercontent.com/emqx/emqx-exporter/main/grafana-dashboard/template/emqx-5/rule-engine-count.json
+          datasource: Prometheus
+        emqx-rule-engine-rate:
+          url: https://raw.githubusercontent.com/emqx/emqx-exporter/main/grafana-dashboard/template/emqx-5/rule-engine-rate.json
+          datasource: Prometheus
+
+      envoy:
+        envoy-clusters:
+          url: https://raw.githubusercontent.com/envoyproxy/gateway/refs/heads/main/charts/gateway-addons-helm/dashboards/envoy-clusters.json
+          datasource: Prometheus
+        envoy-gateway-global:
+          url: https://raw.githubusercontent.com/envoyproxy/gateway/refs/heads/main/charts/gateway-addons-helm/dashboards/envoy-gateway-global.json
+          datasource: Prometheus
+        envoy-proxy-global:
+          url: https://raw.githubusercontent.com/envoyproxy/gateway/refs/heads/main/charts/gateway-addons-helm/dashboards/envoy-proxy-global.json
+          datasource: Prometheus
+        global-ratelimit:
+          url: https://raw.githubusercontent.com/envoyproxy/gateway/refs/heads/main/charts/gateway-addons-helm/dashboards/global-ratelimit.json
+          datasource: Prometheus
+
     datasources:
       datasources.yaml:
         apiVersion: 1
@@ -245,99 +448,3 @@ spec:
             orgId: 1
           - name: Loki
             orgId: 1
-
-    env:
-      GF_ANALYTICS_CHECK_FOR_UPDATES: false
-      GF_ANALYTICS_CHECK_FOR_PLUGIN_UPDATES: false
-      GF_ANALYTICS_REPORTING_ENABLED: false
-      GF_AUTH_ANONYMOUS_ENABLED: false
-      GF_AUTH_BASIC_ENABLED: false
-      GF_DATE_FORMATS_USE_BROWSER_LOCALE: true
-      GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH: /tmp/dashboards/homelab.json
-      GF_EXPLORE_ENABLED: true
-      GF_FEATURE_TOGGLES_ENABLE: publicDashboards
-      GF_LOG_MODE: console
-      GF_NEWS_NEWS_FEED_ENABLED: false
-      GF_PLUGINS_ALLOW_LOADING_UNSIGNED_PLUGINS: natel-discrete-panel,pr0ps-trackmap-panel,panodata-map-panel
-      GF_SECURITY_COOKIE_SAMESITE: grafana
-      GF_SERVER_ROOT_URL: http://grafana.homelab.internal
-      HTTP_PROXY: http://172.19.82.10:1080
-      HTTPS_PROXY: http://172.19.82.10:1080
-      NO_PROXY: .cluster.local.,.cluster.local,.svc,localhost,127.0.0.1,10.100.0.0/16
-
-    downloadDashboards:
-      env:
-        HTTP_PROXY: http://172.19.82.10:1080
-        HTTPS_PROXY: http://172.19.82.10:1080
-        NO_PROXY: .cluster.local.,.cluster.local,.svc,localhost,127.0.0.1,10.100.0.0/16
-
-    imageRenderer:
-      enabled: true
-
-    route:
-      main:
-        hostnames:
-          - grafana.homelab.internal
-        parentRefs:
-          - name: internal
-            namespace: kube-system
-            sectionName: http
-
-    persistence:
-      enabled: true
-      storageClassName: ceph-block
-      size: 5Gi
-
-    plugins:
-      - grafana-clock-panel
-      - grafana-piechart-panel
-      - grafana-worldmap-panel
-      - natel-discrete-panel
-      - pr0ps-trackmap-panel
-      - vonage-status-panel
-
-    rbac:
-      pspEnabled: false
-
-    resources:
-      limits:
-        memory: 512Mi
-      requests:
-        cpu: 50m
-        memory: 128Mi
-
-    serviceAccount:
-      create: true
-      autoMount: true
-
-    serviceMonitor:
-      enabled: true
-
-    sidecar:
-      image:
-         registry: ghcr.io
-         repository: home-operations/k8s-sidecar
-         tag: 1.30.3@sha256:39cca7abcad8f1621b9462d95f7d0e60301b92fcb0ff4de0ad4561859011cddf
-      dashboards:
-        enabled: true
-        searchNamespace: ALL
-        label: grafana_dashboard
-        folderAnnotation: grafana_folder
-        provider:
-          disableDelete: true
-          foldersFromFilesStructure: true
-      datasources:
-        enabled: true
-        searchNamespace: ALL
-        labelValue: ""
-
-    testFramework:
-      enabled: false
-
-    topologySpreadConstraints:
-      - maxSkew: 1
-        topologyKey: kubernetes.io/hostname
-        whenUnsatisfiable: DoNotSchedule
-        labelSelector:
-          matchLabels:
-            app.kubernetes.io/name: grafana

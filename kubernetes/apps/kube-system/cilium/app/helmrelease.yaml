@@ -32,5 +32,29 @@ spec:
       name: cilium-values
 
   values:
+    hubble:
+      enabled: true
+      metrics:
+        enabled:
+          - dns:query
+          - drop
+          - flow
+          - httpV2
+          - icmp
+          - port-distribution
+          - tcp
+        serviceMonitor:
+          enabled: true
+        dashboards:
+          enabled: true
+      relay:
+        enabled: true
+        rollOutPods: true
+        prometheus:
+          serviceMonitor:
+            enabled: true
+      ui:
+        enabled: true
+        rollOutPods: true
     operator:
       tolerations: [] # ref:https://github.com/cilium/cilium/issues/28549

@@ -10,6 +10,7 @@
 
 > kubernetes
 
+- crds:gateway-api
 - apps:alist
 - apps:crossplane-system
 - apps:crunchy-postgres-operator

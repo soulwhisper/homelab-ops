@@ -11,3 +11,5 @@ resources:
   - ./immich/ks.yaml
   - ./komga/ks.yaml
   - ./ocis/ks.yaml
+
+# ref:https://github.com/mchestr/home-cluster/tree/main/kubernetes/apps/media

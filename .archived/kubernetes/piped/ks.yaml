@@ -20,9 +20,9 @@ spec:
     namespace: gitops-system
   wait: false
   dependsOn:
-    - name: onepassword-store
-      namespace: security-system
     - name: crunchy-postgres-operator-cluster
       namespace: database-system
     - name: crunchy-postgres-operator-secretstore
       namespace: database-system
+    - name: onepassword-store
+      namespace: security-system

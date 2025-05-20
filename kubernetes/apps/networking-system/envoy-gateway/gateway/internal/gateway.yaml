@@ -3,18 +3,19 @@
 apiVersion: gateway.networking.k8s.io/v1
 kind: Gateway
 metadata:
-  name: external
+  name: internal
   annotations:
-    external-dns.alpha.kubernetes.io/target: &hostname gateway-ext.noirprime.com
-    cert-manager.io/issuer: letsencrypt-production
+    external-dns.alpha.kubernetes.io/target: &hostname gateway-int.noirprime.com
 spec:
-  gatewayClassName: cilium
-  addresses:
-    - type: IPAddress
-      value: 172.19.82.202
+  gatewayClassName: envoy
   infrastructure:
     annotations:
       external-dns.alpha.kubernetes.io/hostname: *hostname
+      lbipam.cilium.io/ips: 172.19.82.201
+    parametersRef:
+      group: gateway.envoyproxy.io
+      kind: EnvoyProxy
+      name: internal-proxy-config
   listeners:
     - name: http
       protocol: HTTP
@@ -26,11 +27,11 @@ spec:
     - name: https
       protocol: HTTPS
       port: 443
-      hostname: "*.noirprime.com"
+      hostname: "*.cnoirprime.com"
       allowedRoutes:
         namespaces:
           from: All
       tls:
-        mode: Terminate
         certificateRefs:
-          - name: noirprime-com-tls
+          - kind: Secret
+            name: noirprime-com-tls

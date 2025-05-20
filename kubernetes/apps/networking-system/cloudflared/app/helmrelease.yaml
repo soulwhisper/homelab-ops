@@ -24,6 +24,9 @@ spec:
     keepHistory: false
 
   values:
+    defaultPodOptions:
+      hostUsers: false
+
     controllers:
       cloudflared:
         replicas: 2
@@ -52,15 +55,16 @@ spec:
                   httpGet:
                     path: /ready
                     port: &port 8080
-                  initialDelaySeconds: 30
-                  periodSeconds: 20
-                  timeoutSeconds: 10
+                  initialDelaySeconds: 0
+                  periodSeconds: 10
+                  timeoutSeconds: 1
+                  failureThreshold: 3
               readiness: *probes
             resources:
               requests:
                 cpu: 10m
               limits:
-                memory: 128Mi
+                memory: 256Mi
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
@@ -81,9 +85,6 @@ spec:
         endpoints:
           - port: http
             scheme: http
-            path: /metrics
-            interval: 1m
-            scrapeTimeout: 30s
 
     persistence:
       config:

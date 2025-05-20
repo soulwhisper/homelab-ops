@@ -42,10 +42,9 @@ spec:
               IRQBALANCE_BANNED_CPULIST: 12-19
             resources:
               requests:
-                cpu: 25m
-                memory: 128Mi
+                cpu: 10m
               limits:
-                memory: 128Mi
+                memory: 32Mi
             securityContext:
               privileged: true
 

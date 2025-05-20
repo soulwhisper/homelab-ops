@@ -4,7 +4,7 @@ kind: Service
 metadata:
   name: postgres
   annotations:
-    external-dns.alpha.kubernetes.io/hostname: "postgres.homelab.internal"
+    external-dns.alpha.kubernetes.io/hostname: "postgres.noirprime.com"
     lbipam.cilium.io/ips: "172.19.82.203"
 spec:
   type: LoadBalancer
@@ -22,7 +22,7 @@ kind: Service
 metadata:
   name: vector
   annotations:
-    external-dns.alpha.kubernetes.io/hostname: "vector.homelab.internal"
+    external-dns.alpha.kubernetes.io/hostname: "vector.noirprime.com"
     lbipam.cilium.io/ips: "172.19.82.204"
 spec:
   type: LoadBalancer

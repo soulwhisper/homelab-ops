@@ -3,8 +3,8 @@
 # DHCP Server
 set service dhcp-server hostfile-update
 set service dhcp-server shared-network-name HOMELAB authoritative
-set service dhcp-server shared-network-name HOMELAB option domain-name 'homelab.internal'
-set service dhcp-server shared-network-name HOMELAB option domain-search 'homelab.internal'
+set service dhcp-server shared-network-name HOMELAB option domain-name 'noirprime.com'
+set service dhcp-server shared-network-name HOMELAB option domain-search 'noirprime.com'
 
 ## LAB
 set service dhcp-server shared-network-name LAB subnet 10.10.0.0/24 subnet-id '1'

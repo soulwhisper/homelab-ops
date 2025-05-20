@@ -8,7 +8,7 @@
 
 ## Components
 
-- DHCP Server, domain-name = `homelab.internal`;
+- DHCP Server, domain-name = `noirprime.com`;
 - DNS, forward to alidns, ddns using rfc-2136, backed by powerdns;
 - NTP, nts using `time.cloudflare.com`;
 - Protocols support: BGP / BFD;
