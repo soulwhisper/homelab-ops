@@ -23,5 +23,5 @@ spec:
     - ../../../../components/gatus/external
   postBuild:
     substitute:
-      APP: *app
+      APP: *appname
       GATUS_STATUS: '404'
