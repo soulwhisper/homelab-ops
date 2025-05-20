@@ -28,10 +28,8 @@ spec:
   values:
     githubConfigUrl: https://github.com/soulwhisper/homelab-ops
     githubConfigSecret: actions-runner-controller-github-app
-
-    minRunners: 0
+    minRunners: 1
     maxRunners: 3
-
     containerMode:
       type: kubernetes
       kubernetesModeWorkVolumeClaim:
@@ -40,11 +38,9 @@ spec:
         resources:
           requests:
             storage: 10Gi
-
     controllerServiceAccount:
       name: actions-runner-controller
       namespace: gitops-system
-
     template:
       spec:
         containers:

@@ -1,0 +1,8 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/kustomization
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - ./smartctl-exporter/ks.yaml
+
+# more ref:https://github.com/mchestr/home-cluster/tree/main/kubernetes/apps/observability/exporters

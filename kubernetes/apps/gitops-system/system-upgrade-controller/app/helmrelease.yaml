@@ -28,11 +28,6 @@ spec:
       system-upgrade-controller:
         strategy: RollingUpdate
         replicas: 1
-        pod:
-          securityContext:
-            runAsNonRoot: true
-            runAsUser: 65534
-            runAsGroup: 65534
         serviceAccount:
           identifier: system-upgrade-controller
         containers:

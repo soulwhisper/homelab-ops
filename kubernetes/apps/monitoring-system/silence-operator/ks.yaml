@@ -19,12 +19,15 @@ spec:
     name: gitops-system
     namespace: gitops-system
   wait: false
+  dependsOn:
+    - name: silence-operator-crds
+      namespace: monitoring-system
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &appname silence-operator-silences
+  name: &appname silence-operator-crds
   namespace: &namespace monitoring-system
 spec:
   targetNamespace: *namespace
@@ -33,13 +36,10 @@ spec:
       app.kubernetes.io/name: *appname
   interval: 30m
   timeout: 5m
-  path: "./kubernetes/apps/monitoring-system/silence-operator/silences"
+  path: "./kubernetes/apps/monitoring-system/silence-operator/crds"
   prune: true
   sourceRef:
     kind: GitRepository
     name: gitops-system
     namespace: gitops-system
   wait: false
-  dependsOn:
-    - name: silence-operator
-      namespace: monitoring-system

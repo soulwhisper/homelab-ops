@@ -24,3 +24,8 @@ spec:
       namespace: database-system
     - name: onepassword-store
       namespace: security-system
+  components:
+    - ../../../../components/cnpg
+  postBuild:
+    substitute:
+      APP: *appname

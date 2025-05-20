@@ -1,5 +1,5 @@
 ---
-# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrelease-helm-v2.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
@@ -8,8 +8,7 @@ spec:
   interval: 30m
   chartRef:
     kind: OCIRepository
-    name: app-template
-    namespace: gitops-system
+    name: silence-operator
   maxHistory: 2
   install:
     crds: CreateReplace
@@ -24,50 +23,69 @@ spec:
     keepHistory: false
 
   values:
-    controllers:
-      silence-operator:
-        serviceAccount:
-          identifier: silence-operator
-        pod:
-          securityContext:
-            runAsUser: 65534
-            runAsNonRoot: true
-        containers:
-          silence-operator:
-            image:
-              repository: quay.io/giantswarm/silence-operator
-              tag: 0.15.0
-            args:
-              - --leader-elect
-              - --metrics-bind-address=:8080
-              - --alertmanager-address=http://alertmanager.monitoring.svc.cluster.local:9093
-            probes:
-              liveness:
-                enabled: true
-                custom: true
-                spec:
-                  httpGet:
-                    path: /healthz
-                    port: 8081
-                  initialDelaySeconds: 30
-                  periodSeconds: 20
-                  timeoutSeconds: 10
-              readiness:
-                enabled: false
-              startup:
-                enabled: false
-            resources:
-              requests:
-                cpu: 10m
-                memory: 50Mi
-              limits:
-                memory: 128Mi
-            securityContext:
-              allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
-              capabilities:
-                drop:
-                  - ALL
-
-    serviceAccount:
-      silence-operator: {}
+    image:
+      name: quay.io/giantswarm/silence-operator
+    operator:
+      config:
+        alertmanager:
+          service:
+            address: http://vmalertmanager-stack.monitoring-system.svc.cluster.local:9093
+    rbac:
+      create: true
+    extraDeploy:
+      - apiVersion: monitoring.giantswarm.io/v1alpha1
+        kind: Silence
+        metadata:
+          name: ceph-node-nfsmount-diskspace-warning
+          namespace: monitoring-system
+        spec:
+          matchers:
+            - name: alertname
+              value: CephNodeDiskspaceWarning
+              isRegex: false
+            - name: mountpoint
+              value: /etc/nfsmount.conf
+              isRegex: false
+      - apiVersion: monitoring.giantswarm.io/v1alpha1
+        kind: Silence
+        metadata:
+          name: ceph-node-local-diskspace-warning
+          namespace: monitoring-system
+        spec:
+          matchers:
+            - name: alertname
+              value: CephNodeDiskspaceWarning
+              isRegex: false
+            - name: mountpoint
+              value: /var
+              isRegex: false
+      - apiVersion: monitoring.giantswarm.io/v1alpha1
+        kind: Silence
+        metadata:
+          name: ceph-node-inconsistent-mtu
+          namespace: monitoring-system
+        spec:
+          matchers:
+            - name: alertname
+              value: CephNodeInconsistentMTU
+              isRegex: false
+      - apiVersion: monitoring.giantswarm.io/v1alpha1
+        kind: Silence
+        metadata:
+          name: ceph-node-packet-drop
+          namespace: monitoring-system
+        spec:
+          matchers:
+            - name: alertname
+              value: CephNodeNetworkPacketDrops
+              isRegex: false
+      - apiVersion: monitoring.giantswarm.io/v1alpha1
+        kind: Silence
+        metadata:
+          name: ceph-node-packet-error
+          namespace: monitoring-system
+        spec:
+          matchers:
+            - name: alertname
+              value: CephNodeNetworkPacketErrors
+              isRegex: false

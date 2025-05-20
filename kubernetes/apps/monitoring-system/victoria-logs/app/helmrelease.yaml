@@ -3,12 +3,12 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: smartctl-exporter
+  name: victoria-logs
 spec:
   interval: 30m
   chartRef:
     kind: OCIRepository
-    name: smartctl-exporter
+    name: victoria-logs-single
   maxHistory: 2
   install:
     crds: CreateReplace
@@ -23,22 +23,12 @@ spec:
     keepHistory: false
 
   values:
-    fullnameOverride: smartctl-exporter
-
-    image:
-      registry: quay.io
-
-    serviceMonitor:
-      enabled: true
-      relabelings:
-        - action: labeldrop
-          regex: (pod)
-        - action: replace
-          regex: (.*)
-          replacement: $1.noirprime.com
-          sourceLabels:
-            - __meta_kubernetes_endpoint_node_name
-          targetLabel: instance
-
-    prometheusRules:
-      enabled: false
+    fullnameOverride: victoria-logs
+    retentionPeriod: 3 # months
+    server:
+      persistentVolume:
+        enabled: true
+        storageClassName: ceph-block
+        size: 50Gi
+      serviceMonitor:
+        enabled: true

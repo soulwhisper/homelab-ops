@@ -6,13 +6,10 @@ namespace: monitoring-system
 components:
   - ../../components/common
 resources:
-  - ./alertmanager/ks.yaml
   - ./coroot/ks.yaml
+  - ./fluent-bit/ks.yaml
+  - ./gatus/ks.yaml
   - ./grafana/ks.yaml
-  - ./kube-prometheus-stack/ks.yaml
-  - ./loki/ks.yaml
-  - ./node-exporter/ks.yaml
-  - ./prometheus-operator/ks.yaml
-  - ./promtail/ks.yaml
   - ./silence-operator/ks.yaml
-  - ./smartctl-exporter/ks.yaml
+  - ./victoria-logs/ks.yaml
+  - ./victoria-metrics/ks.yaml

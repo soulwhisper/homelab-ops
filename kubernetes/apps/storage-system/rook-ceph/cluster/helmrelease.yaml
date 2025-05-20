@@ -23,7 +23,7 @@ spec:
     keepHistory: false
 
   values:
-    clusterName: &cluster_namespace storage-system
+    clusterName: &cluster_namespace "{{ .Release.Namespace }}"
     csiDriverNamePrefix: *cluster_namespace
     operatorNamespace: *cluster_namespace
     monitoring:
@@ -42,11 +42,14 @@ spec:
           mgr/crash/warn_recent_interval: "7200" # 2h
       crashCollector:
         disable: false
+      csi:
+        readAffinity:
+          enabled: true
       dashboard:
         enabled: true
         urlPrefix: /
         ssl: false
-        prometheusEndpoint: http://prometheus-operated.monitoring-system.svc.cluster.local:9090
+        prometheusEndpoint: http://vmsingle-stack.monitoring-system.svc.cluster.local:8429
       mgr:
         modules:
           - name: diskprediction_local
@@ -104,9 +107,7 @@ spec:
           isDefault: true
           reclaimPolicy: Delete
           allowVolumeExpansion: true
-          volumeBindingMode: WaitForFirstConsumer
           parameters:
-            compression_mode: aggressive # algorithm=snappy
             imageFormat: "2"
             imageFeatures: layering,fast-diff,object-map,deep-flatten,exclusive-lock
             csi.storage.k8s.io/provisioner-secret-name: rook-csi-rbd-provisioner

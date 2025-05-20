@@ -40,3 +40,14 @@ spec:
     name: gitops-system
     namespace: gitops-system
   wait: false
+  dependsOn:
+    - name: onepassword-store
+      namespace: security-system
+    - name: flux-operator
+      namespace: gitops-system
+  components:
+    - ../../../../components/gatus/external
+  postBuild:
+    substitute:
+      APP: flux-webhook
+      GATUS_STATUS: '404'

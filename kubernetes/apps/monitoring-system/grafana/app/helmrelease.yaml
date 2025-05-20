@@ -39,6 +39,7 @@ spec:
       - natel-discrete-panel
       - pr0ps-trackmap-panel
       - vonage-status-panel
+      - victoriametrics-logs-datasource
     replicas: 1
     resources:
       limits:
@@ -70,11 +71,19 @@ spec:
       GF_DISABLE_SANITIZE_HTML: true
       GF_LOG_FILTERS: rendering:debug
       GF_DASHBOARDS_MIN_REFRESH_INTERVAL: 2s
-      # Grafana
       GF_DATABASE_NAME: grafana
       GF_DATABASE_HOST: postgres-rw.database-system.svc.cluster.local:5432
       GF_DATABASE_SSL_MODE: disable
       GF_DATABASE_TYPE: postgres
+    envValueFrom:
+      GF_DATABASE_USER:
+        secretKeyRef:
+          name: grafana-pguser
+          key: user
+      GF_DATABASE_PASSWORD:
+        secretKeyRef:
+          name: grafana-pguser
+          key: password
 
     downloadDashboards:
       envValueFrom:
@@ -90,13 +99,6 @@ spec:
           configMapKeyRef:
             name: http-proxy
             key: NO_PROXY
-
-    # env:
-    #  GF_DATE_FORMATS_USE_BROWSER_LOCALE: true
-    #  GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH: /tmp/dashboards/homelab.json
-    #  GF_FEATURE_TOGGLES_ENABLE: publicDashboards
-    #  GF_PLUGINS_ALLOW_LOADING_UNSIGNED_PLUGINS: natel-discrete-panel,pr0ps-trackmap-panel,panodata-map-panel
-    #  GF_SECURITY_COOKIE_SAMESITE: grafana
 
     grafana.ini:
       news:
@@ -180,6 +182,32 @@ spec:
             namespace: networking
             sectionName: https
 
+    # sources
+    datasources:
+      datasources.yaml:
+        apiVersion: 1
+        deleteDatasources:
+          - { name: Alertmanager, orgId: 1 }
+          - { name: Prometheus, orgId: 1 }
+        datasources:
+          - name: Prometheus
+            type: prometheus
+            uid: prometheus
+            access: proxy
+            url: http://vmsingle-stack.monitoring-system.svc.cluster.local:8429
+            isDefault: true
+          - name: Alertmanager
+            type: alertmanager
+            uid: alertmanager
+            access: proxy
+            url: http://vmalertmanager-stack.monitoring-system.svc.cluster.local:9093
+            jsonData:
+              implementation: prometheus
+          - name: VictoriaLogs
+            type: victoriametrics-logs-datasource
+            access: proxy
+            url: http://victoria-logs-server.monitoring-system.svc.cluster.local:9428
+
     # dashboards
     dashboardProviders:
       dashboardproviders.yaml:
@@ -217,14 +245,6 @@ spec:
             editable: true
             options:
               path: /var/lib/grafana/dashboards/kubernetes
-          - name: postgres
-            orgId: 1
-            folder: Postgres
-            type: file
-            disableDeletion: false
-            editable: true
-            options:
-              path: /var/lib/grafana/dashboards/postgres
           - name: emqx
             orgId: 1
             folder: Emqx
@@ -241,6 +261,14 @@ spec:
             editable: true
             options:
               path: /var/lib/grafana/dashboards/envoy
+          - name: victoria-metrics
+            orgId: 1
+            folder: VictoriaMetrics
+            type: file
+            disableDeletion: false
+            editable: true
+            options:
+              path: /var/lib/grafana/dashboards/victoria-metrics
 
     dashboards:
       default:
@@ -261,6 +289,16 @@ spec:
           # renovate: dashboardName="External-DNS"
           gnetId: 15038
           revision: 3
+          datasource: Prometheus
+
+        external-secrets:
+          url: https://raw.githubusercontent.com/external-secrets/external-secrets/main/docs/snippets/dashboard.json
+          datasource: Prometheus
+        nut-exporter:
+          url: https://raw.githubusercontent.com/DRuggeri/nut_exporter/refs/heads/master/dashboard/dashboard.json
+          datasource: Prometheus
+        gatus:
+          url: https://raw.githubusercontent.com/TwiN/gatus/master/.examples/docker-compose-grafana-prometheus/grafana/provisioning/dashboards/gatus.json
           datasource: Prometheus
 
         node-exporter-full:
@@ -359,29 +397,6 @@ spec:
           revision: 14
           datasource: Prometheus
 
-      postgres:
-        crunchy-pgbackrest:
-          url: https://raw.githubusercontent.com/CrunchyData/postgres-operator-examples/main/kustomize/monitoring/grafana/dashboards/pgbackrest.json
-          datasource: Prometheus
-        crunchy-pod-details:
-          url: https://raw.githubusercontent.com/CrunchyData/postgres-operator-examples/main/kustomize/monitoring/grafana/dashboards/pod_details.json
-          datasource: Prometheus
-        crunchy-postgresql-details:
-          url: https://raw.githubusercontent.com/CrunchyData/postgres-operator-examples/main/kustomize/monitoring/grafana/dashboards/postgresql_details.json
-          datasource: Prometheus
-        crunchy-postgresql-overview:
-          url: https://raw.githubusercontent.com/CrunchyData/postgres-operator-examples/main/kustomize/monitoring/grafana/dashboards/postgresql_overview.json
-          datasource: Prometheus
-        crunchy-postgresql-service_health:
-          url: https://raw.githubusercontent.com/CrunchyData/postgres-operator-examples/main/kustomize/monitoring/grafana/dashboards/postgresql_service_health.json
-          datasource: Prometheus
-        crunchy-prometheus-alerts:
-          url: https://raw.githubusercontent.com/CrunchyData/postgres-operator-examples/main/kustomize/monitoring/grafana/dashboards/prometheus_alerts.json
-          datasource: Prometheus
-        crunchy-query-statistics:
-          url: https://raw.githubusercontent.com/CrunchyData/postgres-operator-examples/main/kustomize/monitoring/grafana/dashboards/query_statistics.json
-          datasource: Prometheus
-
       emqx:
         emqx-authentication:
           url: https://raw.githubusercontent.com/emqx/emqx-exporter/main/grafana-dashboard/template/emqx-5/authentication.json
@@ -419,32 +434,31 @@ spec:
           url: https://raw.githubusercontent.com/envoyproxy/gateway/refs/heads/main/charts/gateway-addons-helm/dashboards/global-ratelimit.json
           datasource: Prometheus
 
-    datasources:
-      datasources.yaml:
-        apiVersion: 1
-        datasources:
-          - access: proxy
-            name: Prometheus
-            type: prometheus
-            url: http://prometheus-operated.monitoring-system.svc.cluster.local:9090
-            isDefault: true
-            jsonData:
-              prometheusType: Prometheus
-          - access: proxy
-            name: Loki
-            type: loki
-            url: http://loki-headless.monitoring-system.svc.cluster.local:3100
-          - name: Alertmanager
-            type: alertmanager
-            access: proxy
-            url: http://alertmanager.monitoring-system.svc.cluster.local:9093
-            jsonData:
-              implementation: prometheus
-
-        deleteDatasources:
-          - name: Alertmanager
-            orgId: 1
-          - name: Prometheus
-            orgId: 1
-          - name: Loki
-            orgId: 1
+      victoria-metrics:
+        backupmanager:
+          url: https://raw.githubusercontent.com/VictoriaMetrics/VictoriaMetrics/refs/heads/master/dashboards/backupmanager.json
+          datasource: Prometheus
+        clusterbytenant:
+          url: https://raw.githubusercontent.com/VictoriaMetrics/VictoriaMetrics/refs/heads/master/dashboards/clusterbytenant.json
+          datasource: Prometheus
+        operator:
+          url: https://raw.githubusercontent.com/VictoriaMetrics/VictoriaMetrics/refs/heads/master/dashboards/operator.json
+          datasource: Prometheus
+        victorialogs:
+          url: https://raw.githubusercontent.com/VictoriaMetrics/VictoriaMetrics/refs/heads/master/dashboards/victorialogs.json
+          datasource: Prometheus
+        victoriametrics-cluster:
+          url: https://raw.githubusercontent.com/VictoriaMetrics/VictoriaMetrics/refs/heads/master/dashboards/victoriametrics-cluster.json
+          datasource: Prometheus
+        victoriametrics:
+          url: https://raw.githubusercontent.com/VictoriaMetrics/VictoriaMetrics/refs/heads/master/dashboards/victoriametrics.json
+          datasource: Prometheus
+        vmagent:
+          url: https://raw.githubusercontent.com/VictoriaMetrics/VictoriaMetrics/refs/heads/master/dashboards/vmagent.json
+          datasource: Prometheus
+        vmalert:
+          url: https://raw.githubusercontent.com/VictoriaMetrics/VictoriaMetrics/refs/heads/master/dashboards/vmalert.json
+          datasource: Prometheus
+        vmauth:
+          url: https://raw.githubusercontent.com/VictoriaMetrics/VictoriaMetrics/refs/heads/master/dashboards/vmauth.json
+          datasource: Prometheus
