@@ -9,6 +9,7 @@ spec:
   chartRef:
     kind: OCIRepository
     name: intel-device-plugins-gpu
+  maxHistory: 2
   install:
     crds: CreateReplace
     remediation:
@@ -18,6 +19,9 @@ spec:
     crds: CreateReplace
     remediation:
       retries: 3
+  uninstall:
+    keepHistory: false
+
   values:
     name: i915
     nodeFeatureRule: false

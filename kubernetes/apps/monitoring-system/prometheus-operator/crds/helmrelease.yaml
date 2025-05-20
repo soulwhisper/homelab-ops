@@ -9,6 +9,7 @@ spec:
   chartRef:
     kind: OCIRepository
     name: prometheus-operator-crds
+  maxHistory: 2
   install:
     crds: CreateReplace
     remediation:
@@ -18,3 +19,5 @@ spec:
     crds: CreateReplace
     remediation:
       retries: 3
+  uninstall:
+    keepHistory: false

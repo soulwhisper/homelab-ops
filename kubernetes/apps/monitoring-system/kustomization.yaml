@@ -3,6 +3,8 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 namespace: monitoring-system
+components:
+  - ../../components/common
 resources:
   - ./alertmanager/ks.yaml
   - ./coroot/ks.yaml
@@ -14,6 +16,3 @@ resources:
   - ./promtail/ks.yaml
   - ./silence-operator/ks.yaml
   - ./smartctl-exporter/ks.yaml
-components:
-  - ../../components/namespace
-  - ../../components/flux/alerts

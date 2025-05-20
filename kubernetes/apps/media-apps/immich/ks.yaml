@@ -20,9 +20,16 @@ spec:
     namespace: gitops-system
   wait: false
   dependsOn:
-    - name: crunchy-postgres-operator-cluster
+    - name: cloudnative-pg-cluster
       namespace: database-system
-    - name: crunchy-postgres-operator-secretstore
+    - name: dragonfly-operator
       namespace: database-system
-    - name: dragonfly-operator-cluster
-      namespace: database-system
+    - name: onepassword-store
+      namespace: security-system
+  components:
+    - ../../../../components/cnpg
+    - ../../../../components/dragonfly
+  postBuild:
+    substitute:
+      APP: *appname
+      CNPG_NAME: vector

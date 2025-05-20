@@ -31,12 +31,6 @@
 - postgres, cpgo; app:immich,maybe;
 - redis, dragonfly; 0:immich, 1:maybe;
 
-### NFS
-
-- shared-media: /mnt/Arcanum/shared/media
-- sub-folders: comic,data,ebook,manga,movie,music,photo,tvshow
-- permissions: 2000:2000
-
 ## Deployment
 
 - `10.10.0.10` as `nas.homelab.internal`, provide `dns` / `minio` / `nfs` / `ntp` / `talos-api` / ...;

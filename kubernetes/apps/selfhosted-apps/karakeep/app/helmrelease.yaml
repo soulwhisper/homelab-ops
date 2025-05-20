@@ -10,6 +10,7 @@ spec:
     kind: OCIRepository
     name: app-template
     namespace: gitops-system
+  maxHistory: 2
   install:
     crds: CreateReplace
     remediation:
@@ -19,6 +20,8 @@ spec:
     crds: CreateReplace
     remediation:
       retries: 3
+  uninstall:
+    keepHistory: false
 
   values:
     defaultPodOptions:
@@ -137,7 +140,7 @@ spec:
 
     persistence:
       app:
-        existingClaim: karakeep-app
+        existingClaim: karakeep
         advancedMounts:
           karakeep:
             app:

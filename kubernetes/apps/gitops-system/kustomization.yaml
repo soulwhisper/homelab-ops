@@ -3,12 +3,11 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 namespace: gitops-system
+components:
+  - ../../components/common
+  - ../../components/sops
 resources:
   - ./actions-runner-controller/ks.yaml
   - ./flux-operator/ks.yaml
   - ./system-upgrade-controller/ks.yaml
   - ./talos-backup/ks.yaml
-components:
-  - ../../components/namespace
-  - ../../components/flux/alerts
-  - ../../components/flux/sops

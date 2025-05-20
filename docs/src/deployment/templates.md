@@ -15,6 +15,7 @@ spec:
     kind: OCIRepository
     name: app-template
     namespace: gitops-system
+  maxHistory: 2
   install:
     crds: CreateReplace
     remediation:
@@ -24,6 +25,8 @@ spec:
     crds: CreateReplace
     remediation:
       retries: 3
+  uninstall:
+    keepHistory: false
 
   values:
     defaultPodOptions:
@@ -81,7 +84,7 @@ spec:
 
     persistence:
       app:
-        existingClaim: example-app
+        existingClaim: example
         globalMounts:
           - path: /app/data
             subPath: data

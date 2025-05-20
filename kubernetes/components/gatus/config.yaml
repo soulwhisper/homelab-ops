@@ -1,16 +1,23 @@
----
 endpoints:
-  - name: "${APP}"
-    group: "${GATUS_GROUP}"
-    url: 1.1.1.1
+  # external
+  - client:
+      dns-resolver: tcp://1.1.1.1:53
+    conditions:
+      - '[STATUS] == ${GATUS_STATUS:=200}'
+    group: external
     interval: 1m
+    name: ${APP}
+    url: https://${GATUS_SUBDOMAIN:=${APP}}.${GATUS_DOMAIN:=noirprime.com}${GATUS_PATH:=/}
+  # internal
+  - conditions:
+      - len([BODY]) == 0
+    dns:
+      query-name: ${GATUS_SUBDOMAIN:=${APP}}.noirprime.com
+      query-type: A
+    group: internal
+    interval: 1m
+    name: ${APP}
     ui:
       hide-hostname: true
       hide-url: true
-    dns:
-      query-name: "${GATUS_SUBDOMAIN:=${APP}}.noirprime.com"
-      query-type: A
-    conditions:
-      - "len([BODY]) == 0"
-    alerts:
-      - type: discord
+    url: 1.1.1.1
