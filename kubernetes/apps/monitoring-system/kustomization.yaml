@@ -8,7 +8,6 @@ components:
 resources:
   - ./coroot/ks.yaml
   - ./fluent-bit/ks.yaml
-  - ./gatus/ks.yaml
   - ./grafana/ks.yaml
   - ./silence-operator/ks.yaml
   - ./victoria-logs/ks.yaml

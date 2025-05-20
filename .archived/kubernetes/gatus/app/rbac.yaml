@@ -11,18 +11,12 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: &name gatus
+  name: gatus
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: *name
+  name: gatus
 subjects:
   - kind: ServiceAccount
-    name: *name
+    name: gatus
     namespace: monitoring-system
----
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: gatus
-  namespace: monitoring-system
