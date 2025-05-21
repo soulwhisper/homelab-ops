@@ -23,7 +23,7 @@ spec:
     keepHistory: false
 
   values:
-    clusterName: &cluster_namespace "{{ .Release.Namespace }}"
+    clusterName: &cluster_namespace storage-system
     csiDriverNamePrefix: *cluster_namespace
     operatorNamespace: *cluster_namespace
     monitoring:
