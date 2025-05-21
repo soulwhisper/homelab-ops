@@ -29,7 +29,7 @@ spec:
         strategy: RollingUpdate
         replicas: 1
         serviceAccount:
-          identifier: system-upgrade-controller
+          identifier: *name
         containers:
           app:
             image:

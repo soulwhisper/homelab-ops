@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: zigbee2mqtt
+  name: &name zigbee2mqtt
 spec:
   interval: 30m
   chartRef:
@@ -43,7 +43,7 @@ spec:
               ZIGBEE2MQTT_CONFIG_ADVANCED_EXT_PAN_ID:
                 valueFrom:
                   secretKeyRef:
-                    name: zigbee2mqtt
+                    name: *name
                     key: zigbee_ext_pan_id
               ZIGBEE2MQTT_CONFIG_ADVANCED_LAST_SEEN: ISO_8601
               ZIGBEE2MQTT_CONFIG_ADVANCED_LEGACY_API: false
@@ -53,12 +53,12 @@ spec:
               ZIGBEE2MQTT_CONFIG_ADVANCED_NETWORK_KEY:
                 valueFrom:
                   secretKeyRef:
-                    name: zigbee2mqtt
+                    name: *name
                     key: zigbee_network_key
               ZIGBEE2MQTT_CONFIG_ADVANCED_PAN_ID:
                 valueFrom:
                   secretKeyRef:
-                    name: zigbee2mqtt
+                    name: *name
                     key: zigbee_pan_id
               ZIGBEE2MQTT_CONFIG_AVAILABILITY_ACTIVE_TIMEOUT: 60
               ZIGBEE2MQTT_CONFIG_AVAILABILITY_PASSIVE_TIMEOUT: 2000
@@ -72,7 +72,7 @@ spec:
               ZIGBEE2MQTT_CONFIG_HOMEASSISTANT_LEGACY_ENTITY_ATTRIBUTES: false
               ZIGBEE2MQTT_CONFIG_HOMEASSISTANT_LEGACY_TRIGGERS: false
               ZIGBEE2MQTT_CONFIG_HOMEASSISTANT_STATUS_TOPIC: homeassistant/status
-              ZIGBEE2MQTT_CONFIG_MQTT_BASE_TOPIC: zigbee2mqtt
+              ZIGBEE2MQTT_CONFIG_MQTT_BASE_TOPIC: *name
               ZIGBEE2MQTT_CONFIG_MQTT_INCLUDE_DEVICE_INFORMATION: true
               ZIGBEE2MQTT_CONFIG_MQTT_KEEPALIVE: 60
               ZIGBEE2MQTT_CONFIG_MQTT_REJECT_UNAUTHORIZED: true
@@ -81,12 +81,12 @@ spec:
               ZIGBEE2MQTT_CONFIG_MQTT_USER:
                 valueFrom:
                   secretKeyRef:
-                    name: zigbee2mqtt
+                    name: *name
                     key: mqtt_user
               ZIGBEE2MQTT_CONFIG_MQTT_PASSWORD:
                 valueFrom:
                   secretKeyRef:
-                    name: zigbee2mqtt
+                    name: *name
                     key: mqtt_password
               ZIGBEE2MQTT_CONFIG_PERMIT_JOIN: false
               ZIGBEE2MQTT_CONFIG_SERIAL_ADAPTER: ember              # todo
@@ -129,7 +129,7 @@ spec:
 
     service:
       app:
-        controller: zigbee2mqtt
+        controller: *name
         ports:
           http:
             primary: true
@@ -141,12 +141,11 @@ spec:
 
     route:
       app:
-        hostnames:
-          - zigbee.noirprime.com
+        hostnames: ["{{ .Release.Name }}.noirprime.com"]
         parentRefs:
           - name: internal
-            namespace: kube-system
-            sectionName: http
+            namespace: networking-system
+            sectionName: https
         rules:
           - matches:
               - path:
@@ -167,7 +166,7 @@ spec:
 
     persistence:
       app:
-        existingClaim: zigbee2mqtt
+        existingClaim: *name
         advancedMounts:
           zigbee2mqtt:
             app:

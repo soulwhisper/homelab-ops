@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: karakeep
+  name: &name karakeep
 spec:
   interval: 30m
   chartRef:
@@ -49,7 +49,7 @@ spec:
               COREPACK_INTEGRITY_KEYS: 0
             envFrom:
               - secretRef:
-                  name: karakeep
+                  name: *name
               - configMapRef:
                   name: http-proxy
             resources:
@@ -96,7 +96,7 @@ spec:
               MEILI_MASTER_KEY:
                 valueFrom:
                   secretKeyRef:
-                    name: karakeep
+                    name: *name
                     key: meilisearch_master_key
             resources:
               requests:
@@ -107,7 +107,7 @@ spec:
 
     service:
       app:
-        controller: karakeep
+        controller: *name
         ports:
           http:
             port: &port 3000
@@ -119,20 +119,19 @@ spec:
 
     route:
       app:
-        hostnames:
-          - karakeep.noirprime.com
+        hostnames: ["{{ .Release.Name }}.noirprime.com"]
         parentRefs:
           - name: internal
-            namespace: kube-system
-            sectionName: http
+            namespace: networking-system
+            sectionName: https
         rules:
           - backendRefs:
-              - name: karakeep
+              - identifier: app
                 port: *port
 
     persistence:
       app:
-        existingClaim: karakeep
+        existingClaim: *name
         advancedMounts:
           karakeep:
             app:

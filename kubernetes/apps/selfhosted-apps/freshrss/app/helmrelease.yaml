@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: freshrss
+  name: &name freshrss
 spec:
   interval: 30m
   chartRef:
@@ -53,27 +53,26 @@ spec:
 
     service:
       app:
-        controller: freshrss
+        controller: *name
         ports:
           http:
             port: &port 8080
 
     route:
       app:
-        hostnames:
-          - freshrss.noirprime.com
+        hostnames: ["{{ .Release.Name }}.noirprime.com"]
         parentRefs:
           - name: internal
-            namespace: kube-system
-            sectionName: http
+            namespace: networking-system
+            sectionName: https
         rules:
           - backendRefs:
-              - name: freshrss
+              - identifier: app
                 port: *port
 
     persistence:
       app:
-        existingClaim: freshrss
+        existingClaim: *name
         advancedMounts:
           freshrss:
             app:

@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: n8n
+  name: &name n8n
 spec:
   interval: 30m
   chartRef:
@@ -70,22 +70,21 @@ spec:
 
     service:
       app:
-        controller: n8n
+        controller: *name
         ports:
           http:
             port: *port
 
     route:
       app:
-        hostnames:
-          - n8n.noirprime.com
+        hostnames: ["{{ .Release.Name }}.noirprime.com"]
         parentRefs:
           - name: internal
-            namespace: kube-system
-            sectionName: http
+            namespace: networking-system
+            sectionName: https
         rules:
           - backendRefs:
-              - name: n8n
+              - identifier: app
                 port: *port
 
       webhooks:
@@ -93,19 +92,19 @@ spec:
           - n8n-webhook.noirprime.com
         parentRefs:
           - name: external
-            namespace: kube-system
+            namespace: networking-system
             sectionName: https
         rules:
           - matches:
               - path:
                   value: /webhook
             backendRefs:
-              - name: n8n
+              - name: *name
                 port: *port
 
     persistence:
       app:
-        existingClaim: n8n
+        existingClaim: *name
         advancedMounts:
           n8n:
             app:

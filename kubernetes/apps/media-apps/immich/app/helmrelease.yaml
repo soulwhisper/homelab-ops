@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &app immich
+  name: &name immich
 spec:
   interval: 30m
   chartRef:
@@ -80,7 +80,7 @@ spec:
                     key: port
             envFrom: &envFrom
               - secretRef:
-                  name: immich
+                  name: *name
               - configMapRef:
                   name: immich-configmap
             securityContext: &securityContext
@@ -114,8 +114,8 @@ spec:
                 memory: 2Gi
 
     service:
-      immich:
-        controller: immich
+      app:
+        controller: *name
         ports:
           http:
             port: &port 2283
@@ -146,7 +146,7 @@ spec:
             sectionName: https
         rules:
           - backendRefs:
-              - name: *app
+              - identifier: app
                 port: *port
 
     persistence:

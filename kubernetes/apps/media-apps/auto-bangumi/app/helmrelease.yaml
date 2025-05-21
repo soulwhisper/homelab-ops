@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: auto-bangumi
+  name: &name auto-bangumi
 spec:
   interval: 30m
   chartRef:
@@ -56,26 +56,25 @@ spec:
 
     service:
       app:
-        controller: &app auto-bangumi
+        controller: *name
         ports:
           http:
             port: &port 7892
     route:
       app:
-        hostnames:
-          - bangumi.noirprime.com
+        hostnames: ["{{ .Release.Name }}.noirprime.com"]
         parentRefs:
           - name: internal
-            namespace: kube-system
-            sectionName: http
+            namespace: networking-system
+            sectionName: https
         rules:
           - backendRefs:
-              - name: *app
+              - identifier: app
                 port: *port
 
     persistence:
       app:
-        existingClaim: auto-bangumi
+        existingClaim: *name
         globalMounts:
           - path: /app/config
             subPath: config

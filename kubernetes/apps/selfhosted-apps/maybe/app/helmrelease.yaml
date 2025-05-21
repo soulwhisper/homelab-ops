@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: maybe
+  name: &name maybe
 spec:
   interval: 30m
   chartRef:
@@ -46,7 +46,7 @@ spec:
               REDIS_URL: redis://dragonfly.database-system.svc.cluster.local:6379/1
             envFrom:
               - secretRef:
-                  name: maybe
+                  name: *name
               - secretRef:
                   name: maybe-db
             securityContext: &securityContext
@@ -71,7 +71,7 @@ spec:
             env: *shared-env
             envFrom:
               - secretRef:
-                  name: maybe
+                  name: *name
               - secretRef:
                   name: maybe-db
             resources: *resources
@@ -79,19 +79,18 @@ spec:
 
     service:
       app:
-        controller: maybe
+        controller: *name
         ports:
           http:
             port: &port 3000
 
     route:
       app:
-        hostnames:
-          - maybe.noirprime.com
+        hostnames: ["{{ .Release.Name }}.noirprime.com"]
         parentRefs:
           - name: internal
-            namespace: kube-system
-            sectionName: http
+            namespace: networking-system
+            sectionName: https
         rules:
           - backendRefs:
               - identifier: app
@@ -99,7 +98,7 @@ spec:
 
     persistence:
       app:
-        existingClaim: maybe
+        existingClaim: *name
         advancedMounts:
           maybe:
             app:

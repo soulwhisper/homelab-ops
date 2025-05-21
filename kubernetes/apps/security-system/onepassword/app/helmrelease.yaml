@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: onepassword-connect
+  name: &name onepassword-connect
 spec:
   interval: 30m
   chartRef:
@@ -42,7 +42,7 @@ spec:
               OP_SESSION:
                 valueFrom:
                   secretKeyRef:
-                    name: onepassword
+                    name: *name
                     key: 1password-credentials.json
             probes: &probes
               liveness:
@@ -81,13 +81,13 @@ spec:
               tag: 1.7.3@sha256:2f17621c7eb27bbcb1f86bbc5e5a5198bf54ac3b9c2ffac38064d03c932b07d5
             env:
               XDG_DATA_HOME: *configDir
-              OP_HTTP_PORT: &syncPort 8081
+              OP_HTTP_PORT: 8081
               OP_BUS_PORT: 11221
               OP_BUS_PEERS: localhost:11220
               OP_SESSION:
                 valueFrom:
                   secretKeyRef:
-                    name: onepassword
+                    name: *name
                     key: 1password-credentials.json
             envFrom:
               - configMapRef:
@@ -97,7 +97,7 @@ spec:
             resources: *resources
     service:
       app:
-        controller: onepassword-connect
+        controller: *name
         ports:
           http:
             port: *apiPort

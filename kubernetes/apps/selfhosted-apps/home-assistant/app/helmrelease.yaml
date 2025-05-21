@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: home-assistant
+  name: &name home-assistant
 spec:
   interval: 30m
   chartRef:
@@ -80,7 +80,7 @@ spec:
 
     service:
       app:
-        controller: home-assistant
+        controller: *name
         ports:
           http:
             port: 8123
@@ -92,10 +92,11 @@ spec:
       app:
         hostnames:
           - hass.noirprime.com
+          - "{{ .Release.Name }}.noirprime.com"
         parentRefs:
           - name: internal
-            namespace: kube-system
-            sectionName: http
+            namespace: networking-system
+            sectionName: https
         rules:
           - matches:
               - path:
@@ -116,7 +117,7 @@ spec:
 
     persistence:
       app:
-        existingClaim: home-assistant
+        existingClaim: *name
         advancedMounts:
           home-assistant:
             app:
