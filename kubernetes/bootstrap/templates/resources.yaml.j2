@@ -14,17 +14,3 @@ stringData:
   # both secrets should not contain a trailing new line
   1password-credentials.json: {{ ENV.ONEPASSWORD_CREDENTIALS }}
   token: {{ ENV.ONEPASSWORD_CONNECT_TOKEN }}
----
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: gitops-system
----
-apiVersion: v1
-kind: Secret
-metadata:
-  name: sops-age
-  namespace: gitops-system
-stringData:
-  age.agekey: |
-    {{ ENV.FLUX_SOPS_PRIVATE_KEY | indent(4) }}

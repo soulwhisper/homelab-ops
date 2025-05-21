@@ -41,6 +41,7 @@ nodes:
           miimon: 100
           updelay: 200
           downdelay: 200
+        mtu: 9000
         dhcp: false
         addresses:
           - 10.10.0.101/24
@@ -58,6 +59,7 @@ nodes:
       - interface: bond0
         bond: *bond
         dhcp: false
+        mtu: 9000
         addresses:
           - 10.10.0.102/24
         routes: *gateway
@@ -72,6 +74,7 @@ nodes:
       - interface: bond0
         bond: *bond
         dhcp: false
+        mtu: 9000
         addresses:
           - 10.10.0.103/24
         routes: *gateway

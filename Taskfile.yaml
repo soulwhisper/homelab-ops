@@ -12,7 +12,6 @@ includes:
   flux: .taskfiles/flux/Taskfile.yaml
   k8s: .taskfiles/k8s/Taskfile.yaml
   postgres: .taskfiles/postgres/Taskfile.yaml
-  sops: .taskfiles/sops/Taskfile.yaml
   talos: .taskfiles/talos/Taskfile.yaml
   volsync: .taskfiles/volsync/Taskfile.yaml
 

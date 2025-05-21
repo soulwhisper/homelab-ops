@@ -12,10 +12,6 @@
   git-hooks = {
     exclude = ".github\/.*";
     hooks = {
-      actionlint = {
-        enable = false;
-        files = "github\/workflows\/.*\.(yml|yaml)$";
-      };
       prettier = {
         enable = true;
         settings = {
@@ -44,25 +40,6 @@
             indentation: enable
         '';
       };
-      # disable this check when using ci, hints only
-      markdownlint = lib.optionalAttrs (!config.devenv.isTesting) {
-        enable = true;
-        files = "\.md$";
-        settings.configuration = {
-          MD013.line-length = 120;
-          MD024.siblings-only = true;
-          MD033 = false;
-          MD034 = false;
-        };
-      };
-      # disable this check when using ci, hints only
-      pre-commit-hook-ensure-sops = lib.optionalAttrs (!config.devenv.isTesting) {
-        enable = true;
-        files = "kubernetes/.*\.sops\.(toml|ya?ml)$";
-      };
-      check-added-large-files.enable = true;
-      check-merge-conflicts.enable = true;
-      check-executables-have-shebangs.enable = true;
     };
   };
 

@@ -12,7 +12,6 @@ kubeconform
 kubectl-bin
 k9s
 minijinja-cli-bin
-sops
 stern-bin
 talhelper-bin
 talosctl

@@ -2,12 +2,13 @@
 # yaml-language-server: $schema=https://json.schemastore.org/helmfile
 helmDefaults:
   cleanupOnFail: true
+  force: true
+  timeout: 600
   wait: true
   waitForJobs: true
-  timeout: 3600
 
 repositories:
-  - name: cilium      # stay in helm for stability and downgradeability
+  - name: cilium
     url: https://helm.cilium.io
 
 releases:
@@ -23,17 +24,6 @@ releases:
     chart: cilium/cilium
     version: 1.17.4
     values: ['../apps/kube-system/cilium/app/values.yaml']
-    hooks:
-      - # Install gateway-api CRDs
-        events:
-          - postsync
-        command: kubectl
-        args:
-          - apply
-          - -f
-          # renovate: datasource=github-releases depName=kubernetes-sigs/gateway-api
-          - https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.3.0/experimental-install.yaml
-        showlogs: true
     needs: ['monitoring-system/prometheus-operator-crds']
 
   - name: coredns

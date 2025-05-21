@@ -16,7 +16,6 @@
 
 - [external-secrets-1password](https://external-secrets.io/main/provider/1password-automation/);
 - [external-dns-cloudflare](https://github.com/kubernetes-sigs/external-dns/blob/master/docs/tutorials/cloudflare.md);
-- [sops-age](https://github.com/getsops/sops?tab=readme-ov-file#encrypting-using-age);
 - [talos](https://www.talos.dev), [talhelper](https://budimanjojo.github.io/talhelper/latest/);
 
 ### 准备工作
