@@ -84,8 +84,9 @@ spec:
         hostnames: ["{{ .Release.Name }}.noirprime.com"]
         annotations:
           gethomepage.dev/enabled: "true"
+          gethomepage.dev/icon: web.png
+          gethomepage.dev/name: *name
           gethomepage.dev/group: System
-          gethomepage.dev/name: Echo
         parentRefs:
           - name: external
             namespace: networking-system

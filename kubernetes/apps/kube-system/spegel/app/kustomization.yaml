@@ -6,7 +6,7 @@ resources:
   - ./ocirepository.yaml
   - ./helmrelease.yaml
 configMapGenerator:
-  - name: spegel-helm-values
+  - name: spegel
     files:
       - values.yaml=./values.yaml
 configurations:

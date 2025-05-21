@@ -23,7 +23,7 @@ spec:
       hostname: "*.noirprime.com"
       allowedRoutes:
         namespaces:
-          from: All
+          from: Same
     - name: https
       protocol: HTTPS
       port: 443

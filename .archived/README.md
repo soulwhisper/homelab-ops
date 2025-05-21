@@ -16,7 +16,6 @@
 - apps:crossplane-system
 - apps:crunchy-postgres-operator
 - apps:echo-server
-- apps:gatus
 - apps:ingress-nginx
 - apps:kube-prometheus-stack
 - apps:kube-state-metrics

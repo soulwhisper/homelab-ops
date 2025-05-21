@@ -81,7 +81,7 @@ spec:
                     key: uri
             envFrom:
               - secretRef:
-                  name: gatus
+                  name: cluster-secrets
             probes:
               liveness: &probes
                 enabled: true
@@ -134,7 +134,7 @@ spec:
             sectionName: https
         rules:
           - backendRefs:
-              - name: *app
+              - identifier: app
                 port: *port
 
     serviceAccount:

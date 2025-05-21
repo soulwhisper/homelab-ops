@@ -20,7 +20,7 @@ spec:
     namespace: gitops-system
   wait: false
   dependsOn:
-    - name: emqx-operator-cluster
+    - name: emqx-cluster
       namespace: database-system
     - name: onepassword-store
       namespace: security-system
@@ -29,6 +29,7 @@ spec:
     - name: volsync
       namespace: storage-system
   components:
+    - ../../../../components/gatus/internal
     - ../../../../components/volsync
   postBuild:
     substitute:

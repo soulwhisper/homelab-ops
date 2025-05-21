@@ -20,18 +20,6 @@ connectivity:
     interval: 1m
 
 endpoints:
-  - name: heartbeat
-    group: external
-    ui:
-      hide-hostname: true
-      hide-url: true
-    url: ${STATUS_PAGE_HEARTBEAT_URL}
-    interval: 1m
-    client:
-      dns-resolver: tcp://1.1.1.1:53
-    conditions:
-      - "[STATUS] == 200"
-
   - name: "*.noirprime.com"
     group: certificates
     url: "tls://gateway-ext.noirprime.com:443"

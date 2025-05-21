@@ -46,3 +46,8 @@ spec:
   dependsOn:
     - name: rook-ceph
       namespace: storage-system
+  components:
+    - ../../../../components/gatus/internal
+  postBuild:
+    substitute:
+      APP: rook

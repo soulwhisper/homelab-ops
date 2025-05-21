@@ -24,4 +24,4 @@ spec:
 
   valuesFrom:
     - kind: ConfigMap
-      name: flux-operator-helm-values
+      name: flux-operator

@@ -28,4 +28,4 @@ spec:
 
   valuesFrom:
     - kind: ConfigMap
-      name: karmada-operator-helm-values
+      name: karmada-operator

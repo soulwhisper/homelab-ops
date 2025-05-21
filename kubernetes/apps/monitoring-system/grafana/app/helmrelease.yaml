@@ -297,9 +297,9 @@ spec:
         # nut-exporter:
         #   url: https://raw.githubusercontent.com/DRuggeri/nut_exporter/refs/heads/master/dashboard/dashboard.json
         #   datasource: Prometheus
-        # gatus:
-        #   url: https://raw.githubusercontent.com/TwiN/gatus/master/.examples/docker-compose-grafana-prometheus/grafana/provisioning/dashboards/gatus.json
-        #   datasource: Prometheus
+        gatus:
+          url: https://raw.githubusercontent.com/TwiN/gatus/master/.examples/docker-compose-grafana-prometheus/grafana/provisioning/dashboards/gatus.json
+          datasource: Prometheus
 
         node-exporter-full:
           # renovate: dashboardName="Node Exporter Full"

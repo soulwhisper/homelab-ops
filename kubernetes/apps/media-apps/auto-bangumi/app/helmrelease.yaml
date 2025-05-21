@@ -63,6 +63,11 @@ spec:
     route:
       app:
         hostnames: ["{{ .Release.Name }}.noirprime.com"]
+        annotations:
+          gethomepage.dev/enabled: "true"
+          gethomepage.dev/icon: comic.png
+          gethomepage.dev/name: *name
+          gethomepage.dev/group: Media
         parentRefs:
           - name: internal
             namespace: networking-system

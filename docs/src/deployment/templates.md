@@ -8,7 +8,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: example-app
+  name: &name example-app
 spec:
   interval: 30m
   chartRef:
@@ -65,7 +65,7 @@ spec:
 
     service:
       app:
-        controller: &app example-app
+        controller: *name
         ports:
           http:
             port: &port 8080
@@ -73,18 +73,23 @@ spec:
       app:
         hostnames:
           - sub.example.com
+        annotations:
+          gethomepage.dev/enabled: "true"
+          gethomepage.dev/icon: image.png
+          gethomepage.dev/name: *name
+          gethomepage.dev/group: Group
         parentRefs:
           - name: internal
-            namespace: kube-system
-            sectionName: http
+            namespace: networking-system
+            sectionName: https
         rules:
           - backendRefs:
-              - name: *app
+              - identifier: app
                 port: *port
 
     persistence:
       app:
-        existingClaim: example
+        existingClaim: *name
         globalMounts:
           - path: /app/data
             subPath: data

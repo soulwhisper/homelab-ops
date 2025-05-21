@@ -6,7 +6,7 @@ resources:
   - ./helmrepository.yaml
   - ./helmrelease.yaml
 configMapGenerator:
-  - name: karmada-operator-helm-values
+  - name: karmada-operator
     files:
       - values.yaml=./values.yaml
 configurations:

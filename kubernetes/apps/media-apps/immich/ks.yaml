@@ -29,7 +29,9 @@ spec:
   components:
     - ../../../../components/cnpg
     - ../../../../components/dragonfly
+    - ../../../../components/gatus/external
   postBuild:
     substitute:
       APP: *appname
+      GATUS_SUBDOMAIN: photo
       CNPG_NAME: vector

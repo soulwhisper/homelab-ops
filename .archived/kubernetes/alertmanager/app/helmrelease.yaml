@@ -88,7 +88,7 @@ spec:
             sectionName: http
         rules:
           - backendRefs:
-              - name: alertmanager
+              - identifier: app
                 port: *port
 
     persistence:

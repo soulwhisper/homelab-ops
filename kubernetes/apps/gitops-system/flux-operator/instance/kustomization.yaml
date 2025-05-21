@@ -8,7 +8,7 @@ resources:
   - ./prometheusrules.yaml
   - ./github/
 configMapGenerator:
-  - name: flux-instance-helm-values
+  - name: flux-instance
     files:
       - values.yaml=./values.yaml
 configurations:

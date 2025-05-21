@@ -72,5 +72,5 @@ spec:
             sectionName: http
         rules:
           - backendRefs:
-              - name: echo-server
+              - identifier: app
                 port: *port
