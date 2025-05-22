@@ -196,6 +196,10 @@ patches:
     machine:
       network:
         disableSearchDomain: true
+        extraHostEntries:
+          - ip: 10.10.0.100
+            aliases:
+              - k8s.homelab.internal
         nameservers:
           - 10.10.0.10
 
@@ -206,10 +210,6 @@ patches:
         nodeIP:
           validSubnets:
             - 10.10.0.0/24
-        extraHostEntries:
-          - ip: 10.10.0.100
-            aliases:
-              - k8s.homelab.internal
         extraConfig:
           featureGates:
             UserNamespacesSupport: true
