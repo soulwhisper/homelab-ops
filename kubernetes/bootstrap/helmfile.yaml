@@ -53,13 +53,22 @@ releases:
     values: ['../apps/kube-system/spegel/app/values.yaml']
     needs: ['kube-system/coredns']
 
+  # bootstrap external-secrets to render components/common/secrets
+  - name: external-secrets
+    namespace: security-system
+    atomic: true
+    chart: oci://ghcr.io/external-secrets/charts/external-secrets
+    version: 0.17.0
+    values: ['../kubernetes/apps/security-system/external-secrets/app/values.yaml']
+    needs: ['kube-system/spegel']
+
   - name: flux-operator
     namespace: gitops-system
     atomic: true
     chart: oci://ghcr.io/controlplaneio-fluxcd/charts/flux-operator
     version: 0.20.0
     values: ['../apps/gitops-system/flux-operator/app/values.yaml']
-    needs: ['kube-system/spegel']
+    needs: ['security-system/external-secrets']
 
   - name: flux-instance
     namespace: gitops-system
