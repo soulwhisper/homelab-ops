@@ -5,5 +5,4 @@ kind: Component
 resources:
   - ./alerts
   - ./configmaps
-  - ./secrets
   - ./namespace.yaml

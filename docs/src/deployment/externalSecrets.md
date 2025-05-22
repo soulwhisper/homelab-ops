@@ -26,15 +26,13 @@
 apiVersion: external-secrets.io/v1
 kind: ExternalSecret
 metadata:
-  name: &app cloudnative-pg
+  name: cloudnative-pg
 spec:
   refreshInterval: 30m
   secretStoreRef:
     kind: ClusterSecretStore
     name: onepassword
   target:
-    name: *app
-    creationPolicy: Owner
     template:
       data:
         username: "{{ .admin_user }}"

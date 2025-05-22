@@ -5,10 +5,14 @@
 
 ## List
 
+> taskfiles
+
+- postgres
+- sops
+
 > components
 
 - gatus
-- sops
 - volysnc:ceph-s3
 
 > kubernetes:base

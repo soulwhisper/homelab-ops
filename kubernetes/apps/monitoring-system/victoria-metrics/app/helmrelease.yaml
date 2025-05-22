@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: victoria-metrics
+  name: &name victoria-metrics
 spec:
   interval: 30m
   chartRef:
@@ -125,10 +125,10 @@ spec:
                   {{ .CommonLabels.alertname }}
                 ttl: 86400s
                 token:
-                  name: cluster-secrets
+                  name: *name
                   key: PUSHOVER_TOKEN
                 user_key:
-                  name: cluster-secrets
+                  name: *name
                   key: PUSHOVER_USER_KEY
                 url_title: View in Alertmanager
 
