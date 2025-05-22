@@ -3,8 +3,8 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &appname talos-backup
-  namespace: &namespace gitops-system
+  name: &appname cronitor
+  namespace: &namespace monitoring-system
 spec:
   targetNamespace: *namespace
   commonMetadata:
@@ -12,7 +12,7 @@ spec:
       app.kubernetes.io/name: *appname
   interval: 30m
   timeout: 5m
-  path: "./kubernetes/apps/gitops-system/talos-backup/app"
+  path: ./kubernetes/apps/monitoring-system/cronitor/app
   prune: true
   sourceRef:
     kind: GitRepository

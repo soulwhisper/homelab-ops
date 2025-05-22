@@ -15,6 +15,7 @@ kubernetesVersion: v1.33.1
 
 additionalApiServerCertSans: &sans
   - k8s.homelab.internal
+  - &talosControlplaneVip 10.10.0.100
   - 127.0.0.1
 additionalMachineCertSans: *sans
 
@@ -205,6 +206,10 @@ patches:
         nodeIP:
           validSubnets:
             - 10.10.0.0/24
+        extraHostEntries:
+          - ip: 10.10.0.100
+            aliases:
+              - k8s.homelab.internal
         extraConfig:
           featureGates:
             UserNamespacesSupport: true

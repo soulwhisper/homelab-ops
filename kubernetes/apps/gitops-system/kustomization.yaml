@@ -9,4 +9,4 @@ resources:
   - ./actions-runner-controller/ks.yaml
   - ./flux-operator/ks.yaml
   - ./system-upgrade-controller/ks.yaml
-  - ./talos-backup/ks.yaml
+  - ./talos-utils/ks.yaml

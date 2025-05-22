@@ -16,7 +16,7 @@ kubernetesVersion: v1.33.1
 
 additionalApiServerCertSans: &sans
   - k8s.homelab.internal
-  # - &talosControlplaneVip 10.10.0.100
+  - &talosControlplaneVip 10.10.0.100
   - 127.0.0.1
 additionalMachineCertSans: *sans
 
@@ -210,10 +210,10 @@ patches:
     machine:
       network:
         disableSearchDomain: true
-        # extraHostEntries:
-        #   - ip: 10.10.0.100
-        #     aliases:
-        #       - k8s.homelab.internal
+        extraHostEntries:
+          - ip: 10.10.0.100
+            aliases:
+              - k8s.homelab.internal
         nameservers:
           - 10.10.0.10
 

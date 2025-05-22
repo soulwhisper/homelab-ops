@@ -1,0 +1,46 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/master-standalone/cronjob-batch-v1.json
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: &name talos-healthcheck
+  annotations:
+    k8s.cronitor.io/include: "true"
+    k8s.cronitor.io/cronitor-id: "Talos"
+    k8s.cronitor.io/cronitor-group: "Homelab"
+    k8s.cronitor.io/tags: "K8S"
+    k8s.cronitor.io/cronitor-grace-seconds: "1800" # tolerate 3 fails
+    k8s.cronitor.io/cronitor-notify: "Pushover"
+spec:
+  schedule: "*/10 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          nodeSelector:
+            node-role.kubernetes.io/control-plane: ""
+          restartPolicy: OnFailure
+          containers:
+            - name: talosctl
+              image: ghcr.io/siderolabs/talosctl:latest
+              args:
+                - "health"
+                - "--nodes=172.19.82.100" # use vip not domain
+              imagePullPolicy: IfNotPresent
+              securityContext:
+                runAsNonRoot: true
+                runAsUser: 2000
+                runAsGroup: 2000
+                allowPrivilegeEscalation: false
+                capabilities:
+                  drop:
+                    - ALL
+                seccompProfile:
+                  type: RuntimeDefault
+              volumeMounts:
+                - name: *name
+                  mountPath: /var/run/secrets/talos.dev
+          volumes:
+            - name: *name
+              secret:
+                secretName: *name
