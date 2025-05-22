@@ -10,5 +10,5 @@ spec:
     mediaType: application/vnd.cncf.helm.chart.content.v1.tar+gzip
     operation: copy
   ref:
-    tag: 0.16.1
+    tag: 0.16.1@sha256:7bfcbf91ce5eb056e43cdc42a88b1f895b821d43fd10874fda057ef53a09bc26
   url: oci://ghcr.io/home-operations/charts-mirror/silence-operator
