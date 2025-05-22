@@ -70,7 +70,7 @@ spec:
 
     alertmanager:
       spec:
-        externalURL: https://am.noirprime.com
+        externalURL: https://alert.noirprime.com
       useManagedConfig: true
       config:
         route:
@@ -145,7 +145,7 @@ spec:
           matchExpressions:
             - { key: somekey, operator: NotIn, values: ["never-used-value"] }
         extraArgs:
-          external.url: https://vm.noirprime.com
+          external.url: https://metrics.noirprime.com
 
     vmagent:
       spec:

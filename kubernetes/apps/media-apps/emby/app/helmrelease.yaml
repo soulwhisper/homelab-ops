@@ -62,12 +62,9 @@ spec:
             port: &port 8096
     route:
       app:
-        hostnames: ["{{ .Release.Name }}.noirprime.com"]
-        annotations:
-          gethomepage.dev/enabled: "true"
-          gethomepage.dev/icon: movie.png
-          gethomepage.dev/name: *name
-          gethomepage.dev/group: Media
+        hostnames:
+          - movie.noirprime.com
+          - "{{ .Release.Name }}.noirprime.com"
         parentRefs:
           - name: internal
             namespace: networking-system

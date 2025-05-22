@@ -67,11 +67,6 @@ spec:
         hostnames:
           - chat.noirprime.com
           -  "{{ .Release.Name }}.noirprime.com"
-        annotations:
-          gethomepage.dev/enabled: "true"
-          gethomepage.dev/icon: chat.png
-          gethomepage.dev/name: *name
-          gethomepage.dev/group: AI
         parentRefs:
           - name: internal
             namespace: networking-system

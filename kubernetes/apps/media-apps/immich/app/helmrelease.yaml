@@ -130,16 +130,6 @@ spec:
         hostnames:
           - photo.noirprime.com
           - "{{ .Release.Name }}.noirprime.com"
-        annotations:
-          gethomepage.dev/enabled: "true"
-          gethomepage.dev/icon: immich.png
-          gethomepage.dev/name: Photo
-          gethomepage.dev/group: Media
-          gethomepage.dev/widget.type: *name
-          gethomepage.dev/widget.fields: '["photo", "video", "storage"]'
-          gethomepage.dev/widget.url: http://immich.media-apps.svc.cluster.local:2283
-          gethomepage.dev/widget.key: '{{ "{{HOMEPAGE_VAR_IMMICH_API_KEY}}" }}'
-          gethomepage.dev/widget.version: '2'
         parentRefs:
           - name: external
             namespace: networking-system

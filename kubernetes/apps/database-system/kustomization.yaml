@@ -8,4 +8,3 @@ components:
 resources:
   - ./cloudnative-pg/ks.yaml
   - ./dragonfly-operator/ks.yaml
-  - ./emqx-operator/ks.yaml

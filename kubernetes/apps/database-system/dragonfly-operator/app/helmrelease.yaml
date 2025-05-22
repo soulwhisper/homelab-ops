@@ -85,6 +85,42 @@ spec:
             matchLabels:
               app.kubernetes.io/name: *name
 
+    serviceAccount:
+      dragonfly-operator: {}
+    rbac:
+      roles:
+        dragonfly-operator:
+          type: Role
+          rules:
+            - apiGroups: ["coordination.k8s.io"]
+              resources: ["leases"]
+              verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+            - apiGroups: [""]
+              resources: ["events"]
+              verbs: ["create", "patch"]
+            - apiGroups: [""]
+              resources: ["pods", "services"]
+              verbs: ["create", "delete", "get", "list", "patch", "update", "watch"]
+            - apiGroups: ["apps"]
+              resources: ["statefulsets"]
+              verbs: ["create", "delete", "get", "list", "patch", "update", "watch"]
+            - apiGroups: ["dragonflydb.io"]
+              resources: ["dragonflies"]
+              verbs: ["create", "delete", "get", "list", "patch", "update", "watch"]
+            - apiGroups: ["dragonflydb.io"]
+              resources: ["dragonflies/finalizers"]
+              verbs: ["update"]
+            - apiGroups: ["dragonflydb.io"]
+              resources: ["dragonflies/status"]
+              verbs: ["get", "patch", "update"]
+      bindings:
+        dragonfly-operator:
+          type: RoleBinding
+          roleRef:
+            identifier: *name
+          subjects:
+            - identifier: *name
+
     service:
       app:
         controller: *name
@@ -93,10 +129,6 @@ spec:
             port: *port
           metrics:
             port: 8080
-
-    serviceAccount:
-      dragonfly-operator: {}
-
     serviceMonitor:
       app:
         serviceName: *name

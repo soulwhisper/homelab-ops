@@ -113,29 +113,29 @@ spec:
         mode: console
       panels:
         disable_sanitize_html: true
-      auth:
-        signout_redirect_url: "https://auth.noirprime.com/logout"
-        oauth_auto_login: true
-      auth.generic_oauth:
-        enabled: true
-        name: Authelia
-        scopes: openid profile email groups
-        empty_scopes: false
-        auth_url: https://auth.noirprime.com/api/oidc/authorization
-        token_url: https://auth.noirprime.com/api/oidc/token
-        api_url: https://auth.noirprime.com/api/oidc/userinfo
-        login_attribute_path: preferred_username
-        groups_attribute_path: groups
-        name_attribute_path: name
-        use_pkce: true
-      auth.generic_oauth.group_mapping:
-        role_attribute_path: |
-          contains(groups[*], 'admin') && 'Admin' || contains(groups[*], 'people') && 'Viewer'
-        org_id: 1
-      auth.basic:
-        enabled: true
-      auth.anonymous:
-        enabled: false
+      # auth:
+      #   signout_redirect_url: "https://auth.noirprime.com/logout"
+      #   oauth_auto_login: true
+      # auth.generic_oauth:
+      #   enabled: true
+      #   name: Authelia
+      #   scopes: openid profile email groups
+      #   empty_scopes: false
+      #   auth_url: https://auth.noirprime.com/api/oidc/authorization
+      #   token_url: https://auth.noirprime.com/api/oidc/token
+      #   api_url: https://auth.noirprime.com/api/oidc/userinfo
+      #   login_attribute_path: preferred_username
+      #   groups_attribute_path: groups
+      #   name_attribute_path: name
+      #   use_pkce: true
+      # auth.generic_oauth.group_mapping:
+      #   role_attribute_path: |
+      #     contains(groups[*], 'admin') && 'Admin' || contains(groups[*], 'people') && 'Viewer'
+      #   org_id: 1
+      # auth.basic:
+      #   enabled: true
+      # auth.anonymous:
+      #   enabled: false
 
     # images
     image:
@@ -172,11 +172,6 @@ spec:
     route:
       main:
         hostnames: ["{{ .Release.Name }}.noirprime.com"]
-        annotations:
-          gethomepage.dev/enabled: "true"
-          gethomepage.dev/icon: grafana.png
-          gethomepage.dev/name: Grafana
-          gethomepage.dev/group: Observability
         parentRefs:
           - name: internal
             namespace: networking-system
@@ -245,14 +240,14 @@ spec:
             editable: true
             options:
               path: /var/lib/grafana/dashboards/kubernetes
-          - name: emqx
-            orgId: 1
-            folder: Emqx
-            type: file
-            disableDeletion: false
-            editable: true
-            options:
-              path: /var/lib/grafana/dashboards/emqx
+          # - name: emqx
+          #   orgId: 1
+          #   folder: Emqx
+          #   type: file
+          #   disableDeletion: false
+          #   editable: true
+          #   options:
+          #     path: /var/lib/grafana/dashboards/emqx
           - name: envoy
             orgId: 1
             folder: Envoy
@@ -297,9 +292,9 @@ spec:
         # nut-exporter:
         #   url: https://raw.githubusercontent.com/DRuggeri/nut_exporter/refs/heads/master/dashboard/dashboard.json
         #   datasource: Prometheus
-        gatus:
-          url: https://raw.githubusercontent.com/TwiN/gatus/master/.examples/docker-compose-grafana-prometheus/grafana/provisioning/dashboards/gatus.json
-          datasource: Prometheus
+        # gatus:
+        #   url: https://raw.githubusercontent.com/TwiN/gatus/master/.examples/docker-compose-grafana-prometheus/grafana/provisioning/dashboards/gatus.json
+        #   datasource: Prometheus
 
         node-exporter-full:
           # renovate: dashboardName="Node Exporter Full"
@@ -397,28 +392,28 @@ spec:
           revision: 14
           datasource: Prometheus
 
-      emqx:
-        emqx-authentication:
-          url: https://raw.githubusercontent.com/emqx/emqx-exporter/main/grafana-dashboard/template/emqx-5/authentication.json
-          datasource: Prometheus
-        emqx-authorization:
-          url: https://raw.githubusercontent.com/emqx/emqx-exporter/main/grafana-dashboard/template/emqx-5/authorization.json
-          datasource: Prometheus
-        emqx-client-events:
-          url: https://raw.githubusercontent.com/emqx/emqx-exporter/main/grafana-dashboard/template/emqx-5/client-events.json
-          datasource: Prometheus
-        emqx-messages:
-          url: https://raw.githubusercontent.com/emqx/emqx-exporter/main/grafana-dashboard/template/emqx-5/messages.json
-          datasource: Prometheus
-        emqx-overview:
-          url: https://raw.githubusercontent.com/emqx/emqx-exporter/main/grafana-dashboard/template/emqx-5/overview.json
-          datasource: Prometheus
-        emqx-rule-engine-count:
-          url: https://raw.githubusercontent.com/emqx/emqx-exporter/main/grafana-dashboard/template/emqx-5/rule-engine-count.json
-          datasource: Prometheus
-        emqx-rule-engine-rate:
-          url: https://raw.githubusercontent.com/emqx/emqx-exporter/main/grafana-dashboard/template/emqx-5/rule-engine-rate.json
-          datasource: Prometheus
+      # emqx:
+      #   emqx-authentication:
+      #     url: https://raw.githubusercontent.com/emqx/emqx-exporter/main/grafana-dashboard/template/emqx-5/authentication.json
+      #     datasource: Prometheus
+      #   emqx-authorization:
+      #     url: https://raw.githubusercontent.com/emqx/emqx-exporter/main/grafana-dashboard/template/emqx-5/authorization.json
+      #     datasource: Prometheus
+      #   emqx-client-events:
+      #     url: https://raw.githubusercontent.com/emqx/emqx-exporter/main/grafana-dashboard/template/emqx-5/client-events.json
+      #     datasource: Prometheus
+      #   emqx-messages:
+      #     url: https://raw.githubusercontent.com/emqx/emqx-exporter/main/grafana-dashboard/template/emqx-5/messages.json
+      #     datasource: Prometheus
+      #   emqx-overview:
+      #     url: https://raw.githubusercontent.com/emqx/emqx-exporter/main/grafana-dashboard/template/emqx-5/overview.json
+      #     datasource: Prometheus
+      #   emqx-rule-engine-count:
+      #     url: https://raw.githubusercontent.com/emqx/emqx-exporter/main/grafana-dashboard/template/emqx-5/rule-engine-count.json
+      #     datasource: Prometheus
+      #   emqx-rule-engine-rate:
+      #     url: https://raw.githubusercontent.com/emqx/emqx-exporter/main/grafana-dashboard/template/emqx-5/rule-engine-rate.json
+      #     datasource: Prometheus
 
       envoy:
         envoy-clusters:

@@ -6,8 +6,6 @@ namespace: media-apps
 components:
   - ../../components/common
 resources:
-  - ./auto-bangumi/ks.yaml
   - ./emby/ks.yaml
   - ./immich/ks.yaml
-  - ./komga/ks.yaml
   - ./ocis/ks.yaml

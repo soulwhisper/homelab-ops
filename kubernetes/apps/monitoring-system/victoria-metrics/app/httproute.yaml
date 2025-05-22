@@ -4,14 +4,8 @@ apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:
   name: victoria-metrics-dashboard
-  annotations:
-    gethomepage.dev/enabled: "true"
-    gethomepage.dev/icon: victoriametrics.png
-    gethomepage.dev/name: VictoriaMetrics
-    gethomepage.dev/group: Observability
-    gethomepage.dev/pod-selector: app.kubernetes.io/name=vmsingle
 spec:
-  hostnames: ["vm.noirprime.com"]
+  hostnames: ["metrics.noirprime.com"]
   parentRefs:
     - name: internal
       namespace: networking-system
@@ -27,13 +21,8 @@ apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:
   name: vmalertmanager
-  annotations:
-    gethomepage.dev/enabled: "true"
-    gethomepage.dev/icon: alertmanager.png
-    gethomepage.dev/name: AlertManager
-    gethomepage.dev/group: Observability
 spec:
-  hostnames: ["am.noirprime.com"]
+  hostnames: ["alert.noirprime.com"]
   parentRefs:
     - name: internal
       namespace: networking-system

@@ -73,11 +73,6 @@ spec:
       app:
         hostnames:
           - sub.example.com
-        annotations:
-          gethomepage.dev/enabled: "true"
-          gethomepage.dev/icon: image.png
-          gethomepage.dev/name: *name
-          gethomepage.dev/group: Group
         parentRefs:
           - name: internal
             namespace: networking-system

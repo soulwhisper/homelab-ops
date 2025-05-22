@@ -26,7 +26,6 @@ spec:
       namespace: security-system
   components:
     - ../../../../components/cnpg
-    - ../../../../components/gatus/internal
   postBuild:
     substitute:
       APP: *appname

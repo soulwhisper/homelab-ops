@@ -94,12 +94,9 @@ spec:
 
     route:
       app:
-        hostnames: ["{{ .Release.Name }}.noirprime.com"]
-        annotations:
-          gethomepage.dev/enabled: "true"
-          gethomepage.dev/icon: disk.png
-          gethomepage.dev/name: *name
-          gethomepage.dev/group: Media
+        hostnames:
+          - pan.noirprime.com
+          - "{{ .Release.Name }}.noirprime.com"
         parentRefs:
           - name: external
             namespace: networking-system
