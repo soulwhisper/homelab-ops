@@ -10,6 +10,7 @@ spec:
     kind: OCIRepository
     name: app-template
     namespace: gitops-system
+  maxHistory: 2
   install:
     crds: CreateReplace
     remediation:
@@ -19,6 +20,8 @@ spec:
     crds: CreateReplace
     remediation:
       retries: 3
+  uninstall:
+    keepHistory: false
 
   values:
     controllers:
@@ -39,10 +42,9 @@ spec:
               IRQBALANCE_BANNED_CPULIST: 12-19
             resources:
               requests:
-                cpu: 25m
-                memory: 128Mi
+                cpu: 10m
               limits:
-                memory: 128Mi
+                memory: 32Mi
             securityContext:
               privileged: true
 

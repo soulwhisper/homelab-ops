@@ -3,13 +3,14 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: maybe
+  name: &name maybe
 spec:
   interval: 30m
   chartRef:
     kind: OCIRepository
     name: app-template
     namespace: gitops-system
+  maxHistory: 2
   install:
     crds: CreateReplace
     remediation:
@@ -19,6 +20,8 @@ spec:
     crds: CreateReplace
     remediation:
       retries: 3
+  uninstall:
+    keepHistory: false
 
   values:
     defaultPodOptions:
@@ -40,10 +43,10 @@ spec:
               RAILS_FORCE_SSL: "false"
               RAILS_ASSUME_SSL: "false"
               DB_PORT: 5432
-              REDIS_URL: redis://dragonfly.database-system.svc.cluster.local:6379/1
+              REDIS_URL: redis://maybe-dragonfly.selfhosted-apps.svc.cluster.local:6379/0
             envFrom:
               - secretRef:
-                  name: maybe
+                  name: *name
               - secretRef:
                   name: maybe-db
             securityContext: &securityContext
@@ -68,7 +71,7 @@ spec:
             env: *shared-env
             envFrom:
               - secretRef:
-                  name: maybe
+                  name: *name
               - secretRef:
                   name: maybe-db
             resources: *resources
@@ -76,7 +79,7 @@ spec:
 
     service:
       app:
-        controller: maybe
+        controller: *name
         ports:
           http:
             port: &port 3000
@@ -84,11 +87,12 @@ spec:
     route:
       app:
         hostnames:
-          - maybe.homelab.internal
+          - finance.noirprime.com
+          - "{{ .Release.Name }}.noirprime.com"
         parentRefs:
           - name: internal
-            namespace: kube-system
-            sectionName: http
+            namespace: networking-system
+            sectionName: https
         rules:
           - backendRefs:
               - identifier: app
@@ -96,7 +100,7 @@ spec:
 
     persistence:
       app:
-        existingClaim: maybe-app
+        existingClaim: *name
         advancedMounts:
           maybe:
             app:

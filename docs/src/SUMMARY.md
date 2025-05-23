@@ -11,7 +11,8 @@
   - [External Secrets](./deployment/externalSecrets.md)
   - [Templates](./deployment/templates.md)
 - [Networking](./infrastructure/networking.md)
-- [Hardware](./deployment/hardware.md)
+  - [Domains](./infrastructure/domains.md)
+- [Hardware](./infrastructure/hardware.md)
 
 ---
 

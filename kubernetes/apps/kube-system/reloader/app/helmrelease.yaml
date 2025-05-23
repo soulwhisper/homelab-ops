@@ -1,5 +1,5 @@
 ---
-# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrelease-helm-v2.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/helm.toolkit.fluxcd.io/helmrelease_v2.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
@@ -9,6 +9,7 @@ spec:
   chartRef:
     kind: OCIRepository
     name: reloader
+  maxHistory: 2
   install:
     crds: CreateReplace
     remediation:
@@ -18,14 +19,8 @@ spec:
     crds: CreateReplace
     remediation:
       retries: 3
+  uninstall:
+    keepHistory: false
 
   values:
     fullnameOverride: reloader
-    reloader:
-      enableHA: true
-      deployment:
-        replicas: 1
-      readOnlyRootFileSystem: true
-      podMonitor:
-        enabled: true
-        namespace: "{{ .Release.Namespace }}"

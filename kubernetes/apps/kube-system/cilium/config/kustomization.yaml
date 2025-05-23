@@ -5,3 +5,4 @@ kind: Kustomization
 resources:
   - ./bgp.yaml
   - ./pool.yaml
+  - ./vip.yaml

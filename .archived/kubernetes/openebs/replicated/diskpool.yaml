@@ -1,5 +1,6 @@
 ---
-apiVersion: "openebs.io/v1beta2"
+# yaml-language-server: $schema=https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/openebs.io/diskpool_v1beta2.json
+apiVersion: openebs.io/v1beta2
 kind: DiskPool
 metadata:
   name: openebs-pool-01
@@ -8,7 +9,8 @@ spec:
   node: exarch-01
   disks: ["/dev/sdb"]
 ---
-apiVersion: "openebs.io/v1beta2"
+# yaml-language-server: $schema=https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/openebs.io/diskpool_v1beta2.json
+apiVersion: openebs.io/v1beta2
 kind: DiskPool
 metadata:
   name: openebs-pool-02
@@ -17,7 +19,8 @@ spec:
   node: exarch-02
   disks: ["/dev/sdb"]
 ---
-apiVersion: "openebs.io/v1beta2"
+# yaml-language-server: $schema=https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/openebs.io/diskpool_v1beta2.json
+apiVersion: openebs.io/v1beta2
 kind: DiskPool
 metadata:
   name: openebs-pool-03

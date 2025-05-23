@@ -3,13 +3,14 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: cloudflared
+  name: &name cloudflared
 spec:
   interval: 30m
   chartRef:
     kind: OCIRepository
     name: app-template
     namespace: gitops-system
+  maxHistory: 2
   install:
     crds: CreateReplace
     remediation:
@@ -19,8 +20,13 @@ spec:
     crds: CreateReplace
     remediation:
       retries: 3
+  uninstall:
+    keepHistory: false
 
   values:
+    defaultPodOptions:
+      hostUsers: false
+
     controllers:
       cloudflared:
         replicas: 2
@@ -40,7 +46,7 @@ spec:
               TUNNEL_METRICS: 0.0.0.0:8080
             envFrom:
               - secretRef:
-                  name: cloudflared
+                  name: *name
             probes:
               liveness: &probes
                 enabled: true
@@ -49,15 +55,16 @@ spec:
                   httpGet:
                     path: /ready
                     port: &port 8080
-                  initialDelaySeconds: 30
-                  periodSeconds: 20
-                  timeoutSeconds: 10
+                  initialDelaySeconds: 0
+                  periodSeconds: 10
+                  timeoutSeconds: 1
+                  failureThreshold: 3
               readiness: *probes
             resources:
               requests:
                 cpu: 10m
               limits:
-                memory: 128Mi
+                memory: 256Mi
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
@@ -67,25 +74,22 @@ spec:
 
     service:
       app:
-        controller: cloudflared
+        controller: *name
         ports:
           http:
             port: *port
 
     serviceMonitor:
       app:
-        serviceName: cloudflared
+        serviceName: *name
         endpoints:
           - port: http
             scheme: http
-            path: /metrics
-            interval: 1m
-            scrapeTimeout: 30s
 
     persistence:
       config:
         type: configMap
-        name: cloudflared-config
+        name: *name
         globalMounts:
           - path: /etc/cloudflared/config.yaml
             subPath: config.yaml

@@ -6,7 +6,7 @@ resources:
   - ./ocirepository.yaml
   - ./helmrelease.yaml
 configMapGenerator:
-  - name: coredns-values
+  - name: coredns
     files:
       - values.yaml=./values.yaml
 configurations:

@@ -1,0 +1,44 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/helm.toolkit.fluxcd.io/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: crunchy-postgres-operator
+spec:
+  interval: 30m
+  chartRef:
+    kind: OCIRepository
+    name: crunchy-postgres-operator
+  maxHistory: 2
+  install:
+    crds: CreateReplace
+    remediation:
+      retries: -1
+  upgrade:
+    cleanupOnFail: true
+    crds: CreateReplace
+    remediation:
+      retries: 3
+  uninstall:
+    keepHistory: false
+
+  values:
+    extraEnv:
+      - name: HTTP_PROXY
+        valueFrom:
+          configMapKeyRef:
+            name: http-proxy
+            key: HTTP_PROXY
+      - name: HTTPS_PROXY
+        valueFrom:
+          configMapKeyRef:
+            name: http-proxy
+            key: HTTPS_PROXY
+      - name: NO_PROXY
+        valueFrom:
+          configMapKeyRef:
+            name: http-proxy
+            key: NO_PROXY
+    install:
+      clusterLabels:
+        app.kubernetes.io/name: pgo

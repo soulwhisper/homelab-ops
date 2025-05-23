@@ -17,6 +17,7 @@ spec:
           for: 15m
           labels:
             severity: critical
+
         - alert: SmartDeviceTestFailed
           annotations:
             summary: |
@@ -31,6 +32,7 @@ spec:
           for: 15m
           labels:
             severity: critical
+
         - alert: SmartDeviceCriticalWarning
           annotations:
             summary: |
@@ -40,9 +42,8 @@ spec:
           for: 15m
           labels:
             severity: critical
-        #
+
         # Ref: https://github.com/prometheus-community/helm-charts/blob/main/charts/prometheus-smartctl-exporter/rules/rules.txt
-        #
         - alert: SmartDeviceMediaErrors
           annotations:
             summary: |
@@ -52,6 +53,7 @@ spec:
           for: 15m
           labels:
             severity: critical
+
         - alert: SmartDeviceAvailableSpareUnderThreadhold
           annotations:
             summary: |
@@ -61,6 +63,7 @@ spec:
           for: 15m
           labels:
             severity: critical
+
         - alert: SmartDeviceInterfaceSlow
           annotations:
             summary: |

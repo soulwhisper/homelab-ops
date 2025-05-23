@@ -15,6 +15,7 @@ kubernetesVersion: v1.33.1
 
 additionalApiServerCertSans: &sans
   - k8s.homelab.internal
+  - &talosControlplaneVip 172.19.82.100
   - 127.0.0.1
 additionalMachineCertSans: *sans
 
@@ -171,7 +172,7 @@ patches:
       env:
         http_proxy: http://172.19.82.10:1080
         https_proxy: http://172.19.82.10:1080
-        no_proxy: .noirprime.com,.homelab.internal,localhost,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16
+        no_proxy: .noirprime.com,.homelab.internal,localhost,127.0.0.1,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16
 
   # NTP configuration, ip for baremetal, '/dev/ptp0' for proxmox
   - |-
@@ -186,6 +187,10 @@ patches:
     machine:
       network:
         disableSearchDomain: true
+        extraHostEntries:
+          - ip: 172.19.82.100
+            aliases:
+              - k8s.homelab.internal
         nameservers:
           - 172.19.82.10
 

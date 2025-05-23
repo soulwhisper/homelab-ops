@@ -5,11 +5,12 @@
 
 ## S3
 
-| app              | bucket           | key-name         |
-| ---------------- | ---------------- | ---------------- |
-| crunchy-pgo      | postgres         | postgres         |
-| talos-backup     | talos            | talos            |
-| volsync          | volsync          | volsync          |
+| app               | bucket     | key-name   |
+| ----------------- | ---------- | ---------- |
+| dragonfly-operator | dragonfly   | dragonfly   |
+| crunchy-pgo       | postgres   | postgres   |
+| talos-backup      | talos      | talos      |
+| volsync           | volsync    | volsync    |
 
 ### Minio
 
@@ -25,7 +26,7 @@
     {
       "Effect": "Allow",
       "Action": ["s3:*"],
-      "Resource": ["arn:aws:s3:::volsync/*", "arn:aws:s3:::volsync"]
+      "Resource": ["arn:aws:s3:::{bucket}/*", "arn:aws:s3:::{bucket}"]
     }
   ]
 }
@@ -34,6 +35,7 @@
 ## NFS
 
 - use truenas-scale as main nas;
-- nfs-endpoint: `nas.homelab.internal`;
-- nfs-shares: `/mnt/Arcanum/shared/media`;
-- nfs-permissions: `uid:gid=2000:2000`;
+- endpoint: `nas.homelab.internal`;
+- shares: `/mnt/Arcanum/shared/media`;
+- permissions: `uid:gid=2000:2000`;
+- folders: `data` and `comic,ebook,manga,movie,music,photo,tvshow`;

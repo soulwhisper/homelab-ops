@@ -3,17 +3,16 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 namespace: monitoring-system
+components:
+  - ../../components/common
 resources:
-  - ./alertmanager/ks.yaml
   - ./coroot/ks.yaml
+  - ./cronitor/ks.yaml
+  - ./fluent-bit/ks.yaml
   - ./grafana/ks.yaml
-  - ./kube-prometheus-stack/ks.yaml
-  - ./loki/ks.yaml
-  - ./node-exporter/ks.yaml
+  - ./kromgo/ks.yaml
   - ./prometheus-operator/ks.yaml
-  - ./promtail/ks.yaml
   - ./silence-operator/ks.yaml
   - ./smartctl-exporter/ks.yaml
-components:
-  - ../../components/namespace
-  - ../../components/flux/alerts
+  - ./victoria-logs/ks.yaml
+  - ./victoria-metrics/ks.yaml

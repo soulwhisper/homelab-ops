@@ -33,7 +33,7 @@ jobs:
           token: "${{ steps.app-token.outputs.token }}"
           repository: "${{ github.repository }}"
           retain_days: "0"
-          keep_minimum_runs: "5"
+          keep_minimum_runs: "3"
           delete_run_by_conclusion_pattern: "success"
       - name: Clenaup workflow failure runs
         uses: Mattraks/delete-workflow-runs@4c9f24749b7996562658e3d6e10662489e22caca # v2
@@ -41,5 +41,5 @@ jobs:
           token: "${{ steps.app-token.outputs.token }}"
           repository: "${{ github.repository }}"
           retain_days: "0"
-          keep_minimum_runs: "3"
+          keep_minimum_runs: "1"
           delete_run_by_conclusion_pattern: "action_required,failure"

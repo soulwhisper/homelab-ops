@@ -2,22 +2,6 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: security-system
----
-apiVersion: v1
-kind: Secret
-metadata:
-  name: onepassword
-  namespace: security-system
-stringData:
-  # ONEPASSWORD_CREDENTIALS=`cat 1password-credentials.json | base64 | tr '/+' '_-' | tr -d '=' | tr -d '\n'`.
-  # both secrets should not contain a trailing new line
-  1password-credentials.json: {{ ENV.ONEPASSWORD_CREDENTIALS }}
-  token: {{ ENV.ONEPASSWORD_CONNECT_TOKEN }}
----
-apiVersion: v1
-kind: Namespace
-metadata:
   name: gitops-system
 ---
 apiVersion: v1
@@ -28,3 +12,19 @@ metadata:
 stringData:
   age.agekey: |
     {{ ENV.FLUX_SOPS_PRIVATE_KEY | indent(4) }}
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: security-system
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: onepassword-connect
+  namespace: security-system
+stringData:
+  # ONEPASSWORD_CREDENTIALS=`cat 1password-credentials.json | base64 | tr '/+' '_-' | tr -d '=' | tr -d '\n'`.
+  # both secrets should not contain a trailing new line
+  1password-credentials.json: {{ ENV.ONEPASSWORD_CREDENTIALS }}
+  token: {{ ENV.ONEPASSWORD_CONNECT_TOKEN }}

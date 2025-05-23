@@ -1,5 +1,5 @@
 ---
-# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrelease-helm-v2.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/helm.toolkit.fluxcd.io/helmrelease_v2.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
@@ -9,6 +9,7 @@ spec:
   chartRef:
     kind: OCIRepository
     name: external-dns
+  maxHistory: 2
   install:
     crds: CreateReplace
     remediation:
@@ -18,29 +19,23 @@ spec:
     crds: CreateReplace
     remediation:
       retries: 3
+  uninstall:
+    keepHistory: false
 
   values:
     fullnameOverride: *name
     domainFilters:
       - noirprime.com
-    env:
-      - name: CF_API_TOKEN
-        valueFrom:
-          secretKeyRef:
-            name: externaldns-cloudflare
-            key: cloudflare-api-token
-      - name: HTTP_PROXY
-        value: http://172.19.82.10:1080
-      - name: HTTPS_PROXY
-        value: http://172.19.82.10:1080
-      - name: NO_PROXY
-        value: .cluster.local.,.cluster.local,.svc,localhost,127.0.0.1,10.100.0.0/16
+    envFrom:
+      - secretRef:
+          name: externaldns-cloudflare
+      - configMapRef:
+          name: http-proxy
     extraArgs:
       - --cloudflare-dns-records-per-page=1000
       - --cloudflare-proxied
       - --crd-source-apiversion=externaldns.k8s.io/v1alpha1
       - --crd-source-kind=DNSEndpoint
-      - --events
       - --gateway-name=external
     podAnnotations:
       reloader.stakater.com/auto: "true"
@@ -66,8 +61,8 @@ spec:
     serviceMonitor:
       enabled: true
     sources:
-      - gateway-httproute
       - crd
+      - gateway-httproute
     txtPrefix: "k8s-ext."
 
   postRenderers:

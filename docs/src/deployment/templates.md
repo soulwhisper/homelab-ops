@@ -4,17 +4,18 @@
 
 ```yaml
 ---
-# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/helm.toolkit.fluxcd.io/helmrelease_v2.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: example-app
+  name: &name example-app
 spec:
   interval: 30m
   chartRef:
     kind: OCIRepository
     name: app-template
     namespace: gitops-system
+  maxHistory: 2
   install:
     crds: CreateReplace
     remediation:
@@ -24,6 +25,8 @@ spec:
     crds: CreateReplace
     remediation:
       retries: 3
+  uninstall:
+    keepHistory: false
 
   values:
     defaultPodOptions:
@@ -62,7 +65,7 @@ spec:
 
     service:
       app:
-        controller: &app example-app
+        controller: *name
         ports:
           http:
             port: &port 8080
@@ -72,16 +75,16 @@ spec:
           - sub.example.com
         parentRefs:
           - name: internal
-            namespace: kube-system
-            sectionName: http
+            namespace: networking-system
+            sectionName: https
         rules:
           - backendRefs:
-              - name: *app
+              - identifier: app
                 port: *port
 
     persistence:
       app:
-        existingClaim: example-app
+        existingClaim: *name
         globalMounts:
           - path: /app/data
             subPath: data

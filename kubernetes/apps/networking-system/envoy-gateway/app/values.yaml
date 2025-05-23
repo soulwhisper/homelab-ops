@@ -1,0 +1,12 @@
+---
+deployment:
+  replicas: 2
+config:
+  envoy-gateway:
+    gateway:
+      controllerName: gateway.envoyproxy.io/gatewayclass-controller
+    backendTlsConfig:
+      clientCertificateRef: noirprime-com-tls
+  logging:
+    level:
+      default: debug

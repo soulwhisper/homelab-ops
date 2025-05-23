@@ -1,5 +1,5 @@
 ---
-# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/helm.toolkit.fluxcd.io/helmrelease_v2.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
@@ -13,6 +13,7 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: karmada
+  maxHistory: 2
   install:
     crds: CreateReplace
     remediation:
@@ -22,7 +23,9 @@ spec:
     crds: CreateReplace
     remediation:
       retries: 3
+  uninstall:
+    keepHistory: false
 
   valuesFrom:
     - kind: ConfigMap
-      name: karmada-operator-helm-values
+      name: karmada-operator

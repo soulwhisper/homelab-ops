@@ -3,13 +3,14 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: freshrss
+  name: &name freshrss
 spec:
   interval: 30m
   chartRef:
     kind: OCIRepository
     name: app-template
     namespace: gitops-system
+  maxHistory: 2
   install:
     crds: CreateReplace
     remediation:
@@ -19,6 +20,8 @@ spec:
     crds: CreateReplace
     remediation:
       retries: 3
+  uninstall:
+    keepHistory: false
 
   values:
     defaultPodOptions:
@@ -34,7 +37,7 @@ spec:
               tag: 1.26.2-alpine
             env:
               CRON_MIN: "*"
-              DOMAIN: freshrss.homelab.internal
+              DOMAIN: freshrss.noirprime.com
               LISTEN: 8080
             probes:
               liveness:
@@ -50,7 +53,7 @@ spec:
 
     service:
       app:
-        controller: freshrss
+        controller: *name
         ports:
           http:
             port: &port 8080
@@ -58,19 +61,20 @@ spec:
     route:
       app:
         hostnames:
-          - freshrss.homelab.internal
+          - rss.noirprime.com
+          - "{{ .Release.Name }}.noirprime.com"
         parentRefs:
           - name: internal
-            namespace: kube-system
-            sectionName: http
+            namespace: networking-system
+            sectionName: https
         rules:
           - backendRefs:
-              - name: freshrss
+              - identifier: app
                 port: *port
 
     persistence:
       app:
-        existingClaim: freshrss-app
+        existingClaim: *name
         advancedMounts:
           freshrss:
             app:

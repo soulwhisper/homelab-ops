@@ -1,5 +1,5 @@
 ---
-# https://github.com/backube/volsync/blob/main/api/v1alpha1/replicationsource_types.go
+# yaml-language-server: $schema=https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/volsync.backube/replicationsource_v1alpha1.json
 apiVersion: volsync.backube/v1alpha1
 kind: ReplicationSource
 metadata:

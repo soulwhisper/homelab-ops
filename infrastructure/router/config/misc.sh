@@ -2,7 +2,7 @@
 
 # System
 set system host-name 'vyos'
-set system domain-name 'homelab.internal'
+set system domain-name 'noirprime.com'
 set system time-zone 'Asia/Shanghai'
 set system name-server '10.0.0.1'
 

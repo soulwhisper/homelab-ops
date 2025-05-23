@@ -26,26 +26,22 @@
 apiVersion: external-secrets.io/v1
 kind: ExternalSecret
 metadata:
-  name: paperless
+  name: cloudnative-pg
 spec:
   refreshInterval: 30m
   secretStoreRef:
     kind: ClusterSecretStore
     name: onepassword
   target:
-    name: paperless
-    creationPolicy: Owner
-  data:
-    - secretKey: PAPERLESS_ADMIN_USER
-      remoteRef:
-        key: app_admin
-        property: admin_user
-    - secretKey: PAPERLESS_ADMIN_PASSWORD
-      remoteRef:
-        key: app_admin
-        property: admin_pass
-    - secretKey: PAPERLESS_SECRET_KEY
-      remoteRef:
-        key: encryption_cipher
-        property: paperless
+    template:
+      data:
+        username: "{{ .admin_user }}"
+        password: "{{ .admin_pass }}"
+        aws-access-key-id: "{{ .postgres_access_key }}"
+        aws-secret-access-key: "{{ .postgres_secret_key }}"
+  dataFrom:
+    - extract:
+        key: app_user
+    - extract:
+        key: minio
 ```

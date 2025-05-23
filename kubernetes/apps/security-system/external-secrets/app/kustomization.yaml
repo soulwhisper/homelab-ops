@@ -6,7 +6,7 @@ resources:
   - ./ocirepository.yaml
   - ./helmrelease.yaml
 configMapGenerator:
-  - name: external-secrets-helm-values
+  - name: external-secrets
     files:
       - values.yaml=./values.yaml
 configurations:

@@ -10,6 +10,7 @@ spec:
     kind: OCIRepository
     name: app-template
     namespace: gitops-system
+  maxHistory: 2
   install:
     crds: CreateReplace
     remediation:
@@ -19,19 +20,16 @@ spec:
     crds: CreateReplace
     remediation:
       retries: 3
+  uninstall:
+    keepHistory: false
 
   values:
     controllers:
       system-upgrade-controller:
         strategy: RollingUpdate
         replicas: 1
-        pod:
-          securityContext:
-            runAsNonRoot: true
-            runAsUser: 65534
-            runAsGroup: 65534
         serviceAccount:
-          identifier: system-upgrade-controller
+          identifier: *name
         containers:
           app:
             image:
@@ -58,3 +56,12 @@ spec:
 
     serviceAccount:
       system-upgrade-controller: {}
+    rbac:
+      bindings:
+        system-upgrade-controller:
+          type: ClusterRoleBinding
+          roleRef:
+            kind: ClusterRole
+            name: cluster-admin
+          subjects:
+            - identifier: *name

@@ -1,5 +1,5 @@
 ---
-# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/kustomize.toolkit.fluxcd.io/kustomization_v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
@@ -11,6 +11,7 @@ spec:
     labels:
       app.kubernetes.io/name: *appname
   interval: 30m
+  retryInterval: 5m
   timeout: 5m
   path: "./kubernetes/apps/security-system/kyverno/app"
   prune: true
@@ -20,11 +21,11 @@ spec:
     namespace: gitops-system
   wait: true
 ---
-# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/kustomize.toolkit.fluxcd.io/kustomization_v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &appname kyverno-policies
+  name: &appname kyverno-policy
   namespace: &namespace security-system
 spec:
   targetNamespace: *namespace
@@ -32,14 +33,15 @@ spec:
     labels:
       app.kubernetes.io/name: *appname
   interval: 30m
+  retryInterval: 5m
   timeout: 5m
-  path: "./kubernetes/apps/security-system/kyverno/policies"
+  path: "./kubernetes/apps/security-system/kyverno/policy"
   prune: true
   sourceRef:
     kind: GitRepository
     name: gitops-system
     namespace: gitops-system
-  wait: false
+  wait: true
   dependsOn:
     - name: kyverno
       namespace: security-system

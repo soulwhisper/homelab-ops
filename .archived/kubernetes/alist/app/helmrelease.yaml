@@ -10,6 +10,7 @@ spec:
     kind: OCIRepository
     name: app-template
     namespace: gitops-system
+  maxHistory: 2
   install:
     crds: CreateReplace
     remediation:
@@ -19,6 +20,8 @@ spec:
     crds: CreateReplace
     remediation:
       retries: 3
+  uninstall:
+    keepHistory: false
 
   values:
     controllers:
@@ -81,19 +84,19 @@ spec:
     route:
       app:
         hostnames:
-          - alist.homelab.internal
+          - alist.noirprime.com
         parentRefs:
           - name: internal
             namespace: kube-system
             sectionName: http
         rules:
           - backendRefs:
-              - name: *app
+              - identifier: app
                 port: *port
 
     persistence:
       app:
-        existingClaim: alist-app
+        existingClaim: alist
         globalMounts:
           - path: /opt/alist/data
             subPath: data
