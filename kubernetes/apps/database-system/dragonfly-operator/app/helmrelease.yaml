@@ -115,7 +115,7 @@ spec:
               verbs: ["get", "patch", "update"]
       bindings:
         dragonfly-operator:
-          type: RoleBinding
+          type: ClusterRoleBinding
           roleRef:
             identifier: *name
           subjects:

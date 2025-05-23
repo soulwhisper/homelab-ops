@@ -71,7 +71,7 @@ spec:
               verbs: ["get"]
       bindings:
         homepage:
-          type: RoleBinding
+          type: ClusterRoleBinding
           roleRef:
             identifier: *name
           subjects:
