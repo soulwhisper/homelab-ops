@@ -90,7 +90,7 @@ spec:
     rbac:
       roles:
         dragonfly-operator:
-          type: Role
+          type: ClusterRole
           rules:
             - apiGroups: ["coordination.k8s.io"]
               resources: ["leases"]

@@ -55,7 +55,7 @@ spec:
     rbac:
       roles:
         homepage:
-          type: Role
+          type: ClusterRole
           rules:
             - apiGroups: [""]
               resources: ["namespaces", "pods", "nodes"]
