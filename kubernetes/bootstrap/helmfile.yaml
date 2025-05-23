@@ -53,7 +53,16 @@ releases:
     values: ['../apps/kube-system/spegel/app/values.yaml']
     needs: ['kube-system/coredns']
 
-  # use to render componets crd
+  # to render gateway-api crd
+  - name: envoy-gateway
+    namespace: networking-system
+    atomic: true
+    chart: oci://docker.io/envoyproxy/gateway-helm
+    version: 1.4.0
+    values: ['../apps/networking-system/envoy-gateway/app/values.yaml']
+    needs: ['kube-system/spegel']
+
+  # to render componets crd
   - name: external-secrets
     namespace: security-system
     atomic: true
@@ -68,7 +77,7 @@ releases:
     chart: oci://ghcr.io/controlplaneio-fluxcd/charts/flux-operator
     version: 0.20.0
     values: ['../apps/gitops-system/flux-operator/app/values.yaml']
-    needs: ['security-system/external-secrets']
+    needs: ['kube-system/spegel']
 
   - name: flux-instance
     namespace: gitops-system

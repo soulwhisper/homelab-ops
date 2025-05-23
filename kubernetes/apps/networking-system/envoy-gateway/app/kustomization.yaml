@@ -6,3 +6,9 @@ resources:
   - ./ocirepository.yaml
   - ./helmrelease.yaml
   - ./servicemonitor.yaml
+configMapGenerator:
+  - name: envoy-gateway
+    files:
+      - values.yaml=./values.yaml
+configurations:
+  - kustomizeconfig.yaml

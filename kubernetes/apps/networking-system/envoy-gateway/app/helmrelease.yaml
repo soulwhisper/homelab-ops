@@ -22,15 +22,6 @@ spec:
   uninstall:
     keepHistory: false
 
-  values:
-    deployment:
-      replicas: 3
-    config:
-      envoy-gateway:
-        gateway:
-          controllerName: gateway.envoyproxy.io/gatewayclass-controller
-        backendTlsConfig:
-          clientCertificateRef: noirprime-com-tls
-      logging:
-        level:
-          default: debug
+  valuesFrom:
+    - kind: ConfigMap
+      name: envoy-gateway
