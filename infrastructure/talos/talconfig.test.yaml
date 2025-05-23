@@ -224,8 +224,7 @@ patches:
   - |-
     machine:
       kernel:
-        modules:
-          - name: rbd
+        mod
           - name: thunderbolt
           - name: thunderbolt_net
 

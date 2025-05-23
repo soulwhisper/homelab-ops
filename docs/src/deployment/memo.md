@@ -88,6 +88,13 @@ kubectl -n gitops-system get receivers.notification.toolkit.fluxcd.io
 popeye -A -s statefulsets
 kubectl resource-capacity --available
 kubectl resource-capacity -p -c -u -n database-system
+
+## ceph rbd connection fix
+  - |-
+    machine:
+      kernel:
+        modules:
+          - name: rbd
 ```
 
 ## VM test issues
