@@ -20,5 +20,7 @@ spec:
     namespace: gitops-system
   wait: false
   dependsOn:
+    - name: external-dns
+      namespace: networking-system
     - name: onepassword-store
       namespace: security-system
