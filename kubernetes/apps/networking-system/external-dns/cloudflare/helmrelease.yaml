@@ -27,7 +27,7 @@ spec:
     domainFilters:
       - noirprime.com
     envFrom:
-      - secretKeyRef:
+      - secretRef:
           name: externaldns-cloudflare
       - configMapRef:
           name: http-proxy

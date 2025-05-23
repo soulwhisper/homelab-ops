@@ -82,7 +82,7 @@ spec:
                     key: uri
             envFrom:
               - secretRef:
-                  name: cluster-secrets
+                  name: *name
             probes:
               liveness: &probes
                 enabled: true
