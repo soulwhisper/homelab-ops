@@ -10,5 +10,5 @@ spec:
     mediaType: application/vnd.cncf.helm.chart.content.v1.tar+gzip
     operation: copy
   ref:
-    tag: v1.17.2@sha256:98284110895beebd917f2c2f8ad850e3a7fffc772331c83918c1975dc8084433
+    tag: v1.17.2
   url: oci://quay.io/jetstack/charts/cert-manager

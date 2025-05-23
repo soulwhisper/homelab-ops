@@ -43,4 +43,4 @@ tasks:
         export ROOK_DISK={{.WIPE}}
         helmfile --file {{.K8S_DIR}}/bootstrap/helmfile.yaml apply {{if eq .WIPE "false"}} -l wipe-rook.enabled!=true {{end}} {{.HELMFILE_ARGS}}
       - |
-        kubectl apply -k {{.K8S_DIR}}/components/common/configmaps -n gitops-system
+        kubectl apply -f {{.K8S_DIR}}/components/common/http-proxy.yaml -n gitops-system
