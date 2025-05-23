@@ -10,5 +10,5 @@ spec:
     mediaType: application/vnd.cncf.helm.chart.content.v1.tar+gzip
     operation: copy
   ref:
-    tag: 0.17.0@sha256:ee8f614ec685dad312afa92d2d7de78efd51aea1624f655487ba8502c8265cb5
+    tag: 0.17.0
   url: oci://ghcr.io/external-secrets/charts/external-secrets

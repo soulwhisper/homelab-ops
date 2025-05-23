@@ -2,6 +2,10 @@
   $schema: "https://docs.renovatebot.com/renovate-schema.json",
   packageRules: [
     {
+      matchDatasources: ["docker"],
+      pinDigests: false,
+    },
+    {
       "matchDatasources": ["docker"],
       "matchPackagePatterns": ["postgresql", "postgres-backup-local"],
       "allowedVersions": "<17"
