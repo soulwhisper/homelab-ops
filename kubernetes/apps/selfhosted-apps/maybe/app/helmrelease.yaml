@@ -1,5 +1,5 @@
 ---
-# yaml-language-server: $schema=https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/helm.toolkit.fluxcd.io/helmrelease_v2.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
@@ -43,7 +43,7 @@ spec:
               RAILS_FORCE_SSL: "false"
               RAILS_ASSUME_SSL: "false"
               DB_PORT: 5432
-              REDIS_URL: redis://dragonfly.database-system.svc.cluster.local:6379/1
+              REDIS_URL: redis://maybe-dragonfly.selfhosted-apps.svc.cluster.local:6379/0
             envFrom:
               - secretRef:
                   name: *name
