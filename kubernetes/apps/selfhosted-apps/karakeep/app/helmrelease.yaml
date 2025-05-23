@@ -73,6 +73,9 @@ spec:
               - --remote-debugging-address=0.0.0.0
               - --remote-debugging-port=9222
               - --hide-scrollbars
+            envFrom:
+              - configMapRef:
+                  name: http-proxy
             securityContext:
               capabilities:
                 drop:
@@ -93,11 +96,11 @@ spec:
               - --experimental-dumpless-upgrade
             env:
               MEILI_NO_ANALYTICS: true
-              MEILI_MASTER_KEY:
-                valueFrom:
-                  secretKeyRef:
-                    name: *name
-                    key: meilisearch_master_key
+            envFrom:
+              - secretRef:
+                  name: *name
+              - configMapRef:
+                  name: http-proxy
             resources:
               requests:
                 cpu: 10m
