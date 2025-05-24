@@ -6,5 +6,6 @@ resources:
   - ./cluster.yaml
   - ./vector.yaml
   - ./prometheusrule.yaml
+  - ./minio-store.yaml
   - ./scheduledbackup.yaml
   - ./service.yaml
