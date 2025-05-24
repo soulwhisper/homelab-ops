@@ -7,13 +7,13 @@ variable "is_public" {
   default = false
 }
 
-variable "owner_access_key" {
+variable "bucket_access_key" {
   type      = string
   sensitive = false
   default   = null
 }
 
-variable "owner_secret_key" {
+variable "bucket_secret_key" {
   type      = string
   sensitive = true
   default   = null

@@ -63,10 +63,6 @@
 - apps:openebs
 - apps:rook-ceph(fs & s3)
 
-> scripts
-
-- minio-bucket-init
-
 ## Reasons
 
 - database: prefer native volume management instead of stateful set;

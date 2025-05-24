@@ -65,3 +65,11 @@ spec:
             name: cluster-admin
           subjects:
             - identifier: *name
+    rawResources:
+      system-upgrade-controller:
+        apiVersion: talos.dev/v1alpha1
+        kind: ServiceAccount
+        spec:
+          spec:
+            roles:
+              - os:admin

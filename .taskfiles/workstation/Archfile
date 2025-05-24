@@ -16,4 +16,5 @@ sops
 stern-bin
 talhelper-bin
 talosctl
+terraform
 uv
