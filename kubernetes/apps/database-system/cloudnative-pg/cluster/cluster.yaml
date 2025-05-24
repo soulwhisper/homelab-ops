@@ -35,6 +35,10 @@ spec:
     barmanObjectStore: &barmanObjectStore
       data:
         compression: bzip2
+        additionalCommandArgs:
+          - "--min-chunk-size=5MB"
+          - "--read-timeout=60"
+          - "-vv"
       wal:
         compression: bzip2
         maxParallel: 8
