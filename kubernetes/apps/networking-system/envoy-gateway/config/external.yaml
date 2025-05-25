@@ -5,6 +5,7 @@ kind: Gateway
 metadata:
   name: external
   annotations:
+    cert-manager.io/issuer: letsencrypt-production
     external-dns.alpha.kubernetes.io/target: &hostname gateway-ext.noirprime.com
 spec:
   gatewayClassName: envoy-gateway
@@ -32,6 +33,6 @@ spec:
         namespaces:
           from: All
       tls:
+        mode: Terminate
         certificateRefs:
-          - kind: Secret
-            name: noirprime-com-tls
+          - name: noirprime-com-tls

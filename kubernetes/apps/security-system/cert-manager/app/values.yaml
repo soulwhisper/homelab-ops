@@ -24,3 +24,8 @@ extraEnv:
       configMapKeyRef:
         name: http-proxy
         key: NO_PROXY
+# gateway-api support
+config:
+  apiVersion: "controller.config.cert-manager.io/v1alpha1"
+  kind: "ControllerConfiguration"
+  enableGatewayAPI: true
