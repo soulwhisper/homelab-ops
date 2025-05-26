@@ -19,4 +19,3 @@
 # Deployment Notes
 
 - [Memo](./deployment/memo.md)
-- [部署指南](./deployment/guide-zh.md)

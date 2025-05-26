@@ -5,7 +5,6 @@ kind: Kustomization
 namespace: gitops-system
 components:
   - ../../components/common
-  - ../../components/sops
 resources:
   - ./actions-runner-controller/ks.yaml
   - ./flux-operator/ks.yaml

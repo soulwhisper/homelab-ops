@@ -1,0 +1,103 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/kustomization
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  # until helm release
+  # renovate: depName=cloudnative-pg/plugin-barman-cloud datasource=github-releases
+  - https://github.com/cloudnative-pg/plugin-barman-cloud/releases/download/v0.4.0/manifest.yaml
+
+patches:
+  - target:
+      kind: ServiceAccount
+      name: plugin-barman-cloud
+    patch: |-
+      - op: replace
+        path: /metadata/namespace
+        value: database-system
+
+  - target:
+      kind: Role
+      name: leader-election-role
+    patch: |-
+      - op: replace
+        path: /metadata/namespace
+        value: database-system
+
+  - target:
+      kind: RoleBinding
+      name: leader-election-rolebinding
+    patch: |-
+      - op: replace
+        path: /metadata/namespace
+        value: database-system
+      - op: replace
+        path: /subjects/0/namespace
+        value: database-system
+
+  - target:
+      kind: ClusterRoleBinding
+      name: metrics-auth-rolebinding
+    patch: |-
+      - op: replace
+        path: /subjects/0/namespace
+        value: database-system
+
+  - target:
+      kind: Opaque
+      name: plugin-barman-cloud-m76km67hd7
+    patch: |-
+      - op: replace
+        path: /metadata/namespace
+        value: database-system
+
+  - target:
+      kind: Service
+      name: barman-cloud
+    patch: |-
+      - op: replace
+        path: /metadata/namespace
+        value: database-system
+
+  - target:
+      kind: Deployment
+      name: barman-cloud
+    patch: |-
+      - op: replace
+        path: /metadata/namespace
+        value: database-system
+
+  - target:
+      kind: Certificate
+      name: barman-cloud-client
+    patch: |-
+      - op: replace
+        path: /metadata/namespace
+        value: database-system
+      - op: replace
+        path: /spec/issuerRef/name
+        value: cloudnative-issuer
+
+  - target:
+      kind: Certificate
+      name: barman-cloud-server
+    patch: |-
+      - op: replace
+        path: /metadata/namespace
+        value: database-system
+      - op: replace
+        path: /spec/issuerRef/name
+        value: cloudnative-issuer
+
+  - target:
+      kind: Issuer
+      name: selfsigned-issuer
+    options:
+      allowNameChange: true
+    patch: |-
+      - op: replace
+        path: /metadata/namespace
+        value: database-system
+      - op: replace
+        path: /metadata/name
+        value: cloudnative-issuer

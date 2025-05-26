@@ -43,7 +43,7 @@ spec:
         type: LoadBalancer
         annotations:
           external-dns.alpha.kubernetes.io/hostname: "ingress-ext.noirprime.com"
-          lbipam.cilium.io/ips: "172.19.82.202"
+          lbipam.cilium.io/ips: "${LB_EXTERNAL}"
 
       publishService:
         enabled: true

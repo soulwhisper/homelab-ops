@@ -7,6 +7,5 @@ metadata:
 spec:
   allowFirstLastIPs: "Yes"
   blocks:
-    - cidr: "172.19.82.100/32"
-    - start: "172.19.82.201"
-      stop: "172.19.82.250"
+    - start: "${LB_POOL_START}"
+      stop: "${LB_POOL_STOP}"

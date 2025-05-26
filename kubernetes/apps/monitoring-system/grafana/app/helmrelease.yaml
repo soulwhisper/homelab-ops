@@ -62,8 +62,6 @@ spec:
       existingSecret: grafana
     envFromSecrets:
       - name: grafana
-    envFromConfigMaps:
-      - name: http-proxy
     env:
       GF_EXPLORE_ENABLED: true
       GF_SECURITY_ALLOW_EMBEDDING: true
@@ -75,6 +73,9 @@ spec:
       GF_DATABASE_HOST: postgres-rw.database-system.svc.cluster.local:5432
       GF_DATABASE_SSL_MODE: disable
       GF_DATABASE_TYPE: postgres
+      HTTP_PROXY: "${HTTP_PROXY}"
+      HTTPS_PROXY: "${HTTPS_PROXY}"
+      NO_PROXY: "${NO_PROXY}"
     envValueFrom:
       GF_DATABASE_USER:
         secretKeyRef:
@@ -86,19 +87,10 @@ spec:
           key: password
 
     downloadDashboards:
-      envValueFrom:
-        HTTP_PROXY:
-          configMapKeyRef:
-            name: http-proxy
-            key: HTTP_PROXY
-        HTTPS_PROXY:
-          configMapKeyRef:
-            name: http-proxy
-            key: HTTPS_PROXY
-        NO_PROXY:
-          configMapKeyRef:
-            name: http-proxy
-            key: NO_PROXY
+      env:
+        HTTP_PROXY: "${HTTP_PROXY}"
+        HTTPS_PROXY: "${HTTPS_PROXY}"
+        NO_PROXY: "${NO_PROXY}"
 
     grafana.ini:
       news:

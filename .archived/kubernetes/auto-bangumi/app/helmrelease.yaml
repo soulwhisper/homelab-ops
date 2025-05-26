@@ -36,10 +36,10 @@ spec:
               repository: ghcr.io/estrellaxd/auto_bangumi
               tag: 3.1.18
             env:
-              TZ: Asia/Shanghai
-            envFrom:
-              - configMapRef:
-                  name: http-proxy
+              TZ: "${TIMEZONE}"
+              HTTP_PROXY: "${HTTP_PROXY}"
+              HTTPS_PROXY: "${HTTPS_PROXY}"
+              NO_PROXY: "${NO_PROXY}"
             securityContext:
               allowPrivilegeEscalation: false
               capabilities:

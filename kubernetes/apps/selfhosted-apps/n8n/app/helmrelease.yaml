@@ -25,7 +25,12 @@ spec:
 
   values:
     defaultPodOptions:
-      hostUsers: false
+      securityContext:
+        # node usr specified
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        fsGroupChangePolicy: "OnRootMismatch"
 
     controllers:
       n8n:

@@ -1,0 +1,78 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/kustomize.toolkit.fluxcd.io/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: flux-repositories
+  namespace: gitops-system
+spec:
+  targetNamespace: gitops-system
+  interval: 30m
+  path: ./kubernetes/flux/repositories
+  prune: true
+  wait: false
+  sourceRef:
+    kind: GitRepository
+    name: gitops-system
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/kustomize.toolkit.fluxcd.io/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: flux-vars
+  namespace: gitops-system
+spec:
+  targetNamespace: gitops-system
+  interval: 30m
+  path: ./kubernetes/flux/vars
+  prune: true
+  wait: false
+  sourceRef:
+    kind: GitRepository
+    name: gitops-system
+  decryption:
+    provider: sops
+    secretRef:
+      name: sops-age
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/kustomize.toolkit.fluxcd.io/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: cluster-apps
+  namespace: gitops-system
+spec:
+  interval: 10m
+  path: ./kubernetes/apps
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: gitops-system
+  dependsOn:
+    - name: flux-repositories
+    - name: flux-vars
+  postBuild:
+    substituteFrom:
+      - kind: ConfigMap
+        name: cluster-settings
+      - kind: Secret
+        name: cluster-secrets
+  patches:
+    # add envsubst to Kustomizations with given label
+    - patch: |-
+        apiVersion: kustomize.toolkit.fluxcd.io/v1
+        kind: Kustomization
+        metadata:
+          name: not-used
+        spec:
+          postBuild:
+            substituteFrom:
+              - kind: ConfigMap
+                name: cluster-settings
+              - kind: Secret
+                name: cluster-secrets
+      target:
+        # substitute is default condition unless 'substitution.flux.home.arpa/disabled: "true"' is present
+        group: kustomize.toolkit.fluxcd.io
+        kind: Kustomization
+        labelSelector: substitution.flux.home.arpa/disabled notin (true)

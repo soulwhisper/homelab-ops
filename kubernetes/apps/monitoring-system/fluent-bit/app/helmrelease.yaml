@@ -68,7 +68,7 @@ spec:
         [FILTER]
           name modify
           match kubernetes.*
-          add source home-cluster
+          add source homelab
 
         [FILTER]
           name nest

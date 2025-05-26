@@ -3,19 +3,20 @@
 apiVersion: gateway.networking.k8s.io/v1
 kind: Gateway
 metadata:
-  name: external
+  name: internal
   annotations:
-    external-dns.alpha.kubernetes.io/target: &hostname gateway-ext.noirprime.com
+    cert-manager.io/issuer: letsencrypt-production
+    external-dns.alpha.kubernetes.io/target: &hostname gateway-int.noirprime.com
 spec:
   gatewayClassName: envoy-gateway
   infrastructure:
     annotations:
       external-dns.alpha.kubernetes.io/hostname: *hostname
-      lbipam.cilium.io/ips: 172.19.82.202
+      lbipam.cilium.io/ips: "${LB_INTERNAL}"
     parametersRef:
       group: gateway.envoyproxy.io
       kind: EnvoyProxy
-      name: external-proxy-config
+      name: internal-proxy-config
   listeners:
     - name: http
       protocol: HTTP
@@ -23,7 +24,7 @@ spec:
       hostname: "*.noirprime.com"
       allowedRoutes:
         namespaces:
-          from: Same
+          from: All
     - name: https
       protocol: HTTPS
       port: 443
@@ -32,6 +33,6 @@ spec:
         namespaces:
           from: All
       tls:
+        mode: Terminate
         certificateRefs:
-          - kind: Secret
-            name: noirprime-com-tls
+          - name: noirprime-com-tls

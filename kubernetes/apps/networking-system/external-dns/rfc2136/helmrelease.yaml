@@ -32,7 +32,7 @@ spec:
       - noirprime.com
     env:
       - name: EXTERNAL_DNS_RFC2136_HOST
-        value: "172.19.82.1"
+        value: "${DNS_HOST}"
       - name: EXTERNAL_DNS_RFC2136_PORT
         value: "53"
       - name: EXTERNAL_DNS_RFC2136_ZONE
