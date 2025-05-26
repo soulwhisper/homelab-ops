@@ -33,13 +33,9 @@ instance:
               spec:
                 containers:
                   - name: manager
-                    env:
-                      - name: HTTP_PROXY
-                        value: "${HTTP_PROXY}"
-                      - name: HTTPS_PROXY
-                        value: "${HTTPS_PROXY}"
-                      - name: NO_PROXY
-                        value: "${NO_PROXY}"
+                    envFrom:
+                      - configMapRef:
+                          name: cluster-settings
         target:
           kind: Deployment
           labelSelector: app.kubernetes.io/part-of=flux
