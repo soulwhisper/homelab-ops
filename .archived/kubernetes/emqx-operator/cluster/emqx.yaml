@@ -43,7 +43,7 @@ spec:
             storage: 100Mi
         accessModes:
           - ReadWriteOnce
-      replicas: 3
+      replicas: 2
       envFrom:
         - secretRef:
             name: emqx

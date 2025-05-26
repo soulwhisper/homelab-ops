@@ -40,7 +40,7 @@ spec:
       metadata:
         labels:
           app.kubernetes.io/name: crunchy-postgres
-      replicas: &replica 3
+      replicas: &replica 2
       dataVolumeClaimSpec:
         storageClassName: ceph-block
         accessModes:
