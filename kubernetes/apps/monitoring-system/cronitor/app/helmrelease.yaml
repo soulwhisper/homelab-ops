@@ -51,3 +51,19 @@ spec:
           - "ALL"
       seccompProfile:
         type: RuntimeDefault
+
+postRenderers:
+  - kustomize:
+      patchesStrategicMerge:
+        - apiVersion: apps/v1
+          kind: Deployment
+          metadata:
+            name: cronitor
+          spec:
+            template:
+              spec:
+                containers:
+                  - name: cronitor-kubernetes
+                    envfrom:
+                      - configMapRef:
+                          name: http-proxy
