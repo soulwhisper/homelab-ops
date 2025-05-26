@@ -15,7 +15,6 @@ kubernetesVersion: v1.33.1
 
 additionalApiServerCertSans: &sans
   - k8s.homelab.internal
-  - &talosControlplaneVip 172.19.82.100
   - 127.0.0.1
 additionalMachineCertSans: *sans
 
@@ -42,8 +41,6 @@ nodes:
         routes: &gateway
           - network: 0.0.0.0/0
             gateway: 172.19.82.1
-        vip:
-          ip: *talosControlplaneVip
 
   - hostname: exarch-02.homelab.internal
     ipAddress: 172.19.82.102
@@ -58,8 +55,6 @@ nodes:
         addresses:
           - 172.19.82.102/24
         routes: *gateway
-        vip:
-          ip: *talosControlplaneVip
 
   - hostname: exarch-03.homelab.internal
     ipAddress: 172.19.82.103
@@ -74,8 +69,6 @@ nodes:
         addresses:
           - 172.19.82.103/24
         routes: *gateway
-        vip:
-          ip: *talosControlplaneVip
 
 controlPlane:
   machineSpec:
@@ -193,10 +186,6 @@ patches:
     machine:
       network:
         disableSearchDomain: true
-        extraHostEntries:
-          - ip: 172.19.82.100
-            aliases:
-              - k8s.homelab.internal
         nameservers:
           - 172.19.82.10
 

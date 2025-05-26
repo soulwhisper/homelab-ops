@@ -6,3 +6,5 @@ resources:
   - ./helmrepository.yaml
   - ./helmrelease.yaml
   - ./externalsecret.yaml
+  # until helm release, v0.4.0, rename ns, change 'selfsigned-issuer' to 'cloudnative-issuer'
+  - ./plugin-barman-cloud.yaml
