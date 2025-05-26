@@ -6,3 +6,21 @@ resources:
   - ./helmrepository.yaml
   - ./helmrelease.yaml
   - ./externalsecret.yaml
+
+patches:
+  - target:
+      kind: Deployment
+      name: cronitor
+    patch: |-
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: cronitor
+      spec:
+        template:
+          spec:
+            containers:
+              - name: cronitor-kubernetes
+                envFrom:
+                  - configMapRef:
+                      name: http-proxy

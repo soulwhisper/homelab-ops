@@ -8,87 +8,96 @@ resources:
   - https://github.com/cloudnative-pg/plugin-barman-cloud/releases/download/v0.4.0/manifest.yaml
 
 patches:
-  - patch: |-
-      - op: replace
-        path: /metadata/namespace
-        value: database-system
-    target:
+  - target:
       kind: ServiceAccount
       name: plugin-barman-cloud
-  - patch: |-
+    patch: |-
       - op: replace
         path: /metadata/namespace
         value: database-system
-    target:
+
+  - target:
       kind: Role
       name: leader-election-role
-  - patch: |-
+    patch: |-
       - op: replace
         path: /metadata/namespace
         value: database-system
-      - op: replace
-        path: /subjects/0/namespace
-        value: database-system
-    target:
+
+  - target:
       kind: RoleBinding
       name: leader-election-rolebinding
-  - patch: |-
+    patch: |-
+      - op: replace
+        path: /metadata/namespace
+        value: database-system
       - op: replace
         path: /subjects/0/namespace
         value: database-system
-    target:
+
+  - target:
       kind: ClusterRoleBinding
       name: metrics-auth-rolebinding
-  - patch: |-
+    patch: |-
       - op: replace
-        path: /metadata/namespace
+        path: /subjects/0/namespace
         value: database-system
-    target:
+
+  - target:
       kind: Opaque
       name: plugin-barman-cloud-m76km67hd7
-  - patch: |-
+    patch: |-
       - op: replace
         path: /metadata/namespace
         value: database-system
-    target:
+
+  - target:
       kind: Service
       name: barman-cloud
-  - patch: |-
+    patch: |-
       - op: replace
         path: /metadata/namespace
         value: database-system
-    target:
+
+  - target:
       kind: Deployment
       name: barman-cloud
-  - patch: |-
+    patch: |-
       - op: replace
         path: /metadata/namespace
         value: database-system
-      - op: replace
-        path: /spec/issuerRef/name
-        value: cloudnative-issuer
-    target:
+
+  - target:
       kind: Certificate
       name: barman-cloud-client
-  - patch: |-
+    patch: |-
       - op: replace
         path: /metadata/namespace
         value: database-system
       - op: replace
         path: /spec/issuerRef/name
         value: cloudnative-issuer
-    target:
+
+  - target:
       kind: Certificate
       name: barman-cloud-server
-  - patch: |-
+    patch: |-
+      - op: replace
+        path: /metadata/namespace
+        value: database-system
+      - op: replace
+        path: /spec/issuerRef/name
+        value: cloudnative-issuer
+
+  - target:
+      kind: Issuer
+      name: selfsigned-issuer
+    options:
+      allowNameChange: true
+    patch: |-
       - op: replace
         path: /metadata/namespace
         value: database-system
       - op: replace
         path: /metadata/name
         value: cloudnative-issuer
-    target:
-      kind: Issuer
-      name: selfsigned-issuer
-    options:
-      allowNameChange: true
