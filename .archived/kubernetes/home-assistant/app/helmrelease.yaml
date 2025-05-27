@@ -38,9 +38,10 @@ spec:
               tag: 2025.5.2
             env:
               VENV_FOLDER: /venv
-            envFrom:
-              - configMapRef:
-                  name: http-proxy
+              TZ: "${TIMEZONE}"
+              HTTP_PROXY: "${HTTP_PROXY}"
+              HTTPS_PROXY: "${HTTPS_PROXY}"
+              NO_PROXY: "${NO_PROXY}"
             resources:
               requests:
                 cpu: 47m

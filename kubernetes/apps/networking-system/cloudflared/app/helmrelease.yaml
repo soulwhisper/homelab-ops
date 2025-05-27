@@ -44,9 +44,11 @@ spec:
               TUNNEL_LOGLEVEL: "debug"
               TUNNEL_TRANSPORT_PROTOCOL: "auto"
               TUNNEL_METRICS: 0.0.0.0:8080
-            envFrom:
-              - secretRef:
-                  name: *name
+              TUNNEL_TOKEN:
+                valueFrom:
+                  secretKeyRef:
+                    name: *name
+                    key: CLOUDFLARE_TUNNEL_TOKEN
             probes:
               liveness: &probes
                 enabled: true

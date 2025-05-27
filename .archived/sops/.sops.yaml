@@ -4,9 +4,9 @@ keys:
   - &user_flux age1d525lccq3zpxaa75xk2xxrfmazqg2p3e0syx9mucnwh9cjd7j50qsp6ejj
 
 creation_rules:
-  - path_regex: kubernetes/.*\.sops\.ya?ml$
-    # encrypted_regex: "^(data|stringData)$"
-    encrypted_regex: "(targets)$"
+    # path_regex: kubernetes/.*\.sops\.ya?ml$
+  - path_regex: cluster-.*\.ya?ml$
+    encrypted_regex: "^(data|stringData)$"
     key_groups:
       - age:
           - *user_soulwhisper

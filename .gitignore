@@ -6,9 +6,6 @@ test/
 .DS_Store
 Thumbs.db
 
-# Sops
-.decrypted~*
-
 # Devenv
 .devenv*
 devenv.local.nix

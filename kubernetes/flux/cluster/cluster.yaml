@@ -28,9 +28,22 @@ spec:
   sourceRef:
     kind: GitRepository
     name: gitops-system
-  decryption:
-    provider: sops
-    secretRef:
-      name: sops-age
   dependsOn:
     - name: flux-repositories
+  patches:
+    # add envsubst to Kustomizations with given label
+    - patch: |-
+        apiVersion: kustomize.toolkit.fluxcd.io/v1
+        kind: Kustomization
+        metadata:
+          name: not-used
+        spec:
+          postBuild:
+            substituteFrom:
+              - kind: ConfigMap
+                name: cluster-settings
+      target:
+        # substitute is default condition unless 'substitution.flux.home.arpa/disabled: "true"' is present
+        group: kustomize.toolkit.fluxcd.io
+        kind: Kustomization
+        labelSelector: substitution.flux.home.arpa/disabled notin (true)

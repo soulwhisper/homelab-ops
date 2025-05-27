@@ -8,7 +8,6 @@
 > taskfiles
 
 - postgres
-- sops
 
 > components
 
@@ -62,10 +61,6 @@
 
 - apps:openebs
 - apps:rook-ceph(fs & s3)
-
-> scripts
-
-- minio-bucket-init
 
 ## Reasons
 

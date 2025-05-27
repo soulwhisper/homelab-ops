@@ -25,20 +25,11 @@ spec:
   values:
     extraEnv:
       - name: HTTP_PROXY
-        valueFrom:
-          configMapKeyRef:
-            name: http-proxy
-            key: HTTP_PROXY
+        value: "${HTTP_PROXY}"
       - name: HTTPS_PROXY
-        valueFrom:
-          configMapKeyRef:
-            name: http-proxy
-            key: HTTPS_PROXY
+        value: "${HTTPS_PROXY}"
       - name: NO_PROXY
-        valueFrom:
-          configMapKeyRef:
-            name: http-proxy
-            key: NO_PROXY
+        value: "${NO_PROXY}"
     install:
       clusterLabels:
         app.kubernetes.io/name: pgo

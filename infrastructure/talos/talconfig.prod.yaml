@@ -4,9 +4,9 @@ clusterName: &clusterName main
 endpoint: "https://k8s.homelab.internal:6443"
 
 # enabled features:
-# secureboot,nut; bond,disk-encryption;
+# secureboot,nut,vip; bond,disk-encryption;
 # disabled features:
-# vip; cni,coredns,forwardKubeDNSToHost,kube-proxy;
+# cni,coredns,forwardKubeDNSToHost,kube-proxy;
 
 # renovate: depName=ghcr.io/siderolabs/installer datasource=docker
 talosVersion: v1.10.2
@@ -17,7 +17,6 @@ additionalApiServerCertSans: &sans
   - k8s.homelab.internal
   - &talosControlplaneVip 10.10.0.100
   - 127.0.0.1
-additionalMachineCertSans: *sans
 
 cniConfig:
   name: none
@@ -49,6 +48,8 @@ nodes:
         routes: &gateway
           - network: 0.0.0.0/0
             gateway: 10.10.0.1
+        vip:
+          ip: *talosControlplaneVip
 
   - hostname: exarch-02.homelab.internal
     ipAddress: 10.10.0.102
@@ -64,6 +65,8 @@ nodes:
         addresses:
           - 10.10.0.102/24
         routes: *gateway
+        vip:
+          ip: *talosControlplaneVip
 
   - hostname: exarch-03.homelab.internal
     ipAddress: 10.10.0.103
@@ -79,8 +82,11 @@ nodes:
         addresses:
           - 10.10.0.103/24
         routes: *gateway
+        vip:
+          ip: *talosControlplaneVip
 
 controlPlane:
+  certSANs: *sans
   machineSpec:
     mode: metal
     arch: amd64

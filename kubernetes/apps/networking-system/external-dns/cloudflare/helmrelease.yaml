@@ -26,11 +26,21 @@ spec:
     fullnameOverride: *name
     domainFilters:
       - noirprime.com
+    env:
+      - name: CF_API_TOKEN
+        valueFrom:
+          secretKeyRef:
+            name: externaldns-cloudflare
+            key: CF_API_TOKEN
+      - name: HTTP_PROXY
+        value: "${HTTP_PROXY}"
+      - name: HTTPS_PROXY
+        value: "${HTTPS_PROXY}"
+      - name: NO_PROXY
+        value: "${NO_PROXY}"
     envFrom:
       - secretRef:
           name: externaldns-cloudflare
-      - configMapRef:
-          name: http-proxy
     extraArgs:
       - --cloudflare-dns-records-per-page=1000
       - --cloudflare-proxied

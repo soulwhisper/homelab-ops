@@ -58,6 +58,6 @@ spec:
     peers:
     - name: "peer-65510"
       peerASN: 65510
-      peerAddress: 172.19.82.2
+      peerAddress: "${BGP_PEER}"
       peerConfigRef:
         name: "cilium-bgp-peer-config"

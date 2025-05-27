@@ -21,7 +21,7 @@ spec:
     metadata:
       annotations:
         external-dns.alpha.kubernetes.io/hostname: "postgres.noirprime.com"
-        lbipam.cilium.io/ips: "172.19.82.203"
+        lbipam.cilium.io/ips: "${LB_POSTGRES}"
 
   patroni: # turn on sync writes to at least 1 other replica
     dynamicConfiguration:
@@ -40,7 +40,7 @@ spec:
       metadata:
         labels:
           app.kubernetes.io/name: crunchy-postgres
-      replicas: &replica 3
+      replicas: &replica 2
       dataVolumeClaimSpec:
         storageClassName: ceph-block
         accessModes:
@@ -121,7 +121,7 @@ spec:
         # - name: repo2 # R2
         #   s3: &r2
         #     bucket: "postgres"
-        #     endpoint: "${CF_ACCOUNT_ID}.r2.cloudflarestorage.com"
+        #     endpoint: "${CLOUDFLARE_ACCOUNT_ID}.r2.cloudflarestorage.com"
         #     region: "us-east-1"
         #   schedules:
         #     full: "0 2 * * 0" # Sunday at 02:00

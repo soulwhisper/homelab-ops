@@ -1,0 +1,24 @@
+---
+apiVersion: barmancloud.cnpg.io/v1
+kind: ObjectStore
+metadata:
+  name: minio-store
+spec:
+  configuration:
+    destinationPath: s3://postgres/
+    endpointURL: http://s3.homelab.internal:9000
+    retentionPolicy: "30d"
+    s3Credentials:
+      accessKeyId:
+        name: cloudnative-pg
+        key: aws-access-key-id
+      secretAccessKey:
+        name: cloudnative-pg
+        key: aws-secret-access-key
+    wal:
+      compression: snappy
+      maxParallel: 8
+    data:
+      compression: snappy
+      additionalCommandArgs:
+        - "--min-chunk-size=5MB"

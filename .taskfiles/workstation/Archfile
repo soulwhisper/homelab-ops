@@ -12,8 +12,9 @@ kubeconform
 kubectl-bin
 k9s
 minijinja-cli-bin
-sops
+minio-client
 stern-bin
 talhelper-bin
 talosctl
+terraform
 uv

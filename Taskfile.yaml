@@ -11,6 +11,7 @@ includes:
   bootstrap: .taskfiles/bootstrap/Taskfile.yaml
   flux: .taskfiles/flux/Taskfile.yaml
   k8s: .taskfiles/k8s/Taskfile.yaml
+  reset: .taskfiles/reset/Taskfile.yaml
   talos: .taskfiles/talos/Taskfile.yaml
   volsync: .taskfiles/volsync/Taskfile.yaml
 
