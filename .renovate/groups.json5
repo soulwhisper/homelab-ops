@@ -76,5 +76,14 @@
         commitMessageTopic: "{{{groupName}}} group",
       },
     },
+    {
+      description: "Victoria-Metrics Group",
+      groupName: "Victoria-Metrics",
+      matchPackageNames: ["/victoriametrics/"],
+      matchDatasources: ["docker", "github-releases"],
+      group: {
+        commitMessageTopic: "{{{groupName}}} group",
+      },
+    },
   ],
 }

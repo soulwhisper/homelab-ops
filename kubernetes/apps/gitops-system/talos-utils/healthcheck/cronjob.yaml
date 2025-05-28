@@ -25,7 +25,7 @@ spec:
               image: ghcr.io/siderolabs/talosctl:latest
               args:
                 - "health"
-                - "--nodes=172.19.82.100" # use vip not domain
+                - "--nodes=${KUBE_VIP}" # without dns
               imagePullPolicy: IfNotPresent
               securityContext:
                 runAsNonRoot: true

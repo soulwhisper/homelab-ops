@@ -43,7 +43,7 @@ spec:
             storage: 100Mi
         accessModes:
           - ReadWriteOnce
-      replicas: 3
+      replicas: 2
       envFrom:
         - secretRef:
             name: emqx
@@ -64,6 +64,6 @@ spec:
     metadata:
       annotations:
         external-dns.alpha.kubernetes.io/hostname: "mqtt.noirprime.com" # port:1883
-        lbipam.cilium.io/ips: "172.19.82.205"
+        lbipam.cilium.io/ips: "${LB_MQTT}"
     spec:
       type: LoadBalancer

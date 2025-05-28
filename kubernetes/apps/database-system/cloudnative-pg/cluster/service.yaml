@@ -5,7 +5,7 @@ metadata:
   name: postgres
   annotations:
     external-dns.alpha.kubernetes.io/hostname: "postgres.noirprime.com"
-    lbipam.cilium.io/ips: "172.19.82.203"
+    lbipam.cilium.io/ips: "${LB_POSTGRES}"
 spec:
   type: LoadBalancer
   selector:
@@ -23,7 +23,7 @@ metadata:
   name: vector
   annotations:
     external-dns.alpha.kubernetes.io/hostname: "vector.noirprime.com"
-    lbipam.cilium.io/ips: "172.19.82.204"
+    lbipam.cilium.io/ips: "${LB_VECTOR}"
 spec:
   type: LoadBalancer
   selector:

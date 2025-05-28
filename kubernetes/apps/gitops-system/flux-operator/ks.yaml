@@ -41,7 +41,5 @@ spec:
     namespace: gitops-system
   wait: false
   dependsOn:
-    - name: onepassword-store
-      namespace: security-system
     - name: flux-operator
       namespace: gitops-system

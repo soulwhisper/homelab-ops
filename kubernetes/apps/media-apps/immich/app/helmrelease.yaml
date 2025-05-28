@@ -39,7 +39,7 @@ spec:
           reloader.stakater.com/auto: "true"
 
         initContainers:
-          01-init-db:
+          init-db:
             image:
               repository: ghcr.io/home-operations/postgres-init
               tag: "17"
@@ -51,7 +51,7 @@ spec:
           app:
             image:
               repository: ghcr.io/immich-app/immich-server
-              tag: v1.133.0@sha256:4d667c5fd6ffac0395c429fc8a335c607272587643f29fb2ddd9bfe16f1f874e
+              tag: v1.134.0@sha256:073fc04c7e3d18ace466c20763809cf17aa55765ed610f12971b392a6a80b50c
             env:
               DB_USERNAME:
                 valueFrom:

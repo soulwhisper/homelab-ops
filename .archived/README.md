@@ -8,7 +8,6 @@
 > taskfiles
 
 - postgres
-- sops
 
 > components
 
@@ -50,6 +49,8 @@
 
 > kubernetes:networking
 
+- apps:externaldns-rfc2136
+
 > kubernetes:security
 
 - apps:authelia
@@ -62,10 +63,6 @@
 
 - apps:openebs
 - apps:rook-ceph(fs & s3)
-
-> scripts
-
-- minio-bucket-init
 
 ## Reasons
 
