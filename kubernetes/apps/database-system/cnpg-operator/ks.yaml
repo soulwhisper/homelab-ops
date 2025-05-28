@@ -3,7 +3,7 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &appname cloudnative-pg
+  name: &appname cnpg-operator
   namespace: &namespace database-system
 spec:
   targetNamespace: *namespace
@@ -12,7 +12,7 @@ spec:
       app.kubernetes.io/name: *appname
   interval: 30m
   timeout: 5m
-  path: ./kubernetes/apps/database-system/cloudnative-pg/app
+  path: ./kubernetes/apps/database-system/cnpg-operator/app
   prune: true
   sourceRef:
     kind: GitRepository
@@ -27,7 +27,7 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &appname cloudnative-barman
+  name: &appname cnpg-barman
   namespace: &namespace database-system
 spec:
   targetNamespace: *namespace
@@ -36,7 +36,7 @@ spec:
       app.kubernetes.io/name: *appname
   interval: 30m
   timeout: 5m
-  path: ./kubernetes/apps/database-system/cloudnative-pg/barman
+  path: ./kubernetes/apps/database-system/cnpg-operator/barman
   prune: true
   sourceRef:
     kind: GitRepository
@@ -44,14 +44,14 @@ spec:
     namespace: gitops-system
   wait: true
   dependsOn:
-    - name: cloudnative-pg
+    - name: cnpg-operator
       namespace: database-system
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/kustomize.toolkit.fluxcd.io/kustomization_v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &appname cloudnative-pg-cluster
+  name: &appname cnpg-cluster
   namespace: &namespace database-system
 spec:
   targetNamespace: *namespace
@@ -60,7 +60,7 @@ spec:
       app.kubernetes.io/name: *appname
   interval: 30m
   timeout: 5m
-  path: ./kubernetes/apps/database-system/cloudnative-pg/cluster
+  path: ./kubernetes/apps/database-system/cnpg-operator/cluster
   prune: true
   sourceRef:
     kind: GitRepository
@@ -68,7 +68,7 @@ spec:
     namespace: gitops-system
   wait: true
   dependsOn:
-    - name: cloudnative-barman
+    - name: cnpg-barman
       namespace: database-system
     - name: rook-ceph-cluster
       namespace: storage-system

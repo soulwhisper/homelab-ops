@@ -101,6 +101,7 @@ kubectl resource-capacity -p -c -u -n database-system
 - only `proxmox` support secureboot and vip;
 - virtual disks, will make rook-ceph-osd-prepare `0/1 completed` forever;
 - virtual nic not support BIGTCP and XDP;
+- dragonfly needs `avx`, cpu should be `host` model;
 
 ## Multi-Cluster plan
 

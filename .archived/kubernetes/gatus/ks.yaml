@@ -20,7 +20,7 @@ spec:
     namespace: gitops-system
   wait: false
   dependsOn:
-    - name: cloudnative-pg-cluster
+    - name: cnpg-cluster
       namespace: database-system
     - name: onepassword-store
       namespace: security-system

@@ -26,7 +26,7 @@
 apiVersion: external-secrets.io/v1
 kind: ExternalSecret
 metadata:
-  name: cloudnative-pg
+  name: cnpg
 spec:
   refreshInterval: 30m
   secretStoreRef:
