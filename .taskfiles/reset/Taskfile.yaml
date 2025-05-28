@@ -31,17 +31,6 @@ tasks:
       - mc alias set minio http://{{.MINIO_HOST}} {{.MINIO_ADMIN_USER}} {{.MINIO_ADMIN_PASS}}
       - |
         IFS=$'\n'
-        BUCKET_LIST=($(op item get {{.MINIO_ITEM}} --format json | \
-            jq -r '.fields[] | select(.label | test("_secret_key$")) | .label | sub("_secret_key$"; "")'))
-        unset IFS
-        echo "removing buckets and policies ..."
-        for ITEM in "${BUCKET_LIST[@]}"; do
-          mc rb --force minio/"${ITEM}"
-          mc admin policy rm minio "${ITEM}-rw"
-        done
-        echo "completed."
-      - |
-        IFS=$'\n'
         KEY_LIST=($(op item get {{.MINIO_ITEM}} --format json --reveal | \
             jq -r '.fields[] | select(.label | test("_access_key$")) | .value'))
         unset IFS
@@ -49,5 +38,16 @@ tasks:
         for ITEM in "${KEY_LIST[@]}"; do
           mc admin accesskey rm minio "${ITEM}" || true
           mc admin user rm minio "${ITEM}" || true
+        done
+        echo "completed."
+      - |
+        IFS=$'\n'
+        BUCKET_LIST=($(op item get {{.MINIO_ITEM}} --format json | \
+            jq -r '.fields[] | select(.label | test("_secret_key$")) | .label | sub("_secret_key$"; "")'))
+        unset IFS
+        echo "removing buckets and policies ..."
+        for ITEM in "${BUCKET_LIST[@]}"; do
+          mc rb --force minio/"${ITEM}"
+          mc admin policy rm minio "${ITEM}-rw"
         done
         echo "completed."
