@@ -33,9 +33,8 @@
 
 ### Proxy
 
-- `auto-bangumi`, `cert-manager`, `coroot-operator`, `externaldns-cloudflare`, `flux-operator`, `grafana`, `karakeep`, `onepassword-sync`, `pgo` using `HTTPS GET`, should set `https_proxy`;
+- `HTTPS GET` / `HTTPS POST`, should set `https_proxy`;
 -  no_proxy = `.cluster.local.,.cluster.local,.svc,localhost,127.0.0.1,{pod-subnet},{svc-subnet}`;
-- talos env.proxy for container pulling;
 
 ### Bootstrap
 
