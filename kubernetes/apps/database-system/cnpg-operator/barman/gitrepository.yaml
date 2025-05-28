@@ -1,0 +1,17 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/source.toolkit.fluxcd.io/gitrepository_v1.json
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: GitRepository
+metadata:
+  name: plugin-barman-cloud
+spec:
+  interval: 30m
+  url: https://github.com/cloudnative-pg/plugin-barman-cloud
+  ref:
+    # renovate: depName=cloudnative-pg/plugin-barman-cloud datasource=github-releases
+    tag: v0.4.0
+  ignore: |
+    # exclude
+    /*
+    # include
+    !manifest.yaml
