@@ -9,10 +9,11 @@ metadata:
     k8s.cronitor.io/cronitor-id: "Talos"
     k8s.cronitor.io/cronitor-group: "Homelab"
     k8s.cronitor.io/tags: "K8S"
-    k8s.cronitor.io/cronitor-grace-seconds: "1800" # tolerate 3 fails
     k8s.cronitor.io/cronitor-notify: "Pushover"
 spec:
   schedule: "*/10 * * * *"
+  backoffLimit: 5 # tolerate 5min
+  activeDeadlineSeconds: 60
   successfulJobsHistoryLimit: 0
   failedJobsHistoryLimit: 1
   jobTemplate:
