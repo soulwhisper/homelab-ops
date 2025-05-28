@@ -38,6 +38,16 @@ spec:
         resources:
           requests:
             storage: 10Gi
+    proxy:
+      http:
+        url: "${HTTP_PROXY}"
+      https:
+        url: "${HTTPS_PROXY}"
+      noProxy:
+        - noirprime.com
+        - homelab.internal
+        - cluster.local
+        - localhost
     controllerServiceAccount:
       name: actions-runner-controller
       namespace: gitops-system
@@ -55,21 +65,6 @@ spec:
                 valueFrom:
                   fieldRef:
                     fieldPath: status.hostIP
-              - name: HTTP_PROXY
-                valueFrom:
-                  configMapKeyRef:
-                    name: cluster-settings
-                    key: HTTP_PROXY
-              - name: HTTPS_PROXY
-                valueFrom:
-                  configMapKeyRef:
-                    name: cluster-settings
-                    key: HTTPS_PROXY
-              - name: NO_PROXY
-                valueFrom:
-                  configMapKeyRef:
-                    name: cluster-settings
-                    key: NO_PROXY
             volumeMounts:
               - mountPath: /var/run/secrets/talos.dev
                 name: talos
