@@ -3,7 +3,7 @@
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: GitRepository
 metadata:
-  name: plugin-barman-cloud
+  name: plugin-barman-cloud-crd
 spec:
   interval: 30m
   url: https://github.com/cloudnative-pg/plugin-barman-cloud
@@ -14,4 +14,4 @@ spec:
     # exclude
     /*
     # include
-    !manifest.yaml
+    !config/crd/bases/barmancloud.cnpg.io_objectstores.yaml

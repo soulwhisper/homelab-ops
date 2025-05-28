@@ -40,7 +40,8 @@ spec:
   prune: true
   sourceRef:
     kind: GitRepository
-    name: plugin-barman-cloud
+    name: gitops-system
+    namespace: gitops-system
   wait: true
   dependsOn:
     - name: cnpg-operator
