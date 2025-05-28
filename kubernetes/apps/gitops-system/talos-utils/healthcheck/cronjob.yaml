@@ -13,6 +13,8 @@ metadata:
     k8s.cronitor.io/cronitor-notify: "Pushover"
 spec:
   schedule: "*/10 * * * *"
+  successfulJobsHistoryLimit: 0
+  failedJobsHistoryLimit: 1
   jobTemplate:
     spec:
       template:
@@ -25,7 +27,7 @@ spec:
               image: ghcr.io/siderolabs/talosctl:latest
               args:
                 - "health"
-                - "--nodes=${KUBE_VIP}" # without dns
+                - "--nodes=${KUBE_VIP}" # work in cluster, without dns
               imagePullPolicy: IfNotPresent
               securityContext:
                 runAsNonRoot: true

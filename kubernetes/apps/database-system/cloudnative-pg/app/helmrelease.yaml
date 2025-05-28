@@ -25,9 +25,10 @@ spec:
     keepHistory: false
 
   values:
+    fullnameOverride: cnpg-operator
     crds:
       create: true
-    replicaCount: 2
+    replicaCount: 1
     monitoring:
       podMonitorEnabled: true
       grafanaDashboard:

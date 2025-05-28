@@ -6,6 +6,8 @@ metadata:
   name: talos-backup
 spec:
   schedule: "0 2 * * *"
+  successfulJobsHistoryLimit: 0
+  failedJobsHistoryLimit: 1
   jobTemplate:
     spec:
       template:

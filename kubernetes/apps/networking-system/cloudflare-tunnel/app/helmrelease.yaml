@@ -34,7 +34,8 @@ spec:
 
     controllers:
       cloudflare-tunnel:
-        replicas: 2
+        # 1 primary + 1 replica
+        replicas: 1
         strategy: RollingUpdate
         annotations:
           reloader.stakater.com/auto: "true"

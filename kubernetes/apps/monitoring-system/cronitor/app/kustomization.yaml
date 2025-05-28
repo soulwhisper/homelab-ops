@@ -21,6 +21,19 @@ patches:
           spec:
             containers:
               - name: cronitor-kubernetes
-                envFrom:
-                  - configMapRef:
-                      name: http-proxy
+                env:
+                  - name: HTTP_PROXY
+                    valueFrom:
+                      configMapKeyRef:
+                        name: cluster-settings
+                        key: HTTP_PROXY
+                  - name: HTTPS_PROXY
+                    valueFrom:
+                      configMapKeyRef:
+                        name: cluster-settings
+                        key: HTTPS_PROXY
+                  - name: NO_PROXY
+                    valueFrom:
+                      configMapKeyRef:
+                        name: cluster-settings
+                        key: NO_PROXY
