@@ -163,7 +163,7 @@ spec:
     # route
     route:
       main:
-        hostnames: ["{{ .Release.Name }}.noirprime.com"]
+        hostnames: ["grafana.noirprime.com"]
         parentRefs:
           - name: internal
             namespace: networking-system

@@ -141,9 +141,7 @@ spec:
 
     route:
       app:
-        hostnames:
-          - zigbee.noirprime.com
-          - "{{ .Release.Name }}.noirprime.com"
+        hostnames: ["zigbee.noirprime.com"]
         parentRefs:
           - name: internal
             namespace: networking-system

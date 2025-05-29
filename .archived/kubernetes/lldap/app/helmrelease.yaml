@@ -92,7 +92,7 @@ spec:
 
     route:
       app:
-        hostnames: ["{{ .Release.Name }}.noirprime.com"]
+        hostnames: ["lldap.noirprime.com"]
         parentRefs:
           - name: internal
             namespace: networking-system

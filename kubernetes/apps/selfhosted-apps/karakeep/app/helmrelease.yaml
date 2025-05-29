@@ -125,9 +125,7 @@ spec:
 
     route:
       app:
-        hostnames:
-          - bookmark.noirprime.com
-          - "{{ .Release.Name }}.noirprime.com"
+        hostnames: ["bookmark.noirprime.com"]
         parentRefs:
           - name: internal
             namespace: networking-system

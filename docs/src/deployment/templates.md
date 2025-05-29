@@ -1,8 +1,45 @@
 # Templates
 
 - This is a template for most self-hosted apps without its own charts
+- with substitute support, non-sensitive but repeative environments are set in configMap:cluster-settings;
+- sensitive environments could be set using `label: override.substitution.flux.home.arpa/enabled=true` and `substituteFrom` secrets;
 
 ```yaml
+# ks.yaml
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/kustomize.toolkit.fluxcd.io/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: &appname example-app-1
+  namespace: &namespace example-ns-1
+  labels:
+    override.substitution.flux.home.arpa/enabled: "true"
+spec:
+  targetNamespace: *namespace
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *appname
+  interval: 30m
+  timeout: 5m
+  path: "./kubernetes/apps/example-ns-1/example-app-1/app"
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: gitops-system
+    namespace: gitops-system
+  wait: false
+  dependsOn:
+    - name: example-app-2
+      namespace: example-ns-2
+  postBuild:
+    substituteFrom:
+      - kind: ConfigMap
+        name: cluster-settings
+      - kind: Secret
+        name: example-app-2
+
+# helmrelease.yaml
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/helm.toolkit.fluxcd.io/helmrelease_v2.json
 apiVersion: helm.toolkit.fluxcd.io/v2
@@ -42,13 +79,56 @@ spec:
       example-app:
         annotations:
           reloader.stakater.com/auto: "true"
+
+        initContainers:
+          init-db:
+            image:
+              repository: ghcr.io/home-operations/postgres-init
+              tag: "17"
+            envFrom:
+              - secretRef:
+                  name: example-app-initdb
+
         containers:
           app:
             image:
               repository: path/to/repo
               tag: 1.0.0
             env:
-              TZ: Asia/Shanghai
+              TZ: "${TIMEZONE}"
+              HTTP_PROXY: "${HTTP_PROXY}"
+              HTTPS_PROXY: "${HTTPS_PROXY}"
+              NO_PROXY: "${NO_PROXY}"
+              DB_USERNAME:
+                valueFrom:
+                  secretKeyRef:
+                    name: &pguser example-app-pguser
+                    key: user
+              DB_PASSWORD:
+                valueFrom:
+                  secretKeyRef:
+                    name: *pguser
+                    key: password
+              DB_DATABASE_NAME:
+                valueFrom:
+                  secretKeyRef:
+                    name: *pguser
+                    key: db
+              DB_HOSTNAME:
+                valueFrom:
+                  secretKeyRef:
+                    name: *pguser
+                    key: host
+              DB_PORT:
+                valueFrom:
+                  secretKeyRef:
+                    name: *pguser
+                    key: port
+            envFrom:
+              - configMapRef:
+                  name: *name
+              - secretRef:
+                  name: *name
             securityContext:
               allowPrivilegeEscalation: false
               capabilities:
@@ -98,7 +178,7 @@ spec:
         server: nas.homelab.internal
         path: /mnt/Arcanum/shared/media
         advancedMounts:
-          auto-bangumi:
+          example-app:
             app:
               - path: /data
                 subPath: data

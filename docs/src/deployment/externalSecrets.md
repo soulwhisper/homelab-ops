@@ -3,9 +3,9 @@
 ## 1Password
 
 - 1password compatible items: secret, document;
-- in this repo, all password use `secret` item;
+- in this repo, all passwords use `secret` item;
 - encryption_ciper => `openssl rand -base64 36`;
-- 1password-sync might need https_proxy;
+- 1password-sync need https_proxy;
 
 | remoteRef.key  | remoteRef.property | remoteRef.value       | ignored                     |
 | -------------- | ------------------ | --------------------- | --------------------------- |
@@ -26,7 +26,7 @@
 apiVersion: external-secrets.io/v1
 kind: ExternalSecret
 metadata:
-  name: cnpg
+  name: example-app
 spec:
   refreshInterval: 30m
   secretStoreRef:
@@ -37,11 +37,7 @@ spec:
       data:
         username: "{{ .admin_user }}"
         password: "{{ .admin_pass }}"
-        aws-access-key-id: "{{ .postgres_access_key }}"
-        aws-secret-access-key: "{{ .postgres_secret_key }}"
   dataFrom:
     - extract:
         key: app_user
-    - extract:
-        key: minio
 ```

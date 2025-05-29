@@ -137,9 +137,7 @@ spec:
           - port: http
     route:
       app:
-        hostnames:
-          - status.noirprime.com
-          - "{{ .Release.Name }}.noirprime.com"
+        hostnames: ["status.noirprime.com"]
         parentRefs:
           - name: external
             namespace: networking
@@ -154,7 +152,7 @@ spec:
         type: emptyDir
       config-file:
         type: configMap
-        name: gatus-configmap
+        name: *name
         globalMounts:
           - path: /config/config.yaml
             subPath: config.yaml

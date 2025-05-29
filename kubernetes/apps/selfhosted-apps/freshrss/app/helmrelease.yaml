@@ -60,9 +60,7 @@ spec:
 
     route:
       app:
-        hostnames:
-          - rss.noirprime.com
-          - "{{ .Release.Name }}.noirprime.com"
+        hostnames: ["rss.noirprime.com"]
         parentRefs:
           - name: internal
             namespace: networking-system

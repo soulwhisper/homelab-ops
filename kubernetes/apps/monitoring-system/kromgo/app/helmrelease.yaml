@@ -76,7 +76,7 @@ spec:
             port: *port
     route:
       app:
-        hostnames: ["{{ .Release.Name }}.noirprime.com"]
+        hostnames: ["kromgo.noirprime.com"]
         parentRefs:
           - name: external
             namespace: networking-system

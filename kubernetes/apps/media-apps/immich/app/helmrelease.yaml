@@ -80,7 +80,7 @@ spec:
                     key: port
             envFrom: &envFrom
               - configMapRef:
-                  name: immich-configmap
+                  name: *name
             securityContext: &securityContext
               allowPrivilegeEscalation: false
               capabilities:
@@ -127,9 +127,7 @@ spec:
 
     route:
       app:
-        hostnames:
-          - photo.noirprime.com
-          - "{{ .Release.Name }}.noirprime.com"
+        hostnames: ["photo.noirprime.com"]
         parentRefs:
           - name: external
             namespace: networking-system

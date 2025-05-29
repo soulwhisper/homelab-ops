@@ -99,9 +99,7 @@ spec:
 
     route:
       app:
-        hostnames:
-          - finance.noirprime.com
-          - "{{ .Release.Name }}.noirprime.com"
+        hostnames: ["finance.noirprime.com"]
         parentRefs:
           - name: internal
             namespace: networking-system

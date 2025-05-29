@@ -62,9 +62,7 @@ spec:
             port: &port 7892
     route:
       app:
-        hostnames:
-          - comic.noirprime.com
-          - "{{ .Release.Name }}.noirprime.com"
+        hostnames: ["comic.noirprime.com"]
         parentRefs:
           - name: internal
             namespace: networking-system

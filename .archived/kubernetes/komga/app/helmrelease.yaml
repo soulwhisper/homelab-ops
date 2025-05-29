@@ -64,9 +64,7 @@ spec:
             port: &port 25600
     route:
       app:
-        hostnames:
-          - manga.noirprime.com
-          - "{{ .Release.Name }}.noirprime.com"
+        hostnames: ["manga.noirprime.com"]
         parentRefs:
           - name: internal
             namespace: networking-system

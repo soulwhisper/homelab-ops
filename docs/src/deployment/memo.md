@@ -3,10 +3,7 @@
 - `hostLegacyRouting:true` conflict wih BIGTCP and BBR, disabled; hence `forwardKubeDNSToHost` is disabled; [ref](https://github.com/siderolabs/talos/issues/10002#issuecomment-2557069620);
 - use hardcoded securityContext instead of kyverno;
 - external nfs_v4.2 backup using `uid:gid = 2000:2000`;
-- media stored in external nas-nfs, using `documents,movie,music,tv-shows` folders;
 - test env using proxmox-vm, with secureboot enabled, subnet `172.19.82.0/24`;
-- `v1.10+` will ignore `.machine.install.extraKernelArgs` and `.machine.install.extensions` fields in talconfig;
-- cilium stays at `v1.16.6` until cloudflared mtu issue fixed, [ref](https://github.com/cilium/cilium/issues/37529);
 
 ## Infra
 
@@ -14,22 +11,16 @@
 - openebs-hostpath, deprecated due to MS-01 using 256G system disk;
 - ceph-block, for database and apps;
 - ceph-fs, deprecated, use nas-nfs for shared media;
-- ceph-s3, deprecated, use nas-nfs for volsync backup;
+- ceph-s3, deprecated, use nas-minio for volsync backup;
 - volsync nfs-backup using mutatingAdmissionPolicy;
 - onepassword as main secret store;
 - externaldns-adguard store records in `custom-adblock` field;
-- internal domains using `noirprime.com`;
-- external doamins using `noirprime.com`, powered by cloudflared;
+- internal and external domains both using `noirprime.com`, powered by cloudflared;
 
 ### Cloudflare
 
 - cloudflared-tunnel => zero-trust / networks / tunnels
 - cloudflare, dns-01, noirprime.com: user-profile =>api-tokens, ZONE:READ / DNS:EDIT
-
-### Database
-
-- postgres; app:immich,maybe;
-- dragonfly; app:immich,maybe;
 
 ### Proxy
 
@@ -39,15 +30,11 @@
 ### Bootstrap
 
 ```shell
-# op signin, then
+# op signin first
 cd homelab-ops
-eval $(op signin)
+direnv allow
 
-## dev-env method-1, or direnv
-export KUBECONFIG=$PWD/infrastructure/talos/clusterconfig/kubeconfig
-export TALOSCONFIG=$PWD/infrastructure/talos/clusterconfig/talosconfig
-## dev-env method-2
-devenv shell
+eval $(op signin)
 
 # bootstrap
 task talos:generate-clusterconfig
@@ -69,12 +56,6 @@ flux get all -A --status-selector ready=false
 kubectl -n gitops-system get fluxreport/flux -o yaml
 kubectl -n gitops-system events --for FluxInstance/flux
 kubectl -n gitops-system logs deployment/flux-operator
-
-## Node-level cloudflared debug, with v2024.12.2+
-curl -L https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64 -o /usr/bin/cloudflared
-chmod +x /usr/bin/cloudflared
-curl 172.19.82.101:2000/diag/tunnel
-cloudflared tunnel diag --metrics 172.19.82.101:2000
 
 ## update flux-webhook
 ## https://fluxcd.io/flux/guides/webhook-receivers/

@@ -82,7 +82,7 @@ spec:
 
     route:
       app:
-        hostnames: ["{{ .Release.Name }}.noirprime.com"]
+        hostnames: ["n8n.noirprime.com"]
         parentRefs:
           - name: internal
             namespace: networking-system

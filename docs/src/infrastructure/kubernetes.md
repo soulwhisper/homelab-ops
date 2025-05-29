@@ -36,7 +36,9 @@ This Git repository contains following directories.
 ├── 📁 components             # re-useable components
 └── 📁 flux                    # flux configuration
 📁 infrastructure
-└── 📁 talos                  # talos configuration
+├── 📁 router                 # router configuration
+├── 📁 talos                  # talos configuration
+└── 📁 terraform              # terrafrom modules
 ```
 
 ### Flux Workflow

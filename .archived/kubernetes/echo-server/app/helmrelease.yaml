@@ -81,7 +81,7 @@ spec:
 
     route:
       app:
-        hostnames: ["{{ .Release.Name }}.noirprime.com"]
+        hostnames: ["echo.noirprime.com"]
         parentRefs:
           - name: external
             namespace: networking-system

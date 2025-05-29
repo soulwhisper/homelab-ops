@@ -39,7 +39,7 @@ spec:
               tag: v1.2.0
             env:
               TZ: Asia/Shanghai
-              HOMEPAGE_ALLOWED_HOSTS: "{{ .Release.Name }}.noirprime.com"
+              HOMEPAGE_ALLOWED_HOSTS: "home.noirprime.com"
             envFrom:
               - secretRef:
                   name: *name
@@ -85,7 +85,7 @@ spec:
             port: &port 3000
     route:
       app:
-        hostnames: ["{{ .Release.Name }}.noirprime.com"]
+        hostnames: ["home.noirprime.com"]
         parentRefs:
           - name: internal
             namespace: networking-system

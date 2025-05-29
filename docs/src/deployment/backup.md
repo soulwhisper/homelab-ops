@@ -5,19 +5,16 @@
 
 ## S3
 
-| app               | bucket     | key-name   |
-| ----------------- | ---------- | ---------- |
-| dragonfly-operator | dragonfly   | dragonfly   |
-| crunchy-pgo       | postgres   | postgres   |
-| talos-backup      | talos      | talos      |
-| volsync           | volsync    | volsync    |
+| bucket     | key-name   | app               |
+| ---------- | ---------- | ----------------- |
+| postgres   | postgres   | cnpg-operator     |
+| talos      | talos      | talos-backup      |
+| volsync    | volsync    | volsync           |
 
 ### Minio
 
 - minio-app on truenas-scale;
-- endpoint = `s3:http://s3.homelab.internal:9000`
-- region = us-east-1
-- versioning = disabled; object-locking = disabled; quota = disabled;
+- init via terraform modules, reset via taskfile;
 
 ```json
 {

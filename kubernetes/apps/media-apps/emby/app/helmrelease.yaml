@@ -62,9 +62,7 @@ spec:
             port: &port 8096
     route:
       app:
-        hostnames:
-          - movie.noirprime.com
-          - "{{ .Release.Name }}.noirprime.com"
+        hostnames: ["movie.noirprime.com"]
         parentRefs:
           - name: internal
             namespace: networking-system

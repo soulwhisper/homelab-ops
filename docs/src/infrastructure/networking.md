@@ -9,7 +9,7 @@ While one could theoretically resolve the first two issues by hosting a Kubernet
 | Service                                   | Use                                                            | Cost          |
 | ----------------------------------------- | -------------------------------------------------------------- | ------------- |
 | [1Password](https://1password.com/)       | Secrets with [External Secrets](https://external-secrets.io/)  | ~$36/yr       |
-| [Cloudflare](https://www.cloudflare.com/) | Domain, S3 and ZeroTrust                                       | Free          |
-| [Discord](https://discord.com/)           | Private channel notify me cluster alerts                       | Free          |
+| [Cloudflare](https://www.cloudflare.com/)   | Domain, S3 and ZeroTrust                                       | Free          |
 | [GitHub](https://github.com/)             | Hosting this repository and continuous integration/deployments | Free          |
+| [Pushover](https://pushover.net/)         | Notify app                                                     | One-time $5   |
 |                                           |                                                                | Total: ~$3/mo |

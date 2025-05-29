@@ -64,9 +64,7 @@ spec:
 
     route:
       app:
-        hostnames:
-          - chat.noirprime.com
-          -  "{{ .Release.Name }}.noirprime.com"
+        hostnames: ["chat.noirprime.com"]
         parentRefs:
           - name: internal
             namespace: networking-system
