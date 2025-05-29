@@ -4,6 +4,7 @@
 - use hardcoded securityContext instead of kyverno;
 - external nfs_v4.2 backup using `uid:gid = 2000:2000`;
 - test env using proxmox-vm, with secureboot enabled, subnet `172.19.82.0/24`;
+- use DNS domain instead of `talhelper` default controlPlane IP endpoints;
 
 ## Infra
 
@@ -27,7 +28,7 @@
 - `HTTPS GET` / `HTTPS POST`, should set `https_proxy`;
 -  no_proxy = `.cluster.local.,.cluster.local,.svc,localhost,127.0.0.1,{pod-subnet},{svc-subnet}`;
 
-### Bootstrap
+## Bootstrap
 
 ```shell
 # op signin first
@@ -70,7 +71,7 @@ kubectl resource-capacity -p -c -u -n database-system
 kubectl create job --from=cronjob/talos-healthcheck talos-hc -n gitops-system
 ```
 
-## VM test issues
+### VM test issues
 
 - only `proxmox` support secureboot and vip;
 - virtual disks, will make rook-ceph-osd-prepare `0/1 completed` forever;
