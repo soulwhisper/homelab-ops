@@ -1,14 +1,4 @@
 ---
-apiVersion: v1
-kind: Secret
-metadata:
-  name: plugin-barman-cloud
-type: Opaque
-data:
-  SIDECAR_IMAGE: |
-    Z2hjci5pby9jbG91ZG5hdGl2ZS1wZy9wbHVnaW4tYmFybWFuLWNsb3VkLXNpZGVjYXItdG
-    VzdGluZzptYWlu
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -28,55 +18,53 @@ spec:
         app: barman-cloud
     spec:
       containers:
-      - args:
-        - operator
-        - --server-cert=/server/tls.crt
-        - --server-key=/server/tls.key
-        - --client-cert=/client/tls.crt
-        - --server-address=:9090
-        - --leader-elect
-        - --log-level=debug
-        env:
-        - name: SIDECAR_IMAGE
-          valueFrom:
-            secretKeyRef:
-              key: SIDECAR_IMAGE
-              name: plugin-barman-cloud
-        image: ghcr.io/cloudnative-pg/plugin-barman-cloud-testing:main
-        name: barman-cloud
-        ports:
-        - containerPort: 9090
-          protocol: TCP
-        readinessProbe:
-          initialDelaySeconds: 10
-          periodSeconds: 10
-          tcpSocket:
-            port: 9090
-        resources: {}
-        securityContext:
-          allowPrivilegeEscalation: false
-          capabilities:
-            drop:
-            - ALL
-          readOnlyRootFilesystem: true
-          runAsGroup: 10001
-          runAsUser: 10001
-          seccompProfile:
-            type: RuntimeDefault
-        volumeMounts:
-        - mountPath: /server
-          name: server
-        - mountPath: /client
-          name: client
+        - name: barman-cloud
+          image: ghcr.io/cloudnative-pg/plugin-barman-cloud:v0.4.1
+          args:
+            - operator
+            - --server-cert=/server/tls.crt
+            - --server-key=/server/tls.key
+            - --client-cert=/client/tls.crt
+            - --server-address=:9090
+            - --leader-elect
+            - --log-level=debug
+          env:
+            - name: SIDECAR_IMAGE
+              # renovate: depName=cloudnative-pg/plugin-barman-cloud datasource=github-releases
+              value: ghcr.io/cloudnative-pg/plugin-barman-cloud-sidecar:v0.4.1
+          ports:
+            - containerPort: 9090
+              protocol: TCP
+          readinessProbe:
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            tcpSocket:
+              port: 9090
+          resources: {}
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+            runAsGroup: 10001
+            runAsUser: 10001
+            seccompProfile:
+              type: RuntimeDefault
+          volumeMounts:
+            - mountPath: /server
+              name: server
+            - mountPath: /client
+              name: client
       securityContext:
         runAsNonRoot: true
         seccompProfile:
           type: RuntimeDefault
       serviceAccountName: plugin-barman-cloud
       volumes:
-      - name: server
-        secret:
-          secretName: barman-cloud-server-tls
-      - name: client
-        secret:
-          secretName: barman-cloud-client-tls
+        - name: server
+          secret:
+            secretName: barman-cloud-server-tls
+        - name: client
+          secret:
+            secretName: barman-cloud-client-tls
