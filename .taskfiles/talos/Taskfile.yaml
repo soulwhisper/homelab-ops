@@ -48,7 +48,6 @@ tasks:
         --config-file {{.TALOS_DIR}}/talconfig.{{.MODE}}.yaml
         --secret-file {{.TALOS_DIR}}/talsecret.yaml
         --out-dir {{.TALOS_DIR}}/clusterconfig
-      - talosctl --talosconfig $TALOSCONFIG config endpoint k8s.homelab.internal
       - fish -i -c 'mkdir -p ~/.talos && cp $TALOSCONFIG ~/.talos/config'
 
   apply-clusterconfig:

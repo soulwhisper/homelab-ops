@@ -1,20 +1,17 @@
 # Domains
 
-## HTTPS
+- using https for both internal and external domains;
+- tls using public domain with cloudflare dns-01 support;
+- router using `homelab.internal` as DHCP search domain; `exarch-0n` to `10.10.0.101-103` via DHCP;
+- extra router domains list below
 
-> noirprime.com
-> cloudflare dns-01
+| FQDN                 | IP         |
+| -------------------- | ---------- |
+| nas.homelab.internal | 10.10.0.10 |
+| s3.homelab.internal  | 10.10.0.10 |
 
-## HTTP
+## API Loadbalancing
 
-> homelab.internal
-
-- `exarch-0n` to `10.10.0.101-103` via DHCP;
-
-| Hostname  | IP          |
-| --------- | ----------- |
-| nas       | 10.10.0.10  |
-| s3        | 10.10.0.10  |
-| k8s       | 10.10.0.101 |
-| k8s       | 10.10.0.102 |
-| k8s       | 10.10.0.103 |
+- Talos: Endpoint => ControlPlane IPs; not support HTTP/S Proxy;
+- K8S: Endpoint => Domain, VIP, ControlPlane IPs;
+- Endpoint Domain points to ControlPlane IPs;

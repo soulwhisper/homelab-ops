@@ -1,18 +1,17 @@
 # Memo
 
 - `hostLegacyRouting:true` conflict wih BIGTCP and BBR, disabled; hence `forwardKubeDNSToHost` is disabled; [ref](https://github.com/siderolabs/talos/issues/10002#issuecomment-2557069620);
-- use hardcoded securityContext instead of kyverno;
+- using hardcoded securityContext instead of kyverno;
 - external nfs_v4.2 backup using `uid:gid = 2000:2000`;
 - test env using proxmox-vm, with secureboot enabled, subnet `172.19.82.0/24`;
-- use DNS domain instead of `talhelper` default controlPlane IP endpoints;
 
 ## Infra
 
 - vlan is managed by switch as ACCESS mode;
 - openebs-hostpath, deprecated due to MS-01 using 256G system disk;
 - ceph-block, for database and apps;
-- ceph-fs, deprecated, use nas-nfs for shared media;
-- ceph-s3, deprecated, use nas-minio for volsync backup;
+- ceph-fs, deprecated, using nas-nfs for shared media;
+- ceph-s3, deprecated, using nas-minio for volsync backup;
 - volsync nfs-backup using mutatingAdmissionPolicy;
 - onepassword as main secret store;
 - externaldns-adguard store records in `custom-adblock` field;
