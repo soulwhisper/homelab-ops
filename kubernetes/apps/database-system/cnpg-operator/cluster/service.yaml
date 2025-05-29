@@ -1,0 +1,36 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres
+  annotations:
+    external-dns.alpha.kubernetes.io/hostname: "postgres.noirprime.com"
+    lbipam.cilium.io/ips: "${LB_POSTGRES}"
+spec:
+  type: LoadBalancer
+  selector:
+    cnpg.io/cluster: postgres
+    cnpg.io/instanceRole: primary
+  ports:
+    - name: postgres
+      port: 5432
+      protocol: TCP
+      targetPort: 5432
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: vector
+  annotations:
+    external-dns.alpha.kubernetes.io/hostname: "vector.noirprime.com"
+    lbipam.cilium.io/ips: "${LB_VECTOR}"
+spec:
+  type: LoadBalancer
+  selector:
+    cnpg.io/cluster: vector
+    cnpg.io/instanceRole: primary
+  ports:
+    - name: vector
+      port: 5432
+      protocol: TCP
+      targetPort: 5432

@@ -1,0 +1,14 @@
+---
+deployment:
+  replicas: 2
+  envoyGateway:
+    resources:
+      requests:
+        cpu: 10m
+        memory: 64Mi
+      limits:
+        cpu: 700m
+        memory: 128Mi
+  logging:
+    level:
+      default: debug

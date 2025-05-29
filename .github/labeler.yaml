@@ -1,8 +1,30 @@
 ---
-# Area
-area/ci:
+area/bootstrap:
+  - changed-files:
+      - any-glob-to-any-file: "kubernetes/bootstrap/**/*"
+area/docs:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "README.md"
+area/github:
   - changed-files:
       - any-glob-to-any-file: ".github/**/*"
 area/kubernetes:
   - changed-files:
-      - any-glob-to-any-file: "kubernetes/**/*"
+      - any-glob-to-any-file:
+          - "kubernetes/apps/**/*"
+          - "kubernetes/components/**/*"
+          - "kubernetes/flux/**/*"
+area/renovate:
+  - changed-files:
+      - any-glob-to-any-file:
+          - ".renovate/**/*"
+          - "renovate.json5"
+area/talos:
+  - changed-files:
+      - any-glob-to-any-file: "infrastructure/talos/**/*"
+area/taskfile:
+  - changed-files:
+      - any-glob-to-any-file:
+          - ".taskfiles/**/*"
+          - "Taskfile.yaml"

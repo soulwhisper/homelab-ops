@@ -1,25 +1,26 @@
 ---
-# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/kustomize.toolkit.fluxcd.io/kustomization_v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &appname intel-device-plugins-operator
+  name: &appname intel-device-plugins
   namespace: &namespace kube-system
 spec:
   targetNamespace: *namespace
   commonMetadata:
     labels:
       app.kubernetes.io/name: *appname
-  path: "./kubernetes/apps/kube-system/intel-device-plugins/operator"
+  interval: 30m
+  timeout: 5m
+  path: "./kubernetes/apps/kube-system/intel-device-plugins/app"
+  prune: true
   sourceRef:
     kind: GitRepository
     name: gitops-system
     namespace: gitops-system
-  interval: 30m
-  prune: true
   wait: false
 ---
-# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/kustomize.toolkit.fluxcd.io/kustomization_v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
@@ -30,11 +31,12 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *appname
+  interval: 30m
+  timeout: 5m
   path: "./kubernetes/apps/kube-system/intel-device-plugins/gpu"
+  prune: true
   sourceRef:
     kind: GitRepository
     name: gitops-system
     namespace: gitops-system
-  interval: 30m
-  prune: true
   wait: false

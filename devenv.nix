@@ -5,19 +5,14 @@
   ...
 }:
 {
-  env.GREET = "homelab-ops";
-  env.KUBECONFIG = "./kubernetes/kubeconfig";
-  env.TALOSCONFIG = "./kubernetes/infrastructure/talos/clusterconfig/talosconfig";
-  env.MINIJINJA_CONFIG_FILE = ".minijinja.toml";
+  env.KUBECONFIG = "./infrastructure/talos/clusterconfig/kubeconfig";
+  env.TALOSCONFIG = "./infrastructure/talos/clusterconfig/talosconfig";
+  env.FLUX_SYSTEM_NAMESPACE = "gitops-system";
 
   # replace pre-commit and various linters
   git-hooks = {
-    # exclude = "_assets\/.*";
+    exclude = ".github\/.*";
     hooks = {
-      actionlint = {
-        enable = true;
-        files = "github\/workflows\/.*\.(yml|yaml)$";
-      };
       prettier = {
         enable = true;
         settings = {
@@ -46,25 +41,6 @@
             indentation: enable
         '';
       };
-      # disable this check when using ci, hints only
-      markdownlint = lib.optionalAttrs (!config.devenv.isTesting) {
-        enable = true;
-        files = "\.md$";
-        settings.configuration = {
-          MD013.line-length = 120;
-          MD024.siblings-only = true;
-          MD033 = false;
-          MD034 = false;
-        };
-      };
-      # disable this check when using ci, hints only
-      pre-commit-hook-ensure-sops = lib.optionalAttrs (!config.devenv.isTesting) {
-        enable = true;
-        files = "kubernetes/.*\.sops\.(toml|ya?ml)$";
-      };
-      check-added-large-files.enable = true;
-      check-merge-conflicts.enable = true;
-      check-executables-have-shebangs.enable = true;
     };
   };
 

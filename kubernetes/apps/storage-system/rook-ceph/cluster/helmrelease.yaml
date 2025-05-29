@@ -1,5 +1,5 @@
 ---
-# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrelease-helm-v2.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/helm.toolkit.fluxcd.io/helmrelease_v2.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
@@ -9,11 +9,19 @@ spec:
   chartRef:
     kind: OCIRepository
     name: rook-ceph-cluster
-  dependsOn:
-    - name: rook-ceph
-      namespace: storage-system
-    - name: snapshot-controller
-      namespace: storage-system
+  maxHistory: 2
+  install:
+    crds: CreateReplace
+    remediation:
+      retries: -1
+  upgrade:
+    cleanupOnFail: true
+    crds: CreateReplace
+    remediation:
+      retries: 3
+  uninstall:
+    keepHistory: false
+
   values:
     clusterName: &cluster_namespace storage-system
     csiDriverNamePrefix: *cluster_namespace
@@ -34,11 +42,14 @@ spec:
           mgr/crash/warn_recent_interval: "7200" # 2h
       crashCollector:
         disable: false
+      csi:
+        readAffinity:
+          enabled: true
       dashboard:
         enabled: true
         urlPrefix: /
         ssl: false
-        prometheusEndpoint: http://prometheus-operated.monitoring-system.svc.cluster.local:9090
+        prometheusEndpoint: http://vmsingle-stack.monitoring-system.svc.cluster.local:8429
       mgr:
         modules:
           - name: diskprediction_local
@@ -81,7 +92,7 @@ spec:
       storage:
         useAllNodes: true
         useAllDevices: false
-        deviceFilter: nvme
+        deviceFilter: ^sd[b-d] # test only; ref:https://rook.io/docs/rook/v1.14/CRDs/Cluster/ceph-cluster-crd/?h=usealldevices#storage-selection-settings
         config:
           osdsPerDevice: "1"
     cephBlockPools:
@@ -96,7 +107,6 @@ spec:
           isDefault: true
           reclaimPolicy: Delete
           allowVolumeExpansion: true
-          volumeBindingMode: WaitForFirstConsumer
           parameters:
             imageFormat: "2"
             imageFeatures: layering,fast-diff,object-map,deep-flatten,exclusive-lock
@@ -109,78 +119,8 @@ spec:
             csi.storage.k8s.io/fstype: ext4
     cephBlockPoolsVolumeSnapshotClass:
       enabled: true
-      name: ceph-block
-      isDefault: false
+      name: ceph-block-snapshot
+      isDefault: true
       deletionPolicy: Delete
-    cephFileSystems:
-      - name: ceph-filesystem
-        spec:
-          metadataPool:
-            replicated:
-              size: 3
-          dataPools:
-            - name: data0
-              failureDomain: host
-              replicated:
-                size: 3
-          metadataServer:
-            # Active/passive
-            activeCount: 1
-            activeStandby: true
-            resources:
-              limits:
-                memory: 1Gi
-              requests:
-                cpu: 100m
-                memory: 1Gi
-            priorityClassName: system-cluster-critical
-        storageClass:
-          enabled: true
-          isDefault: false
-          name: ceph-fs
-          pool: data0
-          reclaimPolicy: Delete
-          allowVolumeExpansion: true
-          volumeBindingMode: Immediate
-          parameters:
-            csi.storage.k8s.io/provisioner-secret-name: rook-csi-cephfs-provisioner
-            csi.storage.k8s.io/provisioner-secret-namespace: *cluster_namespace
-            csi.storage.k8s.io/controller-expand-secret-name: rook-csi-cephfs-provisioner
-            csi.storage.k8s.io/controller-expand-secret-namespace: *cluster_namespace
-            csi.storage.k8s.io/node-stage-secret-name: rook-csi-cephfs-node
-            csi.storage.k8s.io/node-stage-secret-namespace: *cluster_namespace
-            csi.storage.k8s.io/fstype: ext4
-    cephFileSystemVolumeSnapshotClass:
-      enabled: true
-      name: ceph-fs
-      isDefault: false
-      deletionPolicy: Delete
-    cephObjectStores:
-      - name: ceph-objectstore
-        spec:
-          metadataPool:
-            failureDomain: host
-            replicated:
-              size: 3
-          dataPool:
-            failureDomain: host
-            replicated:
-              size: 3
-          preservePoolsOnDelete: true
-          gateway:
-            port: 80
-            resources:
-              limits:
-                memory: 1Gi
-              requests:
-                cpu: 100m
-                memory: 1Gi
-            instances: 1
-            priorityClassName: system-cluster-critical
-        storageClass:
-          enabled: true
-          name: ceph-s3
-          reclaimPolicy: Delete
-          volumeBindingMode: Immediate
-        ingress:
-          enabled: false
+    cephFileSystems: []
+    cephObjectStores: []

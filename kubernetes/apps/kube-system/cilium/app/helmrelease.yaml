@@ -1,15 +1,60 @@
 ---
-# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrelease-helm-v2.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/helm.toolkit.fluxcd.io/helmrelease_v2.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: cilium
 spec:
   interval: 30m
-  chartRef:
-    kind: OCIRepository
-    name: cert-manager
+  chart:
+    spec:
+      chart: cilium
+      interval: 30m
+      sourceRef:
+        kind: HelmRepository
+        name: cilium
+      version: 1.17.4
+  maxHistory: 2
+  install:
+    crds: CreateReplace
+    remediation:
+      retries: -1
+  upgrade:
+    cleanupOnFail: true
+    crds: CreateReplace
+    remediation:
+      retries: 3
+  uninstall:
+    keepHistory: false
 
   valuesFrom:
     - kind: ConfigMap
-      name: cilium-values
+      name: cilium
+
+  values:
+    hubble:
+      enabled: true
+      metrics:
+        enabled:
+          - dns:query
+          - drop
+          - flow
+          - httpV2
+          - icmp
+          - port-distribution
+          - tcp
+        serviceMonitor:
+          enabled: true
+        dashboards:
+          enabled: true
+      relay:
+        enabled: true
+        rollOutPods: true
+        prometheus:
+          serviceMonitor:
+            enabled: true
+      ui:
+        enabled: true
+        rollOutPods: true
+    operator:
+      tolerations: [] # ref:https://github.com/cilium/cilium/issues/28549

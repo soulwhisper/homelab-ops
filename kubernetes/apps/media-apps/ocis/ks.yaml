@@ -1,5 +1,5 @@
 ---
-# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/kustomize.toolkit.fluxcd.io/kustomization_v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
@@ -22,13 +22,13 @@ spec:
   dependsOn:
     - name: onepassword-store
       namespace: security-system
+    - name: rook-ceph-cluster
+      namespace: storage-system
     - name: volsync
       namespace: storage-system
   components:
-    - ../../../infrastructure/components/gatus
-    - ../../../infrastructure/components/volsync
+    - ../../../../components/volsync
   postBuild:
     substitute:
       APP: *appname
       VOLSYNC_CAPACITY: 10Gi
-      GATUS_GROUP: media

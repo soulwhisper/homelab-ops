@@ -15,25 +15,46 @@ tasks:
         - DIR
     preconditions:
       - '[[ "{{.OPERATION}}" == "build" || "{{.OPERATION}}" == "apply" || "{{.OPERATION}}" == "delete" ]]'
-      - which kubectl flux-local
-      - test -d {{.KS_DIR}}
+      - which kubectl
+      - test -d "{{.KS_DIR}}"
+      - test -f "${KUBECONFIG}"
+      - fish -i -c 'flux-local -h' >/dev/null 2>&1
     cmds:
-      - flux-local build ks --all-namespaces {{.NS}} --path {{.KS_DIR}} {{.NAME}}
+      - fish -i -c 'flux-local build ks --all-namespaces {{.NS}} --path {{.KS_DIR}} {{.NAME}}
         | yq -
         {{ if or (eq .OPERATION "apply") (eq .OPERATION "delete") -}}
         | kubectl {{.OPERATION}} {{- .OPERATION_ARGS}} --filename -
-        {{ end }}
+        {{ end }}'
 
-  "*-ks-all":
-    desc: Suspend or resume all Flux Kustomizations
+  "retry-*":
+    desc: Retry Certain Flux Helmrelease or Kustomization [NAME=required] [NS=required]
     vars:
-      STATE: "{{index .MATCH 0}}"
+      RESOURCE: "{{index .MATCH 0}}"
+    requires:
+      vars:
+        - NAME
+        - NS
+    preconditions:
+      - '[[ "{{.RESOURCE}}" == "hr" || "{{.RESOURCE}}" == "ks" ]]'
+      - which flux
+      - test -f "${KUBECONFIG}"
+    cmds:
+      - flux suspend {{.RESOURCE}} {{.NAME}} -n {{.NS}}
+      - flux resume {{.RESOURCE}} {{.NAME}} -n {{.NS}}
+
+  "*-*-all":
+    desc: Suspend or resume Flux Resources
+    vars:
+      OPERATION: "{{index .MATCH 0}}"
+      RESOURCE: "{{index .MATCH 1}}"
       NAMESPACES:
         sh: kubectl get ns --no-headers -o custom-columns='NAME:.metadata.name'
     preconditions:
-      - '[[ "{{.STATE}}" == "suspend" || "{{.STATE}}" == "resume" ]]'
+      - '[[ "{{.OPERATION}}" == "resume" || "{{.OPERATION}}" == "suspend" ]]'
+      - '[[ "{{.RESOURCE}}" == "hr" || "{{.RESOURCE}}" == "ks" ]]'
       - which flux kubectl
+      - test -f "${KUBECONFIG}"
     cmds:
       - for:
           var: NAMESPACES
-        cmd: flux {{.STATE}} ks -n "{{.ITEM}}" --all || true
+        cmd: flux {{.OPERATION}} {{.RESOURCE}} -n "{{.ITEM}}" --all || true

@@ -1,13 +1,14 @@
 ---
 # yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
 name: Pre-pull Images
+permissions:
+  contents: read
 
 # This action will pre-pull images for spegel
 
 on:
   pull_request:
-    branches:
-      - main
+    branches: ["main"]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.number || github.ref }}
@@ -22,7 +23,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
-
       - name: Get changed files
         id: changed-files
         uses: tj-actions/changed-files@ed68ef82c095e0d48ec87eccea555d944a631a4c # v46
@@ -49,19 +49,17 @@ jobs:
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
         with:
           ref: "${{ matrix.branches == 'default' && github.event.repository.default_branch || '' }}"
-
       - name: Gather Images
-        uses: docker://ghcr.io/allenporter/flux-local:v7.3.0
+        uses: docker://ghcr.io/allenporter/flux-local:v7.5.4
         with:
           args: >-
             get cluster
             --all-namespaces
-            --path /github/workspace/kubernetes/infrastructure/flux/cluster
+            --path /github/workspace/kubernetes/flux/cluster
             --enable-images
             --only-images
             --output json
             --output-file images.json
-
       - name: Extract Images
         id: extract-images
         run: |
@@ -93,10 +91,11 @@ jobs:
           } >> "${GITHUB_STEP_SUMMARY}"
 
   pre-pull-images:
+    timeout-minutes: 30
     if: ${{ needs.compare-images.outputs.images != '[]' }}
     name: Pre-pull images
     runs-on:
-      - arc-homelab-ops
+      - homelab-ops-runner
     needs:
       - compare-images
     strategy:
@@ -107,7 +106,6 @@ jobs:
     steps:
       - name: Install talosctl
         run: curl -fsSL https://talos.dev/install | sh
-
       - name: Pre-pull Image
         run: talosctl -n "$NODE_IP" image pull "${{ matrix.images }}"
 

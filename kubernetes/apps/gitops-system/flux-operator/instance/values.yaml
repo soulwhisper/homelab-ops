@@ -3,6 +3,7 @@ instance:
   distribution:
     # renovate: depName=controlplaneio-fluxcd/distribution datasource=github-releases
     version: 2.5.1
+    artifact: "" # https://github.com/controlplaneio-fluxcd/flux-operator/issues/164#issuecomment-2652950564
   cluster:
     networkPolicy: false
   components:
@@ -14,23 +15,43 @@ instance:
     kind: GitRepository
     url: https://github.com/soulwhisper/homelab-ops.git
     ref: refs/heads/main
-    path: kubernetes/infrastructure/flux/config/cluster
+    path: kubernetes/flux/cluster
+    interval: 1h
   commonMetadata:
     labels:
       app.kubernetes.io/name: flux
   kustomize:
     patches:
-      # Add Sops decryption to Kustomizations
+      # Set Proxy for flux
       - patch: |
-          - op: add
-            path: /spec/decryption
-            value:
-              provider: sops
-              secretRef:
-                name: sops-age
+          apiVersion: apps/v1
+          kind: Deployment
+          metadata:
+            name: all
+          spec:
+            template:
+              spec:
+                containers:
+                  - name: manager
+                    env:
+                      - name: HTTP_PROXY
+                        valueFrom:
+                          configMapKeyRef:
+                            name: cluster-settings
+                            key: HTTP_PROXY
+                      - name: HTTPS_PROXY
+                        valueFrom:
+                          configMapKeyRef:
+                            name: cluster-settings
+                            key: HTTPS_PROXY
+                      - name: NO_PROXY
+                        valueFrom:
+                          configMapKeyRef:
+                            name: cluster-settings
+                            key: NO_PROXY
         target:
-          group: kustomize.toolkit.fluxcd.io
-          kind: Kustomization
+          kind: Deployment
+          labelSelector: app.kubernetes.io/part-of=flux
       # Increase the number of workers
       - patch: |
           - op: add
@@ -51,8 +72,6 @@ instance:
           spec:
             template:
               spec:
-                pod:
-                  hostUsers: false
                 containers:
                   - name: manager
                     resources:

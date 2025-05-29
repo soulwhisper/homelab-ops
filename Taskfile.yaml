@@ -8,25 +8,22 @@ shopt:
   - globstar
 
 includes:
-  ceph: .taskfiles/ceph/Taskfile.yaml
+  bootstrap: .taskfiles/bootstrap/Taskfile.yaml
   flux: .taskfiles/flux/Taskfile.yaml
   k8s: .taskfiles/k8s/Taskfile.yaml
-  k8s-bootstrap: .taskfiles/k8s-bootstrap/Taskfile.yaml
-  karmada: .taskfiles/karmada/Taskfile.yaml
-  postgres: .taskfiles/postgres/Taskfile.yaml
-  sops: .taskfiles/sops/Taskfile.yaml
+  reset: .taskfiles/reset/Taskfile.yaml
   talos: .taskfiles/talos/Taskfile.yaml
   volsync: .taskfiles/volsync/Taskfile.yaml
 
 vars:
   K8S_DIR: "{{.ROOT_DIR}}/kubernetes"
-  KUBECONFIG: "{{.K8S_DIR}}/kubeconfig"
-  MINIJINJA_CONFIG_FILE: "{{.ROOT_DIR}}/.minijinja.toml"
-  TALOSCONFIG: "{{.K8S_DIR}}/infrastructure/talos/clusterconfig/talosconfig"
+  TALOS_DIR: "{{.ROOT_DIR}}/infrastructure/talos"
+  KUBECONFIG: "{{.TALOS_DIR}}/clusterconfig/kubeconfig"
+  TALOSCONFIG: "{{.TALOS_DIR}}/clusterconfig/talosconfig"
+  MINIJINJA_ARGS: "--autoescape none --env --lstrip-blocks --trim-blocks"
 
 env:
   KUBECONFIG: "{{.KUBECONFIG}}"
-  MINIJINJA_CONFIG_FILE: "{{.MINIJINJA_CONFIG_FILE}}"
   TALOSCONFIG: "{{.TALOSCONFIG}}"
 
 tasks:
@@ -34,7 +31,21 @@ tasks:
     silent: true
     cmd: task --list
 
-  noop:
-    internal: true
+  reconcile:
+    desc: Force Flux to pull in changes from your Git repository
+    cmd: flux --namespace gitops-system reconcile kustomization gitops-system --with-source
+    preconditions:
+      - which flux
+      - test -f {{.KUBECONFIG}}
+
+  env:
+    desc: Restore configuration files from backup location
     silent: true
-    cmd: noop() { :; }
+    preconditions:
+      - fish -i -c 'test -f ~/.kube/config'
+      - fish -i -c 'test -f ~/.talos/config'
+    cmds:
+      - fish -i -c 'cp ~/.kube/config $KUBECONFIG'
+      - fish -i -c 'cp ~/.talos/config $TALOSCONFIG'
+      - direnv allow
+      - echo "K8S environment restored."

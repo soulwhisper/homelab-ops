@@ -1,0 +1,349 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/budimanjojo/talhelper/master/pkg/config/schemas/talconfig.json
+clusterName: &clusterName main
+endpoint: "https://k8s.homelab.internal:6443"
+
+# This is a "full" config template
+# enabled features:
+# secureboot,nut,vip; bond,disk-encryption;
+# disabled features:
+# cni,coredns,forwardKubeDNSToHost,kube-proxy;
+
+# renovate: depName=ghcr.io/siderolabs/installer datasource=docker
+talosVersion: v1.10.2
+# renovate: depName=ghcr.io/siderolabs/kubelet datasource=docker
+kubernetesVersion: v1.33.1
+
+additionalApiServerCertSans: &sans
+  - k8s.homelab.internal
+  - &talosControlplaneVip 10.10.0.100
+  - 127.0.0.1
+
+cniConfig:
+  name: none
+
+nodes:
+  - hostname: exarch-01.homelab.internal
+    ipAddress: 10.10.0.101
+    controlPlane: true
+    nodeLabels:
+      intel.feature.node.kubernetes.io/gpu: "true"
+    installDiskSelector: &installDisk
+      model: SQF-C3AV1-256GDEDM
+    networkInterfaces:
+      - interface: bond0
+        bond: &bond
+          interfaces:
+            - enp2s0f0np0
+            - enp2s0f1np1
+          mode: 802.3ad
+          lacpRate: fast
+          xmitHashPolicy: layer3+4
+          miimon: 100
+          updelay: 200
+          downdelay: 200
+        mtu: 9000
+        dhcp: false
+        addresses:
+          - 10.10.0.101/24
+        routes: &gateway
+          - network: 0.0.0.0/0
+            gateway: 10.10.0.1
+        vip:
+          ip: *talosControlplaneVip
+
+  - hostname: exarch-02.homelab.internal
+    ipAddress: 10.10.0.102
+    controlPlane: true
+    nodeLabels:
+      intel.feature.node.kubernetes.io/gpu: "true"
+    installDiskSelector: *installDisk
+    networkInterfaces:
+      - interface: bond0
+        bond: *bond
+        dhcp: false
+        mtu: 9000
+        addresses:
+          - 10.10.0.102/24
+        routes: *gateway
+        vip:
+          ip: *talosControlplaneVip
+
+  - hostname: exarch-03.homelab.internal
+    ipAddress: 10.10.0.103
+    controlPlane: true
+    nodeLabels:
+      intel.feature.node.kubernetes.io/gpu: "true"
+    installDiskSelector: *installDisk
+    networkInterfaces:
+      - interface: bond0
+        bond: *bond
+        dhcp: false
+        mtu: 9000
+        addresses:
+          - 10.10.0.103/24
+        routes: *gateway
+        vip:
+          ip: *talosControlplaneVip
+
+controlPlane:
+  certSANs: *sans
+  machineSpec:
+    mode: metal
+    arch: amd64
+    secureboot: true
+    useUKI: true
+  nodeLabels:
+    topology.kubernetes.io/region: *clusterName
+    topology.kubernetes.io/zone: homelab
+  schematic:
+    customization:
+      extraKernelArgs:
+        - -lockdown                               # secureboot
+        - lockdown=integrity                      # secureboot
+        - console=ttyS0                           # hci only
+        - talos.network.interface.ignore=enp88s0  # block i226-lm in ms-01
+      systemExtensions:
+        officialExtensions:
+          - siderolabs/intel-ucode
+          - siderolabs/i915
+          - siderolabs/mei
+          - siderolabs/nut-client
+          - siderolabs/thunderbolt
+  extensionServices:
+    - name: nut-client
+      configFiles:
+        - content: |-
+            MONITOR santak-box@10.10.0.10 1 monuser monuser secondary
+            SHUTDOWNCMD "/sbin/poweroff"
+          mountPath: /usr/local/etc/nut/upsmon.conf
+
+  # controlPlane only patches
+  patches:
+    # ApiServer configuration
+    # Enable MutatingAdmissionPolicy and UserNamespaces;
+    - |-
+      cluster:
+        apiServer:
+          admissionControl:
+            - name: PodSecurity
+              configuration:
+                exemptions:
+                  namespaces:
+                    - gitops-system
+                    - monitoring-system
+                    - storage-system
+          extraArgs:
+            runtime-config: admissionregistration.k8s.io/v1alpha1=true
+            feature-gates: MutatingAdmissionPolicy=true,UserNamespacesSupport=true,UserNamespacesPodSecurityStandards=true
+
+    # ETCD configuration, increase etcd quota to 8G, keep advertisedSubnets if using tailscale / kubespan
+    - |-
+      cluster:
+        etcd:
+          extraArgs:
+            quota-backend-bytes: 8589934592
+          advertisedSubnets:
+            - 10.10.0.0/24
+
+# general patches
+patches:
+  # Cluster configuration
+  - |-
+    cluster:
+      allowSchedulingOnControlPlanes: true
+      coreDNS:
+        disabled: true
+      proxy:
+        disabled: true
+      discovery:
+        enabled: true
+        registries:
+          kubernetes:
+            disabled: true
+          service:
+            endpoint: http://10.10.0.10:9300
+      network:
+        podSubnets:
+          - 10.100.0.0/17
+        serviceSubnets:
+          - 10.100.128.0/17
+      scheduler:
+        config:
+          apiVersion: kubescheduler.config.k8s.io/v1
+          kind: KubeSchedulerConfiguration
+          profiles:
+            - schedulerName: default-scheduler
+              pluginConfig:
+                - name: PodTopologySpread
+                  args:
+                    defaultingType: List
+                    defaultConstraints:
+                      - maxSkew: 1
+                        topologyKey: kubernetes.io/hostname
+                        whenUnsatisfiable: ScheduleAnyway
+
+  # Enable Proxy, http proxy is more stable than tproxy gateway
+  - |-
+    machine:
+      env:
+        http_proxy: http://10.10.0.10:1080
+        https_proxy: http://10.10.0.10:1080
+        no_proxy: .noirprime.com,.homelab.internal,localhost,127.0.0.1,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16
+
+  # NTP configuration, ip for baremetal, '/dev/ptp0' for proxmox
+  - |-
+    machine:
+      time:
+        disabled: false
+        servers:
+          - 10.10.0.10
+
+  # Network configuration
+  - |-
+    machine:
+      network:
+        disableSearchDomain: true
+        extraHostEntries:
+          - ip: 10.10.0.100
+            aliases:
+              - k8s.homelab.internal
+        nameservers:
+          - 10.10.0.10
+
+  # Kubelet configuration
+  - |-
+    machine:
+      kubelet:
+        nodeIP:
+          validSubnets:
+            - 10.10.0.0/24
+        extraConfig:
+          featureGates:
+            UserNamespacesSupport: true
+            UserNamespacesPodSecurityStandards: true
+
+  # Configure NFS mount options
+  - |
+    machine:
+      files:
+        - op: overwrite
+          path: /etc/nfsmount.conf
+          permissions: 0o644
+          content: |
+            [ NFSMount_Global_Options ]
+            nfsvers=4.2
+            hard=True
+            noatime=True
+            nconnect=16
+
+  # Kernel modules, Enable thunderbolt/USB4 networking support
+  - |-
+    machine:
+      kernel:
+        modules:
+          - name: thunderbolt
+          - name: thunderbolt_net
+
+  # Enable features
+  ## https://github.com/siderolabs/talos/issues/10002#issuecomment-2557069620;
+  ## hostLegacyRouting=true conflict with BIGTCP and BBR
+  - |-
+    machine:
+      features:
+        nodeAddressSortAlgorithm: v2
+        hostDNS:
+          enabled: true
+          forwardKubeDNSToHost: false
+          resolveMemberNames: true
+        kubernetesTalosAPIAccess:
+          enabled: true
+          allowedRoles:
+            - os:admin
+            - os:etcd:backup
+          allowedKubernetesNamespaces:
+            - gitops-system
+
+  # Containerd configuration
+  - |-
+    machine:
+      files:
+        - op: create
+          path: /etc/cri/conf.d/20-customization.part
+          content: |
+            [plugins]
+              [plugins."io.containerd.grpc.v1.cri"]
+                enable_unprivileged_ports = true
+                enable_unprivileged_icmp = true
+              [plugins."io.containerd.grpc.v1.cri".containerd]
+                discard_unpacked_layers = false
+              [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc]
+                discard_unpacked_layers = false
+
+  # Sysctls configuration
+  - |-
+    machine:
+      sysctls:
+        net.core.rmem_max: 134217728              # 10G NIC, tunning
+        net.core.wmem_max: 134217728              # 10G NIC, tunning
+        net.ipv4.tcp_rmem: 4096 87380 67108864    # 10G NIC, tunning
+        net.ipv4.tcp_wmem: 4096 65536 67108864    # 10G NIC, tunning
+        user.max_user_namespaces: 11255           # UserNamespaces
+
+  # Udev configuration, thunderbolt & i915
+  - |-
+    machine:
+      udev:
+        rules:
+          - ACTION=="add", SUBSYSTEM=="thunderbolt", ATTR{authorized}=="0", ATTR{authorized}="1"
+          - SUBSYSTEM=="drm", KERNEL=="renderD*", GROUP="44", MODE="0660"
+
+  # Enable disk encryption with better encyption method, passphrase >= 20 characters
+  # https://github.com/siderolabs/talos/issues/8972
+  # https://en.m.wikipedia.org/wiki/Evil_maid_attack
+  - |-
+    machine:
+      systemDiskEncryption:
+        ephemeral:
+          cipher: aes-xts-plain64
+          keySize: 256
+          keys:
+            - slot: 1
+              static:
+                passphrase: ${DISK_ENCRYPTION_PASS}
+          provider: luks2
+        state:
+          cipher: aes-xts-plain64
+          keySize: 256
+          keys:
+            - slot: 0
+              tpm: {}
+          provider: luks2
+
+  # Enable OpenEBS Storage
+  # - |-
+  #   machine:
+  #     sysctls:
+  #       vm.nr_hugepages: "1024"
+  #     nodeLabels:
+  #       openebs.io/engine: mayastor
+  #     kubelet:
+  #       extraMounts:
+  #         - destination: /var/local/openebs
+  #           type: bind
+  #           source: /var/local/openebs
+  #           options:
+  #             - rbind
+  #             - rshared
+  #             - rw
+
+  # Enable DRBD and LVM-Thin
+  # - |-
+  #   machine:
+  #     kernel:
+  #       modules:
+  #         - name: drbd
+  #           parameters:
+  #             - usermode_helper=disabled
+  #         - name: drbd_transport_tcp
+  #         - name: dm_thin_pool

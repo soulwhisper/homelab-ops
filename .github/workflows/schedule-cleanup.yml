@@ -1,5 +1,8 @@
 ---
 name: Schedule - Cleanup
+permissions:
+  actions: write
+  contents: read
 
 on:
   schedule:
@@ -9,17 +12,13 @@ on:
 jobs:
   cleanup_runs:
     runs-on: ubuntu-latest
-    permissions:
-      actions: write
-      contents: read
     steps:
       - name: Generate Token
-        uses: actions/create-github-app-token@3ff1caaa28b64c9cc276ce0a02e2ff584f3900c5 # v2
+        uses: actions/create-github-app-token@df432ceedc7162793a195dd1713ff69aefc7379e # v2
         id: app-token
         with:
           app-id: ${{ secrets.PRIVATE_APP_ID }}
           private-key: ${{ secrets.PRIVATE_APP_KEY }}
-
       - name: Cleanup workflow stale runs
         uses: Mattraks/delete-workflow-runs@4c9f24749b7996562658e3d6e10662489e22caca # v2
         with:
@@ -28,21 +27,19 @@ jobs:
           retain_days: "0"
           keep_minimum_runs: "0"
           delete_run_by_conclusion_pattern: "cancelled,skipped"
-
       - name: Cleanup workflow success runs
         uses: Mattraks/delete-workflow-runs@4c9f24749b7996562658e3d6e10662489e22caca # v2
         with:
           token: "${{ steps.app-token.outputs.token }}"
           repository: "${{ github.repository }}"
           retain_days: "0"
-          keep_minimum_runs: "5"
+          keep_minimum_runs: "3"
           delete_run_by_conclusion_pattern: "success"
-
       - name: Clenaup workflow failure runs
         uses: Mattraks/delete-workflow-runs@4c9f24749b7996562658e3d6e10662489e22caca # v2
         with:
           token: "${{ steps.app-token.outputs.token }}"
           repository: "${{ github.repository }}"
           retain_days: "0"
-          keep_minimum_runs: "3"
+          keep_minimum_runs: "1"
           delete_run_by_conclusion_pattern: "action_required,failure"

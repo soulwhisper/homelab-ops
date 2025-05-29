@@ -1,5 +1,5 @@
 ---
-# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/kustomize.toolkit.fluxcd.io/kustomization_v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
@@ -11,6 +11,8 @@ spec:
     labels:
       app.kubernetes.io/name: *appname
   interval: 30m
+  retryInterval: 5m
+  timeout: 5m
   path: "./kubernetes/apps/security-system/external-secrets/app"
   prune: true
   sourceRef:
@@ -18,28 +20,3 @@ spec:
     name: gitops-system
     namespace: gitops-system
   wait: true
----
-# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
-metadata:
-  name: &appname onepassword-store
-  namespace: &namespace security-system
-spec:
-  targetNamespace: *namespace
-  commonMetadata:
-    labels:
-      app.kubernetes.io/name: *appname
-  interval: 30m
-  path: "./kubernetes/apps/security-system/external-secrets/stores/onepassword"
-  prune: true
-  sourceRef:
-    kind: GitRepository
-    name: gitops-system
-    namespace: gitops-system
-  wait: true
-  dependsOn:
-    - name: external-secrets
-      namespace: security-system
-    - name: onepassword
-      namespace: security-system

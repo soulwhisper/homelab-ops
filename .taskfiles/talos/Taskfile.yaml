@@ -3,26 +3,60 @@
 version: "3"
 
 tasks:
+  getimage:
+    desc: Get latest ISO for talos
+    silent: true
+    preconditions:
+      - '[[ "{{.MODE}}" == "test" || "{{.MODE}}" == "prod" ]]'
+      - '[[ "{{.SECUREBOOT}}" == "true" || "{{.SECUREBOOT}}" == "false" ]]'
+      - which curl jq yq
+      - test -f "{{.TALOS_DIR}}/talconfig.{{.MODE}}.yaml"
+    vars:
+      MODE: '{{.MODE | default "prod"}}'
+      ARCH: '{{.ARCH | default "amd64"}}'
+      PLATFORM: '{{.PLATFORM | default "metal"}}'
+      SECUREBOOT: '{{.SECUREBOOT | default "true"}}'
+      VERSION:
+        sh: curl -s https://factory.talos.dev/versions | jq -r '
+          map(select(test("^v[0-9.]+$"))) | sort_by(. | ltrimstr("v") | split(".") | map(tonumber)) | reverse | .[0]' | tail -n1
+      ID:
+        sh: |
+          yq '.controlPlane.schematic' "{{.TALOS_DIR}}/talconfig.{{.MODE}}.yaml" > /tmp/schematic.yaml
+          curl -s -X POST --data-binary @/tmp/schematic.yaml https://factory.talos.dev/schematics | jq -r '.id'
+      IMAGE: '{{if .SECUREBOOT}}{{.PLATFORM}}-{{.ARCH}}-secureboot.iso{{else}}{{.PLATFORM}}-{{.ARCH}}.iso{{end}}'
+    cmds:
+      - |
+        echo "Latest version: {{.VERSION}}"
+        echo "Schema ID: {{.ID}}"
+        echo "Image Downloading: talos-{{.VERSION}}-{{.IMAGE}}"
+        curl --progress-bar -L "https://factory.talos.dev/image/{{.ID}}/{{.VERSION}}/{{.IMAGE}}" -o /tmp/talos-{{.VERSION}}-{{.MODE}}-{{.IMAGE}} || (echo "Download failed"; exit 1)
+      - mv /tmp/talos-{{.VERSION}}-{{.MODE}}-{{.IMAGE}} ./
+
   generate-clusterconfig:
     desc: Generate clusterconfig for Talos
     preconditions:
-      - which op test talhelper
-      - test -f {{.K8S_DIR}}/infrastructure/talos/talsecret.yaml
-      - test -f {{.K8S_DIR}}/infrastructure/talos/talconfig.yaml
-      - test -f {{.K8S_DIR}}/infrastructure/talos/talhelper.env
+      - '[[ "{{.MODE}}" == "test" || "{{.MODE}}" == "prod" ]]'
+      - which op talhelper
+      - test -f "{{.TALOS_DIR}}/talconfig.{{.MODE}}.yaml"
+      - test -f "{{.TALOS_DIR}}/talsecret.yaml"
+      - test -f "{{.TALOS_DIR}}/talhelper.env"
+      - op user get --me
+    vars:
+      MODE: '{{.MODE | default "prod"}}'
     cmds:
-      - op run --env-file {{.K8S_DIR}}/infrastructure/talos/talhelper.env --no-masking -- talhelper genconfig
-        --secret-file {{.K8S_DIR}}/infrastructure/talos/talsecret.yaml
-        --config-file {{.K8S_DIR}}/infrastructure/talos/talconfig.yaml
-        --out-dir {{.K8S_DIR}}/infrastructure/talos/clusterconfig
+      - op run --env-file {{.TALOS_DIR}}/talhelper.env --no-masking -- talhelper genconfig
+        --config-file {{.TALOS_DIR}}/talconfig.{{.MODE}}.yaml
+        --secret-file {{.TALOS_DIR}}/talsecret.yaml
+        --out-dir {{.TALOS_DIR}}/clusterconfig
+      - talosctl --talosconfig $TALOSCONFIG config endpoint k8s.homelab.internal
+      - fish -i -c 'mkdir -p ~/.talos && cp $TALOSCONFIG ~/.talos/config'
 
   apply-clusterconfig:
     desc: Apply clusterconfig for a Talos cluster
     vars:
       CLUSTERCONFIG_FILES:
-        sh: ls {{.K8S_DIR}}/infrastructure/talos/clusterconfig/*.yaml
+        sh: ls {{.TALOS_DIR}}/clusterconfig/*.yaml
     preconditions:
-      - which ls
       - test -f "${TALOSCONFIG}"
     cmds:
       - for:
@@ -31,7 +65,7 @@ tasks:
         vars:
           FILENAME: "{{.ITEM}}"
           HOSTNAME: |-
-            {{ trimPrefix (printf "homelab-ops-") (base .ITEM) | trimSuffix ".yaml" }}
+            {{ trimPrefix (printf "main-") (base .ITEM) | trimSuffix ".yaml" }}
           DRY_RUN: "{{ .DRY_RUN }}"
           INSECURE: "{{ .INSECURE }}"
 
@@ -46,7 +80,7 @@ tasks:
         - NODE
     vars:
       FILE:
-        sh: ls {{.K8S_DIR}}/infrastructure/talos/clusterconfig/homelab-ops-{{.NODE}}*.yaml
+        sh: ls {{.TALOS_DIR}}/clusterconfig/homelab-{{.NODE}}*.yaml
     cmds:
       - task: _apply-machineconfig
         vars:
@@ -57,7 +91,7 @@ tasks:
   upgrade-node:
     desc: Upgrade Talos on a single node [NODE=required]
     preconditions:
-      - which talosctl
+      - which talosctl yq
       - test -f "${TALOSCONFIG}"
       - talosctl --nodes {{.NODE}} get machineconfig
     requires:
@@ -65,7 +99,7 @@ tasks:
         - NODE
     vars:
       FILE:
-        sh: ls {{.K8S_DIR}}/infrastructure/talos/clusterconfig/homelab-ops-{{.NODE}}*.yaml
+        sh: ls {{.TALOS_DIR}}/clusterconfig/homelab-{{.NODE}}*.yaml
       TALOS_IMAGE:
         sh: yq '.machine.install.image' < "{{.FILE}}"
     cmds:
@@ -77,17 +111,15 @@ tasks:
     desc: Apply a single Talos machineConfig to a Talos node
     preconditions:
       - which talosctl
+      - test -f "${TALOSCONFIG}"
       - test -f "{{.FILENAME}}"
     requires:
       vars:
         - HOSTNAME
         - FILENAME
-    vars:
-      MODE: '{{.MODE | default "auto"}}'
     cmds:
       - talosctl apply-config
         --nodes "{{.HOSTNAME}}"
         --file "{{.FILENAME}}"
-        --mode="{{.MODE}}"
         {{ if eq "true" .INSECURE }}--insecure{{ end }}
         {{ if eq "true" .DRY_RUN }}--dry-run{{ end }}

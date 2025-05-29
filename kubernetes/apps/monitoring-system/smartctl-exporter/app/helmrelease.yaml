@@ -1,5 +1,5 @@
 ---
-# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/helmrelease-helm-v2.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/helm.toolkit.fluxcd.io/helmrelease_v2.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
@@ -9,23 +9,22 @@ spec:
   chartRef:
     kind: OCIRepository
     name: smartctl-exporter
+  maxHistory: 2
+  install:
+    crds: CreateReplace
+    remediation:
+      retries: -1
+  upgrade:
+    cleanupOnFail: true
+    crds: CreateReplace
+    remediation:
+      retries: 3
+  uninstall:
+    keepHistory: false
+
   values:
     fullnameOverride: smartctl-exporter
-
-    image:
-      registry: quay.io
-
     serviceMonitor:
       enabled: true
-      relabelings:
-        - action: labeldrop
-          regex: (pod)
-        - action: replace
-          regex: (.*)
-          replacement: $1.homelab.internal
-          sourceLabels:
-            - __meta_kubernetes_endpoint_node_name
-          targetLabel: instance
-
     prometheusRules:
       enabled: false

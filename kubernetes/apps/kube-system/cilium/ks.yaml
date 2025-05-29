@@ -1,5 +1,5 @@
 ---
-# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/kustomize.toolkit.fluxcd.io/kustomization_v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
@@ -11,6 +11,7 @@ spec:
     labels:
       app.kubernetes.io/name: *appname
   interval: 30m
+  timeout: 5m
   path: "./kubernetes/apps/kube-system/cilium/app"
   prune: true
   sourceRef:
@@ -19,7 +20,7 @@ spec:
     namespace: gitops-system
   wait: false
 ---
-# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/kustomize.toolkit.fluxcd.io/kustomization_v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
@@ -30,8 +31,9 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: cilium
-      app.kubernetes.io/component: config
+      app.kubernetes.io/controller: config
   interval: 30m
+  timeout: 5m
   path: "./kubernetes/apps/kube-system/cilium/config"
   prune: true
   sourceRef:
@@ -39,28 +41,3 @@ spec:
     name: gitops-system
     namespace: gitops-system
   wait: false
----
-# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
-metadata:
-  name: cilium-gateway
-  namespace: &namespace kube-system
-spec:
-  targetNamespace: *namespace
-  commonMetadata:
-    labels:
-      app.kubernetes.io/name: cilium
-      app.kubernetes.io/component: gateway
-  interval: 30m
-  timeout: 5m
-  path: "./kubernetes/apps/kube-system/cilium/gateway"
-  prune: true
-  sourceRef:
-    kind: GitRepository
-    name: gitops-system
-    namespace: gitops-system
-  wait: true
-  dependsOn:
-    - name: cert-manager-issuers
-      namespace: security-system

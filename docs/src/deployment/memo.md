@@ -1,44 +1,104 @@
-## Memo (WIP)
+# Memo
 
-- bring up new cluster, using secureboot ISO, not pxe/matchbox
-- add github webooks after deployment, [ref](https://fluxcd.io/flux/guides/webhook-receivers/#define-a-git-repository-receiver);
-- tune monitoring apps
-- relocate privieged apps to "privileged", with "labels.pod-security.kubernetes.io/enforce: privileged", like "spegel".
-- consider adding [MAP](https://github.com/kubernetes/enhancements/tree/master/keps/sig-api-machinery/3962-mutating-admission-policies) when beta, [examples](https://github.com/search?q=repo%3Abjw-s-labs%2Fhomelab-ops+MutatingAdmissionPolicy&type=commits).
-- use "sigs.k8s.io/controller-tools/cmd/controller-gen" to update volsync replicationsource/replicationdestination schema
-- add discord notifications for github actions;
-- migrated from mayastor to ceph; disable ceph-nfs;
+- `hostLegacyRouting:true` conflict wih BIGTCP and BBR, disabled; hence `forwardKubeDNSToHost` is disabled; [ref](https://github.com/siderolabs/talos/issues/10002#issuecomment-2557069620);
+- use hardcoded securityContext instead of kyverno;
+- external nfs_v4.2 backup using `uid:gid = 2000:2000`;
+- media stored in external nas-nfs, using `documents,movie,music,tv-shows` folders;
+- test env using proxmox-vm, with secureboot enabled, subnet `172.19.82.0/24`;
+- `v1.10+` will ignore `.machine.install.extraKernelArgs` and `.machine.install.extensions` fields in talconfig;
+- cilium stays at `v1.16.6` until cloudflared mtu issue fixed, [ref](https://github.com/cilium/cilium/issues/37529);
 
-### Infra
+## Infra
 
-- `infra/scripts/minio-bucket-keys.sh`, create minio buckets, service accounts and policies for k8s apps, using 1password keys.
-- offsite backup ( volsync ) use minio @ nix-infra;
-- openebs-hostpath, disabled due to MS-01 using 256G system disk;
+- vlan is managed by switch as ACCESS mode;
+- openebs-hostpath, deprecated due to MS-01 using 256G system disk;
 - ceph-block, for database and apps;
-- ceph-fs, for shared-media;
-- ceph-s3, for volsync backup;
-- sops.age for configs, migrating to onepassword;
-- onepassword, main secret store;
+- ceph-fs, deprecated, use nas-nfs for shared media;
+- ceph-s3, deprecated, use nas-nfs for volsync backup;
+- volsync nfs-backup using mutatingAdmissionPolicy;
+- onepassword as main secret store;
+- externaldns-adguard store records in `custom-adblock` field;
+- internal domains using `noirprime.com`;
+- external doamins using `noirprime.com`, powered by cloudflared;
 
-### Pre-deployment
+### Cloudflare
 
-- make sure system-upgrade-controller use correct installer and schematicID
-- `10.10.0.10` as nix-infra node, minio / dns / ntp / talos-api / ...
-- `10.10.0.101-103` as k8s nodes;
-- `10.10.0.201-250` as cilium l2 loadbalancer ip;
-- monitoring: `mon.noirprime.com`, `/coroot/` for coroot, `/grafana/` for grafana
-- self-hosted-runner, label:arc-homelab / label:arc-homelab-ops
+- cloudflared-tunnel => zero-trust / networks / tunnels
+- cloudflare, dns-01, noirprime.com: user-profile =>api-tokens, ZONE:READ / DNS:EDIT
 
-### defaults
+### Database
 
-- doamin = "cluster.local"
-- app_uid = app_gid = 2000
+- postgres; app:immich,maybe;
+- dragonfly; app:immich,maybe;
 
-### App Memo
+### Proxy
 
-- use Valkey instead of Dragonflydb if apps served <= 2;
+- `HTTPS GET` / `HTTPS POST`, should set `https_proxy`;
+-  no_proxy = `.cluster.local.,.cluster.local,.svc,localhost,127.0.0.1,{pod-subnet},{svc-subnet}`;
 
-### Overengineering
+### Bootstrap
 
-- NTS support servers in NTP config;
-- Disk encryption for homelab env;
+```shell
+# op signin, then
+cd homelab-ops
+eval $(op signin)
+
+## dev-env method-1, or direnv
+export KUBECONFIG=$PWD/infrastructure/talos/clusterconfig/kubeconfig
+export TALOSCONFIG=$PWD/infrastructure/talos/clusterconfig/talosconfig
+## dev-env method-2
+devenv shell
+
+# bootstrap
+task talos:generate-clusterconfig
+## if test
+task talos:generate-clusterconfig MODE=test
+
+task bootstrap:talos
+task bootstrap:apps
+
+# check
+kubectl get ks -A
+kubectl get hr -A
+
+## Flux Debug
+task reconcile
+flux get sources git gitops-system
+flux get all -A --status-selector ready=false
+
+kubectl -n gitops-system get fluxreport/flux -o yaml
+kubectl -n gitops-system events --for FluxInstance/flux
+kubectl -n gitops-system logs deployment/flux-operator
+
+## Node-level cloudflared debug, with v2024.12.2+
+curl -L https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64 -o /usr/bin/cloudflared
+chmod +x /usr/bin/cloudflared
+curl 172.19.82.101:2000/diag/tunnel
+cloudflared tunnel diag --metrics 172.19.82.101:2000
+
+## update flux-webhook
+## https://fluxcd.io/flux/guides/webhook-receivers/
+kubectl -n gitops-system get receivers.notification.toolkit.fluxcd.io
+
+## resource optimization
+popeye -A -s statefulsets
+kubectl resource-capacity --available
+kubectl resource-capacity -p -c -u -n database-system
+
+## trigger healthcheck
+kubectl create job --from=cronjob/talos-healthcheck talos-hc -n gitops-system
+```
+
+## VM test issues
+
+- only `proxmox` support secureboot and vip;
+- virtual disks, will make rook-ceph-osd-prepare `0/1 completed` forever;
+- virtual nic not support BIGTCP and XDP;
+- dragonfly needs `avx`, cpu should be `host` model;
+
+## Multi-Cluster plan
+
+- homelab using talconfig `prod`; corplab using talconfig `test`;
+- multi-cluster flux, [ref](https://github.com/h-wb/home-ops/tree/main);
+- multi-cluster talos task, [ref](https://github.com/h-wb/home-ops/blob/main/.taskfiles/Talos/Taskfile.yaml);
+- multi-cluster volsync task, [ref](https://github.com/h-wb/home-ops/blob/main/.taskfiles/VolSync/Taskfile.yaml);

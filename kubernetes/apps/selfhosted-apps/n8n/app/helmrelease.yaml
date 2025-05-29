@@ -1,48 +1,63 @@
 ---
-# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: n8n
+  name: &name n8n
 spec:
   interval: 30m
   chartRef:
     kind: OCIRepository
     name: app-template
     namespace: gitops-system
-  dependsOn:
-    - name: rook-ceph-cluster
-      namespace: storage-system
+  maxHistory: 2
+  install:
+    crds: CreateReplace
+    remediation:
+      retries: -1
+  upgrade:
+    cleanupOnFail: true
+    crds: CreateReplace
+    remediation:
+      retries: 3
+  uninstall:
+    keepHistory: false
+
   values:
+    defaultPodOptions:
+      securityContext:
+        # node usr specified
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        fsGroupChangePolicy: "OnRootMismatch"
+
     controllers:
       n8n:
         annotations:
           reloader.stakater.com/auto: "true"
 
-        pod:
-          hostUsers: false
-
         containers:
           app:
             image:
               repository: ghcr.io/n8n-io/n8n
-              tag: 1.89.0
+              tag: 1.95.1
             env:
               DB_SQLITE_VACUUM_ON_STARTUP: true
               EXECUTIONS_DATA_PRUNE: true
               EXECUTIONS_DATA_MAX_AGE: 7
               EXECUTIONS_DATA_PRUNE_MAX_COUNT: 50000
-              GENERIC_TIMEZONE: "Europe/Amsterdam"
+              GENERIC_TIMEZONE: "Asia/Shanghai"
               N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS: false
               N8N_PROTOCOL: "https"
               N8N_PORT: &port 8080
-              N8N_HOST: &hostName n8n.noirprime.com
+              N8N_HOST: n8n.noirprime.com
               N8N_LOG_LEVEL: info
               N8N_LOG_OUTPUT: console
               N8N_ENCRYPTION_KEY:
                 valueFrom:
                   secretKeyRef:
-                    name: n8n-secret
+                    name: n8n
                     key: N8N_ENCRYPTION_KEY
             securityContext:
               allowPrivilegeEscalation: false
@@ -60,22 +75,21 @@ spec:
 
     service:
       app:
-        controller: n8n
+        controller: *name
         ports:
           http:
             port: *port
 
     route:
       app:
-        hostnames:
-          - *hostName
+        hostnames: ["{{ .Release.Name }}.noirprime.com"]
         parentRefs:
           - name: internal
-            namespace: kube-system
+            namespace: networking-system
             sectionName: https
         rules:
           - backendRefs:
-              - name: n8n
+              - identifier: app
                 port: *port
 
       webhooks:
@@ -83,20 +97,20 @@ spec:
           - n8n-webhook.noirprime.com
         parentRefs:
           - name: external
-            namespace: kube-system
+            namespace: networking-system
             sectionName: https
         rules:
           - matches:
               - path:
                   value: /webhook
             backendRefs:
-              - name: n8n
+              - name: *name
                 port: *port
 
     persistence:
       app:
-        existingClaim: n8n-app
+        existingClaim: *name
         advancedMounts:
           n8n:
             app:
-              - path: /homelab/node/.n8n
+              - path: /home/node/.n8n

@@ -1,0 +1,44 @@
+---
+# yaml-language-server: $schema=https://taskfile.dev/schema.json
+version: "3"
+
+tasks:
+  talos:
+    desc: Bootstrap Talos
+    vars:
+      TALOS_CONTROLLER:
+        sh: talosctl config info --output json | jq --raw-output '.endpoints[]' | shuf -n 1
+    preconditions:
+      - which talosctl
+      - test -f "${TALOSCONFIG}"
+      - talosctl config info
+    cmds:
+      - task: :talos:apply-clusterconfig
+        vars:
+          INSECURE: "true"
+      - echo "Bootstrap Talos cluster takes over 20 minutes, have a coffee"
+      - until talosctl --nodes {{.TALOS_CONTROLLER}} bootstrap; do sleep 5; done
+      - talosctl kubeconfig --nodes {{.TALOS_CONTROLLER}} --force ${KUBECONFIG}
+      - fish -i -c 'mkdir -p ~/.kube && cp $KUBECONFIG ~/.kube/config'
+
+  apps:
+    desc: Bootstrap Apps [WIPE=rook-disk-model]
+    prompt: Bootstrap apps into Talos cluster?
+    vars:
+      FIX: '{{.FIX | default "false"}}'
+      WIPE: '{{.WIPE | default "false"}}'
+      HELMFILE_ARGS: --skip-diff-on-install --suppress-diff
+    preconditions:
+      - which helmfile kubectl minijinja-cli op
+      - test -f "${KUBECONFIG}"
+      - test -f "{{.K8S_DIR}}/bootstrap/bootstrap.env"
+      - test -f "{{.K8S_DIR}}/bootstrap/helmfile.yaml"
+      - test -f "{{.K8S_DIR}}/bootstrap/templates/resources.yaml.j2"
+      - op user get --me
+    cmds:
+      - |
+        {{if ne .FIX "true"}} until kubectl wait nodes --for=condition=Ready=False --all --timeout=10m; do sleep 5; done {{end}}
+      - op run --env-file {{.K8S_DIR}}/bootstrap/bootstrap.env --no-masking -- minijinja-cli {{.MINIJINJA_ARGS}} "{{.K8S_DIR}}/bootstrap/templates/resources.yaml.j2" | kubectl apply --server-side --filename -
+      - |
+        export ROOK_DISK={{.WIPE}}
+        helmfile --file {{.K8S_DIR}}/bootstrap/helmfile.yaml apply {{if eq .WIPE "false"}} -l wipe-rook.enabled!=true {{end}} {{.HELMFILE_ARGS}}

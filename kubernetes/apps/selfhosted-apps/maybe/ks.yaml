@@ -1,0 +1,39 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/kustomize.toolkit.fluxcd.io/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: &appname maybe
+  namespace: &namespace selfhosted-apps
+spec:
+  targetNamespace: *namespace
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *appname
+  interval: 30m
+  timeout: 5m
+  path: "./kubernetes/apps/selfhosted-apps/maybe/app"
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: gitops-system
+    namespace: gitops-system
+  wait: false
+  dependsOn:
+    - name: cnpg-cluster
+      namespace: database-system
+    - name: dragonfly-operator
+      namespace: database-system
+    - name: onepassword-store
+      namespace: security-system
+    - name: rook-ceph-cluster
+      namespace: storage-system
+    - name: volsync
+      namespace: storage-system
+  components:
+    - ../../../../components/cnpg
+    - ../../../../components/dragonfly
+    - ../../../../components/volsync
+  postBuild:
+    substitute:
+      APP: *appname

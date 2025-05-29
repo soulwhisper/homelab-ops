@@ -8,3 +8,5 @@ service:
     hostPort: 29999
 serviceMonitor:
   enabled: true
+grafanaDashboard:
+  enabled: false

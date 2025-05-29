@@ -1,0 +1,21 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/kustomize.toolkit.fluxcd.io/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: &appname karmada-operator
+  namespace: &namespace karmada-system
+spec:
+  targetNamespace: *namespace
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *appname
+  interval: 30m
+  timeout: 5m
+  path: ./kubernetes/apps/karmada-system/karmada-operator/app
+  prune: false # Never delete this
+  sourceRef:
+    kind: GitRepository
+    name: gitops-system
+    namespace: gitops-system
+  wait: false

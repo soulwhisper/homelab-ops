@@ -1,0 +1,98 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/helmfile
+helmDefaults:
+  cleanupOnFail: true
+  force: true
+  timeout: 600
+  wait: true
+  waitForJobs: true
+
+repositories:
+  - name: cilium
+    url: https://helm.cilium.io
+
+releases:
+  - name: prometheus-operator-crds
+    namespace: monitoring-system
+    atomic: true
+    chart: oci://ghcr.io/prometheus-community/charts/prometheus-operator-crds
+    version: 20.0.0
+
+  - name: cilium
+    namespace: kube-system
+    atomic: true
+    chart: cilium/cilium
+    version: 1.17.4
+    values: ['../apps/kube-system/cilium/app/values.yaml']
+    needs: ['monitoring-system/prometheus-operator-crds']
+
+  - name: coredns
+    namespace: kube-system
+    atomic: true
+    chart: oci://ghcr.io/coredns/charts/coredns
+    version: 1.42.2
+    values: ['../apps/kube-system/coredns/app/values.yaml']
+    needs: ['kube-system/cilium']
+
+  # require `rook disk model` for env "ROOK_DISK"
+  - name: wipe-rook
+    namespace: kube-system
+    atomic: true
+    labels:
+      wipe-rook.enabled: true
+    chart: oci://ghcr.io/bjw-s-labs/helm/app-template
+    version: 4.0.1
+    values: ['./templates/wipe-rook.yaml.gotmpl']
+    needs: ['kube-system/coredns']
+
+  - name: spegel
+    namespace: kube-system
+    atomic: true
+    chart: oci://ghcr.io/spegel-org/helm-charts/spegel
+    version: 0.2.0
+    values: ['../apps/kube-system/spegel/app/values.yaml']
+    needs: ['kube-system/coredns']
+
+  # to render gateway-api crd
+  - name: envoy-gateway
+    namespace: networking-system
+    atomic: true
+    chart: oci://docker.io/envoyproxy/gateway-helm
+    version: 1.4.0
+    values: ['../apps/networking-system/envoy-gateway/app/values.yaml']
+    needs: ['kube-system/spegel']
+
+  # to render componets crd
+  - name: external-secrets
+    namespace: security-system
+    atomic: true
+    chart: oci://ghcr.io/external-secrets/charts/external-secrets
+    version: 0.17.0
+    values: ['../apps/security-system/external-secrets/app/values.yaml']
+    needs: ['kube-system/spegel']
+
+  - name: flux-operator
+    namespace: gitops-system
+    atomic: true
+    chart: oci://ghcr.io/controlplaneio-fluxcd/charts/flux-operator
+    version: 0.20.0
+    values: ['../apps/gitops-system/flux-operator/app/values.yaml']
+    needs: ['kube-system/spegel']
+    hooks:
+      # Apply cluster settings
+      - events: ["postsync"]
+        command: "kubectl"
+        args:
+          - "apply"
+          - "--namespace=gitops-system"
+          - "--filename=../components/common/cluster-settings.yaml"
+          - "--wait=true"
+
+  - name: flux-instance
+    namespace: gitops-system
+    atomic: true
+    chart: oci://ghcr.io/controlplaneio-fluxcd/charts/flux-instance
+    version: 0.20.0
+    wait: false
+    values: ['../apps/gitops-system/flux-operator/instance/values.yaml']
+    needs: ['gitops-system/flux-operator']
