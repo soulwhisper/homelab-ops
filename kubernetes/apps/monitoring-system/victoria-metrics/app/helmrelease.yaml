@@ -32,6 +32,12 @@ spec:
           value: 0
         - name: VM_VMALERTMANAGER_CONFIGRELOADERCPU
           value: 0
+        - name: HTTP_PROXY
+          value: "${HTTP_PROXY}"
+        - name: HTTPS_PROXY
+          value: "${HTTPS_PROXY}"
+        - name: NO_PROXY
+          value: "${NO_PROXY}"
       operator:
         enable_converter_ownership: true # Required to allow VM to remove VM rules it imports if a prometheus rule is deleted
 
@@ -49,7 +55,6 @@ spec:
             create: false
 
     vmsingle:
-      enabled: true
       spec:
         port: "8429"
         # -- Data retention period. Possible units character: h(ours), d(ays), w(eeks), y(ears), if no unit character specified - month. The minimum retention period is 24h. See these [docs](https://docs.victoriametrics.com/single-server-victoriametrics/#retention)
@@ -71,7 +76,6 @@ spec:
             memory: 2Gi
 
     alertmanager:
-      enabled: true
       spec:
         externalURL: https://alert.noirprime.com
         port: "9093"
@@ -137,7 +141,6 @@ spec:
                 url_title: View in Alertmanager
 
     vmalert:
-      enabled: true
       spec:
         port: "8080"
         extraArgs:
@@ -154,7 +157,6 @@ spec:
             - { key: somekey, operator: NotIn, values: ["never-used-value"] }
 
     vmagent:
-      enabled: true
       spec:
         port: "8429"
         extraArgs:
@@ -172,9 +174,7 @@ spec:
       enabled: false
 
     prometheus-node-exporter:
-      enabled: true
       vmScrape:
-        enabled: true
         spec:
           endpoints:
             - port: metrics

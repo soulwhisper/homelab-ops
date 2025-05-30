@@ -12,7 +12,7 @@ spec:
       sectionName: https
   rules:
     - backendRefs:
-        - name: vmsingle-stack
+        - name: victoria-metrics-vmsingle
           namespace: monitoring-system
           port: 8429
 ---
@@ -29,6 +29,6 @@ spec:
       sectionName: https
   rules:
     - backendRefs:
-        - name: vmalertmanager-stack
+        - name: victoria-metrics-vmalertmanager
           namespace: monitoring-system
           port: 9093
