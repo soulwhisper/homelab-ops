@@ -26,8 +26,5 @@ spec:
     alertmanagerAddress: http://vmalertmanager-stack.monitoring-system.svc.cluster.local:9093
     image:
       registry: quay.io
-      # TODO: until flux 2.6
-      name: giantswarm/silence-operator
-      tag: 0.16.1
     networkPolicy:
       enabled: false
