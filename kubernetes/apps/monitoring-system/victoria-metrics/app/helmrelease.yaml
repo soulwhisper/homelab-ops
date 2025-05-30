@@ -49,7 +49,9 @@ spec:
             create: false
 
     vmsingle:
+      enabled: true
       spec:
+        port: "8429"
         # -- Data retention period. Possible units character: h(ours), d(ays), w(eeks), y(ears), if no unit character specified - month. The minimum retention period is 24h. See these [docs](https://docs.victoriametrics.com/single-server-victoriametrics/#retention)
         retentionPeriod: "1y"
         replicaCount: 1
@@ -69,8 +71,10 @@ spec:
             memory: 2Gi
 
     alertmanager:
+      enabled: true
       spec:
         externalURL: https://alert.noirprime.com
+        port: "9093"
       useManagedConfig: true
       config:
         route:
@@ -133,7 +137,11 @@ spec:
                 url_title: View in Alertmanager
 
     vmalert:
+      enabled: true
       spec:
+        port: "8080"
+        extraArgs:
+          external.url: https://metrics.noirprime.com
         # Skip vmalerts for vmlog rules
         selectAllByDefault: false
         ruleSelector:
@@ -144,11 +152,11 @@ spec:
         ruleNamespaceSelector:
           matchExpressions:
             - { key: somekey, operator: NotIn, values: ["never-used-value"] }
-        extraArgs:
-          external.url: https://metrics.noirprime.com
 
     vmagent:
+      enabled: true
       spec:
+        port: "8429"
         extraArgs:
           promscrape.maxScrapeSize: 50MiB
           promscrape.streamParse: "true"
@@ -164,7 +172,9 @@ spec:
       enabled: false
 
     prometheus-node-exporter:
+      enabled: true
       vmScrape:
+        enabled: true
         spec:
           endpoints:
             - port: metrics
