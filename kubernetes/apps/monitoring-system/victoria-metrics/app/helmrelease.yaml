@@ -23,7 +23,7 @@ spec:
     keepHistory: false
 
   values:
-    fullnameOverride: stack
+    fullnameOverride: *name
     victoria-metrics-operator:
       env:
         - name: VM_VMALERTDEFAULT_CONFIGRELOADERCPU
