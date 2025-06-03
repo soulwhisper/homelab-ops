@@ -1,4 +1,4 @@
-# Domains
+## Domains
 
 - using https for both internal and external domains;
 - tls using public domain with cloudflare dns-01 support;
@@ -10,7 +10,7 @@
 | nas.homelab.internal | 10.10.0.10 |
 | s3.homelab.internal  | 10.10.0.10 |
 
-## API Loadbalancing
+### API Loadbalancing
 
 - Talos: Endpoint => ControlPlane IPs; not support HTTP/S Proxy;
 - K8S: Endpoint => Domain, VIP, ControlPlane IPs;

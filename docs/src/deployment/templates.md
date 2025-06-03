@@ -1,4 +1,4 @@
-# Templates
+## Templates
 
 - This is a template for most self-hosted apps without its own charts
 - with substitute support, non-sensitive but repeative environments are set in configMap:cluster-settings;

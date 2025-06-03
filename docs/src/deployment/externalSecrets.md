@@ -1,6 +1,6 @@
-# Externalsecret
+## Externalsecret
 
-## 1Password
+### 1Password
 
 - 1password compatible items: secret, document;
 - in this repo, all passwords use `secret` item;
@@ -12,13 +12,13 @@
 | password.title | password.label     | password.new_field    | password.section/notes/tags |
 | document.title | document.file_name | document.file_content | document.section/notes/tags |
 
-### Naming
+#### Naming
 
 - externalSecret and Secret name should be same
 - secrets refers to app itself, use `appname`
 - secrets refers to using other services, use `appname`-`service`-`usage`
 
-### Example
+#### Example
 
 ```yaml
 ---

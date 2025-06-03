@@ -1,11 +1,11 @@
-# Memo
+## Memo
 
 - `hostLegacyRouting:true` conflict wih BIGTCP and BBR, disabled; hence `forwardKubeDNSToHost` is disabled; [ref](https://github.com/siderolabs/talos/issues/10002#issuecomment-2557069620);
 - using hardcoded securityContext instead of kyverno;
 - external nfs_v4.2 backup using `uid:gid = 2000:2000`;
 - test env using proxmox-vm, with secureboot enabled, subnet `172.19.82.0/24`;
 
-## Infra
+### Infra
 
 - vlan is managed by switch as ACCESS mode;
 - openebs-hostpath, deprecated due to MS-01 using 256G system disk;
@@ -17,17 +17,12 @@
 - externaldns-adguard store records in `custom-adblock` field;
 - internal and external domains both using `noirprime.com`, powered by cloudflared;
 
-### Cloudflare
-
-- cloudflared-tunnel => zero-trust / networks / tunnels
-- cloudflare, dns-01, noirprime.com: user-profile =>api-tokens, ZONE:READ / DNS:EDIT
-
-### Proxy
+#### Proxy
 
 - `HTTPS GET` / `HTTPS POST`, should set `https_proxy`;
 -  no_proxy = `.cluster.local.,.cluster.local,.svc,localhost,127.0.0.1,{pod-subnet},{svc-subnet}`;
 
-## Bootstrap
+### Bootstrap
 
 ```shell
 # op signin first
@@ -70,14 +65,14 @@ kubectl resource-capacity -p -c -u -n database-system
 kubectl create job --from=cronjob/talos-healthcheck talos-hc -n gitops-system
 ```
 
-### VM test issues
+#### VM test issues
 
 - only `proxmox` support secureboot and vip;
 - virtual disks, will make rook-ceph-osd-prepare `0/1 completed` forever;
 - virtual nic not support BIGTCP and XDP;
 - dragonfly needs `avx`, cpu should be `host` model;
 
-## Multi-Cluster plan
+### Multi-Cluster plan
 
 - homelab using talconfig `prod`; corplab using talconfig `test`;
 - multi-cluster flux, [ref](https://github.com/h-wb/home-ops/tree/main);
