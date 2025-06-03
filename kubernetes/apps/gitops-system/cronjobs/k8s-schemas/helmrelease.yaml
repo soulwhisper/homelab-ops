@@ -112,7 +112,7 @@ spec:
           rules:
             - apiGroups: ["apiextensions.k8s.io"]
               resources: ["customresourcedefinitions","customresourcedefinitions/status"]
-              verbs: []
+              verbs: ["get","list","watch"]
             - apiGroups: ["apiregistration.k8s.io"]
               resources: ["apiservices","apiservices/status"]
               verbs: ["get","list","watch"]
