@@ -57,7 +57,7 @@ spec:
           app:
             image:
               repository: ghcr.io/bjw-s-labs/wrangler
-              tag: 4.18.0@sha256:54ce7ef78a13f571cb011763a75e2c4b83e78d30860db9f3e370055beeec0db8
+              tag: 4.19.1@sha256:68f6fc8fc725b2e04d45e0f921ea94f7f14cd637a9135874e87f792c87183af7
             env:
               - name: HTTP_PROXY
                 value: "${HTTP_PROXY}"
