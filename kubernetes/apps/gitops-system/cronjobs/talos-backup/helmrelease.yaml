@@ -78,7 +78,7 @@ spec:
               - path: /tmp
                 subPath: tmp
               - path: /.talos
-                subPath: .talos
+                subPath: talos
       secrets:
         type: secret
         name: *name
