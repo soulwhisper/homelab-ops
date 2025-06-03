@@ -1,5 +1,5 @@
 ---
-# yaml-language-server: $schema=https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/snapshot.storage.k8s.io/volumesnapshotclass_v1.json
+# yaml-language-server: $schema=https://kubernetes-schemas.noirprime.com/snapshot.storage.k8s.io/volumesnapshotclass_v1.json
 apiVersion: snapshot.storage.k8s.io/v1
 kind: VolumeSnapshotClass
 metadata:
