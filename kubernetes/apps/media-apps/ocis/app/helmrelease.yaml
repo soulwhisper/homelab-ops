@@ -119,7 +119,7 @@ spec:
             subPath: data
           - path: /etc/ocis
             subPath: config
-      tmp:
+      tmpfs:
         type: emptyDir
         globalMounts:
           - path: /tmp

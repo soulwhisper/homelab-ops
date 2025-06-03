@@ -116,7 +116,7 @@ spec:
           maybe:
             app:
               - path: /rails/storage
-      tmp:
+      tmpfs:
         enabled: true
         type: emptyDir
         globalMounts:

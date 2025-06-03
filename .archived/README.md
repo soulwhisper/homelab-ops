@@ -11,6 +11,7 @@
 
 > components
 
+- cnpg:nfs-backup
 - gatus
 - volysnc:ceph-s3
 

@@ -24,11 +24,14 @@ spec:
       namespace: database-system
     - name: dragonfly-operator
       namespace: database-system
+    - name: keda
+      namespace: kube-system
     - name: onepassword-store
       namespace: security-system
   components:
     - ../../../../components/cnpg
     - ../../../../components/dragonfly
+    - ../../../../components/keda/nas-nfs-scaler
   postBuild:
     substitute:
       APP: *appname

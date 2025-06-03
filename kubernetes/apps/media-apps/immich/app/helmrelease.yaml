@@ -146,7 +146,7 @@ spec:
           - path: /usr/src/app/upload
             subPath: photo
 
-      tmp:
+      tmpfs:
         type: emptyDir
         globalMounts:
           - path: /cache

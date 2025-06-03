@@ -127,7 +127,7 @@ spec:
             code-server:
               - path: /config
                 subPath: config
-      tmp:
+      tmpfs:
         type: emptyDir
         advancedMounts:
           home-assistant:

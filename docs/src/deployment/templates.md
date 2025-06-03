@@ -168,7 +168,7 @@ spec:
         globalMounts:
           - path: /app/data
             subPath: data
-      tmp:
+      tmpfs:
         type: emptyDir
         globalMounts:
           - path: /tmp

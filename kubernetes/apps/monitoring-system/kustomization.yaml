@@ -6,6 +6,7 @@ namespace: monitoring-system
 components:
   - ../../components/common
 resources:
+  - ./blackbox-exporter/ks.yaml
   - ./coroot/ks.yaml
   - ./cronitor/ks.yaml
   - ./fluent-bit/ks.yaml

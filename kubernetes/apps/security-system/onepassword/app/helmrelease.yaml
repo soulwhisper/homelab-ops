@@ -102,7 +102,7 @@ spec:
           http:
             port: *apiPort
     persistence:
-      tmp:
+      tmpfs:
         type: emptyDir
         globalMounts:
           - path: *configDir
