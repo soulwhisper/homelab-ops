@@ -2,22 +2,19 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: list-snapshots-{{ ENV.APP }}
+  name: volsync-unlock-{{ ENV.APP }}
   namespace: {{ ENV.NS }}
 spec:
   ttlSecondsAfterFinished: 3600
   template:
-    metadata:
-      labels:
-        app.kubernetes.io/created-by: volsync
     spec:
       automountServiceAccountToken: false
       restartPolicy: OnFailure
       containers:
-        - name: list-snapshots
+        - name: volsync-unlock
           image: docker.io/restic/restic:latest
-          args:
-            - snapshots
+          args: ["unlock", "--remove-all"]
           envFrom:
             - secretRef:
                 name: {{ ENV.APP }}-volsync
+          resources: {}

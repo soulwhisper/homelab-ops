@@ -19,5 +19,5 @@ spec:
       runAsUser: {{ ENV.PUID }}
       runAsGroup: {{ ENV.PGID }}
       fsGroup: {{ ENV.PGID }}
-    repository: {{ ENV.APP }}-volsync-s3
+    repository: {{ ENV.APP }}-volsync
     storageClassName: {{ ENV.STORAGE_CLASS_NAME }}

@@ -12,13 +12,13 @@ spec:
       - "${VOLSYNC_ACCESSMODES:-ReadWriteOnce}"
     cacheAccessModes:
       - "${VOLSYNC_CACHE_ACCESSMODES:-ReadWriteOnce}"
-    cacheCapacity: "${VOLSYNC_CACHE_CAPACITY:-1Gi}"
+    cacheCapacity: "${VOLSYNC_CACHE_CAPACITY:-5Gi}"
     cacheStorageClassName: "${VOLSYNC_CACHE_SNAPSHOTCLASS:-ceph-block}"
     capacity: "${VOLSYNC_CAPACITY:-1Gi}"
     cleanupCachePVC: true
     cleanupTempPVC: true
     enableFileDeletion: true
     copyMethod: "${VOLSYNC_COPYMETHOD:-Snapshot}"
-    repository: "${APP}-volsync-nfs"
+    repository: "${APP}-volsync"
     storageClassName: "${VOLSYNC_STORAGECLASS:-ceph-block}"
     volumeSnapshotClassName: "${VOLSYNC_SNAPSHOTCLASS:-ceph-block-snapshot}"
