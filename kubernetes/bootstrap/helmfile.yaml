@@ -58,7 +58,7 @@ releases:
     namespace: networking-system
     atomic: true
     chart: oci://docker.io/envoyproxy/gateway-helm
-    version: 1.4.0
+    version: 1.4.1
     values: ['../apps/networking-system/envoy-gateway/app/values.yaml']
     needs: ['kube-system/spegel']
 
