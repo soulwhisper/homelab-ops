@@ -7,6 +7,7 @@ components:
   - ../../components/common
 resources:
   - ./fstrim/ks.yaml
+  - ./openebs/ks.yaml
   - ./rook-ceph/ks.yaml
   - ./snapshot-controller/ks.yaml
   - ./volsync/ks.yaml

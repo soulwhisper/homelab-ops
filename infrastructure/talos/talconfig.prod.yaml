@@ -220,6 +220,14 @@ patches:
           featureGates:
             UserNamespacesSupport: true
             UserNamespacesPodSecurityStandards: true
+        extraMounts:
+          - destination: /var/local/openebs
+            type: bind
+            source: /var/local/openebs
+            options:
+              - rbind
+              - rshared
+              - rw
 
   # Configure NFS mount options
   - |

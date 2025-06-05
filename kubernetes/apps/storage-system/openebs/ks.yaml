@@ -3,7 +3,7 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &appname volsync
+  name: &appname openebs
   namespace: &namespace storage-system
 spec:
   targetNamespace: *namespace
@@ -12,15 +12,10 @@ spec:
       app.kubernetes.io/name: *appname
   interval: 30m
   timeout: 5m
-  path: "./kubernetes/apps/storage-system/volsync/app"
+  path: "./kubernetes/apps/storage-system/openebs/app"
   prune: true
   sourceRef:
     kind: GitRepository
     name: gitops-system
     namespace: gitops-system
   wait: true
-  dependsOn:
-    - name: snapshot-controller
-      namespace: storage-system
-    - name: openebs
-      namespace: storage-system
