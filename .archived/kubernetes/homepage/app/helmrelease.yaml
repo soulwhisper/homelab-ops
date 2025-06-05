@@ -73,6 +73,7 @@ spec:
         homepage:
           type: ClusterRoleBinding
           roleRef:
+            kind: ClusterRole
             identifier: *name
           subjects:
             - identifier: *name

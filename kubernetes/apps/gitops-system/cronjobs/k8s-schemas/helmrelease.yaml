@@ -120,6 +120,7 @@ spec:
         k8s-schemas:
           type: ClusterRoleBinding
           roleRef:
+            kind: ClusterRole
             identifier: *name
           subjects:
             - identifier: *name

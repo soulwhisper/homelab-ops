@@ -3,37 +3,5 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-  - ./helmrepository.yaml
   - ./helmrelease.yaml
   - ./externalsecret.yaml
-
-patches:
-  - target:
-      kind: Deployment
-      name: cronitor
-    patch: |-
-      apiVersion: apps/v1
-      kind: Deployment
-      metadata:
-        name: cronitor
-      spec:
-        template:
-          spec:
-            containers:
-              - name: cronitor-kubernetes
-                env:
-                  - name: HTTP_PROXY
-                    valueFrom:
-                      configMapKeyRef:
-                        name: cluster-settings
-                        key: HTTP_PROXY
-                  - name: HTTPS_PROXY
-                    valueFrom:
-                      configMapKeyRef:
-                        name: cluster-settings
-                        key: HTTPS_PROXY
-                  - name: NO_PROXY
-                    valueFrom:
-                      configMapKeyRef:
-                        name: cluster-settings
-                        key: NO_PROXY
