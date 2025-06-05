@@ -50,6 +50,15 @@
       },
     },
     {
+      description: "Envoy Group",
+      groupName: "Envoy",
+      matchDatasources: ["docker"],
+      matchPackageNames: ["/envoyproxy/"],
+      group: {
+        commitMessageTopic: "{{{groupName}}} group",
+      },
+    },
+    {
       description: "External Secrets Operator Group",
       groupName: "External Secrets Operator",
       matchDatasources: ["docker"],
