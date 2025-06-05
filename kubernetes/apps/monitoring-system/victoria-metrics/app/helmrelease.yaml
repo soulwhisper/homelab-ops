@@ -32,6 +32,26 @@ spec:
           value: 0
         - name: VM_VMALERTMANAGER_CONFIGRELOADERCPU
           value: 0
+        - name: VM_VLOGSDEFAULT_IMAGE
+          value: "quay.io/victoriametrics/victoria-logs"
+        - name: "VM_VMALERTDEFAULT_IMAGE"
+          value: "quay.io/victoriametrics/vmalert"
+        - name: "VM_VMAGENTDEFAULT_IMAGE"
+          value: "quay.io/victoriametrics/vmagent"
+        - name: "VM_VMSINGLEDEFAULT_IMAGE"
+          value: "quay.io/victoriametrics/victoria-metrics"
+        - name: "VM_VMCLUSTERDEFAULT_VMSELECTDEFAULT_IMAGE"
+          value: "quay.io/victoriametrics/vmselect"
+        - name: "VM_VMCLUSTERDEFAULT_VMSTORAGEDEFAULT_IMAGE"
+          value: "quay.io/victoriametrics/vmstorage"
+        - name: "VM_VMCLUSTERDEFAULT_VMINSERTDEFAULT_IMAGE"
+          value: "quay.io/victoriametrics/vminsert"
+        - name: "VM_VMBACKUP_IMAGE"
+          value: "quay.io/victoriametrics/vmbackupmanager"
+        - name: "VM_VMAUTHDEFAULT_IMAGE"
+          value: "quay.io/victoriametrics/vmauth"
+        - name: "VM_VMALERTMANAGER_ALERTMANAGERDEFAULTBASEIMAGE"
+          value: "quay.io/prometheus/alertmanager"
         - name: HTTP_PROXY
           value: "${HTTP_PROXY}"
         - name: HTTPS_PROXY
@@ -55,6 +75,7 @@ spec:
             create: false
 
     vmsingle:
+      enabled: true
       spec:
         port: "8429"
         # -- Data retention period. Possible units character: h(ours), d(ays), w(eeks), y(ears), if no unit character specified - month. The minimum retention period is 24h. See these [docs](https://docs.victoriametrics.com/single-server-victoriametrics/#retention)
@@ -74,6 +95,38 @@ spec:
           requests:
             cpu: 500m
             memory: 2Gi
+
+    vmalert:
+      enabled: true
+      spec:
+        port: "8080"
+        extraArgs:
+          external.url: https://metrics.noirprime.com
+        # Skip vmalerts for vmlog rules
+        selectAllByDefault: false
+        ruleSelector:
+          matchExpressions:
+            - key: vmalert-logs.io/enabled
+              operator: NotIn
+              values: ["true"]
+        ruleNamespaceSelector:
+          matchExpressions:
+            - { key: somekey, operator: NotIn, values: ["never-used-value"] }
+
+    vmagent:
+      enabled: true
+      spec:
+        port: "8429"
+        extraArgs:
+          promscrape.maxScrapeSize: 50MiB
+          promscrape.streamParse: "true"
+          promscrape.dropOriginalLabels: "true"
+        resources:
+          limits:
+            memory: 1Gi
+          requests:
+            cpu: 500m
+            memory: 500Mi
 
     alertmanager:
       spec:
@@ -139,36 +192,6 @@ spec:
                   name: *name
                   key: PUSHOVER_USER_KEY
                 url_title: View in Alertmanager
-
-    vmalert:
-      spec:
-        port: "8080"
-        extraArgs:
-          external.url: https://metrics.noirprime.com
-        # Skip vmalerts for vmlog rules
-        selectAllByDefault: false
-        ruleSelector:
-          matchExpressions:
-            - key: vmalert-logs.io/enabled
-              operator: NotIn
-              values: ["true"]
-        ruleNamespaceSelector:
-          matchExpressions:
-            - { key: somekey, operator: NotIn, values: ["never-used-value"] }
-
-    vmagent:
-      spec:
-        port: "8429"
-        extraArgs:
-          promscrape.maxScrapeSize: 50MiB
-          promscrape.streamParse: "true"
-          promscrape.dropOriginalLabels: "true"
-        resources:
-          limits:
-            memory: 1Gi
-          requests:
-            cpu: 500m
-            memory: 500Mi
 
     grafana:
       enabled: false
