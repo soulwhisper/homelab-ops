@@ -54,7 +54,7 @@ spec:
                 value: "${NO_PROXY}"
             envFrom:
               - secretRef:
-                  name: *name
+                  name: talos-backup-s3
             resources:
               requests:
                 cpu: 10m

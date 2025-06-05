@@ -12,10 +12,8 @@ metadata:
     k8s.cronitor.io/cronitor-notify: "Pushover"
 spec:
   schedule: "*/10 * * * *"
-  backoffLimit: 5 # tolerate 5min
-  activeDeadlineSeconds: 60
-  successfulJobsHistoryLimit: 0
-  failedJobsHistoryLimit: 1
+  backoffLimit: 5 # tolerate 10min
+  activeDeadlineSeconds: 120
   jobTemplate:
     spec:
       template:
