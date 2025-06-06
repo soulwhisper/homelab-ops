@@ -3,7 +3,4 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-  - ./cronjob.yaml
-  - ./rbac.yaml
-
-  # this cronjob is tracked by cronitor, so not rewrite to helmrelease
+  - ./helmrelease.yaml

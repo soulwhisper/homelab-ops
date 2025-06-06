@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &name talos-backup
+  name: &name talos-healthcheck
 spec:
   interval: 30m
   chartRef:
@@ -25,11 +25,19 @@ spec:
 
   values:
     controllers:
-      talos-backup:
+      talos-healthcheck:
         type: cronjob
+        annotations:
+          k8s.cronitor.io/include: "true"
+          k8s.cronitor.io/cronitor-id: "Talos"
+          k8s.cronitor.io/cronitor-group: "Homelab"
+          k8s.cronitor.io/tags: "K8S"
+          k8s.cronitor.io/cronitor-notify: "Pushover"
         cronjob:
-          schedule: "0 2 * * *"
+          schedule: "*/10 * * * *"
           concurrencyPolicy: "Replace"
+          backoffLimit: 5
+          activeDeadlineSeconds: 120
           failedJobsHistory: 1
           successfulJobsHistory: 0
         pod:
@@ -38,31 +46,21 @@ spec:
             runAsUser: 65534
             runAsGroup: 65534
             runAsNonRoot: true
+          nodeSelector:
+            node-role.kubernetes.io/control-plane: ""
         containers:
           app:
             image:
-              repository: ghcr.io/siderolabs/talos-backup
-              tag: v0.1.0-beta.3
-            command: [/talos-backup]
-            workingDir: /tmp
-            env:
-              - name: TZ
-                value: "${TIMEZONE}"
-              - name: HTTP_PROXY
-                value: "${HTTP_PROXY}"
-              - name: HTTPS_PROXY
-                value: "${HTTPS_PROXY}"
-              - name: NO_PROXY
-                value: "${NO_PROXY}"
-            envFrom:
-              - secretRef:
-                  name: talos-backup-s3
+              repository: ghcr.io/siderolabs/talosctl
+              tag: latest
+            args:
+              - "health"
+              - "--nodes=${KUBE_VIP}" # work in cluster, without dns
             resources:
               requests:
                 cpu: 10m
-                memory: 128Mi
               limits:
-                memory: 2Gi
+                memory: 32Mi
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
@@ -72,15 +70,6 @@ spec:
         serviceAccount:
           identifier: *name
     persistence:
-      tmpfs:
-        type: emptyDir
-        advancedMounts:
-          talos-backup:
-            app:
-              - path: /tmp
-                subPath: tmp
-              - path: /.talos
-                subPath: talos
       secrets:
         type: secret
         name: *name
@@ -88,12 +77,12 @@ spec:
           - path: /var/run/secrets/talos.dev
             readOnly: true
     serviceAccount:
-      talos-backup: {}
+      talos-healthcheck: {}
     rawResources:
-      talos-backup:
+      talos-healthcheck:
         apiVersion: talos.dev/v1alpha1
         kind: ServiceAccount
         spec:
           spec:
             roles:
-              - os:etcd:backup
+              - os:admin
