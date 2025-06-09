@@ -1,10 +1,9 @@
 ---
 # :: enabled tunning
 # BIGTCP, xdp, for Intel-x710(ice);
-# Recommendation:netkit, host-routing, bbr, ebpf-backend-memory, ebpf-clock-probe;
-# maglev-hashing, preallocate-maps;
+# Recommendation:netkit, host-routing, bbr, ebpf-backend-memory, ebpf-clock-probe, preallocate-maps, maglev-hashing;
 # :: features
-# hubble:enabled, hostLegacyRouting:disabled, ipam:kubernetes;
+# hubble:disabled, hostLegacyRouting:disabled, ipam:kubernetes;
 # ::
 autoDirectNodeRoutes: true
 bandwidthManager:

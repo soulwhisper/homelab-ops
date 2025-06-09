@@ -13,6 +13,22 @@ tasks:
     cmds:
       - talosctl reset --system-labels-to-wipe STATE --system-labels-to-wipe EPHEMERAL --graceful=false --wait=false --reboot
 
+  "node-*":
+    desc: scale down talos node [node hostname required]
+    prompt: Reset talos node?
+    vars:
+      NODE: "{{index .MATCH 0}}"
+    preconditions:
+      - which kubectl talosctl
+      - test -f "${TALOSCONFIG}"
+      - talosctl config info
+      - ping -4 -c 1 {{.NODE}}
+      - test -f "${KUBECONFIG}"
+      - kubectl get node -l kubernetes.io/hostname={{.NODE}} --no-headers 2>/dev/null | grep -q .
+    cmds:
+      - talosctl reset -n {{.NODE}}
+      - kubectl delete node {{.NODE}}
+
   minio:
     desc: reset minio buckets for new install (only buckets defined)
     prompt: Reset minio buckets?

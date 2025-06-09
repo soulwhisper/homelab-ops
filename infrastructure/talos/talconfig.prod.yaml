@@ -7,6 +7,8 @@ endpoint: "https://k8s.homelab.internal:6443"
 # secureboot,nut,vip; bond,disk-encryption;
 # disabled features:
 # cni,coredns,forwardKubeDNSToHost,kube-proxy;
+# k8s features 1.33:
+# userNamespace:default, MutatingAdmissionPolicy:alpha;
 
 # renovate: depName=ghcr.io/siderolabs/installer datasource=docker
 talosVersion: v1.10.3
@@ -119,7 +121,7 @@ controlPlane:
   # controlPlane only patches
   patches:
     # ApiServer configuration
-    # Enable MutatingAdmissionPolicy and UserNamespaces;
+    # Enable MutatingAdmissionPolicy;
     - |-
       cluster:
         apiServer:
@@ -133,7 +135,7 @@ controlPlane:
                     - storage-system
           extraArgs:
             runtime-config: admissionregistration.k8s.io/v1alpha1=true
-            feature-gates: MutatingAdmissionPolicy=true,UserNamespacesSupport=true,UserNamespacesPodSecurityStandards=true
+            feature-gates: MutatingAdmissionPolicy=true
 
     # ETCD configuration, increase etcd quota to 8G, keep advertisedSubnets if using tailscale / kubespan
     - |-
@@ -216,10 +218,6 @@ patches:
         nodeIP:
           validSubnets:
             - 10.10.0.0/24
-        extraConfig:
-          featureGates:
-            UserNamespacesSupport: true
-            UserNamespacesPodSecurityStandards: true
         extraMounts:
           - destination: /var/local/openebs
             type: bind
