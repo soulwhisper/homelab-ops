@@ -41,3 +41,28 @@ spec:
     name: gitops-system
     namespace: gitops-system
   wait: false
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.noirprime.com/kustomize.toolkit.fluxcd.io/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: cilium-gateway
+  namespace: &namespace kube-system
+spec:
+  targetNamespace: *namespace
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: cilium
+      app.kubernetes.io/component: gateway
+  interval: 30m
+  timeout: 5m
+  path: "./kubernetes/apps/kube-system/cilium/gateway"
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: gitops-system
+    namespace: gitops-system
+  wait: true
+  dependsOn:
+    - name: cert-manager-issuers
+      namespace: security-system

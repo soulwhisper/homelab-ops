@@ -17,7 +17,6 @@
 
 > kubernetes:base
 
-- crds:gateway-api
 - apps:ingress-nginx
 
 > kubernetes:database
@@ -51,6 +50,7 @@
 > kubernetes:networking
 
 - apps:externaldns-rfc2136
+- apps:envoy-gateway
 
 > kubernetes:security
 

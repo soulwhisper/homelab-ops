@@ -53,15 +53,6 @@ releases:
     values: ['../apps/kube-system/spegel/app/values.yaml']
     needs: ['kube-system/coredns']
 
-  # to render gateway-api crd
-  - name: envoy-gateway
-    namespace: networking-system
-    atomic: true
-    chart: oci://docker.io/envoyproxy/gateway-helm
-    version: 1.4.1
-    values: ['../apps/networking-system/envoy-gateway/app/values.yaml']
-    needs: ['kube-system/spegel']
-
   # to render componets crd
   - name: external-secrets
     namespace: security-system

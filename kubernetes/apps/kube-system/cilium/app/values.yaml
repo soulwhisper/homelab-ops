@@ -36,9 +36,12 @@ devices: bond+
 endpointRoutes:
   enabled: true
 envoy:
-  enabled: false
+  enabled: true
+  rollOutPods: true
 gatewayAPI:
-  enabled: false
+  enabled: true
+  enableAlpn: true
+  xffNumTrustedHops: 1
 hubble:
   enabled: false
 ipam:
