@@ -43,5 +43,3 @@ spec:
   dependsOn:
     - name: envoy-gateway
       namespace: networking-system
-    - name: onepassword-store
-      namespace: security-system

@@ -64,5 +64,5 @@ spec:
     namespace: gitops-system
   wait: true
   dependsOn:
-    - name: cert-manager-issuers
-      namespace: security-system
+    - name: gateway-api-crds
+      namespace: networking-system

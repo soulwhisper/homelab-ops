@@ -18,6 +18,7 @@
 > kubernetes:base
 
 - apps:ingress-nginx
+- crds:gateway-api
 
 > kubernetes:database
 
