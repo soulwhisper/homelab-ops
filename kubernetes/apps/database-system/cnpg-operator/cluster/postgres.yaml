@@ -6,7 +6,7 @@ metadata:
   name: postgres
 spec:
   instances: 3
-  imageName: ghcr.io/cloudnative-pg/postgresql:17
+  imageName: ghcr.io/tensorchord/cloudnative-vectorchord:17
   primaryUpdateStrategy: unsupervised
   primaryUpdateMethod: switchover
   plugins:
@@ -22,16 +22,24 @@ spec:
     name: cloudnative-pg
   enableSuperuserAccess: true
   postgresql:
+    shared_preload_libraries:
+      - vchord.so
     parameters:
+      effective_io_concurrency: "200"
       max_connections: "400"
-      shared_buffers: 256MB
+      shared_buffers: "4GB" # 25-90% total memory
   resources:
     requests:
       cpu: 500m
     limits:
-      memory: 4Gi
+      memory: 6Gi
   monitoring:
     enablePodMonitor: true
+
+  bootstrap:
+    initdb:
+      postInitSQL:
+        - CREATE EXTENSION IF NOT EXISTS vchord CASCADE;
 
   # :: Notice: backup.barmanObjectStore is deprecated
   # :: recover cluster, uncomment below

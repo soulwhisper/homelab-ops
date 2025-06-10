@@ -35,4 +35,3 @@ spec:
   postBuild:
     substitute:
       APP: *appname
-      CNPG_NAME: vector
