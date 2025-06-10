@@ -23,7 +23,7 @@ spec:
   enableSuperuserAccess: true
   postgresql:
     shared_preload_libraries:
-      - vchord.so
+      - vchord
     parameters:
       effective_io_concurrency: "200"
       max_connections: "400"
