@@ -3,8 +3,10 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-  - ./ocirepository.yaml
+  # app
   - ./helmrelease.yaml
+  - ./ocirepository.yaml
+  # utils
   - ./prometheusrules.yaml
   - ./github/
 configMapGenerator:

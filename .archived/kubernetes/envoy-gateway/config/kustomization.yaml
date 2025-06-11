@@ -3,8 +3,10 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
+  # app
   - ./external.yaml
   - ./internal.yaml
+  # utils
   - ./gatewayclass.yaml
   - ./redirect.yaml
   - ./servicemonitor.yaml

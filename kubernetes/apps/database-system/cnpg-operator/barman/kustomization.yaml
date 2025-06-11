@@ -3,8 +3,10 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
+  # app
   - ./crd.yaml
   - ./deployment.yaml
+  # utils
   - ./rbac.yaml
   - ./service.yaml
   - ./certificate.yaml

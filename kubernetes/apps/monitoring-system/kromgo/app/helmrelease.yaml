@@ -79,7 +79,7 @@ spec:
         hostnames: ["kromgo.noirprime.com"]
         parentRefs:
           - name: external
-            namespace: networking-system
+            namespace: kube-system
             sectionName: https
         rules:
           - backendRefs:

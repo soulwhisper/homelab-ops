@@ -59,8 +59,8 @@
       },
     },
     {
-      description: "External Secrets Operator Group",
-      groupName: "External Secrets Operator",
+      description: "External Secrets Group",
+      groupName: "External Secrets",
       matchDatasources: ["docker"],
       matchPackageNames: ["/external-secrets/"],
       group: {
@@ -99,6 +99,15 @@
       groupName: "Silence-Operator",
       matchPackageNames: ["/silence-operator/"],
       matchDatasources: ["docker", "github-releases"],
+      group: {
+        commitMessageTopic: "{{{groupName}}} group",
+      },
+    },
+    {
+      description: "Spegel Group",
+      groupName: "Spegel",
+      matchPackageNames: ["/spegel-org"],
+      matchDatasources: ["docker"],
       group: {
         commitMessageTopic: "{{{groupName}}} group",
       },

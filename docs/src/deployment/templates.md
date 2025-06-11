@@ -155,7 +155,7 @@ spec:
           - sub.example.com
         parentRefs:
           - name: internal
-            namespace: networking-system
+            namespace: kube-system
             sectionName: https
         rules:
           - backendRefs:

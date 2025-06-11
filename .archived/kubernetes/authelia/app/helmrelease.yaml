@@ -142,7 +142,7 @@ spec:
         hostnames: ["auth.noirprime.com"]
         parentRefs:
           - name: external
-            namespace: networking-system
+            namespace: kube-system
             sectionName: https
         rules:
           - backendRefs:

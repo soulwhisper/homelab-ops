@@ -85,7 +85,7 @@ spec:
         hostnames: ["n8n.noirprime.com"]
         parentRefs:
           - name: internal
-            namespace: networking-system
+            namespace: kube-system
             sectionName: https
         rules:
           - backendRefs:
@@ -97,7 +97,7 @@ spec:
           - n8n-webhook.noirprime.com
         parentRefs:
           - name: external
-            namespace: networking-system
+            namespace: kube-system
             sectionName: https
         rules:
           - matches:
