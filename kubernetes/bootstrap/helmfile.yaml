@@ -41,7 +41,7 @@ releases:
     labels:
       wipe-rook.enabled: true
     chart: oci://ghcr.io/bjw-s-labs/helm/app-template
-    version: 4.0.1
+    version: 4.1.0
     values: ['./templates/wipe-rook.yaml.gotmpl']
     needs: ['kube-system/coredns']
 
