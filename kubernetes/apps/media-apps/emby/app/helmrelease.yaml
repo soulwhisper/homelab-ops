@@ -32,7 +32,7 @@ spec:
           app:
             image:
               repository: docker.io/emby/embyserver
-              tag: 4.9.1.0@sha256:dfe2866d411fe6de66dad1c6aa756bfbff39a6549e79549b6d335f43da6c6dc8
+              tag: 4.9.1.1@sha256:f02e08e59d37a43ca20ef1a0cea0b2dc03e94b24649eb2d723602a2bb043fcab
             env:
               TZ: Asia/Shanghai
               UID: 2000
