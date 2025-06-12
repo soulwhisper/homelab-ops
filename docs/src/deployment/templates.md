@@ -79,6 +79,8 @@ spec:
       example-app:
         annotations:
           reloader.stakater.com/auto: "true"
+        serviceAccount: # if only one defined, can be ignored
+          identifier: example-app
 
         initContainers:
           init-db:
@@ -88,7 +90,6 @@ spec:
             envFrom:
               - secretRef:
                   name: example-app-initdb
-
         containers:
           app:
             image:
@@ -162,6 +163,8 @@ spec:
               - identifier: app
                 port: *port
 
+    serviceAccount:
+      example-app: {}
     persistence:
       app:
         existingClaim: *name

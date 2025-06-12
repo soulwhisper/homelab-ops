@@ -157,7 +157,12 @@ spec:
           - name: "null"
           - name: pushover
             pushover_configs:
-              - html: true
+              - send_resolved: true
+                priority: |-
+                  {{ if eq .Status "firing" }}1{{ else }}0{{ end }}
+                title: >-
+                  [{{ .Status | toUpper }}{{ if eq .Status "firing" }}:{{ .Alerts.Firing | len }}{{ end }}]
+                  {{ .CommonLabels.alertname }}
                 message: |-
                   {{- range .Alerts }}
                     {{- if ne .Annotations.description "" }}
@@ -177,13 +182,7 @@ spec:
                       </small>
                     {{- end }}
                   {{- end }}
-                priority: |-
-                  {{ if eq .Status "firing" }}1{{ else }}0{{ end }}
-                send_resolved: true
                 sound: gamelan
-                title: >-
-                  [{{ .Status | toUpper }}{{ if eq .Status "firing" }}:{{ .Alerts.Firing | len }}{{ end }}]
-                  {{ .CommonLabels.alertname }}
                 ttl: 86400s
                 token:
                   name: *name
@@ -191,7 +190,6 @@ spec:
                 user_key:
                   name: *name
                   key: PUSHOVER_USER_KEY
-                url_title: View in Alertmanager
 
     grafana:
       enabled: false

@@ -1,5 +1,5 @@
 # ARG BASE=ghcr.io/cloudnative-pg/postgresql:17-standard-bookworm
-ARG BASE=ghcr.io/supabase/postgres:17.4.1.043
+ARG BASE=ghcr.io/supabase/postgres:latest
 FROM $BASE AS cnpg-dev
 
 ## : add extensions with pig-cli support

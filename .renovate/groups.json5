@@ -14,6 +14,15 @@
       },
     },
     {
+      description: "App-template Group",
+      groupName: "App-template",
+      matchDatasources: ["docker"],
+      matchPackageNames: ["app-template"],
+      group: {
+        commitMessageTopic: "{{{groupName}}} group",
+      },
+    },
+    {
       description: ["Cert-Manager Group"],
       groupName: "Cert-Manager",
       matchDatasources: ["docker"],

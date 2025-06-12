@@ -15,6 +15,7 @@
   - [Cloudflare](./infrastructure/cloudflare.md)
   - [Domains](./infrastructure/domains.md)
 - [Hardware](./infrastructure/hardware.md)
+- [Notification](./infrastructure/notification.md)
 
 ---
 
