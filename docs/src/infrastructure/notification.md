@@ -1,5 +1,12 @@
 ## Notification
 
+### Hub
+
+- choose `apprise` as notification-hub, [ref](https://hub.docker.com/r/caronc/apprise);
+- app -> hub -> platforms;
+- via webhook: `http://hostname:8000/notify`
+- to severchan: `schan://sendkey/`
+
 ### Method
 
 > Pushover
@@ -8,9 +15,10 @@
 
 > Serverchan
 
-- via webhook, [ref](https://sct.ftqq.com/); free-tier is enough;
-- could push messages with content to my working-apps; dont need proxy;
-- prefer `sct`, dont need app;
+- via webhook, [ref](https://sct.ftqq.com/); free-tier is enough; dont need proxy;
+- if work, prefer `sct_appkey`, dont need another app, push to work_channel;
+- if home, prefer `sc3_appkey`, dont need app running, push to status_bar;
+- support markdown message;
 
 ### Implementation
 
