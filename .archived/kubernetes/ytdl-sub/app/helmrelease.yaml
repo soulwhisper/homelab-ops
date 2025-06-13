@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: ytdl-sub
+  name: &name ytdl-sub
 spec:
   interval: 30m
   chartRef:
@@ -46,13 +46,6 @@ spec:
             args:
               - |
                 ytdl-sub --log-level=debug --config=/config/config.yaml sub /data/subscriptions.yaml
-            securityContext:
-              allowPrivilegeEscalation: false
-              capabilities:
-                drop:
-                  - ALL
-              seccompProfile:
-                type: RuntimeDefault
             resources:
               requests:
                 cpu: 10m
@@ -60,18 +53,19 @@ spec:
               limits:
                 gpu.intel.com/i915: 1
                 memory: 2Gi
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities: { drop: ["ALL"] }
+              readOnlyRootFilesystem: true
 
     persistence:
       config:
-        name: ytdl-sub
         type: configMap
-        advancedMounts:
-          ytdl-sub:
-            app:
-              - path: /config/config.yaml
-                subPath: config.yaml
-                readOnly: true
-
+        name: *name
+        globalMounts:
+          - path: /config/config.yaml
+            subPath: config.yaml
+            readOnly: true
       media:
         type: nfs
         server: nas.homelab.internal

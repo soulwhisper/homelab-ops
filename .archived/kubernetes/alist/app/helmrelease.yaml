@@ -24,18 +24,12 @@ spec:
     keepHistory: false
 
   values:
+    defaultPodOptions:
+      hostUsers: false
     controllers:
       alist:
-        pod:
-          securityContext:
-            runAsUser: 2000
-            runAsGroup: 2000
-            runAsNonRoot: true
-            fsGroup: 2000
-            fsGroupChangePolicy: OnRootMismatch
         annotations:
           reloader.stakater.com/auto: "true"
-
         initContainers:
           init-config:
             image:
@@ -50,7 +44,6 @@ spec:
             envFrom:
               - secretRef:
                   name: *name
-
         containers:
           app:
             image:
@@ -61,46 +54,38 @@ spec:
               PUID: 2000
               GUID: 2000
               UMASK: 022
-            securityContext:
-              allowPrivilegeEscalation: false
-              capabilities:
-                drop:
-                  - ALL
-              seccompProfile:
-                type: RuntimeDefault
+            ports:
+              - name: http
+                containerPort: &port 5244
             resources:
               requests:
                 cpu: 15m
                 memory: 500Mi
               limits:
                 memory: 1Gi
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities: { drop: ["ALL"] }
+              readOnlyRootFilesystem: true
 
     service:
       app:
-        controller: *name
         ports:
           http:
-            port: &port 5244
+            port: *port
     route:
       app:
-        hostnames:
-          - alist.noirprime.com
+        hostnames: ["alist.noirprime.com"]
         parentRefs:
           - name: internal
             namespace: kube-system
             sectionName: https
-        rules:
-          - backendRefs:
-              - identifier: app
-                port: *port
 
     persistence:
       app:
         existingClaim: *name
         globalMounts:
           - path: /opt/alist/data
-            subPath: data
-
       media:
         type: nfs
         server: nas.homelab.internal

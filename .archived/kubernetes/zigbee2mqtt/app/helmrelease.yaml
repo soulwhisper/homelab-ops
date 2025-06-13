@@ -26,7 +26,6 @@ spec:
   values:
     defaultPodOptions:
       hostUsers: false
-
     controllers:
       zigbee2mqtt:
         annotations:
@@ -65,7 +64,7 @@ spec:
               ZIGBEE2MQTT_CONFIG_DEVICE_OPTIONS_LEGACY: false
               ZIGBEE2MQTT_CONFIG_DEVICE_OPTIONS_RETAIN: true
               ZIGBEE2MQTT_CONFIG_EXPERIMENTAL_NEW_API: true
-              ZIGBEE2MQTT_CONFIG_FRONTEND_PORT: &httpPort 8080
+              ZIGBEE2MQTT_CONFIG_FRONTEND_PORT: &port 8080
               ZIGBEE2MQTT_CONFIG_FRONTEND_URL: http://zigbee.noirprime.com
               ZIGBEE2MQTT_CONFIG_HOMEASSISTANT_DISCOVERY_TOPIC: homeassistant
               ZIGBEE2MQTT_CONFIG_HOMEASSISTANT_EXPERIMENTAL_EVENT_ENTITIES: true
@@ -96,15 +95,12 @@ spec:
             resources:
               requests:
                 cpu: 50m
-                memory: 384Mi
               limits:
                 memory: 384Mi
-            securityContext:
+            securityContext: &securityContext
               allowPrivilegeEscalation: false
+              capabilities: { drop: ["ALL"] }
               readOnlyRootFilesystem: true
-              capabilities:
-                drop:
-                  - ALL
           code-server:
             image:
               repository: ghcr.io/coder/code-server
@@ -126,18 +122,18 @@ spec:
                 cpu: 10m
               limits:
                 memory: 512Mi
+            securityContext: *securityContext
 
     service:
       app:
-        controller: *name
         ports:
           http:
             primary: true
-            port: *httpPort
+            port: *port
           metrics:
             port: 9000
           code-server:
-            port: 12321
+            port: &codePort 12321
 
     route:
       app:
@@ -147,6 +143,9 @@ spec:
             namespace: kube-system
             sectionName: https
         rules:
+          - backendRefs:
+              - identifier: app
+                port: *port
           - matches:
               - path:
                   type: PathPrefix
@@ -159,17 +158,10 @@ spec:
                     replacePrefixMatch: /
             backendRefs:
               - identifier: app
-                port: 12321
-          - backendRefs:
-              - identifier: app
-                port: *httpPort
+                port: *codePort
 
     persistence:
       app:
         existingClaim: *name
-        advancedMounts:
-          zigbee2mqtt:
-            app:
-              - path: /data
-            code-server:
-              - path: /data
+        globalMounts:
+          - path: /data

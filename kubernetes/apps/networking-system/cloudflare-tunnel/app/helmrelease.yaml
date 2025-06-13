@@ -75,21 +75,16 @@ spec:
                 memory: 256Mi
             securityContext:
               allowPrivilegeEscalation: false
+              capabilities: { drop: ["ALL"] }
               readOnlyRootFilesystem: true
-              capabilities:
-                drop:
-                  - ALL
 
     service:
       app:
-        controller: *name
         ports:
           http:
             port: *port
-
     serviceMonitor:
       app:
-        serviceName: *name
         endpoints:
           - port: http
             scheme: http

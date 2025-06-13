@@ -40,26 +40,25 @@ spec:
               HTTP_PROXY: "${HTTP_PROXY}"
               HTTPS_PROXY: "${HTTPS_PROXY}"
               NO_PROXY: "${NO_PROXY}"
-            securityContext:
-              allowPrivilegeEscalation: false
-              capabilities:
-                drop:
-                  - ALL
-              seccompProfile:
-                type: RuntimeDefault
+            ports:
+              - name: http
+                containerPort: &port 7892
             resources:
               requests:
                 cpu: 15m
                 memory: 128Mi
               limits:
                 memory: 512Mi
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities: { drop: ["ALL"] }
+              readOnlyRootFilesystem: true
 
     service:
       app:
-        controller: *name
         ports:
           http:
-            port: &port 7892
+            port: *port
     route:
       app:
         hostnames: ["comic.noirprime.com"]
@@ -67,10 +66,6 @@ spec:
           - name: internal
             namespace: kube-system
             sectionName: https
-        rules:
-          - backendRefs:
-              - identifier: app
-                port: *port
 
     persistence:
       app:
@@ -80,7 +75,6 @@ spec:
             subPath: config
           - path: /app/data
             subPath: data
-
       media:
         type: nfs
         server: nas.homelab.internal

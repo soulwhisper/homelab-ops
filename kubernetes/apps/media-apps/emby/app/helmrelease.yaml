@@ -24,6 +24,8 @@ spec:
     keepHistory: false
 
   values:
+    defaultPodOptions:
+      hostUsers: false
     controllers:
       emby:
         annotations:
@@ -39,13 +41,9 @@ spec:
               GID: 2000
               # GIDLIST: 100
               UMASK: 022
-            securityContext:
-              allowPrivilegeEscalation: false
-              capabilities:
-                drop:
-                  - ALL
-              seccompProfile:
-                type: RuntimeDefault
+            ports:
+              - name: http
+                containerPort: &port 8096
             resources:
               requests:
                 cpu: 15m
@@ -53,13 +51,16 @@ spec:
               limits:
                 gpu.intel.com/i915: 1
                 memory: 4Gi
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities: { drop: ["ALL"] }
+              readOnlyRootFilesystem: true
 
     service:
       app:
-        controller: *name
         ports:
           http:
-            port: &port 8096
+            port: *port
     route:
       app:
         hostnames: ["movie.noirprime.com"]
@@ -67,18 +68,12 @@ spec:
           - name: internal
             namespace: kube-system
             sectionName: https
-        rules:
-          - backendRefs:
-              - identifier: app
-                port: *port
 
     persistence:
       app:
         existingClaim: *name
         globalMounts:
           - path: /config
-            subPath: config
-
       media:
         type: nfs
         server: nas.homelab.internal

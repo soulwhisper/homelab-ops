@@ -12,5 +12,5 @@ data:
   REDIS_HOSTNAME: immich-dragonfly.media-apps.svc.cluster.local
   REDIS_PORT: "6379"
   REDIS_DBINDEX: "0"
-  IMMICH_MACHINE_LEARNING_URL: http://immich-machine-learning.media-apps.svc.cluster.local:3003
+  IMMICH_MACHINE_LEARNING_URL: http://localhost:3003
   UPLOAD_LOCATION: /usr/src/app/upload

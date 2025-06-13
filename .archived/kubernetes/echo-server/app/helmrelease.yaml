@@ -25,11 +25,7 @@ spec:
 
   values:
     defaultPodOptions:
-      securityContext:
-        runAsNonRoot: true
-        runAsUser: 2000
-        runAsGroup: 2000
-
+      hostUsers: false
     controllers:
       echo:
         replicas: 1
@@ -57,25 +53,23 @@ spec:
                   timeoutSeconds: 1
                   failureThreshold: 3
               readiness: *probes
-            securityContext:
-              allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
-              capabilities: { drop: ["ALL"] }
             resources:
               requests:
                 cpu: 10m
               limits:
                 memory: 64Mi
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities: { drop: ["ALL"] }
+              readOnlyRootFilesystem: true
 
     service:
       app:
-        controller: *name
         ports:
           http:
             port: *port
     serviceMonitor:
       app:
-        serviceName: *name
         endpoints:
           - port: http
 
@@ -86,7 +80,3 @@ spec:
           - name: external
             namespace: kube-system
             sectionName: https
-        rules:
-          - backendRefs:
-              - identifier: app
-                port: *port

@@ -25,12 +25,7 @@ spec:
 
   values:
     defaultPodOptions:
-      securityContext:
-        runAsUser: 2000
-        runAsGroup: 2000
-        runAsNonRoot: true
-        fsGroup: 2000
-        fsGroupChangePolicy: OnRootMismatch
+      hostUsers: false
     controllers:
       komga:
         annotations:
@@ -42,26 +37,25 @@ spec:
               tag: 1.21.3@sha256:72dc9f81a0a528752e953028a7d3ca6a83f8eabe2a617e3c7e53cfa594c84256
             env:
               TZ: Asia/Shanghai
-            securityContext:
-              allowPrivilegeEscalation: false
-              capabilities:
-                drop:
-                  - ALL
-              seccompProfile:
-                type: RuntimeDefault
+            ports:
+              - name: http
+                containerPort: &port 25600
             resources:
               requests:
                 cpu: 15m
                 memory: 128Mi
               limits:
                 memory: 512Mi
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities: { drop: ["ALL"] }
+              readOnlyRootFilesystem: true
 
     service:
       app:
-        controller: *name
         ports:
           http:
-            port: &port 25600
+            port: *port
     route:
       app:
         hostnames: ["manga.noirprime.com"]
@@ -69,10 +63,6 @@ spec:
           - name: internal
             namespace: kube-system
             sectionName: https
-        rules:
-          - backendRefs:
-              - identifier: app
-                port: *port
 
     persistence:
       app:
@@ -82,7 +72,6 @@ spec:
             subPath: config
           - path: /data
             subPath: data
-
       media:
         type: nfs
         server: nas.homelab.internal

@@ -24,6 +24,8 @@ spec:
     keepHistory: false
 
   values:
+    defaultPodOptions:
+      hostUsers: false
     controllers:
       homepage:
         replicas: 1
@@ -43,12 +45,19 @@ spec:
             envFrom:
               - secretRef:
                   name: *name
+            ports:
+              - name: http
+                containerPort: &port 3000
             resources:
               requests:
                 cpu: 15m
                 memory: 200M
               limits:
                 memory: 500Mi
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities: { drop: ["ALL"] }
+              readOnlyRootFilesystem: true
 
     serviceAccount:
       homepage: {}
@@ -80,10 +89,9 @@ spec:
 
     service:
       app:
-        controller: *name
         ports:
           http:
-            port: &port 3000
+            port: *port
     route:
       app:
         hostnames: ["home.noirprime.com"]
@@ -91,14 +99,9 @@ spec:
           - name: internal
             namespace: kube-system
             sectionName: https
-        rules:
-          - backendRefs:
-              - identifier: app
-                port: *port
 
     persistence:
       config:
-        enabled: true
         type: configMap
         name: *name
         globalMounts:

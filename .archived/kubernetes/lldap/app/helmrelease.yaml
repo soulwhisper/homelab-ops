@@ -25,6 +25,7 @@ spec:
 
   values:
     defaultPodOptions:
+      hostUsers: false
       topologySpreadConstraints:
         - maxSkew: 1
           topologyKey: kubernetes.io/hostname
@@ -47,7 +48,6 @@ spec:
             envFrom:
               - secretRef:
                   name: lldap-initdb
-
         containers:
           app:
             image:
@@ -75,21 +75,17 @@ spec:
                 memory: 500Mi
             securityContext:
               allowPrivilegeEscalation: false
+              capabilities: { drop: ["ALL"] }
               readOnlyRootFilesystem: true
-              capabilities:
-                drop:
-                  - ALL
 
     service:
       app:
-        controller: *name
         ports:
           http:
             port: *port
+            primary: true
           ldap:
-            enabled: true
             port: *ldapPort
-
     route:
       app:
         hostnames: ["lldap.noirprime.com"]
@@ -97,12 +93,9 @@ spec:
           - name: internal
             namespace: kube-system
             sectionName: https
-        rules:
-          - backendRefs:
-              - identifier: app
-                port: *port
 
     persistence:
-      data:
-        enabled: true
+      tmpfs:
         type: emptyDir
+        globalMounts:
+          - path: /data

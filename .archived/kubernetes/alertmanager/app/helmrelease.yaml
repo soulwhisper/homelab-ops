@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: alertmanager
+  name: &name alertmanager
 spec:
   interval: 30m
   chartRef:
@@ -24,12 +24,13 @@ spec:
     keepHistory: false
 
   values:
+    defaultPodOptions:
+      hostUsers: false
     controllers:
       alertmanager:
         type: statefulset
         annotations:
           reloader.stakater.com/auto: "true"
-
         statefulset:
           volumeClaimTemplates:
             - name: storage
@@ -38,7 +39,6 @@ spec:
               storageClass: ceph-block
               globalMounts:
                 - path: /alertmanager
-
         containers:
           alertmanager:
             image:
@@ -46,7 +46,7 @@ spec:
               tag: v0.28.1
             ports:
               - name: http
-                containerPort: 9093
+                containerPort: &port 9093
             probes:
               liveness:
                 enabled: true
@@ -65,42 +65,32 @@ spec:
                 memory: 99M
             securityContext:
               allowPrivilegeEscalation: false
-              capabilities:
-                drop:
-                  - ALL
-              seccompProfile:
-                type: RuntimeDefault
+              capabilities: { drop: ["ALL"] }
+              readOnlyRootFilesystem: true
 
     service:
       app:
-        controller: alertmanager
         ports:
           http:
-            port: &port 9093
-
+            port: *port
     route:
       app:
-        hostnames:
-          - alm.noirprime.com
+        hostnames: ["alert.noirprime.com"]
         parentRefs:
           - name: internal
             namespace: kube-system
             sectionName: https
-        rules:
-          - backendRefs:
-              - identifier: app
-                port: *port
 
     persistence:
       config:
         type: configMap
-        name: alertmanager
+        name: *name
         globalMounts:
           - path: /etc/alertmanager
             readOnly: true
       secrets:
         type: secret
-        name: alertmanager
+        name: *name
         globalMounts:
           - path: /etc/secrets
             readOnly: true

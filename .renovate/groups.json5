@@ -14,10 +14,13 @@
       },
     },
     {
-      description: "App-template Group",
-      groupName: "App-template",
+      description: "BJW-S LABS Group",
+      groupName: "BJW-S LABS",
       matchDatasources: ["docker"],
-      matchPackageNames: ["app-template"],
+      matchPackageNames: [
+        "/bjw-s/",
+        "/bjw-s-labs/",
+      ],
       group: {
         commitMessageTopic: "{{{groupName}}} group",
       },

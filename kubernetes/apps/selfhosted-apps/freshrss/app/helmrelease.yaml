@@ -37,8 +37,8 @@ spec:
               tag: 1.26.3-alpine
             env:
               CRON_MIN: "*"
-              DOMAIN: freshrss.noirprime.com
-              LISTEN: 8080
+              DOMAIN: rss.noirprime.com
+              LISTEN: &port 8080
             probes:
               liveness:
                 enabled: true
@@ -50,14 +50,16 @@ spec:
                 memory: 128Mi
               limits:
                 memory: 512Mi
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities: { drop: ["ALL"] }
+              readOnlyRootFilesystem: true
 
     service:
       app:
-        controller: *name
         ports:
           http:
-            port: &port 8080
-
+            port: *port
     route:
       app:
         hostnames: ["rss.noirprime.com"]
@@ -65,20 +67,12 @@ spec:
           - name: internal
             namespace: kube-system
             sectionName: https
-        rules:
-          - backendRefs:
-              - identifier: app
-                port: *port
 
     persistence:
       app:
         existingClaim: *name
-        advancedMounts:
-          freshrss:
-            app:
-              - path: /var/www/FreshRSS/data
-                subPath: data
-                readOnly: false
-              - path: /var/www/FreshRSS/extensions
-                subPath: extensions
-                readOnly: false
+        globalMounts:
+          - path: /var/www/FreshRSS/data
+            subPath: data
+          - path: /var/www/FreshRSS/extensions
+            subPath: extensions

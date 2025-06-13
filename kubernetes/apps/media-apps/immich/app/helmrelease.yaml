@@ -27,17 +27,11 @@ spec:
     defaultPodOptions:
       automountServiceAccountToken: false
       enableServiceLinks: false
-      securityContext:
-        runAsUser: 2000
-        runAsGroup: 2000
-        runAsNonRoot: true
-        fsGroup: 2000
-        fsGroupChangePolicy: OnRootMismatch
+      hostUsers: false
     controllers:
       immich:
         annotations:
           reloader.stakater.com/auto: "true"
-
         initContainers:
           init-db:
             image:
@@ -46,7 +40,6 @@ spec:
             envFrom:
               - secretRef:
                   name: immich-initdb
-
         containers:
           app:
             image:
@@ -81,13 +74,9 @@ spec:
             envFrom: &envFrom
               - configMapRef:
                   name: *name
-            securityContext: &securityContext
-              allowPrivilegeEscalation: false
-              capabilities:
-                drop:
-                  - ALL
-              seccompProfile:
-                type: RuntimeDefault
+            ports:
+              - name: http
+                containerPort: &port 2283
             resources:
               requests: &requests
                 cpu: 100m
@@ -95,36 +84,34 @@ spec:
               limits:
                 memory: 4Gi
                 gpu.intel.com/i915: 1
-
-      machine-learning:
-        annotations:
-          reloader.stakater.com/auto: "true"
-        containers:
-          app:
+            securityContext: &securityContext
+              allowPrivilegeEscalation: false
+              capabilities: { drop: ["ALL"] }
+              readOnlyRootFilesystem: true
+          machine-learning:
             image:
               repository: ghcr.io/immich-app/immich-machine-learning
               tag: v1.132.3
             env:
               TRANSFORMERS_CACHE: /cache
             envFrom: *envFrom
-            securityContext: *securityContext
+            ports:
+              - name: http
+                containerPort: &mlPort 3003
             resources:
               requests: *requests
               limits:
                 memory: 2Gi
+            securityContext: *securityContext
 
     service:
       app:
-        controller: *name
         ports:
           http:
-            port: &port 2283
-      machine-learning:
-        controller: machine-learning
-        ports:
-          http:
-            port: 3003
-
+            port: *port
+            primary: true
+          machine-learning:
+            port: *mlPort
     route:
       app:
         hostnames: ["photo.noirprime.com"]
@@ -132,20 +119,8 @@ spec:
           - name: external
             namespace: kube-system
             sectionName: https
-        rules:
-          - backendRefs:
-              - identifier: app
-                port: *port
 
     persistence:
-      media:
-        type: nfs
-        server: nas.homelab.internal
-        path: /mnt/Arcanum/shared/media
-        globalMounts:
-          - path: /usr/src/app/upload
-            subPath: photo
-
       tmpfs:
         type: emptyDir
         globalMounts:
@@ -155,3 +130,10 @@ spec:
             subPath: tmp
           - path: /usr/src/app/.reverse-geocoding-dump
             subPath: geocoding-dump
+      media:
+        type: nfs
+        server: nas.homelab.internal
+        path: /mnt/Arcanum/shared/media
+        globalMounts:
+          - path: /usr/src/app/upload
+            subPath: photo

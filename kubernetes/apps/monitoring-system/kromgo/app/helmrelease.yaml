@@ -25,12 +25,7 @@ spec:
 
   values:
     defaultPodOptions:
-      securityContext:
-        runAsUser: 2000
-        runAsGroup: 2000
-        fsGroup: 2000
-        runAsNonRoot: true
-        fsGroupChangePolicy: OnRootMismatch
+      hostUsers: false
       topologySpreadConstraints:
         - maxSkew: 1
           topologyKey: kubernetes.io/hostname
@@ -38,7 +33,6 @@ spec:
           labelSelector:
             matchLabels:
               app.kubernetes.io/name: kromgo
-
     controllers:
       kromgo:
         replicas: 1
@@ -54,23 +48,19 @@ spec:
               PROMETHEUS_URL: http://vmsingle-stack.monitoring-system.svc.cluster.local:8429
               SERVER_HOST: 0.0.0.0
               SERVER_PORT: &port 8080
-            securityContext:
-              allowPrivilegeEscalation: false
-              capabilities:
-                drop:
-                  - "ALL"
-              seccompProfile:
-                type: RuntimeDefault
             resources:
               requests:
                 cpu: 5m
                 memory: 10M
               limits:
                 memory: 64M
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities: { drop: ["ALL"] }
+              readOnlyRootFilesystem: true
 
     service:
       app:
-        controller: *name
         ports:
           http:
             port: *port
@@ -81,10 +71,6 @@ spec:
           - name: external
             namespace: kube-system
             sectionName: https
-        rules:
-          - backendRefs:
-              - identifier: app
-                port: *port
 
     persistence:
       config:

@@ -26,7 +26,6 @@ spec:
   values:
     defaultPodOptions:
       hostUsers: false
-
     controllers:
       open-webui:
         annotations:
@@ -41,6 +40,9 @@ spec:
             envFrom:
               - secretRef:
                   name: *name
+            ports:
+              - name: http
+                containerPort: &port 8080
             resources:
               requests:
                 cpu: 50m
@@ -49,19 +51,14 @@ spec:
                 memory: 4Gi
             securityContext:
               allowPrivilegeEscalation: false
-              capabilities:
-                drop:
-                  - ALL
-              seccompProfile:
-                type: RuntimeDefault
+              capabilities: { drop: ["ALL"] }
+              readOnlyRootFilesystem: true
 
     service:
       app:
-        controller: *name
         ports:
           http:
-            port: &port 8080
-
+            port: *port
     route:
       app:
         hostnames: ["chat.noirprime.com"]
@@ -69,14 +66,9 @@ spec:
           - name: internal
             namespace: kube-system
             sectionName: https
-        rules:
-          - backendRefs:
-              - identifier: app
-                port: *port
 
     persistence:
       app:
         existingClaim: *name
         globalMounts:
           - path: /app/backend/data
-            subPath: data

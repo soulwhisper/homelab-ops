@@ -27,12 +27,10 @@ spec:
     defaultPodOptions:
       enableServiceLinks: false
       hostUsers: false
-
     controllers:
       maybe:
         annotations:
           reloader.stakater.com/auto: "true"
-
         initContainers:
           init-db:
             image:
@@ -41,7 +39,6 @@ spec:
             envFrom:
               - secretRef:
                   name: maybe-initdb
-
         containers:
           app:
             image:
@@ -62,20 +59,19 @@ spec:
             envFrom:
               - secretRef:
                   name: *name
-            securityContext: &securityContext
-              allowPrivilegeEscalation: false
-              capabilities:
-                drop:
-                  - ALL
-              seccompProfile:
-                type: RuntimeDefault
+            ports:
+              - name: http
+                containerPort: &port 3000
             resources: &resources
               requests:
                 cpu: 15m
                 memory: 128Mi
               limits:
                 memory: 512Mi
-
+            securityContext: &securityContext
+              allowPrivilegeEscalation: false
+              capabilities: { drop: ["ALL"] }
+              readOnlyRootFilesystem: true
           worker:
             image:
               repository: ghcr.io/maybe-finance/maybe
@@ -92,11 +88,9 @@ spec:
 
     service:
       app:
-        controller: *name
         ports:
           http:
-            port: &port 3000
-
+            port: *port
     route:
       app:
         hostnames: ["finance.noirprime.com"]
@@ -104,20 +98,13 @@ spec:
           - name: internal
             namespace: kube-system
             sectionName: https
-        rules:
-          - backendRefs:
-              - identifier: app
-                port: *port
 
     persistence:
       app:
         existingClaim: *name
-        advancedMounts:
-          maybe:
-            app:
-              - path: /rails/storage
+        globalMounts:
+          - path: /rails/storage
       tmpfs:
-        enabled: true
         type: emptyDir
         globalMounts:
           - path: /rails/tmp

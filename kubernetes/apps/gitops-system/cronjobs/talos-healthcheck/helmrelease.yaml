@@ -63,19 +63,9 @@ spec:
                 memory: 32Mi
             securityContext:
               allowPrivilegeEscalation: false
+              capabilities: { drop: ["ALL"] }
               readOnlyRootFilesystem: true
-              capabilities:
-                drop:
-                  - ALL
-        serviceAccount:
-          identifier: *name
-    persistence:
-      secrets:
-        type: secret
-        name: *name
-        globalMounts:
-          - path: /var/run/secrets/talos.dev
-            readOnly: true
+
     serviceAccount:
       talos-healthcheck: {}
     rawResources:
@@ -86,3 +76,11 @@ spec:
           spec:
             roles:
               - os:admin
+
+    persistence:
+      secrets:
+        type: secret
+        name: *name
+        globalMounts:
+          - path: /var/run/secrets/talos.dev
+            readOnly: true

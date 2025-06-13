@@ -36,7 +36,7 @@ spec:
               tag: 1.7.3@sha256:0601c7614e102eada268dbda6ba4b5886ce77713be2c332ec6a2fd0f028484ba
             env:
               XDG_DATA_HOME: &configDir /config
-              OP_HTTP_PORT: &apiPort 8080
+              OP_HTTP_PORT: &port 8080
               OP_BUS_PORT: 11220
               OP_BUS_PEERS: localhost:11221
               OP_SESSION:
@@ -51,7 +51,7 @@ spec:
                 spec:
                   httpGet:
                     path: /heartbeat
-                    port: *apiPort
+                    port: *port
                   initialDelaySeconds: 15
                   periodSeconds: 30
                   failureThreshold: 3
@@ -61,20 +61,17 @@ spec:
                 spec:
                   httpGet:
                     path: /health
-                    port: *apiPort
+                    port: *port
                   initialDelaySeconds: 15
-            securityContext: &securityContext
-              allowPrivilegeEscalation: false
-              capabilities:
-                drop:
-                  - "ALL"
-              seccompProfile:
-                type: RuntimeDefault
             resources: &resources
               requests:
                 cpu: 10m
               limits:
                 memory: 256M
+            securityContext: &securityContext
+              allowPrivilegeEscalation: false
+              capabilities: { drop: ["ALL"] }
+              readOnlyRootFilesystem: true
           sync:
             image:
               repository: docker.io/1password/connect-sync
@@ -93,14 +90,15 @@ spec:
               HTTPS_PROXY: "${HTTPS_PROXY}"
               NO_PROXY: "${NO_PROXY}"
             probes: *probes
-            securityContext: *securityContext
             resources: *resources
+            securityContext: *securityContext
+
     service:
       app:
-        controller: *name
         ports:
           http:
-            port: *apiPort
+            port: *port
+
     persistence:
       tmpfs:
         type: emptyDir

@@ -39,7 +39,7 @@ spec:
       - kind: Secret
         name: example-app-2
 
-# helmrelease.yaml
+# helmrelease.yaml, since app-template-4.1.1
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.noirprime.com/helm.toolkit.fluxcd.io/helmrelease_v2.json
 apiVersion: helm.toolkit.fluxcd.io/v2
@@ -67,21 +67,19 @@ spec:
 
   values:
     defaultPodOptions:
-      # hostUsers: false   # if root, most self-hosted apps
-      securityContext:     # if non-root, most media-apps
-        runAsUser: 2000
-        runAsGroup: 2000
-        runAsNonRoot: true
-        fsGroup: 2000
-        fsGroupChangePolicy: OnRootMismatch
-
+      hostUsers: false                        # new way
+      # securityContext:                      # old way
+      #   runAsUser: 2000
+      #   runAsGroup: 2000
+      #   runAsNonRoot: true
+      #   fsGroup: 2000                       # optional
+      #   fsGroupChangePolicy: OnRootMismatch # optional
     controllers:
       example-app:
         annotations:
           reloader.stakater.com/auto: "true"
-        serviceAccount: # if only one defined, can be ignored
+        serviceAccount: # can be ignored if only one serviceaccount
           identifier: example-app
-
         initContainers:
           init-db:
             image:
@@ -125,31 +123,40 @@ spec:
                   secretKeyRef:
                     name: *pguser
                     key: port
-            envFrom:
+            envFrom: &envFrom
               - configMapRef:
                   name: *name
               - secretRef:
                   name: *name
-            securityContext:
-              allowPrivilegeEscalation: false
-              capabilities:
-                drop:
-                  - ALL
-              seccompProfile:
-                type: RuntimeDefault
+            ports:
+              - name: http
+                containerPort: &port 8080
             resources:
               requests:
                 cpu: 15m
                 memory: 128Mi
               limits:
                 memory: 512Mi
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities: { drop: ["ALL"] }
+              readOnlyRootFilesystem: true
 
     service:
       app:
-        controller: *name
+        controller: *name     # can be ignored if only one controller
         ports:
           http:
-            port: &port 8080
+            primary: true     # can be ignored if only one port
+            port: *port
+          metrics:
+            port: *metricsPort
+        primary: true         # can be ignored if only one service, only one primary
+    serviceMonitor:
+      app:
+        serviceName: *name    # can be ignored if only one service
+        endpoints:
+          - port: metrics
     route:
       app:
         hostnames:
@@ -158,7 +165,7 @@ spec:
           - name: internal
             namespace: kube-system
             sectionName: https
-        rules:
+        rules:                 # can be ignored if only one service
           - backendRefs:
               - identifier: app
                 port: *port
@@ -170,12 +177,12 @@ spec:
         existingClaim: *name
         globalMounts:
           - path: /app/data
-            subPath: data
+            subPath: data     # can be ignored if only one path
       tmpfs:
         type: emptyDir
         globalMounts:
           - path: /tmp
-            subPath: tmp
+            subPath: tmp      # can be ignored if only one path
       media:
         type: nfs
         server: nas.homelab.internal

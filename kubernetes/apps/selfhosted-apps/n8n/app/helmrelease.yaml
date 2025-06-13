@@ -25,18 +25,11 @@ spec:
 
   values:
     defaultPodOptions:
-      securityContext:
-        # node usr specified
-        runAsUser: 1000
-        runAsGroup: 1000
-        fsGroup: 1000
-        fsGroupChangePolicy: "OnRootMismatch"
-
+      hostUsers: false # was uid:gid=1000:1000
     controllers:
       n8n:
         annotations:
           reloader.stakater.com/auto: "true"
-
         containers:
           app:
             image:
@@ -59,27 +52,22 @@ spec:
                   secretKeyRef:
                     name: n8n
                     key: N8N_ENCRYPTION_KEY
-            securityContext:
-              allowPrivilegeEscalation: false
-              capabilities:
-                drop:
-                  - ALL
-              seccompProfile:
-                type: RuntimeDefault
             resources:
               requests:
                 cpu: 5m
                 memory: 128Mi
               limits:
                 memory: 2Gi
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities: { drop: ["ALL"] }
+              readOnlyRootFilesystem: true
 
     service:
       app:
-        controller: *name
         ports:
           http:
             port: *port
-
     route:
       app:
         hostnames: ["n8n.noirprime.com"]
@@ -87,14 +75,8 @@ spec:
           - name: internal
             namespace: kube-system
             sectionName: https
-        rules:
-          - backendRefs:
-              - identifier: app
-                port: *port
-
       webhooks:
-        hostnames:
-          - n8n-webhook.noirprime.com
+        hostnames: ["n8n-webhook.noirprime.com"]
         parentRefs:
           - name: external
             namespace: kube-system
@@ -110,7 +92,5 @@ spec:
     persistence:
       app:
         existingClaim: *name
-        advancedMounts:
-          n8n:
-            app:
-              - path: /home/node/.n8n
+        globalMounts:
+          - path: /home/node/.n8n

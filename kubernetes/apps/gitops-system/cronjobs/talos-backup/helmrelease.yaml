@@ -35,9 +35,9 @@ spec:
         pod:
           restartPolicy: OnFailure
           securityContext:
+            runAsNonRoot: true
             runAsUser: 65534
             runAsGroup: 65534
-            runAsNonRoot: true
         containers:
           app:
             image:
@@ -65,28 +65,9 @@ spec:
                 memory: 2Gi
             securityContext:
               allowPrivilegeEscalation: false
+              capabilities: { drop: ["ALL"] }
               readOnlyRootFilesystem: true
-              capabilities:
-                drop:
-                  - ALL
-        serviceAccount:
-          identifier: *name
-    persistence:
-      tmpfs:
-        type: emptyDir
-        advancedMounts:
-          talos-backup:
-            app:
-              - path: /tmp
-                subPath: tmp
-              - path: /.talos
-                subPath: talos
-      secrets:
-        type: secret
-        name: *name
-        globalMounts:
-          - path: /var/run/secrets/talos.dev
-            readOnly: true
+
     serviceAccount:
       talos-backup: {}
     rawResources:
@@ -97,3 +78,18 @@ spec:
           spec:
             roles:
               - os:etcd:backup
+
+    persistence:
+      tmpfs:
+        type: emptyDir
+        globalMounts:
+          - path: /tmp
+            subPath: tmp
+          - path: /.talos
+            subPath: talos
+      secrets:
+        type: secret
+        name: *name
+        globalMounts:
+          - path: /var/run/secrets/talos.dev
+            readOnly: true

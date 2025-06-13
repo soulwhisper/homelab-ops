@@ -1,14 +1,5 @@
 ## Notification
 
-### Hub
-
-- choose `apprise` as notification-hub, [ref](https://hub.docker.com/r/caronc/apprise);
-- app -> hub -> platforms;
-- via webhook: `http://hostname:8000/notify`
-- to severchan: `schan://sendkey/`
-
-### Method
-
 > Pushover
 
 - Old-fashioned way, widely used. Realtime alerts might need proxy (for me).

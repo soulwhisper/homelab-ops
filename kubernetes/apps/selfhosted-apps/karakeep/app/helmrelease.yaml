@@ -26,7 +26,6 @@ spec:
   values:
     defaultPodOptions:
       hostUsers: false
-
     controllers:
       karakeep:
         annotations:
@@ -37,14 +36,14 @@ spec:
               repository: ghcr.io/karakeep-app/karakeep
               tag: 0.25.0
             env:
-              BROWSER_WEB_URL: http://karakeep.selfhosted-apps.svc.cluster.local:9222
+              BROWSER_WEB_URL: http://localhost:9222
               CRAWLER_DOWNLOAD_BANNER_IMAGE: true
               CRAWLER_ENABLE_ADBLOCKER: true
               CRAWLER_STORE_SCREENSHOT: true
               DATA_DIR: /data
               DISABLE_SIGNUPS: true
-              MEILI_ADDR: http://karakeep.selfhosted-apps.svc.cluster.local:7700
-              NEXTAUTH_URL: http://karakeep.noirprime.com
+              MEILI_ADDR: http://localhost:7700
+              NEXTAUTH_URL: http://bookmark.noirprime.com
               DISABLE_NEW_RELEASE_CHECK: true
               COREPACK_INTEGRITY_KEYS: 0
               HTTP_PROXY: "${HTTP_PROXY}"
@@ -53,12 +52,19 @@ spec:
             envFrom:
               - secretRef:
                   name: *name
+            ports:
+              - name: http
+                containerPort: &port 3000
             resources:
-              requests:
+              requests: &requests
                 cpu: 10m
                 memory: 128Mi
               limits:
                 memory: 1Gi
+            securityContext: &securityContext
+              allowPrivilegeEscalation: false
+              capabilities: { drop: ["ALL"] }
+              readOnlyRootFilesystem: true
 
           chrome:
             image:
@@ -78,16 +84,14 @@ spec:
               HTTP_PROXY: "${HTTP_PROXY}"
               HTTPS_PROXY: "${HTTPS_PROXY}"
               NO_PROXY: "${NO_PROXY}"
-            securityContext:
-              capabilities:
-                drop:
-                  - ALL
+            ports:
+              - name: http
+                containerPort: 9222
             resources:
-              requests:
-                cpu: 10m
-                memory: 128Mi
+              requests: *requests
               limits:
                 memory: 1Gi
+            securityContext: *securityContext
 
           meilisearch:
             image:
@@ -104,25 +108,20 @@ spec:
             envFrom:
               - secretRef:
                   name: *name
+            ports:
+              - name: http
+                containerPort: 7700
             resources:
-              requests:
-                cpu: 10m
-                memory: 128Mi
+              requests: *requests
               limits:
                 memory: 4Gi
+            securityContext: *securityContext
 
     service:
       app:
-        controller: *name
         ports:
           http:
-            port: &port 3000
-            primary: true
-          chrome:
-            port: 9222
-          meilisearch:
-            port: 7700
-
+            port: *port
     route:
       app:
         hostnames: ["bookmark.noirprime.com"]
@@ -130,18 +129,12 @@ spec:
           - name: internal
             namespace: kube-system
             sectionName: https
-        rules:
-          - backendRefs:
-              - identifier: app
-                port: *port
 
     persistence:
       app:
         existingClaim: *name
-        advancedMounts:
-          karakeep:
-            app:
-              - path: /data
-                subPath: karakeep
-              - path: /meili_data
-                subPath: meilisearch
+        globalMounts:
+          - path: /data
+            subPath: karakeep
+          - path: /meili_data
+            subPath: meilisearch

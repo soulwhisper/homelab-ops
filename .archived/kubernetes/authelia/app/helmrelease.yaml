@@ -26,6 +26,7 @@ spec:
   values:
     defaultPodOptions:
       enableServiceLinks: false
+      hostUsers: false
       topologySpreadConstraints:
         - maxSkew: 1
           topologyKey: kubernetes.io/hostname
@@ -33,14 +34,12 @@ spec:
           labelSelector:
             matchLabels:
               app.kubernetes.io/name: *name
-
     controllers:
       authelia:
         replicas: 1
         strategy: RollingUpdate
         annotations:
           reloader.stakater.com/auto: "true"
-
         initContainers:
           init-db:
             image:
@@ -49,7 +48,6 @@ spec:
             envFrom:
               - secretRef:
                   name: authelia-initdb
-
         containers:
           app:
             args:
@@ -58,7 +56,6 @@ spec:
             image:
               repository: ghcr.io/authelia/authelia
               tag: 4.39.3
-
             env:
               AUTHELIA_SERVER_ADDRESS: tcp://0.0.0.0:80
               AUTHELIA_DUO_API_DISABLE: "true"
@@ -88,11 +85,9 @@ spec:
                   secretKeyRef:
                     name: *pguser
                     key: password
-
             envFrom:
               - secretRef:
                   name: *name
-
             probes:
               liveness: &probes
                 enabled: true
@@ -100,7 +95,7 @@ spec:
                 spec:
                   httpGet:
                     path: /api/health
-                    port: &port 80
+                    port: 80
                   initialDelaySeconds: 0
                   periodSeconds: 10
                   timeoutSeconds: 1
@@ -108,35 +103,29 @@ spec:
               readiness: *probes
               startup:
                 enabled: false
-
             resources:
               requests:
                 cpu: 50m
                 memory: 100Mi
               limits:
                 memory: 500Mi
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities: { drop: ["ALL"] }
+              readOnlyRootFilesystem: true
 
     service:
       app:
-        controller: *name
         ports:
           http:
-            port: *port
+            port: 80
+            primary: true
           metrics:
-            enabled: true
             port: 8080
-
     serviceMonitor:
       app:
-        serviceName: *name
-        enabled: true
         endpoints:
           - port: metrics
-            scheme: http
-            path: /metrics
-            interval: 1m
-            scrapeTimeout: 10s
-
     route:
       app:
         hostnames: ["auth.noirprime.com"]
@@ -144,14 +133,9 @@ spec:
           - name: external
             namespace: kube-system
             sectionName: https
-        rules:
-          - backendRefs:
-              - identifier: app
-                port: *port
 
     persistence:
       config:
-        enabled: true
         type: configMap
         name: *name
         globalMounts:

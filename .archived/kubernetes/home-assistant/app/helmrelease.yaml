@@ -26,7 +26,6 @@ spec:
   values:
     defaultPodOptions:
       hostUsers: false
-
     controllers:
       home-assistant:
         annotations:
@@ -44,17 +43,13 @@ spec:
               NO_PROXY: "${NO_PROXY}"
             resources:
               requests:
-                cpu: 47m
-                memory: 2Gi
+                cpu: 50m
               limits:
                 memory: 2Gi
-            securityContext:
+            securityContext: &securityContext
               allowPrivilegeEscalation: false
+              capabilities: { drop: ["ALL"] }
               readOnlyRootFilesystem: true
-              capabilities:
-                drop:
-                  - ALL
-
           code-server:
             image:
               repository: ghcr.io/coder/code-server
@@ -78,16 +73,16 @@ spec:
                 cpu: 10m
               limits:
                 memory: 1Gi
+            securityContext: *securityContext
 
     service:
       app:
-        controller: *name
         ports:
           http:
-            port: 8123
+            port: &port 8123
             primary: true
           code-server:
-            port: 12321
+            port: &codePort 12321
 
     route:
       app:
@@ -97,6 +92,9 @@ spec:
             namespace: kube-system
             sectionName: https
         rules:
+          - backendRefs:
+              - identifier: app
+                port: *port
           - matches:
               - path:
                   type: PathPrefix
@@ -109,33 +107,20 @@ spec:
                     replacePrefixMatch: /
             backendRefs:
               - identifier: app
-                port: 12321
-          - backendRefs:
-              - identifier: app
-                port: 8123
+                port: *codePort
 
     persistence:
       app:
         existingClaim: *name
-        advancedMounts:
-          home-assistant:
-            app:
-              - path: /config
-                subPath: config
-              - path: /venv
-                subPath: venv
-            code-server:
-              - path: /config
-                subPath: config
+        globalMounts:
+          - path: /config
+            subPath: config
+          - path: /venv
+            subPath: venv
       tmpfs:
         type: emptyDir
-        advancedMounts:
-          home-assistant:
-            app:
-              - path: /tmp
-                subPath: hass-tmp
-            code-server:
-              - path: /tmp
-                subPath: code-server-tmp
-              - path: /nonexistent
-                subPath: nonexistent
+        globalMounts:
+          - path: /tmp
+            subPath: tmp
+          - path: /nonexistent
+            subPath: nonexistent

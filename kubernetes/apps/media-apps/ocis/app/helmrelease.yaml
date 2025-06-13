@@ -25,18 +25,11 @@ spec:
 
   values:
     defaultPodOptions:
-      securityContext:
-        runAsUser: 2000
-        runAsGroup: 2000
-        runAsNonRoot: true
-        fsGroup: 2000
-        fsGroupChangePolicy: OnRootMismatch
-
+      hostUsers: false
     controllers:
       ocis:
         annotations:
           reloader.stakater.com/auto: "true"
-
         initContainers:
           init-config:
             image:
@@ -50,7 +43,6 @@ spec:
                 if [ ! -f /etc/ocis/ocis.yaml ]; then ocis init; else exit 0; fi
             env:
               OCIS_INSECURE: true
-
         containers:
           app:
             image:
@@ -66,6 +58,9 @@ spec:
             envFrom:
               - secretRef:
                   name: *name
+            ports:
+              - name: http
+                containerPort: &port 9200
             probes:
               liveness:
                 enabled: true
@@ -79,19 +74,14 @@ spec:
                 memory: 1024Mi
             securityContext:
               allowPrivilegeEscalation: false
-              capabilities:
-                drop:
-                  - ALL
-              seccompProfile:
-                type: RuntimeDefault
+              capabilities: { drop: ["ALL"] }
+              readOnlyRootFilesystem: true
 
     service:
       app:
-        controller: *name
         ports:
           http:
-            port: &port 9200
-
+            port: *port
     route:
       app:
         hostnames: ["pan.noirprime.com"]
@@ -99,19 +89,8 @@ spec:
           - name: external
             namespace: kube-system
             sectionName: https
-        rules:
-          - backendRefs:
-              - identifier: app
-                port: *port
 
     persistence:
-      config:
-        type: configMap
-        name: *name
-        globalMounts:
-          - path: /etc/ocis/web.yaml
-            subPath: web.yaml
-            readOnly: true
       app:
         existingClaim: *name
         globalMounts:
@@ -119,11 +98,17 @@ spec:
             subPath: data
           - path: /etc/ocis
             subPath: config
+      config:
+        type: configMap
+        name: *name
+        globalMounts:
+          - path: /etc/ocis/web.yaml
+            subPath: web.yaml
+            readOnly: true
       tmpfs:
         type: emptyDir
         globalMounts:
           - path: /tmp
-            subPath: tmp
       media:
         type: nfs
         server: nas.homelab.internal
