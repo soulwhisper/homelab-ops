@@ -23,7 +23,7 @@ spec:
     keepHistory: false
 
   values:
-    replicas: 1
+    replicas: 2
     kind: Deployment
     deschedulerPolicyAPIVersion: descheduler/v1alpha2
     deschedulerPolicy:

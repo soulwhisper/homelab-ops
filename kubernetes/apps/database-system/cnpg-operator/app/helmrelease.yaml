@@ -28,7 +28,7 @@ spec:
     fullnameOverride: *name
     crds:
       create: true
-    replicaCount: 1
+    replicaCount: 2
     monitoring:
       podMonitorEnabled: true
       grafanaDashboard:

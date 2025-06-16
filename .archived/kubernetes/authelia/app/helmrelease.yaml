@@ -36,7 +36,7 @@ spec:
               app.kubernetes.io/name: *name
     controllers:
       authelia:
-        replicas: 1
+        replicas: 2
         strategy: RollingUpdate
         annotations:
           reloader.stakater.com/auto: "true"

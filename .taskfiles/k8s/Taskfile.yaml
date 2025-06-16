@@ -30,3 +30,15 @@ tasks:
           var: SECRETS
           split: "\n"
         cmd: kubectl --namespace {{splitList "," .ITEM | first}} annotate externalsecret {{splitList "," .ITEM | last}} force-sync="{{now | unixEpoch}}" --overwrite
+
+  score:
+    desc: Run kube-score on the current namespace
+    preconditions:
+      - which kubectl
+      - kubectl score version
+      - test -f "${KUBECONFIG}"
+    vars:
+      SCORE_ARGS: "--output-format=ci --ignore-container-cpu-limit --ignore-test=container-ephemeral-storage-request-and-limit --ignore-test=container-image-pull-policy --ignore-test=container-image-pull-policy --ignore-test=pod-networkpolicy"
+    cmds:
+      - kubectl get all -o yaml | kubectl score {{ .SCORE_ARGS }} - | grep WARNING
+      - kubectl get all -o yaml | kubectl score {{ .SCORE_ARGS }} - | grep CRITICAL

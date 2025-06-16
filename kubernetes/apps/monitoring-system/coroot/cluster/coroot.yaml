@@ -6,7 +6,7 @@ metadata:
   name: coroot
   namespace: coroot
 spec:
-  replicas: 1
+  replicas: 2
   authAnonymousRole: Admin
   env:
     - name: HTTP_PROXY
@@ -15,7 +15,6 @@ spec:
       value: "${HTTPS_PROXY}"
     - name: NO_PROXY
       value: "${NO_PROXY}"
-
 # Use an external ClickHouse instance instead of deploying one.
 #  externalClickhouse:
 #    address: # Address of the external ClickHouse instance.

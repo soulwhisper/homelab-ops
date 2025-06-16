@@ -27,4 +27,4 @@ spec:
     keepHistory: false
 
   values:
-    replicas: 1
+    replicas: 2

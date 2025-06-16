@@ -24,4 +24,4 @@ spec:
 
   values:
     fullnameOverride: *name
-    replicaCount: 1
+    replicaCount: 2

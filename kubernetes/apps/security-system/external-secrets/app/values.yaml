@@ -1,6 +1,6 @@
 ---
 installCRDs: true
-replicaCount: 1
+replicaCount: 2
 leaderElect: true
 image:
   repository: ghcr.io/external-secrets/external-secrets
