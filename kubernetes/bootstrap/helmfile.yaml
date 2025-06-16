@@ -75,7 +75,7 @@ releases:
     namespace: gitops-system
     atomic: true
     chart: oci://ghcr.io/controlplaneio-fluxcd/charts/flux-operator
-    version: 0.22.0
+    version: 0.23.0
     values: ['../apps/gitops-system/flux-operator/app/values.yaml']
     needs: ['kube-system/spegel']
     hooks:
@@ -92,7 +92,7 @@ releases:
     namespace: gitops-system
     atomic: true
     chart: oci://ghcr.io/controlplaneio-fluxcd/charts/flux-instance
-    version: 0.22.0
+    version: 0.23.0
     wait: false
     values: ['../apps/gitops-system/flux-operator/instance/values.yaml']
     needs: ['gitops-system/flux-operator']
