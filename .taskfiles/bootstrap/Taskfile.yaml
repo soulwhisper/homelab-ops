@@ -5,6 +5,7 @@ version: "3"
 tasks:
   talos:
     desc: Bootstrap Talos
+    prompt: Have you disable https_proxy?
     vars:
       TALOS_CONTROLLER:
         sh: talosctl config info --output json | jq --raw-output '.endpoints[]' | shuf -n 1
@@ -13,13 +14,13 @@ tasks:
       - test -f "${TALOSCONFIG}"
       - talosctl config info
     cmds:
-      - task: :talos:apply-clusterconfig
-        vars:
-          INSECURE: "true"
-      - echo "Bootstrap Talos cluster takes over 20 minutes, have a coffee"
-      - until talosctl --nodes {{.TALOS_CONTROLLER}} bootstrap; do sleep 5; done
-      - talosctl kubeconfig --nodes {{.TALOS_CONTROLLER}} --force ${KUBECONFIG}
-      - fish -i -c 'mkdir -p ~/.kube && cp $KUBECONFIG ~/.kube/config'
+      - task: :talos:_bootstrap
+      - |
+        echo "Bootstrap Talos cluster takes over 20 minutes, have a coffee"
+        until talosctl --nodes {{.TALOS_CONTROLLER}} bootstrap; do sleep 5; done
+      - |
+        talosctl kubeconfig --nodes {{.TALOS_CONTROLLER}} --force ${KUBECONFIG}
+        bash -c 'mkdir -p ~/.kube && cp $KUBECONFIG ~/.kube/config'
 
   apps:
     desc: Bootstrap Apps [WIPE=rook-disk-model]

@@ -13,6 +13,6 @@ tasks:
       - test -f {{.ARCHFILE}}
     cmds:
       - "yay -Syu --needed --noconfirm --noprogressbar $(cat {{.ARCHFILE}} | xargs)"
-      - fish -i -c "fish alias --save k=kubectl"
-      - fish -i -c "fish alias --save kubectl=kubecolor"
-      - fish -i -c "fish alias --save flux-local='uvx flux-local'"
+      - bash -c "fish alias --save k=kubectl"
+      - bash -c "fish alias --save kubectl=kubecolor"
+      - bash -c "fish alias --save flux-local='uvx flux-local'"

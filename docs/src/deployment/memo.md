@@ -20,7 +20,7 @@
 #### Proxy
 
 - `HTTPS GET` / `HTTPS POST`, should set `https_proxy`;
--  no_proxy = `.cluster.local.,.cluster.local,.svc,localhost,127.0.0.1,{pod-subnet},{svc-subnet}`;
+- no_proxy = `.cluster.local.,.cluster.local,.svc,localhost,127.0.0.1,{pod-subnet},{svc-subnet}`;
 
 ### Bootstrap
 
@@ -32,9 +32,9 @@ direnv allow
 eval $(op signin)
 
 # bootstrap
-task talos:generate-clusterconfig
+task talos:generate
 ## if test
-task talos:generate-clusterconfig MODE=test
+task talos:generate MODE=test
 
 task bootstrap:talos
 task bootstrap:apps

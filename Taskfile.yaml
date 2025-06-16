@@ -42,10 +42,10 @@ tasks:
     desc: Restore configuration files from backup location
     silent: true
     preconditions:
-      - fish -i -c 'test -f ~/.kube/config'
-      - fish -i -c 'test -f ~/.talos/config'
+      - bash -c 'test -f ~/.kube/config'
+      - bash -c 'test -f ~/.talos/config'
     cmds:
-      - fish -i -c 'cp ~/.kube/config $KUBECONFIG'
-      - fish -i -c 'cp ~/.talos/config $TALOSCONFIG'
+      - bash -c 'cp ~/.kube/config $KUBECONFIG'
+      - bash -c 'cp ~/.talos/config $TALOSCONFIG'
       - direnv allow
       - echo "K8S environment restored."

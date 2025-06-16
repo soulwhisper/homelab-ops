@@ -4,7 +4,7 @@ version: "3"
 
 tasks:
   "*-ks":
-    desc: Render a Flux Kustomizations [DIR=required] [NAME] [SRC]
+    desc: Render a Flux Kustomizations [DIR=required, example:"selfhosted-apps/maybe"]
     vars:
       OPERATION: "{{index .MATCH 0}}"
       OPERATION_ARGS: |-
@@ -18,9 +18,9 @@ tasks:
       - which kubectl
       - test -d "{{.KS_DIR}}"
       - test -f "${KUBECONFIG}"
-      - fish -i -c 'flux-local -h' >/dev/null 2>&1
+      - bash -c 'flux-local -h' >/dev/null 2>&1
     cmds:
-      - fish -i -c 'flux-local build ks --all-namespaces {{.NS}} --path {{.KS_DIR}} {{.NAME}}
+      - bash -c 'flux-local build ks --all-namespaces --path {{.KS_DIR}}
         | yq -
         {{ if or (eq .OPERATION "apply") (eq .OPERATION "delete") -}}
         | kubectl {{.OPERATION}} {{- .OPERATION_ARGS}} --filename -
