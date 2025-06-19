@@ -22,7 +22,7 @@ releases:
     namespace: kube-system
     atomic: true
     chart: cilium/cilium
-    version: 1.17.4
+    version: 1.17.5
     values: ['../apps/kube-system/cilium/app/values.yaml']
     needs: ['monitoring-system/prometheus-operator-crds']
 
