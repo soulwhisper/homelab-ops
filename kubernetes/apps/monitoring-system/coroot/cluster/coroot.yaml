@@ -6,7 +6,7 @@ metadata:
   name: coroot
   namespace: coroot
 spec:
-  replicas: 2
+  replicas: 1
   authAnonymousRole: Admin
   env:
     - name: HTTP_PROXY

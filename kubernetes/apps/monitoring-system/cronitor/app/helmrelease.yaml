@@ -28,7 +28,7 @@ spec:
       hostUsers: false
     controllers:
       cronitor:
-        replicas: 2
+        replicas: 1
         strategy: RollingUpdate
         annotations:
           reloader.stakater.com/auto: "true"
