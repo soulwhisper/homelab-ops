@@ -47,7 +47,7 @@ spec:
       name: sops-age
 ```
 
-> bootstrap/templates/resource.yaml.j2
+> bootstrap/resource.yaml.j2
 
 ```yaml
 ---
