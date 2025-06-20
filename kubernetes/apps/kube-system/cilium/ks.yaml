@@ -19,6 +19,11 @@ spec:
     name: gitops-system
     namespace: gitops-system
   wait: false
+  components:
+    - ../../../../components/gatus/internal
+  postBuild:
+    substitute:
+      GATUS_SUBDOMAIN: hubble
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.noirprime.com/kustomize.toolkit.fluxcd.io/kustomization_v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1

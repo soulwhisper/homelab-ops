@@ -10,6 +10,7 @@ resources:
   - ./coroot/ks.yaml
   - ./cronitor/ks.yaml
   - ./fluent-bit/ks.yaml
+  - ./gatus/ks.yaml
   - ./grafana/ks.yaml
   - ./kromgo/ks.yaml
   - ./prometheus-operator/ks.yaml

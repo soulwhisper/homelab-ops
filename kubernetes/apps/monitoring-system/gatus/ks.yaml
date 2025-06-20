@@ -20,12 +20,10 @@ spec:
     namespace: gitops-system
   wait: false
   dependsOn:
-    - name: cnpg-cluster
-      namespace: database-system
-    - name: onepassword-store
-      namespace: security-system
+    - name: rook-ceph-cluster
+      namespace: storage-system
   components:
-    - ../../../../components/cnpg
+    - ../../../../components/volsync
   postBuild:
     substitute:
       APP: *appname

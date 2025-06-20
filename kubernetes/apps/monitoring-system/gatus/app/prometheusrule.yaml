@@ -3,7 +3,7 @@
 apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule
 metadata:
-  name: gatus-rules
+  name: gatus
 spec:
   groups:
     - name: gatus.rules
@@ -18,12 +18,12 @@ spec:
           labels:
             severity: critical
 
-        - alert: GatusEndpointExposed
+        - alert: GatusDNSResolutionFailed
           expr: |
-            gatus_results_endpoint_success{group="guarded"} == 0
-          for: 5m
+            gatus_results_endpoint_success{group="internal"} == 0
+          for: 3m
           annotations:
             summary: >-
-              The {{ $labels.name }} endpoint has a public DNS record and is exposed
+              The {{ $labels.name }} endpoint DNS resolution failed
           labels:
             severity: critical

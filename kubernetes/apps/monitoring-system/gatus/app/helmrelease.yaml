@@ -26,19 +26,11 @@ spec:
   values:
     defaultPodOptions:
       hostUsers: false
-
     controllers:
       gatus:
         annotations:
           reloader.stakater.com/auto: "true"
         initContainers:
-          init-db:
-            image:
-              repository: ghcr.io/home-operations/postgres-init
-              tag: "17"
-            envFrom:
-              - secretRef:
-                  name: gatus-initdb
           init-config:
             image:
               repository: ghcr.io/home-operations/k8s-sidecar
@@ -60,20 +52,12 @@ spec:
           app:
             image:
               repository: ghcr.io/twin/gatus
-              tag: v5.17.0@sha256:a8c53f9e9f1a3876cd00e44a42c80fc984e118d5ba0bdbaf08980cb627d61512
+              tag: v5.18.1@sha256:97525568fdef34539b1b4d015aef2d1cf6f58f1bc087443387b349940544394d
             env:
-              TZ: Asia/Shanghai
+              TZ: "${TIMEZONE}"
               GATUS_CONFIG_PATH: /config
               GATUS_DELAY_START_SECONDS: 5
-              CUSTOM_WEB_PORT: &port 80
-              DB_URI:
-                valueFrom:
-                  secretKeyRef:
-                    name: gatus-pguser
-                    key: uri
-            envFrom:
-              - secretRef:
-                  name: *name
+              WEB_PORT: &port 80
             probes:
               liveness: &probes
                 enabled: true
@@ -87,34 +71,15 @@ spec:
                   timeoutSeconds: 1
                   failureThreshold: 3
               readiness: *probes
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: { drop: ["ALL"] }
             resources:
               requests:
                 cpu: 100m
               limits:
                 memory: 256Mi
-            securityContext:
-              allowPrivilegeEscalation: false
-              capabilities: { drop: ["ALL"] }
-              readOnlyRootFilesystem: true
-
-    serviceAccount:
-      gatus: {}
-    rbac:
-      roles:
-        gatus:
-          type: ClusterRole
-          rules:
-            - apiGroups: [""]
-              resources: ["configmaps", "secrets"]
-              verbs: ["get", "watch", "list"]
-      bindings:
-        gatus:
-          type: ClusterRoleBinding
-          roleRef:
-            kind: ClusterRole
-            identifier: *name
-          subjects:
-            - identifier: *name
 
     service:
       app:
@@ -130,14 +95,30 @@ spec:
         hostnames: ["status.noirprime.com"]
         parentRefs:
           - name: external
-            namespace: networking
+            namespace: kube-system
             sectionName: https
 
+    serviceAccount:
+      gatus: {}
+    rbac:
+      roles:
+        gatus:
+          type: ClusterRole
+          rules:
+            - apiGroups: [""]
+              resources: ["configmaps", "secrets"]
+              verbs: ["get", "watch", "list"]
+      bindings:
+        gatus:
+          type: ClusterRoleBinding
+          roleRef:
+            identifier: *name
+          subjects:
+            - identifier: *name
+
     persistence:
-      tmpfs:
-        type: emptyDir
-        globalMounts:
-          - path: /config
+      app:
+        existingClaim: *name
       config:
         type: configMap
         name: *name

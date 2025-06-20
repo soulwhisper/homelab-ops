@@ -6,12 +6,11 @@ resources:
   # app
   - ./helmrelease.yaml
   # utils
-  - ./externalsecret.yaml
   - ./prometheusrule.yaml
 configMapGenerator:
   - name: gatus
     files:
-      - ./config/config.yaml
+      - config/config.yml
 generatorOptions:
   annotations:
     kustomize.toolkit.fluxcd.io/substitute: disabled

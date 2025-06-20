@@ -8,5 +8,6 @@ resources:
   - ./ocirepository.yaml
   # utils
   - ./externalsecret.yaml
+  - ./gatus.yaml
   - ./httproute.yaml
   - ./scrapeconfig.yaml

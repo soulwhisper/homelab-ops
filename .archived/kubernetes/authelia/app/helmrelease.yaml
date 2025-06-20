@@ -130,7 +130,7 @@ spec:
       app:
         hostnames: ["auth.noirprime.com"]
         parentRefs:
-          - name: external
+          - name: internal
             namespace: kube-system
             sectionName: https
 

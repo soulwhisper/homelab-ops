@@ -27,8 +27,10 @@ spec:
     - name: volsync
       namespace: storage-system
   components:
-    - ../../../../components/volsync
+    - ../../../../components/gatus/internal
     - ../../../../components/keda/nas-nfs-scaler
+    - ../../../../components/volsync
   postBuild:
     substitute:
       APP: *appname
+      GATUS_SUBDOMAIN: movie

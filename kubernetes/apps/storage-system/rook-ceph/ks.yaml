@@ -60,3 +60,8 @@ spec:
       kind: CephCluster
       failed: status.ceph.health == 'HEALTH_ERR'
       current: status.ceph.health == 'HEALTH_OK' || status.ceph.health == 'HEALTH_WARN'
+  components:
+    - ../../../../components/gatus/internal
+  postBuild:
+    substitute:
+      GATUS_SUBDOMAIN: rook

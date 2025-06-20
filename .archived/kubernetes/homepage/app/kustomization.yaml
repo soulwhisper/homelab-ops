@@ -9,4 +9,6 @@ resources:
   - configmap.yaml
   - externalsecret.yaml
 generatorOptions:
+  annotations:
+    kustomize.toolkit.fluxcd.io/substitute: disabled
   disableNameSuffixHash: true

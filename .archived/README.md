@@ -9,10 +9,13 @@
 
 - postgres
 
+> bootstrap
+
+- wipe-rook
+
 > components
 
 - cnpg:nfs-backup
-- gatus
 - volysnc:ceph-s3
 
 > kubernetes:base
@@ -41,7 +44,6 @@
 
 - apps:alertmanager
 - apps:echo-server
-- apps:gatus
 - apps:loki
 - apps:kube-prometheus-stack
 - apps:kube-state-metrics
