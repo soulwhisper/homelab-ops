@@ -6,32 +6,19 @@
 
 _... managed by Flux, Renovate and GitHub Actions_ <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f916/512.gif" alt="🤖" width="16" height="16">
 
-</div>
+[![Discord](https://img.shields.io/discord/673534664354430999?style=for-the-badge&label&logo=discord&logoColor=white&color=blue)](https://discord.gg/homelab-operations)
 
-<div align="center">
+[![Talos](https://img.shields.io/endpoint?url=https%3A%2F%2Fkromgo.noirprime.com%2Ftalos_version&style=for-the-badge&logo=talos&logoColor=white&color=blue&label=talos)](https://talos.dev)&nbsp;
+[![Kubernetes](https://img.shields.io/endpoint?url=https%3A%2F%2Fkromgo.noirprime.com%2Fkubernetes_version&style=for-the-badge&logo=kubernetes&logoColor=white&color=blue&label=k8s)](https://kubernetes.io)&nbsp;
+[![Flux](https://img.shields.io/endpoint?url=https%3A%2F%2Fkromgo.noirprime.com%2Fflux_version&style=for-the-badge&logo=flux&logoColor=white&color=blue&label=flux)](https://fluxcd.io)&nbsp;
+![Status](https://img.shields.io/website?url=https%3A%2F%2Fstatus.noirprime.com&up_message=UP&up_color=white&down_message=DOWN&down_color=red&style=for-the-badge&logo=statuspal&logoColor=white&label=STATUS&color=blue)
 
-[![Discord](https://img.shields.io/discord/673534664354430999?style=for-the-badge&label&logo=discord&logoColor=white&color=blue)](https://discord.gg/homelab-operations)&nbsp;&nbsp;
-[![Talos](https://img.shields.io/endpoint?url=https%3A%2F%2Fkromgo.noirprime.com%2Ftalos_version&style=for-the-badge&logo=talos&logoColor=white&color=blue&label=%20)](https://talos.dev)&nbsp;&nbsp;
-[![Kubernetes](https://img.shields.io/endpoint?url=https%3A%2F%2Fkromgo.noirprime.com%2Fkubernetes_version&style=for-the-badge&logo=kubernetes&logoColor=white&color=blue&label=%20)](https://kubernetes.io)&nbsp;&nbsp;
-[![Renovate](https://img.shields.io/github/actions/workflow/status/soulwhisper/renovate-config/schedule-renovate.yaml?branch=main&label=&logo=renovatebot&style=for-the-badge&color=blue)](https://github.com/soulwhisper/renovate-config/schedule-renovate.yaml)
-
-</div>
-
-<div align="center">
-
-[![Age-Days](https://img.shields.io/endpoint?url=https%3A%2F%2Fkromgo.noirprime.com%2Fcluster_age_days&style=flat-square&label=Age)](https://github.com/kashalls/kromgo)&nbsp;&nbsp;
-[![Uptime-Days](https://img.shields.io/endpoint?url=https%3A%2F%2Fkromgo.noirprime.com%2Fcluster_uptime_days&style=flat-square&label=Uptime)](https://github.com/kashalls/kromgo)&nbsp;&nbsp;
-[![Power-Usage](https://img.shields.io/endpoint?url=https%3A%2F%2Fkromgo.noirprime.com%2Fcluster_power_usage&style=flat-square&label=Power)](https://github.com/kashalls/kromgo)&nbsp;&nbsp;
-[![Alerts](https://img.shields.io/endpoint?url=https%3A%2F%2Fkromgo.noirprime.com%2Fcluster_alert_count&style=flat-square&label=Alerts)](https://github.com/kashalls/kromgo)
-
-</div>
-
-<div align="center">
-
-[![CPU-Usage](https://img.shields.io/endpoint?url=https%3A%2F%2Fkromgo.noirprime.com%2Fcluster_cpu_usage&style=flat-square&label=CPU)](https://github.com/kashalls/kromgo)&nbsp;&nbsp;
-[![Memory-Usage](https://img.shields.io/endpoint?url=https%3A%2F%2Fkromgo.noirprime.com%2Fcluster_memory_usage&style=flat-square&label=Memory)](https://github.com/kashalls/kromgo)&nbsp;&nbsp;
-[![Node-Count](https://img.shields.io/endpoint?url=https%3A%2F%2Fkromgo.noirprime.com%2Fcluster_node_count&style=flat-square&label=Nodes)](https://github.com/kashalls/kromgo)&nbsp;&nbsp;
-[![Pod-Count](https://img.shields.io/endpoint?url=https%3A%2F%2Fkromgo.noirprime.com%2Fcluster_pod_count&style=flat-square&label=Pods)](https://github.com/kashalls/kromgo)
+[![Age](https://img.shields.io/endpoint?url=https%3A%2F%2Fkromgo.noirprime.com%2Fcluster_age_days&style=flat-square&label=Age&color=green)](https://github.com/kashalls/kromgo)&nbsp;
+[![Node](https://img.shields.io/endpoint?url=https%3A%2F%2Fkromgo.noirprime.com%2Fcluster_node_count&style=flat-square&label=Nodes&color=green)](https://github.com/kashalls/kromgo)&nbsp;
+[![Pod](https://img.shields.io/endpoint?url=https%3A%2F%2Fkromgo.noirprime.com%2Fcluster_pod_count&style=flat-square&label=Pods&color=green)](https://github.com/kashalls/kromgo)&nbsp;
+[![CPU](https://img.shields.io/endpoint?url=https%3A%2F%2Fkromgo.noirprime.com%2Fcluster_cpu_usage&style=flat-square&label=CPU&color=green)](https://github.com/kashalls/kromgo)&nbsp;
+[![Memory](https://img.shields.io/endpoint?url=https%3A%2F%2Fkromgo.noirprime.com%2Fcluster_memory_usage&style=flat-square&label=Memory&color=green)](https://github.com/kashalls/kromgo)&nbsp;
+[![Alerts](https://img.shields.io/endpoint?url=https%3A%2F%2Fkromgo.noirprime.com%2Fcluster_alert_count&style=flat-square&label=Alerts&color=green)](https://github.com/kashalls/kromgo)
 
 </div>
 

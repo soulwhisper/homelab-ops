@@ -138,13 +138,13 @@ spec:
           group_by: ["alertname", "job"]
           group_interval: 10m
           group_wait: 1m
-          receiver: pushover
+          receiver: "default-receiver"
           repeat_interval: 12h
           routes:
             - receiver: "null"
               matchers:
                 - alertname=InfoInhibitor
-            - receiver: pushover
+            - receiver: "default-receiver"
               matchers:
                 - severity=~"warning|critical"
         inhibit_rules:
@@ -155,7 +155,7 @@ spec:
             equal: ["alertname", "namespace"]
         receivers:
           - name: "null"
-          - name: pushover
+          - name: "default-receiver"
             pushover_configs:
               - send_resolved: true
                 priority: |-

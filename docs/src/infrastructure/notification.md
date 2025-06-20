@@ -19,7 +19,7 @@
 # alertmanager
 config:
   receivers:
-    - name: pushover
+    - name: "default-receiver"
       pushover_configs:
         - send_resolved: true
           priority: |-
@@ -54,7 +54,6 @@ config:
           user_key:
             name: *name
             key: PUSHOVER_USER_KEY
-    - name: serverchan
       webhook_configs:
         - send_resolved: true
           url:
