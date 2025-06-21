@@ -10,7 +10,7 @@ resources:
 configMapGenerator:
   - name: gatus
     files:
-      - config/config.yml
+      - config/config.yaml
 generatorOptions:
   annotations:
     kustomize.toolkit.fluxcd.io/substitute: disabled
