@@ -46,7 +46,7 @@ spec:
             env:
               MULTIUSER: false
               REGISTRATION: false
-              PORT: &httpPort 3214
+              PORT: &port 3214
               REDIS_URL: redis://manyfold-dragonfly.media-apps.svc.cluster.local:6379/0
               DATABASE_URL:
                 valueFrom:
@@ -65,7 +65,7 @@ spec:
                 spec:
                   httpGet:
                     path: /health
-                    port: *httpPort
+                    port: *port
                   initialDelaySeconds: 0
                   periodSeconds: 10
                   timeoutSeconds: 1
