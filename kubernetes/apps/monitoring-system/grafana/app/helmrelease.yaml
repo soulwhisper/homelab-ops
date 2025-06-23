@@ -40,7 +40,7 @@ spec:
       - pr0ps-trackmap-panel
       - vonage-status-panel
       - victoriametrics-logs-datasource
-    replicas: 2
+    replicas: 2 # keep this
     resources:
       limits:
         memory: 512Mi

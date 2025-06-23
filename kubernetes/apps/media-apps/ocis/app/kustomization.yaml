@@ -11,5 +11,7 @@ configMapGenerator:
   - name: ocis
     files:
       - web.yaml=./config/web.yaml
-configurations:
-  - kustomizeconfig.yaml
+generatorOptions:
+  annotations:
+    kustomize.toolkit.fluxcd.io/substitute: disabled
+  disableNameSuffixHash: true

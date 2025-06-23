@@ -1,0 +1,24 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/kustomization
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  # companion
+  - ./autobrr/ks.yaml
+  - ./bazarr/ks.yaml
+  - ./jellyseerr/ks.yaml
+  - ./recyclarr/ks.yaml
+  # downloader
+  - ./cross-seed/ks.yaml
+  - ./qbittorrent/ks.yaml
+  # indexer
+  - ./prowlarr/ks.yaml
+  # tvshows
+  - ./sonarr/ks.yaml
+  # movies
+  - ./radarr/ks.yaml
+
+  # todo
+  # maintainerr?
+  # tautulli?
+  # tdarr?

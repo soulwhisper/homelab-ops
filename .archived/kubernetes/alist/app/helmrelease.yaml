@@ -50,10 +50,7 @@ spec:
               repository: docker.io/xhofe/alist
               tag: v3.44.0-aio
             env:
-              TZ: Asia/Shanghai
-              PUID: 2000
-              GUID: 2000
-              UMASK: 022
+              TZ: "${TIMEZONE}"
             ports:
               - name: http
                 containerPort: &port 5244

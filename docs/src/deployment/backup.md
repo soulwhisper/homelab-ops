@@ -5,11 +5,11 @@
 
 ### S3
 
-| bucket     | key-name   | app               |
-| ---------- | ---------- | ----------------- |
-| postgres   | postgres   | cnpg-operator     |
-| talos      | talos      | talos-backup      |
-| volsync    | volsync    | volsync           |
+| bucket   | key-name | app           |
+| -------- | -------- | ------------- |
+| postgres | postgres | cnpg-operator |
+| talos    | talos    | talos-backup  |
+| volsync  | volsync  | volsync       |
 
 #### Minio
 
@@ -35,4 +35,4 @@
 - endpoint: `nas.homelab.internal`;
 - shares: `/mnt/Arcanum/shared/media`;
 - permissions: `uid:gid=2000:2000`;
-- folders: `data` and `comic,ebook,manga,movie,music,photo,tvshow`;
+- folders: `model` and `Downloads,comic,ebook,manga,movie,music,photo,tvshow`;

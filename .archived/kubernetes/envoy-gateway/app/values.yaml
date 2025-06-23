@@ -1,6 +1,6 @@
 ---
 deployment:
-  replicas: 2
+  replicas: 2 # keep this
   envoyGateway:
     resources:
       requests:

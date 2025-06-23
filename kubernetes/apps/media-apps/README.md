@@ -1,6 +1,18 @@
 # Media Apps
 
 - This namespace manages media applications
-- specifically `*arr` stack components and media-players
 - backed by nfs-volume `shared-media` on TrueNAS
-- more [ref](https://github.com/mchestr/home-cluster/tree/main/kubernetes/apps/media);
+- use `keda` to reduce nas mount noise, if nas schedule offline;
+
+```yaml
+# ks.yaml
+spec:
+  dependsOn:
+    - name: keda
+      namespace: kube-system
+  components:
+    - ../../../../components/keda/nas-nfs-scaler
+  postBuild:
+    substitute:
+      APP: *appname
+```

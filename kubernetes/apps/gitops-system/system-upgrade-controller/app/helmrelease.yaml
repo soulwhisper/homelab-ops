@@ -27,7 +27,7 @@ spec:
     controllers:
       system-upgrade-controller:
         strategy: RollingUpdate
-        replicas: 2
+        replicas: 2 # keep this
         pod:
           securityContext:
             runAsNonRoot: true

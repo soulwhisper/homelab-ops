@@ -6,6 +6,10 @@ namespace: media-apps
 components:
   - ../../components/common
 resources:
+  # arrs apps
+  - ./starrs
+  # other media apps
   - ./emby/ks.yaml
   - ./immich/ks.yaml
+  - ./manyfold/ks.yaml
   - ./ocis/ks.yaml

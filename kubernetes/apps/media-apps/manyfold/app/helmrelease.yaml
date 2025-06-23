@@ -1,0 +1,114 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &name manyfold
+spec:
+  interval: 30m
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+    namespace: gitops-system
+  maxHistory: 2
+  install:
+    crds: CreateReplace
+    remediation:
+      retries: -1
+  upgrade:
+    cleanupOnFail: true
+    crds: CreateReplace
+    remediation:
+      retries: 3
+  uninstall:
+    keepHistory: false
+
+  values:
+    defaultPodOptions:
+      hostUsers: false
+    controllers:
+      manyfold:
+        annotations:
+          reloader.stakater.com/auto: "true"
+        initContainers:
+          init-db:
+            image:
+              repository: ghcr.io/home-operations/postgres-init
+              tag: "17"
+            envFrom:
+              - secretRef:
+                  name: manyfold-initdb
+        containers:
+          app:
+            image:
+              repository: ghcr.io/bjw-s-labs/manyfold
+              tag: 0.114.1@sha256:8b09b0f1d3ac9db492cd87f21b8aafa641fc35cd6e331d95ca23693ae74a02e4
+            env:
+              MULTIUSER: false
+              REGISTRATION: false
+              PORT: &httpPort 3214
+              REDIS_URL: redis://manyfold-dragonfly.media-apps.svc.cluster.local:6379/0
+              DATABASE_URL:
+                valueFrom:
+                  secretKeyRef:
+                    name: manyfold-pguser
+                    key: uri
+              SECRET_KEY_BASE:
+                valueFrom:
+                  secretKeyRef:
+                    name: *name
+                    key: MANYFOLD_SECRET_KEY
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /health
+                    port: *httpPort
+                  initialDelaySeconds: 0
+                  periodSeconds: 10
+                  timeoutSeconds: 1
+                  failureThreshold: 3
+              readiness: *probes
+            resources:
+              requests:
+                cpu: 20m
+                memory: 128Mi
+              limits:
+                memory: 1536Mi
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities: { drop: ["ALL"] }
+              readOnlyRootFilesystem: true
+
+    service:
+      app:
+        ports:
+          http:
+            port: *port
+    route:
+      app:
+        hostnames: ["model.noirprime.com"]
+        parentRefs:
+          - name: internal
+            namespace: kube-system
+            sectionName: https
+
+    persistence:
+      tmpfs:
+        type: emptyDir
+        globalMounts:
+          - path: /tmp
+            subPath: host-tmp
+          - path: /app/tmp
+            subPath: app-tmp
+          - path: /app/log
+            subPath: app-log
+      media:
+        type: nfs
+        server: nas.homelab.internal
+        path: /mnt/Arcanum/shared/media
+        globalMounts:
+          - path: /data/libraries/main
+            subPath: model

@@ -78,12 +78,5 @@ spec:
         type: nfs
         server: nas.homelab.internal
         path: /mnt/Arcanum/shared/media
-        advancedMounts:
-          emby:
-            app:
-              - path: /comic
-                subPath: comic
-              - path: /movie
-                subPath: movie
-              - path: /tvshow
-                subPath: tvshow
+        globalMounts:
+          - path: /media

@@ -25,6 +25,8 @@ spec:
   values:
     fullnameOverride: *name
     victoria-metrics-operator:
+      image:
+        registry: "quay.io"
       env:
         - name: VM_VMALERTDEFAULT_CONFIGRELOADERCPU
           value: 0
