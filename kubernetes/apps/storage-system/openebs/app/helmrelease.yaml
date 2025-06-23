@@ -41,12 +41,12 @@ spec:
           enabled: false
           keep: false
 
-    mayastor:
+    alloy:
       enabled: false
-      csi:
-        node:
-          initContainers:
-            enabled: false
+    loki:
+      enabled: false
+    minio:
+      enabled: false
 
     engines:
       local:
@@ -57,3 +57,10 @@ spec:
       replicated:
         mayastor:
           enabled: false
+
+    mayastor:
+      enabled: false
+      csi:
+        node:
+          initContainers:
+            enabled: false
