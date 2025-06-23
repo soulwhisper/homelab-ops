@@ -6,11 +6,13 @@ namespace: monitoring-system
 components:
   - ../../components/common
 resources:
+  - ./apprise/ks.yaml
   - ./blackbox-exporter/ks.yaml
   - ./coroot/ks.yaml
   - ./cronitor/ks.yaml
   - ./fluent-bit/ks.yaml
   - ./gatus/ks.yaml
+  - ./goldilocks/ks.yaml
   - ./grafana/ks.yaml
   - ./kromgo/ks.yaml
   - ./prometheus-operator/ks.yaml

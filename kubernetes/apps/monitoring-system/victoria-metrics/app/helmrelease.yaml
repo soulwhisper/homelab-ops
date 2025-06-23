@@ -192,6 +192,9 @@ spec:
                 user_key:
                   name: *name
                   key: PUSHOVER_USER_KEY
+            webhook_configs:
+              - send_resolved: true
+                url: http://apprise.monitoring-system.svc.cluster.local:8001?template=alertmanager
 
     grafana:
       enabled: false
