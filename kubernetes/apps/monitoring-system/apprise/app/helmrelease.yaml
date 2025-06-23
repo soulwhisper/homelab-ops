@@ -40,6 +40,10 @@ spec:
             env:
               - name: TZ
                 value: "${TIMEZONE}"
+              - name: PUID
+                value: "1000"
+              - name: GUID
+                value: "1000"
             envFrom:
               - secretRef:
                   name: *name
