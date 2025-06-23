@@ -3,7 +3,7 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &appname gatus
+  name: &appname goldilocks
   namespace: &namespace monitoring-system
 spec:
   targetNamespace: *namespace
@@ -12,20 +12,15 @@ spec:
       app.kubernetes.io/name: *appname
   interval: 30m
   timeout: 5m
-  path: "./kubernetes/apps/monitoring-system/gatus/app"
+  path: "./kubernetes/apps/monitoring-system/goldilocks/app"
   prune: true
   sourceRef:
     kind: GitRepository
     name: gitops-system
     namespace: gitops-system
   wait: false
-  dependsOn:
-    - name: rook-ceph-cluster
-      namespace: storage-system
-    - name: volsync
-      namespace: storage-system
   components:
-    - ../../../../components/volsync
+    - ../../../../components/gatus/internal
   postBuild:
     substitute:
       APP: *appname

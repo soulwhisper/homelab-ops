@@ -5,6 +5,10 @@
 
 ## List
 
+> infrastructure
+
+- router:vyos
+
 > taskfiles
 
 - postgres

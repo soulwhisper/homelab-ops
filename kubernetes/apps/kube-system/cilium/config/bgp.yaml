@@ -53,11 +53,11 @@ spec:
     matchLabels:
       kubernetes.io/os: linux
   bgpInstances:
-  - name: "instance-65512"
-    localASN: 65512
-    peers:
-    - name: "peer-65510"
-      peerASN: 65510
-      peerAddress: "${BGP_PEER}"
-      peerConfigRef:
-        name: "cilium-bgp-peer-config"
+    - name: "instance-65510"
+      localASN: 65510
+      peers:
+        - name: "peer-65510"
+          peerASN: 65510
+          peerAddress: "${BGP_PEER}"
+          peerConfigRef:
+            name: "cilium-bgp-peer-config"
