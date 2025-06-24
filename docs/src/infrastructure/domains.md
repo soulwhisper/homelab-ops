@@ -2,6 +2,7 @@
 
 - using https for both internal and external domains;
 - tls using public domain with cloudflare dns-01 support;
+- if needing 2+ domains, prefer deeper subs with `Advanced Certificate Manager` support;
 - router using `homelab.internal` as DHCP search domain; `exarch-0n` to `10.10.0.101-103` via DHCP;
 - extra router domains list below
 

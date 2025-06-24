@@ -38,6 +38,7 @@ spec:
             env:
               TZ: "${TIMEZONE}"
               LOG_LEVEL: "info"
+              JELLYFIN_TYPE: emby
               PORT: &port 80
             envFrom:
               - secretRef:
