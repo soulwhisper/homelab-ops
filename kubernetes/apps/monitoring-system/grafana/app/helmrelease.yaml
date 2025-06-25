@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: grafana
+  name: &name grafana
 spec:
   interval: 30m
   chartRef:
@@ -59,9 +59,9 @@ spec:
 
     # environments
     admin:
-      existingSecret: grafana
-    envFromSecrets:
-      - name: grafana
+      existingSecret: *name
+    # envFromSecrets:
+    #   - name: *name
     env:
       GF_EXPLORE_ENABLED: true
       GF_SECURITY_ALLOW_EMBEDDING: true
@@ -179,13 +179,13 @@ spec:
         datasources:
           - name: Prometheus
             type: prometheus
-            uid: prometheus
             access: proxy
             url: http://vmsingle-stack.monitoring-system.svc.cluster.local:8429
             isDefault: true
+            jsonData:
+              prometheusType: Prometheus
           - name: Alertmanager
             type: alertmanager
-            uid: alertmanager
             access: proxy
             url: http://vmalertmanager-stack.monitoring-system.svc.cluster.local:9093
             jsonData:
@@ -240,14 +240,14 @@ spec:
           #   editable: true
           #   options:
           #     path: /var/lib/grafana/dashboards/emqx
-          - name: envoy
+          - name: postgres
             orgId: 1
-            folder: Envoy
+            folder: Postgres
             type: file
             disableDeletion: false
             editable: true
             options:
-              path: /var/lib/grafana/dashboards/envoy
+              path: /var/lib/grafana/dashboards/postgres
           - name: victoria-metrics
             orgId: 1
             folder: VictoriaMetrics
@@ -284,9 +284,9 @@ spec:
         # nut-exporter:
         #   url: https://raw.githubusercontent.com/DRuggeri/nut_exporter/refs/heads/master/dashboard/dashboard.json
         #   datasource: Prometheus
-        # gatus:
-        #   url: https://raw.githubusercontent.com/TwiN/gatus/master/.examples/docker-compose-grafana-prometheus/grafana/provisioning/dashboards/gatus.json
-        #   datasource: Prometheus
+        gatus:
+          url: https://raw.githubusercontent.com/TwiN/gatus/master/.examples/docker-compose-grafana-prometheus/grafana/provisioning/dashboards/gatus.json
+          datasource: Prometheus
 
         node-exporter-full:
           # renovate: dashboardName="Node Exporter Full"
@@ -406,20 +406,6 @@ spec:
       #   emqx-rule-engine-rate:
       #     url: https://raw.githubusercontent.com/emqx/emqx-exporter/main/grafana-dashboard/template/emqx-5/rule-engine-rate.json
       #     datasource: Prometheus
-
-      envoy:
-        envoy-clusters:
-          url: https://raw.githubusercontent.com/envoyproxy/gateway/refs/heads/main/charts/gateway-addons-helm/dashboards/envoy-clusters.json
-          datasource: Prometheus
-        envoy-gateway-global:
-          url: https://raw.githubusercontent.com/envoyproxy/gateway/refs/heads/main/charts/gateway-addons-helm/dashboards/envoy-gateway-global.json
-          datasource: Prometheus
-        envoy-proxy-global:
-          url: https://raw.githubusercontent.com/envoyproxy/gateway/refs/heads/main/charts/gateway-addons-helm/dashboards/envoy-proxy-global.json
-          datasource: Prometheus
-        global-ratelimit:
-          url: https://raw.githubusercontent.com/envoyproxy/gateway/refs/heads/main/charts/gateway-addons-helm/dashboards/global-ratelimit.json
-          datasource: Prometheus
 
       victoria-metrics:
         backupmanager:
