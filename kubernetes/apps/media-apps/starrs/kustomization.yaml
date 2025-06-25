@@ -8,9 +8,6 @@ resources:
   - ./bazarr/ks.yaml
   - ./jellyseerr/ks.yaml
   - ./recyclarr/ks.yaml
-  # downloader
-  - ./cross-seed/ks.yaml
-  - ./qbittorrent/ks.yaml
   # indexer
   - ./prowlarr/ks.yaml
   # tvshows

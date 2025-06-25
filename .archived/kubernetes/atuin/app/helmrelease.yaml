@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &name sonarr
+  name: &name atuin
 spec:
   interval: 30m
   chartRef:
@@ -27,34 +27,41 @@ spec:
     defaultPodOptions:
       hostUsers: false
     controllers:
-      sonarr:
+      atuin:
         annotations:
           reloader.stakater.com/auto: "true"
+        initContainers:
+          init-db:
+            image:
+              repository: ghcr.io/home-operations/postgres-init
+              tag: "17"
+            envFrom:
+              - secretRef:
+                  name: atuin-initdb
         containers:
           app:
             image:
-              repository: ghcr.io/home-operations/sonarr
-              tag: 4.0.15.2940
+              repository: ghcr.io/atuinsh/atuin
+              tag: 18.6.1
+            args:
+              - server
+              - start
             env:
-              SONARR__APP__INSTANCENAME: Sonarr
-              SONARR__AUTH__APIKEY:
+              ATUIN_HOST: 0.0.0.0
+              ATUIN_PORT: &port 8888
+              ATUIN_OPEN_REGISTRATION: true
+              ATUIN_DB_URI:
                 valueFrom:
                   secretKeyRef:
-                    name: *name
-                    key: SONARR_API_KEY
-              SONARR__AUTH__METHOD: External
-              SONARR__AUTH__REQUIRED: DisabledForLocalAddresses
-              SONARR__LOG__DBENABLED: "False"
-              SONARR__LOG__LEVEL: info
-              SONARR__SERVER__PORT: &port 8989
-              SONARR__UPDATE__BRANCH: develop
+                    name: atuin-pguser
+                    key: uri
             probes:
               liveness: &probes
                 enabled: true
                 custom: true
                 spec:
                   httpGet:
-                    path: /ping
+                    path: /
                     port: *port
                   initialDelaySeconds: 0
                   periodSeconds: 10
@@ -63,10 +70,10 @@ spec:
               readiness: *probes
             resources:
               requests:
-                cpu: 20m
-                memory: 384Mi
+                cpu: 10m
+                memory: 128Mi
               limits:
-                memory: 2Gi
+                memory: 256Mi
             securityContext:
               allowPrivilegeEscalation: false
               capabilities: { drop: ["ALL"] }
@@ -77,28 +84,16 @@ spec:
         ports:
           http:
             port: *port
+    route:
+      app:
+        hostnames: ["atuin.noirprime.com"]
+        parentRefs:
+          - name: external
+            namespace: kube-system
+            sectionName: https
 
     persistence:
-      app:
-        existingClaim: *name
-        globalMounts:
-          - path: /config
       tmpfs:
         type: emptyDir
         globalMounts:
-          - path: /tmp
-            subPath: tmp
-      media:
-        type: nfs
-        server: nas.homelab.internal
-        path: /mnt/Arcanum/shared/media
-        globalMounts:
-          - path: /data/nas-media
-
-    route:
-      app:
-        hostnames: ["sonarr.noirprime.com"]
-        parentRefs:
-          - name: internal
-            namespace: kube-system
-            sectionName: https
+          - path: /config

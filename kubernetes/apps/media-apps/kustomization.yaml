@@ -8,6 +8,10 @@ components:
 resources:
   # arrs apps
   - ./starrs
+  - ./moviepilot/ks.yaml
+  # downloader
+  - ./cross-seed/ks.yaml
+  - ./qbittorrent/ks.yaml
   # other media apps
   - ./emby/ks.yaml
   - ./immich/ks.yaml

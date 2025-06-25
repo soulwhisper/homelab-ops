@@ -80,6 +80,8 @@ spec:
     persistence:
       app:
         existingClaim: *name
+        globalMounts:
+          - path: /config
 
     route:
       app:

@@ -3,7 +3,7 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &appname cross-seed
+  name: &appname moviepilot
   namespace: &namespace media-apps
 spec:
   targetNamespace: *namespace
@@ -12,7 +12,7 @@ spec:
       app.kubernetes.io/name: *appname
   interval: 30m
   timeout: 5m
-  path: "./kubernetes/apps/media-apps/starrs/cross-seed/app"
+  path: "./kubernetes/apps/media-apps/starrs/moviepilot/app"
   prune: true
   sourceRef:
     kind: GitRepository
@@ -29,8 +29,12 @@ spec:
     - name: volsync
       namespace: storage-system
   components:
-    - ../../../../../components/keda/nas-nfs-scaler
-    - ../../../../../components/volsync
+    - ../../../../components/dragonfly
+    - ../../../../components/gatus/internal
+    - ../../../../components/keda/nas-nfs-scaler
+    - ../../../../components/volsync
   postBuild:
     substitute:
       APP: *appname
+      GATUS_SUBDOMAIN: pilot
+      REDIS_MEM: 1024Mi

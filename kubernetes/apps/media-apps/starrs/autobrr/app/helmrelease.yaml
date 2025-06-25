@@ -73,6 +73,8 @@ spec:
     persistence:
       app:
         existingClaim: *name
+        globalMounts:
+          - path: /config
       tmpfs:
         type: emptyDir
         globalMounts:

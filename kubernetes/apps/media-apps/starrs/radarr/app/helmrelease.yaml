@@ -81,6 +81,8 @@ spec:
     persistence:
       app:
         existingClaim: *name
+        globalMounts:
+          - path: /config
       media:
         type: nfs
         server: nas.homelab.internal

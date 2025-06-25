@@ -67,6 +67,8 @@
 
 > kubernetes:selfhosted
 
+- apps:atuin
+
 > kubernetes:storage
 
 - apps:openebs
@@ -76,7 +78,7 @@
 
 - database: prefer native volume management instead of stateful set;
 - media: arrs is not my goal;
-- monitoring: victroia-stack perform more and cost less, same to fluent-bit; use kromgo and fqdn-ping instead of gatus;
+- monitoring: victroia-stack perform more and cost less, same to fluent-bit;
 - security: reduce complexity;
-- selfhosted: using aqara stack instead of home-assistant;
+- selfhosted: using aqara stack instead of home-assistant; hence [local-voice-assistant](https://www.home-assistant.io/voice_control/voice_remote_local_assistant/) is not planned;
 - storage: migrated to rook-ceph for better support and stability;

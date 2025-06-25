@@ -69,10 +69,8 @@ spec:
         ports:
           http:
             port: 8000
-        primary: true
-      webhook:
-        ports:
-          http:
+            primary: true
+          webhook:
             port: 8001
     route:
       app:
