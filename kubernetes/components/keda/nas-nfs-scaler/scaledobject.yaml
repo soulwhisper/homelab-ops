@@ -19,5 +19,6 @@ spec:
       metadata:
         serverAddress: http://vmsingle-stack.monitoring-system.svc.cluster.local:8429
         query: probe_success{instance=~"nas.homelab.internal:2049"}
-        threshold: "1"
+        activationThreshold: "3"
+        threshold: "0.9"
         ignoreNullValues: "0"

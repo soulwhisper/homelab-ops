@@ -13,3 +13,7 @@ export OP_SERVICE_ACCOUNT_TOKEN=
 terrafrom init
 terraform apply
 ```
+
+### Buckets
+
+- current, only `postgres` and `volsync` is needed;

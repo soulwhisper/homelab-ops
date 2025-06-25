@@ -6,7 +6,7 @@ metadata:
   name: cert-manager-rules
 spec:
   groups:
-    - name: cert-manager
+    - name: cert-manager.rules
       rules:
         - alert: CertManagerAbsent
           expr: |
@@ -20,7 +20,7 @@ spec:
               ones can't be renewed until cert-manager is back."
             runbook_url: https://gitlab.com/uneeq-oss/cert-manager-mixin/-/blob/master/RUNBOOK.md#certmanagerabsent
             summary: "Cert Manager has dissapeared from Prometheus service discovery."
-    - name: certificates
+    - name: certificates.rules
       rules:
         - alert: CertManagerCertExpirySoon
           expr: |

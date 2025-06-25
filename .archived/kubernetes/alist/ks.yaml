@@ -25,6 +25,7 @@ spec:
     - name: volsync
       namespace: storage-system
   components:
+    - ../../../../components/gatus/internal
     - ../../../../components/volsync
   postBuild:
     substitute:

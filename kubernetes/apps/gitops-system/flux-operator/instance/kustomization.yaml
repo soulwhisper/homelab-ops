@@ -13,5 +13,7 @@ configMapGenerator:
   - name: flux-instance
     files:
       - values.yaml=./values.yaml
-configurations:
-  - kustomizeconfig.yaml
+generatorOptions:
+  annotations:
+    kustomize.toolkit.fluxcd.io/substitute: disabled
+  disableNameSuffixHash: true

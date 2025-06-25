@@ -77,11 +77,17 @@ spec:
 
     service:
       app:
+        primary: true
+        type: LoadBalancer
+        sessionAffinity: ClientIP
+        annotations:
+          lbipam.cilium.io/ips: "${LB_HASS}"
         ports:
           http:
             port: &port 8123
-            primary: true
-          code-server:
+      code-server:
+        ports:
+          http:
             port: &codePort 12321
 
     route:
@@ -106,7 +112,7 @@ spec:
                     type: ReplacePrefixMatch
                     replacePrefixMatch: /
             backendRefs:
-              - identifier: app
+              - identifier: code-server
                 port: *codePort
 
     persistence:

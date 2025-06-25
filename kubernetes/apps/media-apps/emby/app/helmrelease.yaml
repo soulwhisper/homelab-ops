@@ -33,21 +33,31 @@ spec:
         containers:
           app:
             image:
-              repository: docker.io/emby/embyserver
-              tag: 4.9.1.1@sha256:f02e08e59d37a43ca20ef1a0cea0b2dc03e94b24649eb2d723602a2bb043fcab
+              repository: emby/embyserver
+              tag: 4.9.1.1
             env:
-              TZ: Asia/Shanghai
-              UID: 2000
-              GID: 2000
-              # GIDLIST: 100
-              UMASK: 022
+              TZ: "${TIMEZONE}"
+              GIDLIST: 2000,0
             ports:
               - name: http
                 containerPort: &port 8096
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /web/index.html
+                    port: http
+                  initialDelaySeconds: 10
+                  periodSeconds: 60
+                  timeoutSeconds: 10
+                  failureThreshold: 5
+              readiness: *probes
             resources:
               requests:
-                cpu: 15m
-                memory: 1Gi
+                cpu: 100m
+                gpu.intel.com/i915: 1
               limits:
                 gpu.intel.com/i915: 1
                 memory: 4Gi
@@ -74,16 +84,16 @@ spec:
         existingClaim: *name
         globalMounts:
           - path: /config
+      tmpfs:
+        type: emptyDir
+        globalMounts:
+          - path: /tmp
+            subPath: tmp
+          - path: /transcode
+            subPath: transcode
       media:
         type: nfs
         server: nas.homelab.internal
         path: /mnt/Arcanum/shared/media
-        advancedMounts:
-          emby:
-            app:
-              - path: /comic
-                subPath: comic
-              - path: /movie
-                subPath: movie
-              - path: /tvshow
-                subPath: tvshow
+        globalMounts:
+          - path: /media

@@ -27,8 +27,10 @@ spec:
     - name: volsync
       namespace: storage-system
   components:
+    - ../../../../components/gatus/internal
     - ../../../../components/volsync
   postBuild:
     substitute:
       APP: *appname
+      GATUS_SUBDOMAIN: gpt
       VOLSYNC_CAPACITY: 10Gi

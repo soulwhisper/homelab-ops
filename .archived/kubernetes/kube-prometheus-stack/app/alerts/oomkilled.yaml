@@ -3,10 +3,10 @@
 apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule
 metadata:
-  name: oom-alert
+  name: oom-rules
 spec:
   groups:
-    - name: oom
+    - name: oom.rules
       rules:
         - alert: OOMKilled
           annotations:

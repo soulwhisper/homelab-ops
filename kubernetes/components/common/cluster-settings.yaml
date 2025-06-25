@@ -5,19 +5,25 @@ metadata:
   name: cluster-settings
 data:
   TIMEZONE: "Asia/Shanghai"
-  # infra
-  BGP_PEER: "172.19.82.2"
+  # : infra
+  BGP_PEER: "172.19.82.254"
   DNS_HOST: "172.19.82.10"
-  # talos
+  # : talos
   KUBE_VIP: "172.19.82.100"
-  # cilium-lbipam
+  # : cilium-lbipam
   LB_POOL_START: "172.19.82.201"
   LB_POOL_STOP: "172.19.82.250"
+  # :: important
   LB_INTERNAL: "172.19.82.201"
   LB_EXTERNAL: "172.19.82.202"
   LB_POSTGRES: "172.19.82.203"
-  LB_MQTT: "172.19.82.204"
-  # proxy
+  # :: home-assistant
+  LB_HASS: "172.19.82.210"
+  LB_MQTT: "172.19.82.211"
+  LB_MATTER: "172.19.82.212"
+  # :: media
+  LB_BT: "172.19.82.221"
+  # : proxy
   HTTP_PROXY: http://172.19.82.10:1080
   HTTPS_PROXY: http://172.19.82.10:1080
   NO_PROXY: .noirprime.com,.homelab.internal,.cluster.local.,.cluster.local,.svc,localhost,127.0.0.1,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16

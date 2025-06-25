@@ -9,7 +9,7 @@ spec:
   chart:
     spec:
       chart: openebs
-      version: 4.3.0
+      version: 4.3.2
       sourceRef:
         kind: HelmRepository
         name: openebs
@@ -41,12 +41,12 @@ spec:
           enabled: false
           keep: false
 
-    mayastor:
+    alloy:
       enabled: false
-      csi:
-        node:
-          initContainers:
-            enabled: false
+    loki:
+      enabled: false
+    minio:
+      enabled: false
 
     engines:
       local:
@@ -57,3 +57,10 @@ spec:
       replicated:
         mayastor:
           enabled: false
+
+    mayastor:
+      enabled: false
+      csi:
+        node:
+          initContainers:
+            enabled: false

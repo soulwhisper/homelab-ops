@@ -52,7 +52,7 @@ spec:
           app:
             args:
               - --config
-              - /config/config.yml
+              - /config/config.yaml
             image:
               repository: ghcr.io/authelia/authelia
               tag: 4.39.3
@@ -130,7 +130,7 @@ spec:
       app:
         hostnames: ["auth.noirprime.com"]
         parentRefs:
-          - name: external
+          - name: internal
             namespace: kube-system
             sectionName: https
 
@@ -139,5 +139,5 @@ spec:
         type: configMap
         name: *name
         globalMounts:
-          - path: /config/config.yml
+          - path: /config/config.yaml
             subPath: config.yaml

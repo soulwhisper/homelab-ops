@@ -19,3 +19,8 @@ spec:
     name: gitops-system
     namespace: gitops-system
   wait: true
+  components:
+    - ../../../../components/gatus/external
+  postBuild:
+    substitute:
+      GATUS_SUBDOMAIN: echo

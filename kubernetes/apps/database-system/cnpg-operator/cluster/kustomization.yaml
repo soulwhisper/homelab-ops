@@ -6,7 +6,8 @@ resources:
   # app
   - ./postgres.yaml
   # utils
-  - ./prometheusrule.yaml
+  - ./gatus.yaml
   - ./minio-store.yaml
+  - ./prometheusrule.yaml
   - ./scheduledbackup.yaml
   - ./service.yaml

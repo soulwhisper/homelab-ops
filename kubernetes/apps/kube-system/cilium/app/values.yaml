@@ -66,7 +66,7 @@ operator:
     enabled: true
     serviceMonitor:
       enabled: true
-  replicas: 2
+  replicas: 2 # keep this
   rollOutPods: true
 prometheus:
   enabled: true

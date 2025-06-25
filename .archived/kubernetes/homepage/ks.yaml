@@ -22,3 +22,8 @@ spec:
   dependsOn:
     - name: onepassword-store
       namespace: security-system
+  components:
+    - ../../../../components/gatus/internal
+  postBuild:
+    substitute:
+      GATUS_SUBDOMAIN: home

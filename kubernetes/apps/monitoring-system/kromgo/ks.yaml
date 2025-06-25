@@ -19,3 +19,8 @@ spec:
     name: gitops-system
     namespace: gitops-system
   wait: false
+  components:
+    - ../../../../components/gatus/external
+  postBuild:
+    substitute:
+      APP: *appname

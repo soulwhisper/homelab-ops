@@ -32,8 +32,10 @@ spec:
       namespace: storage-system
   components:
     - ../../../../components/cnpg
+    - ../../../../components/gatus/internal
     - ../../../../components/dragonfly
     - ../../../../components/volsync
   postBuild:
     substitute:
       APP: *appname
+      GATUS_SUBDOMAIN: finance

@@ -44,9 +44,6 @@ spec:
             image:
               repository: ghcr.io/bjw-s-labs/k8s-crd-extractor
               tag: 2025.6.12@sha256:c004a691f8371a7fb0954cbbb696d273198644eec2bcaa571de0fc002aa730ac
-            env:
-              - name: SCHEMAS_DIR
-                value: "/data"
             resources:
               requests: &requests
                 cpu: 10m
@@ -61,7 +58,7 @@ spec:
           app:
             image:
               repository: ghcr.io/bjw-s-labs/wrangler
-              tag: 4.20.3@sha256:5bb29439829ecf8de4d8c7cfc19eb0ca4b7d3a4af627e42887b0c6a9b579b025
+              tag: 4.21.2@sha256:d9e58a8e6303aa9d39890a6d9b02d9e2e118bb08e3478ced4a5d5b9870e6290b
             env:
               - name: HTTP_PROXY
                 value: "${HTTP_PROXY}"
@@ -75,7 +72,7 @@ spec:
             args:
               - pages
               - deploy
-              - /data
+              - /data/crdSchemas
               - --project-name
               - kubernetes-schemas
             resources:
@@ -92,11 +89,15 @@ spec:
           type: ClusterRole
           rules:
             - apiGroups: ["apiextensions.k8s.io"]
-              resources: ["customresourcedefinitions","customresourcedefinitions/status"]
-              verbs: ["get","list","watch"]
+              resources:
+                [
+                  "customresourcedefinitions",
+                  "customresourcedefinitions/status",
+                ]
+              verbs: ["get", "list", "watch"]
             - apiGroups: ["apiregistration.k8s.io"]
-              resources: ["apiservices","apiservices/status"]
-              verbs: ["get","list","watch"]
+              resources: ["apiservices", "apiservices/status"]
+              verbs: ["get", "list", "watch"]
       bindings:
         k8s-schemas:
           type: ClusterRoleBinding
@@ -109,10 +110,15 @@ spec:
     persistence:
       tmpfs:
         type: emptyDir
-        globalMounts:
-          - path: /config
-            subPath: config
-          - path: /data
-            subPath: data
-          - path: /tmp
-            subPath: tmp
+        advancedMounts:
+          k8s-schemas:
+            generate-schemas:
+              - path: /config/.datree
+                subPath: data
+              - path: /tmp
+                subPath: tmp
+            app:
+              - path: /config
+                subPath: config
+              - path: /data
+                subPath: data

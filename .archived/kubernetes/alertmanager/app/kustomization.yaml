@@ -10,9 +10,8 @@ resources:
 configMapGenerator:
   - name: alertmanager
     files:
-      - config/config.yml
+      - config/config.yaml
 generatorOptions:
   annotations:
     kustomize.toolkit.fluxcd.io/substitute: disabled
-configurations:
-  - kustomizeconfig.yaml
+  disableNameSuffixHash: true

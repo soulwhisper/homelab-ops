@@ -2,7 +2,7 @@
 
 > Pushover
 
-- Old-fashioned way, widely used. Realtime alerts might need proxy (for me).
+- Old fashion, widely used. Realtime alerts might need proxy (for me).
 
 > Serverchan
 
@@ -11,16 +11,15 @@
 - if home, prefer `sc3_appkey`, dont need app running, push to status_bar;
 - support markdown message;
 
-### Implementation
+## Group pushing
 
-> Pushover
+- tried a few methods to group notification pushing, current method is `prometheus rules`;
 
 ```yaml
 # alertmanager
-## via env:PUSHOVER_TOKEN, env:PUSHOVER_USER_KEY
 config:
   receivers:
-    - name: pushover
+    - name: "default-receiver"
       pushover_configs:
         - send_resolved: true
           priority: |-
@@ -55,47 +54,10 @@ config:
           user_key:
             name: *name
             key: PUSHOVER_USER_KEY
-
-# gatus
-## via env:PUSHOVER_TOKEN, env:PUSHOVER_USER_KEY
-endpoints:
-  - name: example
-    alerts:
-      - type: pushover
-
-```
-
-> Serverchan
-
-```yaml
-# alertmanager
-## via env:SERVERCHAN_URL
-config:
-  receivers:
-    - name: serverchan
       webhook_configs:
         - send_resolved: true
-          url:
-            name: *name
-            key: SERVERCHAN_URL
+          url: http://apprise.monitoring-system.svc.cluster.local:8001?template=alertmanager
 
-# gatus
-## via env:SERVERCHAN_URL
-alerting:
-  custom:
-    url: "${SERVERCHAN_URL}"
-    method: "POST"
-    body: |
-      {
-        "text": "[ALERT_TRIGGERED_OR_RESOLVED]: [ENDPOINT_GROUP] - [ENDPOINT_NAME] - [ALERT_DESCRIPTION] - [RESULT_ERRORS]"
-      }
-    placeholders:
-      ALERT_TRIGGERED_OR_RESOLVED:
-        TRIGGERED: "FAILURE"
-        RESOLVED: "RECOVERED"
+# apprise via `camalot/apprise-webhook`
 
-endpoints:
-  - name: example
-    alerts:
-      - type: custom
 ```

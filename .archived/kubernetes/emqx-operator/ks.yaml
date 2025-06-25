@@ -50,3 +50,8 @@ spec:
       namespace: database-system
     - name: onepassword-store
       namespace: security-system
+  components:
+    - ../../../../components/gatus/internal
+  postBuild:
+    substitute:
+      GATUS_SUBDOMAIN: emqx

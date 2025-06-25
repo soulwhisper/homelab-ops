@@ -1,0 +1,99 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &name atuin
+spec:
+  interval: 30m
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+    namespace: gitops-system
+  maxHistory: 2
+  install:
+    crds: CreateReplace
+    remediation:
+      retries: -1
+  upgrade:
+    cleanupOnFail: true
+    crds: CreateReplace
+    remediation:
+      retries: 3
+  uninstall:
+    keepHistory: false
+
+  values:
+    defaultPodOptions:
+      hostUsers: false
+    controllers:
+      atuin:
+        annotations:
+          reloader.stakater.com/auto: "true"
+        initContainers:
+          init-db:
+            image:
+              repository: ghcr.io/home-operations/postgres-init
+              tag: "17"
+            envFrom:
+              - secretRef:
+                  name: atuin-initdb
+        containers:
+          app:
+            image:
+              repository: ghcr.io/atuinsh/atuin
+              tag: 18.6.1
+            args:
+              - server
+              - start
+            env:
+              ATUIN_HOST: 0.0.0.0
+              ATUIN_PORT: &port 8888
+              ATUIN_OPEN_REGISTRATION: true
+              ATUIN_DB_URI:
+                valueFrom:
+                  secretKeyRef:
+                    name: atuin-pguser
+                    key: uri
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /
+                    port: *port
+                  initialDelaySeconds: 0
+                  periodSeconds: 10
+                  timeoutSeconds: 1
+                  failureThreshold: 3
+              readiness: *probes
+            resources:
+              requests:
+                cpu: 10m
+                memory: 128Mi
+              limits:
+                memory: 256Mi
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities: { drop: ["ALL"] }
+              readOnlyRootFilesystem: true
+
+    service:
+      app:
+        ports:
+          http:
+            port: *port
+    route:
+      app:
+        hostnames: ["atuin.noirprime.com"]
+        parentRefs:
+          - name: external
+            namespace: kube-system
+            sectionName: https
+
+    persistence:
+      tmpfs:
+        type: emptyDir
+        globalMounts:
+          - path: /config

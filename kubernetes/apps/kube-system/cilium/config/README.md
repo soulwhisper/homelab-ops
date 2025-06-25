@@ -1,38 +1,34 @@
 ## BGP
 
 ```shell
-# frr.conf
-! -*- bgp -*-
-!
-! Peer group for k8s
-router bgp 65510
-bgp ebgp-requires-policy
-bgp router-id 10.10.0.1
-maximum-paths 1
-!
-! Peer group for k8s
-neighbor k8s peer-group
-neighbor k8s remote-as 65512
-neighbor k8s activate
-neighbor k8s soft-reconfiguration inbound
-neighbor k8s timers 15 45
-neighbor k8s timers connect 15
-!
-! Neighbors for k8s
-neighbor 10.10.0.101 peer-group k8s
-neighbor 10.10.0.102 peer-group k8s
-neighbor 10.10.0.103 peer-group k8s
-!
-address-family ipv4 unicast
-redistribute connected
-neighbor k8s activate
-neighbor k8s route-map ALLOW-ALL in
-neighbor k8s route-map ALLOW-ALL out
-neighbor k8s next-hop-self
-exit-address-family
-!
-route-map ALLOW-ALL permit 10
-!
-line vty
-!
+# H3C Switch
+router id 10.10.0.1
+
+route-policy RECOVER permit node 10
+ apply dampening 15 750 3000 60
+
+bgp 65510
+ auto-recovery interval 60
+ dampening route-policy RECOVER
+
+ group k8s internal
+ peer k8s reflect-client
+ peer k8s next-hop-local
+ peer 10.10.0.101 group k8s
+ peer 10.10.0.102 group k8s
+ peer 10.10.0.103 group k8s
+ timer keepalive 3 hold 9
+ peer k8s connect-retry 5
+ peer k8s ignore first-as
+ peer k8s timer connect-retry 5
+ peer k8s capability-advertise route-refresh
+ peer k8s route-update-interval 2
+ peer k8s ebgp-interface-sensitive
+ peer k8s tcp-mss 1024
+ peer k8s tcp-keepalive 10 3
+
+ address-family ipv4
+  aggregate 10.10.0.0 24 detail-suppressed
+  network 10.10.0.0 24
+ quit
 ```

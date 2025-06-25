@@ -31,7 +31,9 @@ spec:
   components:
     - ../../../../components/cnpg
     - ../../../../components/dragonfly
+    - ../../../../components/gatus/internal
     - ../../../../components/keda/nas-nfs-scaler
   postBuild:
     substitute:
       APP: *appname
+      GATUS_SUBDOMAIN: photo

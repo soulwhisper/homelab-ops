@@ -1,0 +1,25 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/helmfile
+helmDefaults:
+  cleanupOnFail: true
+  force: true
+  timeout: 600
+  wait: true
+  waitForJobs: true
+
+releases:
+  # : Wipe Rook disks
+  # require `rook disk model` for env "ROOK_DISK"
+  # :: Task
+  # export ROOK_DISK={{.WIPE}}
+  # helmfile --file {{.K8S_DIR}}/bootstrap/helmfile.yaml apply {{if eq .WIPE "false"}} -l wipe-rook.enabled!=true {{end}} {{.HELMFILE_ARGS}}
+
+  - name: wipe-rook
+    namespace: kube-system
+    atomic: true
+    labels:
+      wipe-rook.enabled: true
+    chart: oci://ghcr.io/bjw-s-labs/helm/app-template
+    version: 4.1.2
+    values: ["./wipe-rook.yaml.gotmpl"]
+    needs: ["kube-system/coredns"]

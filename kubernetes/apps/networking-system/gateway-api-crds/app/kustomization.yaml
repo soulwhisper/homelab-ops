@@ -10,5 +10,7 @@ configMapGenerator:
   - name: gateway-api-crds
     files:
       - values.yaml=./values.yaml
-configurations:
-  - kustomizeconfig.yaml
+generatorOptions:
+  annotations:
+    kustomize.toolkit.fluxcd.io/substitute: disabled
+  disableNameSuffixHash: true
