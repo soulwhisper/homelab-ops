@@ -8,7 +8,6 @@
 | bucket   | key-name | app           |
 | -------- | -------- | ------------- |
 | postgres | postgres | cnpg-operator |
-| talos    | talos    | talos-backup  |
 | volsync  | volsync  | volsync       |
 
 #### Minio

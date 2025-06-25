@@ -56,7 +56,8 @@ config:
             key: PUSHOVER_USER_KEY
       webhook_configs:
         - send_resolved: true
-          url:
-            name: *name
-            key: SERVERCHAN_URL
+          url: http://apprise.monitoring-system.svc.cluster.local:8001?template=alertmanager
+
+# apprise via `camalot/apprise-webhook`
+
 ```

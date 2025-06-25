@@ -1,7 +1,6 @@
 locals {
   minio_buckets = [
     "postgres",
-    "talos",
     "volsync"
   ]
 }

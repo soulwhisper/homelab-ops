@@ -8,6 +8,7 @@
 > infrastructure
 
 - router:vyos
+- webhook:slack
 
 > taskfiles
 
@@ -21,6 +22,11 @@
 
 - cnpg:nfs-backup
 - volysnc:ceph-s3
+
+> cronjobs
+
+- cronjob:talos-backup
+- cronjob:talos-healthcheck
 
 > kubernetes:base
 
@@ -47,6 +53,7 @@
 > kubernetes:monitor
 
 - apps:alertmanager
+- apps:cronitor
 - apps:echo-server
 - apps:loki
 - apps:kube-prometheus-stack
@@ -68,6 +75,7 @@
 > kubernetes:selfhosted
 
 - apps:atuin
+- apps:voicechat
 
 > kubernetes:storage
 
