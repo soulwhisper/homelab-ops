@@ -12,7 +12,7 @@ spec:
       app.kubernetes.io/name: *appname
   interval: 30m
   timeout: 5m
-  path: "./kubernetes/apps/media-apps/starrs/qbittorrent/app"
+  path: "./kubernetes/apps/media-apps/qbittorrent/app"
   prune: true
   sourceRef:
     kind: GitRepository
@@ -48,7 +48,7 @@ spec:
       app.kubernetes.io/name: *appname
   interval: 30m
   timeout: 5m
-  path: "./kubernetes/apps/media-apps/starrs/qbittorrent/tools"
+  path: "./kubernetes/apps/media-apps/qbittorrent/tools"
   prune: true
   sourceRef:
     kind: GitRepository
