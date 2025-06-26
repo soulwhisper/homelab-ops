@@ -1,15 +1,15 @@
-## PIG support
+## Postgres with Extensions
 
 - [pig-cli](https://pigsty.io/ext/pig/intro/) provides easy and clean way to manage pgsql extensions;
 - Debian 12 bookworm has best deb compatibility, [extensions_list](https://pigsty.io/ext/list/deb/);
 
-## Patch CNPG
+### Patch CNPG
 
 - build custom image from `ghcr.io/cloudnative-pg/postgresql:17-standard-bookworm`;
 - add Pigsty GPG key and signed upstream repository;
 - install extensions with APT repo;
 
-## Supabase-based
+### Supabase-based
 
 - This category explains how to use `supabase/postgres:17`, [ref](https://github.com/supabase/postgres), as cnpg base-image;
 - Also check `Dockerfile`;
@@ -36,20 +36,20 @@ spec:
       - safeupdate
       - supautils
     parameters:
-      auto_explain.log_min_duration: '10s'
-      cron.database_name: 'postgres'
-      pgsodium.getkey_script: '/usr/lib/postgresql/bin/pgsodium_getkey.sh'
-      vault.getkey_script: '/usr/lib/postgresql/bin/pgsodium_getkey.sh'
+      auto_explain.log_min_duration: "10s"
+      cron.database_name: "postgres"
+      pgsodium.getkey_script: "/usr/lib/postgresql/bin/pgsodium_getkey.sh"
+      vault.getkey_script: "/usr/lib/postgresql/bin/pgsodium_getkey.sh"
       supautils.extensions_parameter_overrides: '{"pg_cron":{"schema":"pg_catalog"}}'
       supautils.policy_grants: '{"postgres":["auth.audit_log_entries","auth.identities","auth.refresh_tokens","auth.sessions","auth.users","realtime.messages","storage.buckets","storage.migrations","storage.objects","storage.s3_multipart_uploads","storage.s3_multipart_uploads_parts"]}'
       supautils.drop_trigger_grants: '{"postgres":["auth.audit_log_entries","auth.identities","auth.refresh_tokens","auth.sessions","auth.users","realtime.messages","storage.buckets","storage.migrations","storage.objects","storage.s3_multipart_uploads","storage.s3_multipart_uploads_parts"]}'
-      supautils.privileged_extensions: 'address_standardizer, address_standardizer_data_us, autoinc, bloom, btree_gin, btree_gist, citext, cube, dblink, dict_int, dict_xsyn, earthdistance, fuzzystrmatch, hstore, http, hypopg, index_advisor, insert_username, intarray, isn, ltree, moddatetime, orioledb, pg_buffercache, pg_cron, pg_graphql, pg_hashids, pg_jsonschema, pg_net, pg_prewarm, pg_repack, pg_stat_monitor, pg_stat_statements, pg_tle, pg_trgm, pg_walinspect, pgaudit, pgcrypto, pgjwt, pgroonga, pgroonga_database, pgrouting, pgrowlocks, pgsodium, pgstattuple, pgtap, plcoffee, pljava, plls, plpgsql_check, postgis, postgis_raster, postgis_sfcgal, postgis_tiger_geocoder, postgis_topology, postgres_fdw, refint, rum, seg, sslinfo, supabase_vault, supautils, tablefunc, tcn, tsm_system_rows, tsm_system_time, unaccent, uuid-ossp, vector, wrappers'
-      supautils.extension_custom_scripts_path: '/etc/postgresql-custom/extension-custom-scripts'
-      supautils.privileged_extensions_superuser: 'supabase_admin'
-      supautils.privileged_role: 'postgres'
-      supautils.privileged_role_allowed_configs: 'auto_explain.*, log_lock_waits, log_min_duration_statement, log_min_messages, log_replication_commands, log_statement, log_temp_files, pg_net.batch_size, pg_net.ttl, pg_stat_statements.*, pgaudit.log, pgaudit.log_catalog, pgaudit.log_client, pgaudit.log_level, pgaudit.log_relation, pgaudit.log_rows, pgaudit.log_statement, pgaudit.log_statement_once, pgaudit.role, pgrst.*, plan_filter.*, safeupdate.enabled, session_replication_role, track_io_timing, wal_compression'
-      supautils.reserved_memberships: 'pg_read_server_files, pg_write_server_files, pg_execute_server_program, supabase_admin, supabase_auth_admin, supabase_storage_admin, supabase_read_only_user, supabase_realtime_admin, supabase_replication_admin, dashboard_user, pgbouncer, authenticator'
-      supautils.reserved_roles: 'supabase_admin, supabase_auth_admin, supabase_storage_admin, supabase_read_only_user, supabase_realtime_admin, supabase_replication_admin, dashboard_user, pgbouncer, service_role*, authenticator*, authenticated*, anon*'
+      supautils.privileged_extensions: "address_standardizer, address_standardizer_data_us, autoinc, bloom, btree_gin, btree_gist, citext, cube, dblink, dict_int, dict_xsyn, earthdistance, fuzzystrmatch, hstore, http, hypopg, index_advisor, insert_username, intarray, isn, ltree, moddatetime, orioledb, pg_buffercache, pg_cron, pg_graphql, pg_hashids, pg_jsonschema, pg_net, pg_prewarm, pg_repack, pg_stat_monitor, pg_stat_statements, pg_tle, pg_trgm, pg_walinspect, pgaudit, pgcrypto, pgjwt, pgroonga, pgroonga_database, pgrouting, pgrowlocks, pgsodium, pgstattuple, pgtap, plcoffee, pljava, plls, plpgsql_check, postgis, postgis_raster, postgis_sfcgal, postgis_tiger_geocoder, postgis_topology, postgres_fdw, refint, rum, seg, sslinfo, supabase_vault, supautils, tablefunc, tcn, tsm_system_rows, tsm_system_time, unaccent, uuid-ossp, vector, wrappers"
+      supautils.extension_custom_scripts_path: "/etc/postgresql-custom/extension-custom-scripts"
+      supautils.privileged_extensions_superuser: "supabase_admin"
+      supautils.privileged_role: "postgres"
+      supautils.privileged_role_allowed_configs: "auto_explain.*, log_lock_waits, log_min_duration_statement, log_min_messages, log_replication_commands, log_statement, log_temp_files, pg_net.batch_size, pg_net.ttl, pg_stat_statements.*, pgaudit.log, pgaudit.log_catalog, pgaudit.log_client, pgaudit.log_level, pgaudit.log_relation, pgaudit.log_rows, pgaudit.log_statement, pgaudit.log_statement_once, pgaudit.role, pgrst.*, plan_filter.*, safeupdate.enabled, session_replication_role, track_io_timing, wal_compression"
+      supautils.reserved_memberships: "pg_read_server_files, pg_write_server_files, pg_execute_server_program, supabase_admin, supabase_auth_admin, supabase_storage_admin, supabase_read_only_user, supabase_realtime_admin, supabase_replication_admin, dashboard_user, pgbouncer, authenticator"
+      supautils.reserved_roles: "supabase_admin, supabase_auth_admin, supabase_storage_admin, supabase_read_only_user, supabase_realtime_admin, supabase_replication_admin, dashboard_user, pgbouncer, service_role*, authenticator*, authenticated*, anon*"
     pg_hba:
       - "local all  supabase_admin      scram-sha-256"
       - "local all  all                 peer map=supabase_map"
@@ -102,7 +102,7 @@ spec:
     parameters:
       auto_explain.log_min_duration: "10s"
       cron.database_name: "postgres"
-# ...
+  # ...
   bootstrap:
     initdb:
       postInitSQL:

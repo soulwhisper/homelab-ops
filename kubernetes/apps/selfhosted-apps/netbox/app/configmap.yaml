@@ -1,0 +1,24 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: netbox
+data:
+  # defaults is removed
+  # netbox
+  ALLOWED_HOSTS: "['*']"
+  CORS_ORIGIN_ALLOW_ALL: "True"
+  MEDIA_ROOT: "/opt/netbox/netbox/media"
+  METRICS_ENABLED: "True"
+  RELEASE_CHECK_URL: "None"
+  TIME_ZONE: "Asia/Shanghai"
+  # postgres
+  DB_HOST: "postgres-rw.database-system.svc.cluster.local"
+  DB_NAME: "netbox"
+  DB_PASSWORD: "netbox"
+  DB_USER: "netbox"
+  # redis
+  REDIS_CACHE_DATABASE: "1"
+  REDIS_CACHE_HOST: "netbox-dragonfly.selfhosted-apps.svc.cluster.local"
+  REDIS_DATABASE: "0"
+  REDIS_HOST: "netbox-dragonfly.selfhosted-apps.svc.cluster.local"

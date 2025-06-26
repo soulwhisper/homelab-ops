@@ -1,0 +1,10 @@
+netbox-attachments
+netbox-bgp
+netbox-floorplan-plugin
+netbox-interface-synchronization
+netbox-plugin-dns
+netbox-plugin-prometheus-sd
+netbox-qrcode
+netbox-reorder-rack
+netbox-topology-views
+# netbox-napalm-plugin
