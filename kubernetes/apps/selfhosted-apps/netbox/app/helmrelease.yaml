@@ -42,7 +42,7 @@ spec:
           app:
             image: &image
               repository: ghcr.io/netbox-community/netbox
-              tag: v4.3.2
+              tag: v4.3.3
             envFrom: &envFrom
               - secretRef:
                   name: *name
