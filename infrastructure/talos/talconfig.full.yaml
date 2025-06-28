@@ -25,7 +25,7 @@ cniConfig:
   name: none
 
 nodes:
-  - hostname: exarch-01.homelab.internal
+  - hostname: exarch-01
     ipAddress: 10.10.0.101
     controlPlane: true
     nodeLabels:
@@ -54,7 +54,7 @@ nodes:
         vip:
           ip: *talosControlplaneVip
 
-  - hostname: exarch-02.homelab.internal
+  - hostname: exarch-02
     ipAddress: 10.10.0.102
     controlPlane: true
     nodeLabels:
@@ -71,7 +71,7 @@ nodes:
         vip:
           ip: *talosControlplaneVip
 
-  - hostname: exarch-03.homelab.internal
+  - hostname: exarch-03
     ipAddress: 10.10.0.103
     controlPlane: true
     nodeLabels:
@@ -101,10 +101,10 @@ controlPlane:
   schematic:
     customization:
       extraKernelArgs:
-        - -lockdown                               # secureboot
-        - lockdown=integrity                      # secureboot
-        - console=ttyS0                           # hci only
-        - talos.network.interface.ignore=enp88s0  # block i226-lm in ms-01
+        - -lockdown # secureboot
+        - lockdown=integrity # secureboot
+        - console=ttyS0 # hci only
+        - talos.network.interface.ignore=enp88s0 # block i226-lm in ms-01
       systemExtensions:
         officialExtensions:
           - siderolabs/intel-ucode

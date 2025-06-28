@@ -26,6 +26,8 @@ spec:
     fullnameOverride: *name
     retentionPeriod: 3 # months
     server:
+      image:
+        registry: "quay.io"
       persistentVolume:
         enabled: true
         storageClassName: ceph-block
