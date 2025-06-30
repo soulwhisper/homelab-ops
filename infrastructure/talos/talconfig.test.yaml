@@ -174,14 +174,6 @@ patches:
                         topologyKey: kubernetes.io/hostname
                         whenUnsatisfiable: ScheduleAnyway
 
-  # Enable Proxy, http proxy is more stable than tproxy gateway
-  - |-
-    machine:
-      env:
-        http_proxy: http://172.19.82.10:1080
-        https_proxy: http://172.19.82.10:1080
-        no_proxy: .noirprime.com,.homelab.internal,localhost,127.0.0.1,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16
-
   # NTP configuration, ip for baremetal, '/dev/ptp0' for proxmox
   - |-
     machine:
@@ -314,3 +306,29 @@ patches:
             - slot: 0
               tpm: {}
           provider: luks2
+
+  # Enable pull through mirror, powered by zotregistry
+  - |-
+    machine:
+      registries:
+        mirrors:
+          docker.io:
+            endpoints:
+              - https://zot.noirprime.com/docker.io
+            overridePath: true
+          ghcr.io:
+            endpoints:
+              - https://zot.noirprime.com/ghcr.io
+            overridePath: true
+          gcr.io:
+            endpoints:
+              - https://zot.noirprime.com/gcr.io
+            overridePath: true
+          registry.k8s.io:
+            endpoints:
+              - https://zot.noirprime.com/registry.k8s.io
+            overridePath: true
+          public.ecr.aws:
+            endpoints:
+              - https://zot.noirprime.com/public.ecr.aws
+            overridePath: true
