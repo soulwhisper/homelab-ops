@@ -210,6 +210,14 @@ patches:
               - rshared
               - rw
 
+  # Cluster Proxy, has negative impact on https-post/quic, use with caution
+  - |-
+    machine:
+      env:
+        http_proxy: http://172.19.82.10:1080
+        https_proxy: http://172.19.82.10:1080
+        no_proxy: .noirprime.com,.homelab.internal,localhost,127.0.0.1,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16
+
   # Configure NFS mount options
   - |
     machine:

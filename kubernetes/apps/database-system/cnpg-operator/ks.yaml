@@ -72,3 +72,5 @@ spec:
       namespace: database-system
     - name: rook-ceph-cluster
       namespace: storage-system
+    - name: rook-ceph-buckets
+      namespace: storage-system

@@ -221,6 +221,14 @@ patches:
               - rshared
               - rw
 
+  # Cluster Proxy, has negative impact on https-post/quic, use with caution
+  - |-
+    machine:
+      env:
+        http_proxy: http://10.10.0.10:1080
+        https_proxy: http://10.10.0.10:1080
+        no_proxy: .noirprime.com,.homelab.internal,localhost,127.0.0.1,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16
+
   # Configure NFS mount options
   - |
     machine:
@@ -319,35 +327,35 @@ patches:
           provider: luks2
 
   # Enable pull through mirror, powered by zotregistry
-  - |-
-    machine:
-      registries:
-        # config:
-        #   zot.noirprime.com:
-        #     auth:
-        #       username: admin
-        #       password: ${ZOT_REGISTRY_PASS}
-        mirrors:
-          docker.io:
-            endpoints:
-              - https://zot.noirprime.com/docker.io
-            overridePath: true
-          ghcr.io:
-            endpoints:
-              - https://zot.noirprime.com/ghcr.io
-            overridePath: true
-          gcr.io:
-            endpoints:
-              - https://zot.noirprime.com/gcr.io
-            overridePath: true
-          registry.k8s.io:
-            endpoints:
-              - https://zot.noirprime.com/registry.k8s.io
-            overridePath: true
-          public.ecr.aws:
-            endpoints:
-              - https://zot.noirprime.com/public.ecr.aws
-            overridePath: true
+  # - |-
+  #   machine:
+  #     registries:
+  #       # config:
+  #       #   zot.noirprime.com:
+  #       #     auth:
+  #       #       username: admin
+  #       #       password: ${ZOT_REGISTRY_PASS}
+  #       mirrors:
+  #         docker.io:
+  #           endpoints:
+  #             - https://zot.noirprime.com/docker.io
+  #           overridePath: true
+  #         ghcr.io:
+  #           endpoints:
+  #             - https://zot.noirprime.com/ghcr.io
+  #           overridePath: true
+  #         gcr.io:
+  #           endpoints:
+  #             - https://zot.noirprime.com/gcr.io
+  #           overridePath: true
+  #         registry.k8s.io:
+  #           endpoints:
+  #             - https://zot.noirprime.com/registry.k8s.io
+  #           overridePath: true
+  #         public.ecr.aws:
+  #           endpoints:
+  #             - https://zot.noirprime.com/public.ecr.aws
+  #           overridePath: true
 
   # Enable OpenEBS Storage
   # - |-
@@ -376,11 +384,3 @@ patches:
   #             - usermode_helper=disabled
   #         - name: drbd_transport_tcp
   #         - name: dm_thin_pool
-
-  # Cluster Proxy, has negative impact on https-post/quic, use with caution
-  # - |-
-  #   machine:
-  #     env:
-  #       http_proxy: http://10.10.0.10:1080
-  #       https_proxy: http://10.10.0.10:1080
-  #       no_proxy: .noirprime.com,.homelab.internal,localhost,127.0.0.1,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16

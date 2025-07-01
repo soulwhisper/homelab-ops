@@ -8,11 +8,13 @@
 > infrastructure
 
 - router:vyos
+- terraform:minio
 - webhook:slack
 
 > taskfiles
 
 - postgres
+- reset:minio
 
 > bootstrap
 

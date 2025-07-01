@@ -24,3 +24,5 @@ spec:
       namespace: storage-system
     - name: openebs
       namespace: storage-system
+    - name: rook-ceph-buckets
+      namespace: storage-system
