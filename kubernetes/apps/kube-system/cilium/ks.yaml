@@ -46,6 +46,9 @@ spec:
     name: gitops-system
     namespace: gitops-system
   wait: false
+  dependsOn:
+    - name: cilium
+      namespace: kube-system
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.noirprime.com/kustomize.toolkit.fluxcd.io/kustomization_v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
@@ -69,5 +72,5 @@ spec:
     namespace: gitops-system
   wait: true
   dependsOn:
-    - name: gateway-api-crds
-      namespace: networking-system
+    - name: cilium
+      namespace: kube-system

@@ -25,6 +25,17 @@ releases:
     version: 1.17.5
     values: ["../apps/kube-system/cilium/app/values.yaml"]
     needs: ["monitoring-system/prometheus-operator-crds"]
+    hooks:
+      # Apply gateway-api crds
+      - events: ["presync"]
+        command: "kubectl"
+        args:
+          - "apply"
+          - "--server-side"
+          - "--namespace=kube-system"
+          # renovate: depName=kubernetes-sigs/gateway-api datasource=github-releases
+          - "--filename=https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.3.0/experimental-install.yaml"
+          - "--wait=true"
 
   - name: coredns
     namespace: kube-system
@@ -42,15 +53,6 @@ releases:
     values: ["../apps/kube-system/spegel/app/values.yaml"]
     needs: ["kube-system/coredns"]
 
-  # to render gateway-api crds
-  - name: gateway-api-crds
-    namespace: networking-system
-    atomic: true
-    chart: oci://docker.io/envoyproxy/gateway-crds-helm
-    version: 1.4.1
-    values: ["../apps/networking-system/gateway-api-crds/app/values.yaml"]
-    needs: ["kube-system/spegel"]
-
   # to render componet crds
   - name: external-secrets
     namespace: security-system
@@ -66,7 +68,7 @@ releases:
     chart: oci://ghcr.io/controlplaneio-fluxcd/charts/flux-operator
     version: 0.23.0
     values: ["../apps/gitops-system/flux-operator/app/values.yaml"]
-    needs: ["kube-system/spegel"]
+    needs: ["security-system/external-secrets"]
     hooks:
       # Apply cluster settings
       - events: ["postsync"]
