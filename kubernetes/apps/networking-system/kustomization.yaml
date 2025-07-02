@@ -9,3 +9,4 @@ resources:
   - ./cloudflare-tunnel/ks.yaml
   - ./externaldns-adguard/ks.yaml
   - ./externaldns-cloudflare/ks.yaml
+  - ./gateway-api-crds/ks.yaml

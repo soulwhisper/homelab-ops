@@ -25,18 +25,6 @@ releases:
     version: 1.17.5
     values: ["../apps/kube-system/cilium/app/values.yaml"]
     needs: ["monitoring-system/prometheus-operator-crds"]
-    hooks:
-      - # Apply gateway-api crds
-        events:
-          - postsync
-        command: kubectl
-        args:
-          - apply
-          - --namespace=kube-system
-          - --server-side
-          - --field-manager=kustomize-controller
-          - --kustomize=../apps/kube-system/cilium/crds/
-        showlogs: true
 
   - name: coredns
     namespace: kube-system
@@ -53,6 +41,15 @@ releases:
     version: 0.3.0
     values: ["../apps/kube-system/spegel/app/values.yaml"]
     needs: ["kube-system/coredns"]
+
+  # to render gateway-api crds
+  - name: gateway-api-crds
+    namespace: networking-system
+    atomic: true
+    chart: oci://docker.io/envoyproxy/gateway-crds-helm
+    version: 1.4.1
+    values: ["../apps/networking-system/gateway-api-crds/app/values.yaml"]
+    needs: ["kube-system/spegel"]
 
   # to render componet crds
   - name: external-secrets
