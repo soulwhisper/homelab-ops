@@ -296,6 +296,7 @@ patches:
   # Enable disk encryption with better encyption method, passphrase >= 20 characters
   # https://github.com/siderolabs/talos/issues/8972
   # https://en.m.wikipedia.org/wiki/Evil_maid_attack
+  # vmware 7.0 not support this
   - |-
     machine:
       systemDiskEncryption:
@@ -314,29 +315,3 @@ patches:
             - slot: 0
               tpm: {}
           provider: luks2
-
-  # Enable pull through mirror, powered by zotregistry
-  - |-
-    machine:
-      registries:
-        mirrors:
-          docker.io:
-            endpoints:
-              - https://zot.noirprime.com/docker.io
-            overridePath: true
-          ghcr.io:
-            endpoints:
-              - https://zot.noirprime.com/ghcr.io
-            overridePath: true
-          gcr.io:
-            endpoints:
-              - https://zot.noirprime.com/gcr.io
-            overridePath: true
-          registry.k8s.io:
-            endpoints:
-              - https://zot.noirprime.com/registry.k8s.io
-            overridePath: true
-          public.ecr.aws:
-            endpoints:
-              - https://zot.noirprime.com/public.ecr.aws
-            overridePath: true

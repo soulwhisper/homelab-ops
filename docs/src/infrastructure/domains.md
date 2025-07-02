@@ -16,3 +16,4 @@
 - `noirprime.com` for all k8s services;
 - s3 storage (previously `minio`) has migrated to `ceph-s3`;
 - the only `homelab.internal` service used in k8s now is NAS;
+- also make sure all k8s node hostname can be resolved in local dns;
