@@ -8,11 +8,13 @@
 > infrastructure
 
 - router:vyos
+- terraform:minio
 - webhook:slack
 
 > taskfiles
 
 - postgres
+- reset:minio
 
 > bootstrap
 
@@ -21,7 +23,7 @@
 > components
 
 - cnpg:nfs-backup
-- volysnc:ceph-s3
+- volsync:nfs-backup
 
 > cronjobs
 
@@ -31,7 +33,6 @@
 > kubernetes:base
 
 - apps:ingress-nginx
-- crds:gateway-api
 
 > kubernetes:database
 
@@ -65,6 +66,7 @@
 
 - apps:externaldns-rfc2136
 - apps:envoy-gateway
+- apps:gateway-api-crds
 
 > kubernetes:security
 
@@ -80,7 +82,8 @@
 > kubernetes:storage
 
 - apps:openebs
-- apps:rook-ceph(fs & s3)
+- apps:rook-ceph(fs)
+- apps:volsync(nfs)
 
 ## Reasons
 

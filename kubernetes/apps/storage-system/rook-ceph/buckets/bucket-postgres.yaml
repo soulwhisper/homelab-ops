@@ -1,0 +1,67 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.noirprime.com/objectbucket.io/objectbucketclaim_v1alpha1.json
+apiVersion: objectbucket.io/v1alpha1
+kind: ObjectBucketClaim
+metadata:
+  name: ceph-bucket-postgres
+spec:
+  bucketName: postgres
+  storageClassName: ceph-bucket
+  additionalConfig:
+    bucketOwner: "postgres"
+    bucketPolicy: |
+      {
+        "Version": "",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Principal": {
+              "AWS": "arn:aws:iam:::user/postgres"
+            },
+            "Action": [
+              "s3:*"
+            ],
+            "Resource": [
+              "arn:aws:s3:::postgres/*",
+              "arn:aws:s3:::postgres"
+            ]
+          }
+        ]
+      }
+    bucketLifecycle: |
+      {
+        "Rules": [
+          {
+            "ID": "AbortIncompleteMultipartUploads",
+            "Status": "Enabled",
+            "Prefix": "",
+            "AbortIncompleteMultipartUpload": {
+              "DaysAfterInitiation": 1
+            }
+          },
+          {
+            "ID": "ExpireAfter365Days",
+            "Status": "Enabled",
+            "Prefix": "",
+            "Expiration": {
+              "Days": 365
+            }
+          }
+        ]
+      }
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.noirprime.com/ceph.rook.io/cephobjectstoreuser_v1.json
+apiVersion: ceph.rook.io/v1
+kind: CephObjectStoreUser
+metadata:
+  name: postgres
+spec:
+  store: ceph-objectstore
+  clusterNamespace: storage-system
+  keys:
+    - accessKeyRef:
+        name: rook-ceph-rgw-user
+        key: POSTGRES_ACCESS_KEY
+      secretKeyRef:
+        name: rook-ceph-rgw-user
+        key: POSTGRES_SECRET_KEY

@@ -175,19 +175,18 @@ spec:
             replicated:
               size: 3
           preservePoolsOnDelete: true
+          # endpint-url:http://rook-ceph-rgw-ceph-objectstore.storage-system.svc.cluster.local
           gateway:
             port: 80
             resources:
-              limits:
-                memory: 1Gi
               requests:
                 cpu: 100m
+              limits:
                 memory: 1Gi
             instances: 1
-            priorityClassName: system-cluster-critical
         storageClass:
           enabled: true
-          name: ceph-s3
+          name: ceph-bucket
           reclaimPolicy: Delete
           volumeBindingMode: Immediate
         ingress:

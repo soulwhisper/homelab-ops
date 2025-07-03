@@ -39,3 +39,4 @@ tasks:
       - |
         {{if ne .FIX "true"}} until kubectl wait nodes --for=condition=Ready=False --all --timeout=10m; do sleep 5; done {{end}}
       - op run --env-file {{.K8S_DIR}}/bootstrap/bootstrap.env --no-masking -- minijinja-cli {{.MINIJINJA_ARGS}} "{{.K8S_DIR}}/bootstrap/resources.yaml.j2" | kubectl apply --server-side --filename -
+      - helmfile --file {{.K8S_DIR}}/bootstrap/helmfile.yaml apply {{.HELMFILE_ARGS}}

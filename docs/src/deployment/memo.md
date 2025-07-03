@@ -4,6 +4,7 @@
 - using hardcoded securityContext instead of kyverno;
 - external nfs_v4.2 backup using `uid:gid = 2000:2000`;
 - test env using proxmox-vm, with secureboot enabled, subnet `172.19.82.0/24`;
+- The Flux objects are created in the same namespace where the `FluxInstance` is deployed using the namespace name as the Flux source and Kustomization name.
 
 ### Infra
 
@@ -11,7 +12,7 @@
 - openebs-hostpath, deprecated due to MS-01 using 256G system disk;
 - ceph-block, for database and apps;
 - ceph-fs, deprecated, using nas-nfs for shared media;
-- ceph-s3, deprecated, using nas-minio for volsync backup;
+- ceph-bucket, using this instead of nas-minio for volsync backup;
 - volsync nfs-backup using mutatingAdmissionPolicy;
 - onepassword as main secret store;
 - externaldns-adguard store records in `custom-adblock` field;
@@ -22,10 +23,14 @@
 - `HTTPS GET` / `HTTPS POST`, should set `https_proxy`;
 - no_proxy = `.cluster.local.,.cluster.local,.svc,localhost,127.0.0.1,{pod-subnet},{svc-subnet}`;
 
+#### Replicas
+
+- production, replica >= 2;
+- homelab, cni/gateway/ingress = 3, others = 1;
+
 ### Bootstrap
 
 ```shell
-# op signin first
 cd homelab-ops
 direnv allow
 

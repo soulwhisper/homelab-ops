@@ -8,7 +8,7 @@ spec:
   hostnames: ["goldilocks.noirprime.com"]
   parentRefs:
     - name: internal
-      namespace: networking
+      namespace: kube-system
       sectionName: https
   rules:
     - backendRefs:

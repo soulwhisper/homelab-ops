@@ -29,7 +29,7 @@ spec:
         reporting_enabled: false
       auth_enabled: false
       commonConfig:
-        replication_factor: 2
+        replication_factor: 1
       compactor:
         working_directory: /var/loki/compactor/retention
         delete_request_store: filesystem

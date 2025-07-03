@@ -9,7 +9,7 @@ endpoint: "https://k8s.homelab.internal:6443"
 # disabled features:
 # cni,coredns,forwardKubeDNSToHost,kube-proxy;
 # k8s features 1.33:
-# userNamespace:default, MutatingAdmissionPolicy:alpha;
+# userNamespace:default, MutatingAdmissionPolicy:disabled;
 
 # renovate: depName=ghcr.io/siderolabs/installer datasource=docker
 talosVersion: v1.10.4
@@ -122,8 +122,8 @@ controlPlane:
 
   # controlPlane only patches
   patches:
-    # ApiServer configuration
-    # Enable MutatingAdmissionPolicy;
+    # : ApiServer configuration
+    # :: MutatingAdmissionPolicy disabled;
     - |-
       cluster:
         apiServer:
@@ -135,11 +135,11 @@ controlPlane:
                     - gitops-system
                     - monitoring-system
                     - storage-system
-          extraArgs:
-            runtime-config: admissionregistration.k8s.io/v1alpha1=true
-            feature-gates: MutatingAdmissionPolicy=true
+          # extraArgs:
+          #   runtime-config: admissionregistration.k8s.io/v1alpha1=true
+          #   feature-gates: MutatingAdmissionPolicy=true
 
-    # ETCD configuration, increase etcd quota to 8G, keep advertisedSubnets if using tailscale / kubespan
+    # : ETCD configuration, increase etcd quota to 8G, keep advertisedSubnets if using tailscale / kubespan
     - |-
       cluster:
         etcd:
@@ -150,7 +150,7 @@ controlPlane:
 
 # general patches
 patches:
-  # Cluster configuration
+  # : Cluster configuration
   - |-
     cluster:
       allowSchedulingOnControlPlanes: true
@@ -185,15 +185,7 @@ patches:
                         topologyKey: kubernetes.io/hostname
                         whenUnsatisfiable: ScheduleAnyway
 
-  # Enable Proxy, http proxy is more stable than tproxy gateway
-  - |-
-    machine:
-      env:
-        http_proxy: http://10.10.0.10:1080
-        https_proxy: http://10.10.0.10:1080
-        no_proxy: .noirprime.com,.homelab.internal,localhost,127.0.0.1,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16
-
-  # NTP configuration, ip for baremetal, '/dev/ptp0' for proxmox
+  # : NTP configuration, ip for baremetal, '/dev/ptp0' for proxmox
   - |-
     machine:
       time:
@@ -201,7 +193,7 @@ patches:
         servers:
           - 10.10.0.10
 
-  # Network configuration
+  # : Network configuration
   - |-
     machine:
       network:
@@ -213,7 +205,7 @@ patches:
         nameservers:
           - 10.10.0.10
 
-  # Kubelet configuration
+  # : Kubelet configuration
   - |-
     machine:
       kubelet:
@@ -229,7 +221,15 @@ patches:
               - rshared
               - rw
 
-  # Configure NFS mount options
+  # : Cluster Proxy, has negative impact on https-post/quic, use with caution
+  - |-
+    machine:
+      env:
+        http_proxy: http://10.10.0.10:1080
+        https_proxy: http://10.10.0.10:1080
+        no_proxy: .noirprime.com,.homelab.internal,localhost,127.0.0.1,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16
+
+  # : Configure NFS mount options
   - |
     machine:
       files:
@@ -243,7 +243,7 @@ patches:
             noatime=True
             nconnect=16
 
-  # Kernel modules, Enable thunderbolt/USB4 networking support
+  # : Kernel modules, Enable thunderbolt/USB4 networking support
   - |-
     machine:
       kernel:
@@ -251,9 +251,9 @@ patches:
           - name: thunderbolt
           - name: thunderbolt_net
 
-  # Enable features
-  ## https://github.com/siderolabs/talos/issues/10002#issuecomment-2557069620;
-  ## hostLegacyRouting=true conflict with BIGTCP and BBR
+  # : Enable features
+  # :: https://github.com/siderolabs/talos/issues/10002#issuecomment-2557069620;
+  # :: hostLegacyRouting=true conflict with BIGTCP and BBR
   - |-
     machine:
       features:
@@ -270,7 +270,7 @@ patches:
           allowedKubernetesNamespaces:
             - gitops-system
 
-  # Containerd configuration
+  # : Containerd configuration
   - |-
     machine:
       files:
@@ -286,7 +286,7 @@ patches:
               [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc]
                 discard_unpacked_layers = false
 
-  # Sysctls configuration
+  # : Sysctls configuration
   - |-
     machine:
       sysctls:
@@ -296,7 +296,7 @@ patches:
         net.ipv4.tcp_wmem: 4096 65536 67108864    # 10G NIC, tunning
         user.max_user_namespaces: 11255           # UserNamespaces
 
-  # Udev configuration, thunderbolt & i915
+  # : Udev configuration, thunderbolt & i915
   - |-
     machine:
       udev:
@@ -304,9 +304,9 @@ patches:
           - ACTION=="add", SUBSYSTEM=="thunderbolt", ATTR{authorized}=="0", ATTR{authorized}="1"
           - SUBSYSTEM=="drm", KERNEL=="renderD*", GROUP="44", MODE="0660"
 
-  # Enable disk encryption with better encyption method, passphrase >= 20 characters
-  # https://github.com/siderolabs/talos/issues/8972
-  # https://en.m.wikipedia.org/wiki/Evil_maid_attack
+  # : Enable disk encryption with better encyption method, passphrase >= 20 characters
+  # :: https://github.com/siderolabs/talos/issues/8972
+  # :: https://en.m.wikipedia.org/wiki/Evil_maid_attack
   - |-
     machine:
       systemDiskEncryption:
@@ -326,7 +326,38 @@ patches:
               tpm: {}
           provider: luks2
 
-  # Enable OpenEBS Storage
+  # : Enable pull through mirror, powered by zotregistry
+  # - |-
+  #   machine:
+  #     registries:
+  #       # config:
+  #       #   zot.noirprime.com:
+  #       #     auth:
+  #       #       username: admin
+  #       #       password: ${ZOT_REGISTRY_PASS}
+  #       mirrors:
+  #         docker.io:
+  #           endpoints:
+  #             - https://zot.noirprime.com/docker.io
+  #           overridePath: true
+  #         ghcr.io:
+  #           endpoints:
+  #             - https://zot.noirprime.com/ghcr.io
+  #           overridePath: true
+  #         gcr.io:
+  #           endpoints:
+  #             - https://zot.noirprime.com/gcr.io
+  #           overridePath: true
+  #         registry.k8s.io:
+  #           endpoints:
+  #             - https://zot.noirprime.com/registry.k8s.io
+  #           overridePath: true
+  #         public.ecr.aws:
+  #           endpoints:
+  #             - https://zot.noirprime.com/public.ecr.aws
+  #           overridePath: true
+
+  # : Enable OpenEBS Storage
   # - |-
   #   machine:
   #     sysctls:
@@ -343,7 +374,7 @@ patches:
   #             - rshared
   #             - rw
 
-  # Enable DRBD and LVM-Thin
+  # : Enable DRBD and LVM-Thin
   # - |-
   #   machine:
   #     kernel:

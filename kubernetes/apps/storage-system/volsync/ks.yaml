@@ -12,6 +12,7 @@ spec:
       app.kubernetes.io/name: *appname
   interval: 30m
   timeout: 5m
+  retryInterval: 1m
   path: "./kubernetes/apps/storage-system/volsync/app"
   prune: true
   sourceRef:
@@ -23,4 +24,6 @@ spec:
     - name: snapshot-controller
       namespace: storage-system
     - name: openebs
+      namespace: storage-system
+    - name: rook-ceph-buckets
       namespace: storage-system

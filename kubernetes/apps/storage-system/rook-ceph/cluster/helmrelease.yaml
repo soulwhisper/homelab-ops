@@ -125,4 +125,31 @@ spec:
       isDefault: true
       deletionPolicy: Delete
     cephFileSystems: []
-    cephObjectStores: []
+    cephObjectStores:
+      - name: ceph-objectstore
+        spec:
+          metadataPool:
+            failureDomain: host
+            replicated:
+              size: 3
+          dataPool:
+            failureDomain: host
+            replicated:
+              size: 3
+          preservePoolsOnDelete: true
+          # endpint-url:http://rook-ceph-rgw-ceph-objectstore.storage-system.svc.cluster.local
+          gateway:
+            port: 80
+            resources:
+              requests:
+                cpu: 100m
+              limits:
+                memory: 1Gi
+            instances: 1
+        storageClass:
+          enabled: true
+          name: ceph-bucket
+          reclaimPolicy: Delete
+          volumeBindingMode: Immediate
+        ingress:
+          enabled: false
