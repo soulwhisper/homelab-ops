@@ -47,14 +47,10 @@ spec:
               memory: 256Mi
           securityContext:
             allowPrivilegeEscalation: false
-            capabilities:
-              drop:
-                - ALL
+            capabilities: { drop: ["ALL"] }
             readOnlyRootFilesystem: true
-            runAsGroup: 10001
-            runAsUser: 10001
-            seccompProfile:
-              type: RuntimeDefault
+            runAsGroup: 2000
+            runAsUser: 2000
           volumeMounts:
             - mountPath: /server
               name: server
@@ -62,8 +58,6 @@ spec:
               name: client
       securityContext:
         runAsNonRoot: true
-        seccompProfile:
-          type: RuntimeDefault
       serviceAccountName: plugin-barman-cloud
       volumes:
         - name: server

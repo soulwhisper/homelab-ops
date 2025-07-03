@@ -42,11 +42,10 @@ spec:
       - victoriametrics-logs-datasource
     replicas: 1
     resources:
-      limits:
-        memory: 512Mi
       requests:
         cpu: 50m
-        memory: 128Mi
+      limits:
+        memory: 512Mi
     rbac:
       pspEnabled: false
     serviceAccount:
@@ -60,15 +59,21 @@ spec:
     # environments
     admin:
       existingSecret: *name
-    # envFromSecrets:
-    #   - name: *name
     env:
+      GF_ANALYTICS_CHECK_FOR_UPDATES: false
+      GF_ANALYTICS_CHECK_FOR_PLUGIN_UPDATES: false
+      GF_ANALYTICS_REPORTING_ENABLED: false
+      GF_AUTH_ANONYMOUS_ENABLED: false
+      GF_DATE_FORMATS_USE_BROWSER_LOCALE: true
+      # GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH: /tmp/dashboards/home.json
       GF_EXPLORE_ENABLED: true
-      GF_SECURITY_ALLOW_EMBEDDING: true
+      GF_FEATURE_TOGGLES_ENABLE: publicDashboards
+      GF_LOG_MODE: console
+      GF_NEWS_NEWS_FEED_ENABLED: false
       GF_PANELS_DISABLE_SANITIZE_HTML: true
-      GF_DISABLE_SANITIZE_HTML: true
-      GF_LOG_FILTERS: rendering:debug
-      GF_DASHBOARDS_MIN_REFRESH_INTERVAL: 2s
+      GF_PLUGINS_ALLOW_LOADING_UNSIGNED_PLUGINS: natel-discrete-panel,pr0ps-trackmap-panel,panodata-map-panel
+      GF_SECURITY_COOKIE_SAMESITE: grafana
+      GF_SERVER_ROOT_URL: https://grafana.noirprime.com
       GF_DATABASE_NAME: grafana
       GF_DATABASE_HOST: postgres-rw.database-system.svc.cluster.local:5432
       GF_DATABASE_SSL_MODE: disable
@@ -92,43 +97,6 @@ spec:
         HTTPS_PROXY: "${HTTPS_PROXY}"
         NO_PROXY: "${NO_PROXY}"
 
-    grafana.ini:
-      news:
-        news_feed_enabled: false
-      server:
-        root_url: https://grafana.noirprime.com
-      analytics:
-        check_for_updates: false
-        check_for_plugin_updates: false
-        reporting_enabled: false
-      log:
-        mode: console
-      panels:
-        disable_sanitize_html: true
-      # auth:
-      #   signout_redirect_url: "https://auth.noirprime.com/logout"
-      #   oauth_auto_login: true
-      # auth.generic_oauth:
-      #   enabled: true
-      #   name: Authelia
-      #   scopes: openid profile email groups
-      #   empty_scopes: false
-      #   auth_url: https://auth.noirprime.com/api/oidc/authorization
-      #   token_url: https://auth.noirprime.com/api/oidc/token
-      #   api_url: https://auth.noirprime.com/api/oidc/userinfo
-      #   login_attribute_path: preferred_username
-      #   groups_attribute_path: groups
-      #   name_attribute_path: name
-      #   use_pkce: true
-      # auth.generic_oauth.group_mapping:
-      #   role_attribute_path: |
-      #     contains(groups[*], 'admin') && 'Admin' || contains(groups[*], 'people') && 'Viewer'
-      #   org_id: 1
-      # auth.basic:
-      #   enabled: true
-      # auth.anonymous:
-      #   enabled: false
-
     # images
     image:
       repository: grafana/grafana
@@ -148,7 +116,6 @@ spec:
       dashboards:
         enabled: true
         searchNamespace: ALL
-        labelValue: ""
         label: grafana_dashboard
         folderAnnotation: grafana_folder
         provider:
@@ -158,7 +125,6 @@ spec:
         enabled: true
         searchNamespace: ALL
         labelValue: ""
-        label: grafana_datasource
 
     # route
     route:
@@ -273,6 +239,11 @@ spec:
             - { name: DS_PROMETHEUS, value: Prometheus }
 
         external-dns:
+          # : since external-dns v0.18.0,
+          # :: external_dns_controller_* => external_dns_*
+          # :: external_dns_registry_(a,aaaa)_records => external_dns_registry_records
+          # :: external_dns_source_(a,aaaa)_records => external_dns_source_records
+          # :: external_dns_controller_verified_(a,aaaa)_records => external_dns_verified_records
           # renovate: dashboardName="External-DNS"
           gnetId: 15038
           revision: 3
