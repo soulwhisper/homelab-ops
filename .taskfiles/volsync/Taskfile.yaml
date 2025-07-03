@@ -19,8 +19,8 @@ tasks:
       NS: '{{.NS | default "default"}}'
       JOB: "volsync-unlock-{{ .APP }}"
     env:
-      NS: '{{.NS}}'
-      APP: '{{.APP}}'
+      NS: "{{.NS}}"
+      APP: "{{.APP}}"
     cmds:
       - minijinja-cli {{.VOLSYNC_RESOURCES_DIR}}/unlock.yaml.j2 | kubectl apply --server-side --filename -
       - until kubectl --namespace {{.NS}} get job/{{ .JOB }} &>/dev/null; do sleep 5; done

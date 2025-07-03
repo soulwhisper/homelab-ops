@@ -1,6 +1,6 @@
 ## Volsync
 
-- This explains a method to backup snapshots to NAS NFS;
+- This is a method to backup snapshots to NFS;
 
 ### Components
 
