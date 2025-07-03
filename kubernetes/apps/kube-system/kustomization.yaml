@@ -9,6 +9,7 @@ resources:
   - ./cilium/ks.yaml
   - ./coredns/ks.yaml
   - ./descheduler/ks.yaml
+  - ./gateway-api/ks.yaml
   - ./intel-device-plugins/ks.yaml
   - ./irqbalance/ks.yaml
   - ./keda/ks.yaml

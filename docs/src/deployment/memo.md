@@ -25,7 +25,6 @@
 ### Bootstrap
 
 ```shell
-# op signin first
 cd homelab-ops
 direnv allow
 
