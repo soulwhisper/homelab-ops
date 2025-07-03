@@ -40,7 +40,7 @@ spec:
       metadata:
         labels:
           app.kubernetes.io/name: crunchy-postgres
-      replicas: &replica 2
+      replicas: &replica 1
       dataVolumeClaimSpec:
         storageClassName: ceph-block
         accessModes:
@@ -77,8 +77,7 @@ spec:
       configuration: &backupConfig
         - secret:
             name: crunchy-postgres
-      global: &backupFlag
-        # Global
+      global: &backupFlag # Global
         compress-type: "bz2"
         compress-level: "9"
         # Minio

@@ -12,6 +12,7 @@ spec:
       app.kubernetes.io/name: *appname
   interval: 30m
   timeout: 5m
+  retryInterval: 1m
   path: "./kubernetes/apps/selfhosted-apps/homepage/app"
   prune: true
   sourceRef:
@@ -26,4 +27,5 @@ spec:
     - ../../../../components/gatus/internal
   postBuild:
     substitute:
+      APP: *appname
       GATUS_SUBDOMAIN: home

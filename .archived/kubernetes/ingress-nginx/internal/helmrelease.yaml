@@ -30,7 +30,7 @@ spec:
     fullnameOverride: nginx-internal
 
     controller:
-      replicaCount: 2
+      replicaCount: 3 # critical for HA
 
       updateStrategy:
         type: RollingUpdate

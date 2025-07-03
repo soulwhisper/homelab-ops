@@ -22,4 +22,5 @@
 
 # Deployment Notes
 
+- [CRDs](./deployment/crds.md)
 - [Memo](./deployment/memo.md)
