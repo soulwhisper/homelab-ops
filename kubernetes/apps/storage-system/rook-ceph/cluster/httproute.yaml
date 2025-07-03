@@ -3,15 +3,30 @@
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:
-  name: rook-ceph-dashboard
+  name: &name rook-ceph-mgr-dashboard
 spec:
   hostnames: ["rook.noirprime.com"]
   parentRefs:
     - name: internal
-      namespace: networking-system
+      namespace: kube-system
       sectionName: https
   rules:
     - backendRefs:
-        - name: rook-ceph-mgr-dashboard
-          namespace: rook-ceph
+        - name: *name
           port: 7000
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.noirprime.com/gateway.networking.k8s.io/httproute_v1.json
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: &name rook-ceph-rgw-ceph-objectstore-external
+spec:
+  hostnames: ["s3.noirprime.com"]
+  parentRefs:
+    - name: internal
+      namespace: kube-system
+      sectionName: https
+  rules:
+    - backendRefs:
+        - name: *name
+          port: 80

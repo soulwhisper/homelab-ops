@@ -13,8 +13,8 @@ spec:
       - dns01:
           cloudflare:
             apiTokenSecretRef:
-              name: certmanager-cloudflare-api
-              key: cloudflare-api-token
+              name: cloudflare
+              key: CLOUDFLARE_API_TOKEN
         selector:
           dnsZones:
             - noirprime.com

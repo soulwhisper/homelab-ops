@@ -34,6 +34,7 @@ tasks:
 
   generate:
     desc: Generate bootstrap configs for talos cluster
+    silent: true
     preconditions:
       - '[[ "{{.MODE}}" == "test" || "{{.MODE}}" == "prod" ]]'
       - which op talhelper
@@ -53,6 +54,7 @@ tasks:
   _bootstrap:
     internal: true
     desc: Apply bootstrap configs to talos cluster
+    silent: true
     vars:
       FILES:
         sh: ls {{.TALOS_DIR}}/clusterconfig/*.yaml

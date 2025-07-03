@@ -13,6 +13,7 @@ configMapGenerator:
     files:
       - values.yaml=./values.yaml
 generatorOptions:
-  annotations:
-    kustomize.toolkit.fluxcd.io/substitute: disabled
+  # : fluxcd substitute disabled for https_proxy
+  # annotations:
+  #   kustomize.toolkit.fluxcd.io/substitute: disabled
   disableNameSuffixHash: true

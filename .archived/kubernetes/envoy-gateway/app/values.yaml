@@ -1,6 +1,6 @@
 ---
 deployment:
-  replicas: 2 # keep this
+  replicas: 3 # critical for HA
   envoyGateway:
     resources:
       requests:

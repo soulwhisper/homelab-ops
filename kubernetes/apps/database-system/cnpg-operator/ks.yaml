@@ -12,6 +12,7 @@ spec:
       app.kubernetes.io/name: *appname
   interval: 30m
   timeout: 5m
+  retryInterval: 1m
   path: ./kubernetes/apps/database-system/cnpg-operator/app
   prune: true
   sourceRef:
@@ -36,6 +37,7 @@ spec:
       app.kubernetes.io/name: *appname
   interval: 30m
   timeout: 5m
+  retryInterval: 1m
   path: ./kubernetes/apps/database-system/cnpg-operator/barman
   prune: true
   sourceRef:
@@ -46,6 +48,8 @@ spec:
   dependsOn:
     - name: cnpg-operator
       namespace: database-system
+    - name: cert-manager
+      namespace: security-system
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.noirprime.com/kustomize.toolkit.fluxcd.io/kustomization_v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
@@ -60,6 +64,7 @@ spec:
       app.kubernetes.io/name: *appname
   interval: 30m
   timeout: 5m
+  retryInterval: 1m
   path: ./kubernetes/apps/database-system/cnpg-operator/cluster
   prune: true
   sourceRef:
@@ -71,4 +76,6 @@ spec:
     - name: cnpg-barman
       namespace: database-system
     - name: rook-ceph-cluster
+      namespace: storage-system
+    - name: rook-ceph-buckets
       namespace: storage-system

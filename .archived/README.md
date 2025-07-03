@@ -8,11 +8,13 @@
 > infrastructure
 
 - router:vyos
+- terraform:minio
 - webhook:slack
 
 > taskfiles
 
 - postgres
+- reset:minio
 
 > bootstrap
 
@@ -31,7 +33,6 @@
 > kubernetes:base
 
 - apps:ingress-nginx
-- crds:gateway-api
 
 > kubernetes:database
 
@@ -65,6 +66,7 @@
 
 - apps:externaldns-rfc2136
 - apps:envoy-gateway
+- apps:gateway-api-crds
 
 > kubernetes:security
 

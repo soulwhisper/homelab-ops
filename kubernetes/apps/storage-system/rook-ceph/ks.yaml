@@ -12,6 +12,7 @@ spec:
       app.kubernetes.io/name: *appname
   interval: 30m
   timeout: 5m
+  retryInterval: 1m
   path: "./kubernetes/apps/storage-system/rook-ceph/app"
   prune: false # Never delete this
   sourceRef:
@@ -36,6 +37,7 @@ spec:
       app.kubernetes.io/name: *appname
   interval: 30m
   timeout: 5m
+  retryInterval: 1m
   path: "./kubernetes/apps/storage-system/rook-ceph/cluster"
   prune: false # Never delete this
   sourceRef:
@@ -64,4 +66,32 @@ spec:
     - ../../../../components/gatus/internal
   postBuild:
     substitute:
+      APP: *appname
       GATUS_SUBDOMAIN: rook
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.noirprime.com/kustomize.toolkit.fluxcd.io/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: &appname rook-ceph-buckets
+  namespace: &namespace storage-system
+spec:
+  targetNamespace: *namespace
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *appname
+  interval: 30m
+  timeout: 5m
+  retryInterval: 1m
+  path: "./kubernetes/apps/storage-system/rook-ceph/buckets"
+  prune: false # Never delete this
+  sourceRef:
+    kind: GitRepository
+    name: gitops-system
+    namespace: gitops-system
+  wait: true
+  dependsOn:
+    - name: onepassword-store
+      namespace: security-system
+    - name: rook-ceph-cluster
+      namespace: storage-system
