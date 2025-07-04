@@ -55,7 +55,6 @@ spec:
               - --not-linked
             resources:
               requests:
-                memory: 128Mi
                 cpu: 25m
               limits:
                 memory: 256Mi

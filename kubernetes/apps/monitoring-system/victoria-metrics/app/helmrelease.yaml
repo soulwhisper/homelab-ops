@@ -90,11 +90,10 @@ spec:
             requests:
               storage: 200Gi
         resources:
-          limits:
-            memory: 6Gi
           requests:
             cpu: 500m
-            memory: 2Gi
+          limits:
+            memory: 6Gi
 
     vmalert:
       enabled: true
@@ -122,11 +121,10 @@ spec:
           promscrape.streamParse: "true"
           promscrape.dropOriginalLabels: "true"
         resources:
-          limits:
-            memory: 1Gi
           requests:
             cpu: 500m
-            memory: 500Mi
+          limits:
+            memory: 1Gi
 
     alertmanager:
       spec:

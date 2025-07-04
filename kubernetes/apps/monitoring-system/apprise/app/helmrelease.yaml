@@ -40,17 +40,12 @@ spec:
             env:
               - name: TZ
                 value: "${TIMEZONE}"
-              - name: PUID
-                value: "1000"
-              - name: GUID
-                value: "1000"
             envFrom:
               - secretRef:
                   name: *name
             resources:
               requests:
                 cpu: 100m
-                memory: 128Mi
               limits:
                 memory: 128Mi
             securityContext:

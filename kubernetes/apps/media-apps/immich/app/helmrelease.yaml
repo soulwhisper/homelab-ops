@@ -80,7 +80,7 @@ spec:
             resources:
               requests: &requests
                 cpu: 100m
-                memory: 250Mi
+                gpu.intel.com/i915: 1
               limits:
                 memory: 4Gi
                 gpu.intel.com/i915: 1
@@ -102,6 +102,7 @@ spec:
               requests: *requests
               limits:
                 memory: 2Gi
+                gpu.intel.com/i915: 1
             securityContext: *securityContext
 
     service:
