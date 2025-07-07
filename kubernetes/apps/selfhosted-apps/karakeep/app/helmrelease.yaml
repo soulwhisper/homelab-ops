@@ -46,7 +46,7 @@ spec:
               DATA_DIR: /data
               DISABLE_SIGNUPS: true
               MEILI_ADDR: http://localhost:7700
-              NEXTAUTH_URL: http://bookmark.noirprime.com
+              NEXTAUTH_URL: https://karakeep.noirprime.com
               DISABLE_NEW_RELEASE_CHECK: true
               COREPACK_INTEGRITY_KEYS: 0
               HTTP_PROXY: "${HTTP_PROXY}"
@@ -126,7 +126,7 @@ spec:
             port: *port
     route:
       app:
-        hostnames: ["bookmark.noirprime.com"]
+        hostnames: ["karakeep.noirprime.com"]
         parentRefs:
           - name: internal
             namespace: kube-system
