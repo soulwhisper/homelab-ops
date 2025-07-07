@@ -62,3 +62,7 @@ spec:
           - path: /config/recyclarr.yml
             subPath: recyclarr.yml
             readOnly: true
+      tmpfs:
+        type: emptyDir
+        globalMounts:
+          - path: /config/cache

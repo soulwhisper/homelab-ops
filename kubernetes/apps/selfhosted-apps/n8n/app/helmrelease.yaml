@@ -24,12 +24,17 @@ spec:
     keepHistory: false
 
   values:
-    defaultPodOptions:
-      hostUsers: false # was uid:gid=1000:1000
     controllers:
       n8n:
         annotations:
           reloader.stakater.com/auto: "true"
+        pod: # this is a must for n8n
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            runAsGroup: 1000
+            fsGroup: 1000
+            fsGroupChangePolicy: OnRootMismatch
         containers:
           app:
             image:

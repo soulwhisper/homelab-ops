@@ -24,12 +24,17 @@ spec:
     keepHistory: false
 
   values:
-    defaultPodOptions:
-      hostUsers: false
     controllers:
       ocis:
         annotations:
           reloader.stakater.com/auto: "true"
+        pod: # this is a must for ocis
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            runAsGroup: 1000
+            fsGroup: 1000
+            fsGroupChangePolicy: OnRootMismatch
         initContainers:
           init-config:
             image:
