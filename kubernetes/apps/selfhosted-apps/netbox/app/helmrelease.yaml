@@ -95,8 +95,6 @@ spec:
       app:
         existingClaim: *name
         globalMounts:
-          - path: /etc/netbox/config
-            subPath: config
           - path: /opt/netbox/netbox/media
             subPath: media
           - path: /opt/netbox/netbox/reports
