@@ -24,12 +24,15 @@ spec:
     keepHistory: false
 
   values:
-    defaultPodOptions:
-      hostUsers: false
     controllers:
       prowlarr:
         annotations:
           reloader.stakater.com/auto: "true"
+        pod:
+          securityContext:
+            runAsUser: 2000
+            runAsGroup: 2000
+            runAsNonRoot: true
         containers:
           app:
             image:

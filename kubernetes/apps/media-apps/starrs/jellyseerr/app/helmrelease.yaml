@@ -24,12 +24,15 @@ spec:
     keepHistory: false
 
   values:
-    defaultPodOptions:
-      hostUsers: false
     controllers:
       jellyseerr:
         annotations:
           reloader.stakater.com/auto: "true"
+        pod:
+          securityContext:
+            runAsUser: 2000
+            runAsGroup: 2000
+            runAsNonRoot: true
         containers:
           app:
             image:
@@ -82,6 +85,8 @@ spec:
         globalMounts:
           - path: /tmp
             subPath: tmp
+          - path: /app/config/logs
+            subPath: logs
 
     route:
       app:
