@@ -95,3 +95,12 @@ spec:
       namespace: security-system
     - name: rook-ceph-cluster
       namespace: storage-system
+  healthChecks:
+    - apiVersion: objectbucket.io/v1alpha1
+      kind: ObjectBucketClaim
+      name: ceph-bucket-postgres
+      namespace: *namespace
+    - apiVersion: objectbucket.io/v1alpha1
+      kind: ObjectBucketClaim
+      name: ceph-bucket-volsync
+      namespace: *namespace
