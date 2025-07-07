@@ -45,11 +45,12 @@ spec:
               EXECUTIONS_DATA_PRUNE: true
               EXECUTIONS_DATA_MAX_AGE: 7
               EXECUTIONS_DATA_PRUNE_MAX_COUNT: 50000
-              GENERIC_TIMEZONE: "Asia/Shanghai"
+              GENERIC_TIMEZONE: "${TIMEZONE}"
               N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS: false
+              N8N_HOST: n8n.noirprime.com
               N8N_PROTOCOL: "https"
               N8N_PORT: &port 8080
-              N8N_HOST: n8n.noirprime.com
+              N8N_RUNNERS_ENABLED: true
               N8N_LOG_LEVEL: info
               N8N_LOG_OUTPUT: console
               N8N_ENCRYPTION_KEY:
@@ -98,3 +99,7 @@ spec:
         existingClaim: *name
         globalMounts:
           - path: /home/node/.n8n
+      tmpfs:
+        type: emptyDir
+        globalMounts:
+          - path: /home/node/.cache
