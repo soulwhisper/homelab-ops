@@ -77,3 +77,9 @@ spec:
           - name: internal
             namespace: kube-system
             sectionName: https
+
+    persistence:
+      tmpfs:
+        type: emptyDir
+        globalMounts:
+          - path: /tmp
