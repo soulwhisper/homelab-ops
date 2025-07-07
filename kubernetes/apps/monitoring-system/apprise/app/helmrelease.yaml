@@ -35,12 +35,10 @@ spec:
             runAsNonRoot: true
             runAsUser: 1000
             runAsGroup: 1000
-            fsGroup: 1000
-            fsGroupChangePolicy: "OnRootMismatch"
         containers:
           app:
             image:
-              repository: caronc/apprise
+              repository: lscr.io/linuxserver/apprise-api
               tag: 1.2.0
             env:
               - name: TZ
@@ -56,7 +54,7 @@ spec:
             securityContext:
               allowPrivilegeEscalation: false
               capabilities: { drop: ["ALL"] }
-              readOnlyRootFilesystem: false # container change permissions
+              readOnlyRootFilesystem: true
           webhook:
             image:
               repository: ghcr.io/camalot/apprise-webhook
@@ -81,7 +79,10 @@ spec:
             sectionName: https
 
     persistence:
-      tmpfs:
-        type: emptyDir
+      app:
+        existingClaim: *name
         globalMounts:
-          - path: /tmp
+          - path: /config
+            subPath: config
+          - path: /attachments
+            subPath: attachments
