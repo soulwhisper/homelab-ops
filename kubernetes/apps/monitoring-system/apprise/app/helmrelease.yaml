@@ -24,33 +24,31 @@ spec:
     keepHistory: false
 
   values:
-    defaultPodOptions:
-      hostUsers: false
     controllers:
       apprise:
         replicas: 1
         strategy: RollingUpdate
         annotations:
           reloader.stakater.com/auto: "true"
+        pod: # this is a must for apprise
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            runAsGroup: 1000
         containers:
           app:
             image:
-              repository: caronc/apprise
+              repository: lscr.io/linuxserver/apprise-api
               tag: 1.2.0
             env:
               - name: TZ
                 value: "${TIMEZONE}"
-              - name: PUID
-                value: "1000"
-              - name: GUID
-                value: "1000"
             envFrom:
               - secretRef:
                   name: *name
             resources:
               requests:
                 cpu: 100m
-                memory: 128Mi
               limits:
                 memory: 128Mi
             securityContext:
@@ -79,3 +77,12 @@ spec:
           - name: internal
             namespace: kube-system
             sectionName: https
+
+    persistence:
+      app:
+        existingClaim: *name
+        globalMounts:
+          - path: /config
+            subPath: config
+          - path: /attachments
+            subPath: attachments

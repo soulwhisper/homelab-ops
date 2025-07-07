@@ -4,7 +4,7 @@
 
 - 1password compatible items: secret, document;
 - in this repo, all passwords use `secret` item;
-- encryption_ciper => `openssl rand -base64 36`;
+- encryption*ciper => `openssl rand -base64 50 | tr '+/' '-*' | tr -d '=' | head -c 50`;
 - 1password-sync need https_proxy;
 
 | remoteRef.key  | remoteRef.property | remoteRef.value       | ignored                     |

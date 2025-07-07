@@ -49,6 +49,7 @@
 - apps:alist
 - apps:auto-bangumi
 - apps:komga
+- apps:ocis
 - apps:ytdl-sub
 
 > kubernetes:monitor
