@@ -23,3 +23,5 @@ spec:
   dependsOn:
     - name: onepassword-store
       namespace: security-system
+    - name: rook-ceph-cluster
+      namespace: storage-system

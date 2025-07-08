@@ -8,9 +8,10 @@ data:
   # netbox
   ALLOWED_HOSTS: "['*']"
   CORS_ORIGIN_ALLOW_ALL: "True"
+  DB_WAIT_DEBUG: "True"
   MEDIA_ROOT: "/opt/netbox/netbox/media"
   METRICS_ENABLED: "True"
-  RELEASE_CHECK_URL: "None"
+  RELEASE_CHECK_URL: ""
   TIME_ZONE: "Asia/Shanghai"
   # postgres
   DB_HOST: "postgres-rw.database-system.svc.cluster.local"

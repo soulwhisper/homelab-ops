@@ -24,12 +24,15 @@ spec:
     keepHistory: false
 
   values:
-    defaultPodOptions:
-      hostUsers: false
     controllers:
       netbox:
         annotations:
           reloader.stakater.com/auto: "true"
+        pod: # this is a must for netbox
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 999
+            runAsGroup: 0
         initContainers:
           init-db:
             image:
@@ -95,7 +98,18 @@ spec:
       app:
         existingClaim: *name
         globalMounts:
-          - path: /opt/netbox/netbox
-            subPath: data
-          - path: /etc/netbox/config
-            subPath: config
+          - path: /opt/netbox/netbox/media
+            subPath: media
+          - path: /opt/netbox/netbox/reports
+            subPath: reports
+          - path: /opt/netbox/netbox/scripts
+            subPath: scripts
+      tmpfs:
+        type: emptyDir
+        globalMounts:
+          - path: /opt/unit
+            subPath: unit
+          - path: /opt/unit/state
+            subPath: state
+          - path: /opt/unit/tmp
+            subPath: tmp

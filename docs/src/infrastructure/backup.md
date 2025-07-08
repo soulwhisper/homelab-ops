@@ -14,8 +14,8 @@
 > NFS
 
 - endpoint: `nas.homelab.internal`;
-- shares: `/mnt/Arcanum/shared/media`;
-- permissions: `uid:gid=2000:2000`;
+- shares: `/mnt/Arcanum/Media`;
+- permissions: `uid:gid=2000:2000, rwx, mapAllUser`;
 - folders: `model` and `Downloads,comic,ebook,manga,movie,music,photo,tvshow`;
 
 ### NFS-snapshots

@@ -27,11 +27,17 @@ spec:
     defaultPodOptions:
       automountServiceAccountToken: false
       enableServiceLinks: false
-      hostUsers: false
     controllers:
       immich:
         annotations:
           reloader.stakater.com/auto: "true"
+        pod:
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 2000
+            runAsGroup: 2000
+            fsGroup: 2000
+            fsGroupChangePolicy: OnRootMismatch
         initContainers:
           init-db:
             image:
@@ -80,7 +86,7 @@ spec:
             resources:
               requests: &requests
                 cpu: 100m
-                memory: 250Mi
+                gpu.intel.com/i915: 1
               limits:
                 memory: 4Gi
                 gpu.intel.com/i915: 1
@@ -102,6 +108,7 @@ spec:
               requests: *requests
               limits:
                 memory: 2Gi
+                gpu.intel.com/i915: 1
             securityContext: *securityContext
 
     service:
@@ -123,17 +130,17 @@ spec:
     persistence:
       tmpfs:
         type: emptyDir
-        globalMounts:
-          - path: /cache
-            subPath: cache
-          - path: /tmp
-            subPath: tmp
-          - path: /usr/src/app/.reverse-geocoding-dump
-            subPath: geocoding-dump
+        advancedMounts:
+          immich:
+            machine-learning:
+              - path: /cache
+                subPath: cache
       media:
         type: nfs
         server: nas.homelab.internal
-        path: /mnt/Arcanum/shared/media
-        globalMounts:
-          - path: /usr/src/app/upload
-            subPath: photo
+        path: /mnt/Arcanum/Media
+        advancedMounts:
+          immich:
+            app:
+              - path: /usr/src/app/upload
+                subPath: photo

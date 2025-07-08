@@ -24,17 +24,22 @@ spec:
     keepHistory: false
 
   values:
-    defaultPodOptions:
-      hostUsers: false
     controllers:
       moviepilot:
         annotations:
           reloader.stakater.com/auto: "true"
+        pod:
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 2000
+            runAsGroup: 2000
+            fsGroup: 2000
+            fsGroupChangePolicy: OnRootMismatch
         containers:
           app:
             image:
               repository: jxxghp/moviepilot-v2
-              tag: 2.6.1
+              tag: 2.6.3
             env:
               TZ: "${TIMEZONE}"
               NGINX_PORT: &port 3000
@@ -62,7 +67,7 @@ spec:
             securityContext:
               allowPrivilegeEscalation: false
               capabilities: { drop: ["ALL"] }
-              readOnlyRootFilesystem: true
+              readOnlyRootFilesystem: false # requires 'chown' to app files
 
     service:
       app:
@@ -93,6 +98,6 @@ spec:
       media:
         type: nfs
         server: nas.homelab.internal
-        path: /mnt/Arcanum/shared/media
+        path: /mnt/Arcanum/Media
         globalMounts:
           - path: /media

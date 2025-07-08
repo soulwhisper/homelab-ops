@@ -2,10 +2,16 @@
 
 - In my homelab, internet connections, especially to registries, need a corporate proxy;
 - However, this HTTP/S based proxy has a negative impact on 'HTTPS POST' and 'QUIC';
-- Current solution is "proxies out of cluster", also known as "A pull-through mirror with proxies".
+
+### Cloudflared proxied
+
+- using custom image `ghcr.io/alliottech/cloudflared_proxy`, with socks5 proxy;
+- proxy config set `dns.fake-ip-filter:"+.argotunnel.com"` and `sniffer.skip-domain:"+.argotunnel.com"`;
+
+### Pull-thorugh mirrors
 
 ```yaml
-# pull through mirror registry, powered by zotregistry
+# talconfig.yaml, powered by zotregistry
 - |-
   machine:
     registries:

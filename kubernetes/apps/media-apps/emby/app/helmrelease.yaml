@@ -24,17 +24,22 @@ spec:
     keepHistory: false
 
   values:
-    defaultPodOptions:
-      hostUsers: false
     controllers:
       emby:
         annotations:
           reloader.stakater.com/auto: "true"
+        pod:
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 2000
+            runAsGroup: 2000
+            fsGroup: 2000
+            fsGroupChangePolicy: OnRootMismatch
         containers:
           app:
             image:
               repository: emby/embyserver
-              tag: 4.9.1.3
+              tag: 4.9.1.4
             env:
               TZ: "${TIMEZONE}"
               GIDLIST: 2000,0
@@ -94,6 +99,6 @@ spec:
       media:
         type: nfs
         server: nas.homelab.internal
-        path: /mnt/Arcanum/shared/media
+        path: /mnt/Arcanum/Media
         globalMounts:
           - path: /media

@@ -24,12 +24,17 @@ spec:
     keepHistory: false
 
   values:
-    defaultPodOptions:
-      hostUsers: false
     controllers:
       prowlarr:
         annotations:
           reloader.stakater.com/auto: "true"
+        pod:
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 2000
+            runAsGroup: 2000
+            fsGroup: 2000
+            fsGroupChangePolicy: OnRootMismatch
         containers:
           app:
             image:
@@ -63,7 +68,6 @@ spec:
             resources:
               requests:
                 cpu: 18m
-                memory: 128Mi
               limits:
                 memory: 512Mi
             securityContext:
