@@ -45,9 +45,6 @@ spec:
     name: gitops-system
     namespace: gitops-system
   wait: true
-  dependsOn:
-    - name: rook-ceph
-      namespace: storage-system
   healthChecks:
     - apiVersion: helm.toolkit.fluxcd.io/v2
       kind: HelmRelease
@@ -62,6 +59,9 @@ spec:
       kind: CephCluster
       failed: status.ceph.health == 'HEALTH_ERR'
       current: status.ceph.health == 'HEALTH_OK' || status.ceph.health == 'HEALTH_WARN'
+  dependsOn:
+    - name: rook-ceph
+      namespace: storage-system
   components:
     - ../../../../components/gatus/internal
   postBuild:
@@ -90,11 +90,6 @@ spec:
     name: gitops-system
     namespace: gitops-system
   wait: true
-  dependsOn:
-    - name: onepassword-store
-      namespace: security-system
-    - name: rook-ceph-cluster
-      namespace: storage-system
   healthChecks:
     - apiVersion: objectbucket.io/v1alpha1
       kind: ObjectBucketClaim
@@ -104,3 +99,13 @@ spec:
       kind: ObjectBucketClaim
       name: ceph-bucket-volsync
       namespace: *namespace
+  healthCheckExprs:
+    - apiVersion: objectbucket.io/v1alpha1
+      kind: ObjectBucketClaim
+      failed: status.phase == 'pending' || status.phase == 'failed' || status.phase == 'released'
+      current: status.phase == 'bound'
+  dependsOn:
+    - name: onepassword-store
+      namespace: security-system
+    - name: rook-ceph-cluster
+      namespace: storage-system

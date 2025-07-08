@@ -35,6 +35,8 @@ spec:
     enableDiscoveryDaemon: true
     monitoring:
       enabled: true
+    # default obc fields = "maxObjects,maxSize"
+    obcAllowAdditionalConfigFields: "bucketOwner,bucketPolicy,bucketLifecycle"
     resources:
       requests:
         memory: 128Mi # unchangable
