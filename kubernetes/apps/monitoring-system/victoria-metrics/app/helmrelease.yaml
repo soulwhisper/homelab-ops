@@ -34,10 +34,10 @@ spec:
           value: 0
         - name: VM_VMALERTMANAGER_CONFIGRELOADERCPU
           value: 0
-        - name: "VM_USECUSTOMCONFIGRELOADER"
-          value: "true"
-        - name: VM_CUSTOMCONFIGRELOADERIMAGE
-          value: "quay.io/victoriametrics/operator:config-reloader-v0.53.0"
+        # - name: "VM_USECUSTOMCONFIGRELOADER"
+        #   value: "true"
+        # - name: VM_CUSTOMCONFIGRELOADERIMAGE
+        #   value: "quay.io/victoriametrics/operator:config-reloader-v0.53.0"
         - name: "VM_VMALERTDEFAULT_IMAGE"
           value: "quay.io/victoriametrics/vmalert"
         - name: "VM_VMAGENTDEFAULT_IMAGE"
@@ -63,6 +63,7 @@ spec:
         - name: NO_PROXY
           value: "${NO_PROXY}"
       operator:
+        admissionWebhooks.certManager.enabled: true # avoid webhook cert issues
         enable_converter_ownership: true # Required to allow VM to remove VM rules it imports if a prometheus rule is deleted
 
     defaultDashboards:
