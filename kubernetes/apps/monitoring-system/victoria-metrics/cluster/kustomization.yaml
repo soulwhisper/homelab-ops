@@ -4,10 +4,10 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
   # app
-  - ./vmsingle.yaml
-  - ./vmagent.yaml
-  - ./vmalert.yaml
-  - ./vmalertmanager.yaml
+  - ./helmrelease.yaml
+  - ./ocirepository.yaml
   # utils
-  - ./vmrule.yaml
-  - ./servicemonitors
+  - ./externalsecret.yaml
+  - ./gatus.yaml
+  - ./httproute.yaml
+  - ./scrapeconfigs.yaml

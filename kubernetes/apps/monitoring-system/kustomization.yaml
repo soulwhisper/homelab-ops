@@ -7,7 +7,9 @@ components:
   - ../../components/common
 resources:
   # exporters
-  - ./exporters
+  - ./blackbox-exporter/ks.yaml
+  - ./node-exporter/ks.yaml
+  - ./smartctl-exporter/ks.yaml
   # monitoring stack
   - ./grafana/ks.yaml
   - ./kube-prometheus-stack/ks.yaml
@@ -17,8 +19,8 @@ resources:
   - ./promtail/ks.yaml
   - ./silence-operator/ks.yaml
   # alternative stack
-  - ./victoria-logs/ks.yaml
-  - ./victoria-metrics/ks.yaml
+  - ./victoria-logs/ks.yaml # replace loki
+  - ./victoria-metrics/ks.yaml # replace kube-prometheus-stack
   # others
   - ./apprise/ks.yaml
   - ./coroot/ks.yaml

@@ -46,6 +46,8 @@ spec:
     namespace: gitops-system
   wait: false
   dependsOn:
+    - name: victoria-metrics
+      namespace: monitoring-system
     - name: onepassword-store
       namespace: security-system
     - name: rook-ceph-cluster
