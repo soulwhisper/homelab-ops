@@ -1,0 +1,14 @@
+# yaml-language-server: $schema=https://kubernetes-schemas.noirprime.com/operator.victoriametrics.com/vmalert_v1beta1.json
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMAlert
+metadata:
+  name: victoria-metrics-vmalert
+spec:
+  replicaCount: 1
+  datasource:
+    url: "http://victoria-metrics-vmsingle.monitoring-system.svc.cluster.local:8429"
+  notifier:
+    url: "http://victoria-metrics-vmalertmanager.monitoring-system.svc.cluster.local:9093"
+  extraArgs:
+    external.url: https://vmalert.noirprime.com
+  selectAllByDefault: true

@@ -62,8 +62,8 @@ spec:
           value: "${HTTPS_PROXY}"
         - name: NO_PROXY
           value: "${NO_PROXY}"
+      admissionWebhooks.certManager.enabled: true # avoid webhook cert issues
       operator:
-        admissionWebhooks.certManager.enabled: true # avoid webhook cert issues
         enable_converter_ownership: true # Required to allow VM to remove VM rules it imports if a prometheus rule is deleted
 
     defaultDashboards:

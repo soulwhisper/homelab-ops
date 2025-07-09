@@ -1,0 +1,68 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.noirprime.com/operator.victoriametrics.com/vmalertmanager_v1beta1.json
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMAlertmanager
+metadata:
+  name: victoria-metrics-vmalertmanager
+spec:
+  externalURL: https://vmalertmanager.noirprime.com
+  configRawYaml: |
+    route:
+      group_by: ["alertname", "job"]
+      group_interval: 5m
+      group_wait: 30m
+      receiver: "default-receiver"
+      repeat_interval: 6h
+      routes:
+        - receiver: "null"
+          matchers:
+            - alertname =~ "InfoInhibitor|Watchdog"
+        - receiver: "default-receiver"
+          matchers:
+            - severity =~ "warning|critical"
+    inhibit_rules:
+      - source_matchers:
+          - severity = "critical"
+        target_matchers:
+          - severity = "warning"
+        equal: ["alertname", "namespace"]
+    receivers:
+      - name: "null"
+      - name: "default-receiver"
+        pushover_configs:
+          - send_resolved: true
+            priority: |-
+              {{ if eq .Status "firing" }}1{{ else }}0{{ end }}
+            title: >-
+              [{{ .Status | toUpper }}{{ if eq .Status "firing" }}:{{ .Alerts.Firing | len }}{{ end }}]
+              {{ .CommonLabels.alertname }}
+            message: |-
+              {{- range .Alerts }}
+                {{- if ne .Annotations.description "" }}
+                  {{ .Annotations.description }}
+                {{- else if ne .Annotations.summary "" }}
+                  {{ .Annotations.summary }}
+                {{- else if ne .Annotations.message "" }}
+                  {{ .Annotations.message }}
+                {{- else }}
+                  Alert description not available
+                {{- end }}
+                {{- if gt (len .Labels.SortedPairs) 0 }}
+                  <small>
+                    {{- range .Labels.SortedPairs }}
+                      <b>{{ .Name }}:</b> {{ .Value }}
+                    {{- end }}
+                  </small>
+                {{- end }}
+              {{- end }}
+            sound: gamelan
+            ttl: 86400s
+            token:
+              name: *name
+              key: PUSHOVER_TOKEN
+            user_key:
+              name: *name
+              key: PUSHOVER_USER_KEY
+        webhook_configs:
+          - send_resolved: true
+            url: http://apprise.monitoring-system.svc.cluster.local:8001?template=alertmanager
