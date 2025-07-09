@@ -14,3 +14,4 @@
 - [ ] evaluate starrs utility
 - [ ] fix cloudflared connectivity, via proxies or not
 - [x] optimize ceph-bucket stability
+- [ ] rewrite `vm-k8s-stack`, with `node-exporter`,`kube-state-metrics`,`operator`,`vmagent`,`vmalert`,`vmsingle`
