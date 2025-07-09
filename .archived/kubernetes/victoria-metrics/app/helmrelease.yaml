@@ -1,0 +1,307 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.noirprime.com/helm.toolkit.fluxcd.io/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &name victoria-metrics
+spec:
+  interval: 30m
+  chartRef:
+    kind: OCIRepository
+    name: victoria-metrics-k8s-stack
+  maxHistory: 2
+  install:
+    crds: CreateReplace
+    remediation:
+      retries: -1
+  upgrade:
+    cleanupOnFail: true
+    crds: CreateReplace
+    remediation:
+      retries: 3
+  uninstall:
+    keepHistory: false
+
+  values:
+    fullnameOverride: *name
+    victoria-metrics-operator:
+      image:
+        registry: "quay.io"
+      env:
+        - name: VM_VMALERTDEFAULT_CONFIGRELOADERCPU
+          value: 0
+        - name: VM_VMAGENTDEFAULT_CONFIGRELOADERCPU
+          value: 0
+        - name: VM_VMALERTMANAGER_CONFIGRELOADERCPU
+          value: 0
+        # - name: "VM_USECUSTOMCONFIGRELOADER"
+        #   value: "true"
+        # - name: VM_CUSTOMCONFIGRELOADERIMAGE
+        #   value: "quay.io/victoriametrics/operator:config-reloader-v0.53.0"
+        - name: "VM_VMALERTDEFAULT_IMAGE"
+          value: "quay.io/victoriametrics/vmalert"
+        - name: "VM_VMAGENTDEFAULT_IMAGE"
+          value: "quay.io/victoriametrics/vmagent"
+        - name: "VM_VMSINGLEDEFAULT_IMAGE"
+          value: "quay.io/victoriametrics/victoria-metrics"
+        - name: "VM_VMCLUSTERDEFAULT_VMSELECTDEFAULT_IMAGE"
+          value: "quay.io/victoriametrics/vmselect"
+        - name: "VM_VMCLUSTERDEFAULT_VMSTORAGEDEFAULT_IMAGE"
+          value: "quay.io/victoriametrics/vmstorage"
+        - name: "VM_VMCLUSTERDEFAULT_VMINSERTDEFAULT_IMAGE"
+          value: "quay.io/victoriametrics/vminsert"
+        - name: "VM_VMBACKUP_IMAGE"
+          value: "quay.io/victoriametrics/vmbackupmanager"
+        - name: "VM_VMAUTHDEFAULT_IMAGE"
+          value: "quay.io/victoriametrics/vmauth"
+        - name: "VM_VMALERTMANAGER_ALERTMANAGERDEFAULTBASEIMAGE"
+          value: "quay.io/prometheus/alertmanager"
+        - name: HTTP_PROXY
+          value: "${HTTP_PROXY}"
+        - name: HTTPS_PROXY
+          value: "${HTTPS_PROXY}"
+        - name: NO_PROXY
+          value: "${NO_PROXY}"
+      operator:
+        admissionWebhooks.certManager.enabled: true # avoid webhook cert issues
+        enable_converter_ownership: true # Required to allow VM to remove VM rules it imports if a prometheus rule is deleted
+
+    defaultDashboards:
+      enabled: false
+
+    defaultRules:
+      rules:
+        groups:
+          etcd:
+            create: false
+          kubernetesSystemControllerManager:
+            create: false
+          kubernetesSystemScheduler:
+            create: false
+
+    vmsingle:
+      enabled: true
+      spec:
+        port: "8429"
+        # -- Data retention period. Possible units character: h(ours), d(ays), w(eeks), y(ears), if no unit character specified - month. The minimum retention period is 24h. See these [docs](https://docs.victoriametrics.com/single-server-victoriametrics/#retention)
+        retentionPeriod: "1y"
+        replicaCount: 1
+        extraArgs:
+          maxLabelsPerTimeseries: "50"
+        storage:
+          accessModes:
+            - ReadWriteOnce
+          resources:
+            requests:
+              storage: 200Gi
+        resources:
+          requests:
+            cpu: 500m
+          limits:
+            memory: 6Gi
+
+    vmalert:
+      enabled: true
+      spec:
+        port: "8080"
+        extraArgs:
+          external.url: https://metrics.noirprime.com
+        # Skip vmalerts for vmlog rules
+        selectAllByDefault: false
+        ruleSelector:
+          matchExpressions:
+            - key: vmalert-logs.io/enabled
+              operator: NotIn
+              values: ["true"]
+        ruleNamespaceSelector:
+          matchExpressions:
+            - { key: somekey, operator: NotIn, values: ["never-used-value"] }
+
+    vmagent:
+      enabled: true
+      spec:
+        port: "8429"
+        extraArgs:
+          promscrape.maxScrapeSize: 50MiB
+          promscrape.streamParse: "true"
+          promscrape.dropOriginalLabels: "true"
+        resources:
+          requests:
+            cpu: 500m
+          limits:
+            memory: 1Gi
+
+    alertmanager:
+      spec:
+        externalURL: https://alert.noirprime.com
+        port: "9093"
+      useManagedConfig: true
+      config:
+        route:
+          group_by: ["alertname", "job"]
+          group_interval: 5m
+          group_wait: 30m
+          receiver: "default-receiver"
+          repeat_interval: 6h
+          routes:
+            - receiver: "null"
+              matchers:
+                - alertname =~ "InfoInhibitor|Watchdog"
+            - receiver: "default-receiver"
+              matchers:
+                - severity =~ "warning|critical"
+        inhibit_rules:
+          - source_matchers:
+              - severity = "critical"
+            target_matchers:
+              - severity = "warning"
+            equal: ["alertname", "namespace"]
+        receivers:
+          - name: "null"
+          - name: "default-receiver"
+            pushover_configs:
+              - send_resolved: true
+                priority: |-
+                  {{ if eq .Status "firing" }}1{{ else }}0{{ end }}
+                title: >-
+                  [{{ .Status | toUpper }}{{ if eq .Status "firing" }}:{{ .Alerts.Firing | len }}{{ end }}]
+                  {{ .CommonLabels.alertname }}
+                message: |-
+                  {{- range .Alerts }}
+                    {{- if ne .Annotations.description "" }}
+                      {{ .Annotations.description }}
+                    {{- else if ne .Annotations.summary "" }}
+                      {{ .Annotations.summary }}
+                    {{- else if ne .Annotations.message "" }}
+                      {{ .Annotations.message }}
+                    {{- else }}
+                      Alert description not available
+                    {{- end }}
+                    {{- if gt (len .Labels.SortedPairs) 0 }}
+                      <small>
+                        {{- range .Labels.SortedPairs }}
+                          <b>{{ .Name }}:</b> {{ .Value }}
+                        {{- end }}
+                      </small>
+                    {{- end }}
+                  {{- end }}
+                sound: gamelan
+                ttl: 86400s
+                token:
+                  name: *name
+                  key: PUSHOVER_TOKEN
+                user_key:
+                  name: *name
+                  key: PUSHOVER_USER_KEY
+            webhook_configs:
+              - send_resolved: true
+                url: http://apprise.monitoring-system.svc.cluster.local:8001?template=alertmanager
+
+    grafana:
+      enabled: false
+
+    prometheus-node-exporter:
+      vmScrape:
+        spec:
+          endpoints:
+            - port: metrics
+              metricRelabelConfigs:
+                - action: replace
+                  sourceLabels:
+                    - __meta_kubernetes_pod_node_name
+                  targetLabel: kubernetes_node
+                - action: replace
+                  sourceLabels:
+                    - __meta_kubernetes_pod_node_name
+                  targetLabel: nodename
+                - action: replace
+                  regex: (.*)
+                  replacement: $1.homelab.internal:9100
+                  sourceLabels:
+                    - kubernetes_node
+                  targetLabel: instance
+
+    kubeApiServer:
+      vmScrape:
+        spec:
+          metricRelabelConfigs:
+            # Drop high cardinality labels
+            - action: drop
+              sourceLabels: ["__name__"]
+              regex: (apiserver|etcd|rest_client)_request(|_sli|_slo)_duration_seconds_bucket
+            - action: drop
+              sourceLabels: ["__name__"]
+              regex: (apiserver_response_sizes_bucket|apiserver_watch_events_sizes_bucket)
+
+    kubelet:
+      vmScrape:
+        spec:
+          metricRelabelConfigs:
+            # Drop high-cardinality labels.
+            - action: labeldrop
+              regex: (uid|id|name)
+            - action: drop
+              sourceLabels: [__name__]
+              regex: (rest_client_request_duration_seconds_bucket|rest_client_request_duration_seconds_sum|rest_client_request_duration_seconds_count)
+            # Optional, Drop cgroup metrics with no pod.
+            - sourceLabels: [id, pod]
+              action: drop
+              regex: ".+;"
+            # Optional, Drop less useful container blkio metrics.
+            - sourceLabels: [__name__]
+              action: drop
+              regex: "container_blkio_device_usage_total"
+            # Optional, Drop less useful container filesystem io metrics.
+            - sourceLabels: [__name__]
+              action: drop
+              regex: "container_fs_(io_current|io_time_seconds_total|io_time_weighted_seconds_total|reads_merged_total|sector_reads_total|sector_writes_total|writes_merged_total)"
+            # Optional, Drop less useful container process metrics.
+            - sourceLabels: [__name__]
+              action: drop
+              regex: "container_(tasks_state|threads_max)"
+
+    kubeControllerManager:
+      enabled: false
+
+    kubeEtcd:
+      enabled: false
+
+    kubeProxy:
+      enabled: false
+
+    kubeScheduler:
+      enabled: false
+
+    additionalVictoriaMetricsMap:
+      dockerhub-rules:
+        groups:
+          - name: dockerhub.rules
+            rules:
+              - alert: DockerhubRateLimitRisk
+                annotations:
+                  summary: Kubernetes cluster Dockerhub rate limit risk
+                expr: count(time() - container_last_seen{image=~"(docker.io).*",container!=""} < 30) > 100
+                labels:
+                  severity: critical
+      oom-rules:
+        groups:
+          - name: oom.rules
+            rules:
+              - alert: OomKilled
+                annotations:
+                  summary: Container {{ $labels.container }} in pod {{ $labels.namespace }}/{{ $labels.pod }} has been OOMKilled {{ $value }} times in the last 10 minutes.
+                expr: (kube_pod_container_status_restarts_total - kube_pod_container_status_restarts_total offset 10m >= 1) and ignoring (reason) min_over_time(kube_pod_container_status_last_terminated_reason{reason="OOMKilled"}[10m]) == 1
+                labels:
+                  severity: critical
+      zfs-rules:
+        groups:
+          - name: zfs.rules
+            rules:
+              - alert: ZfsUnexpectedPoolState
+                annotations:
+                  summary: ZFS pool {{$labels.zpool}} on {{$labels.instance}}
+                    is in a unexpected state {{$labels.state}}
+                expr: node_zfs_zpool_state{state!="online"} > 0
+                for: 15m
+                labels:
+                  severity: critical

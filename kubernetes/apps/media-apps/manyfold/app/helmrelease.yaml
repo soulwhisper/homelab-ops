@@ -24,12 +24,17 @@ spec:
     keepHistory: false
 
   values:
-    defaultPodOptions:
-      hostUsers: false
     controllers:
       manyfold:
         annotations:
           reloader.stakater.com/auto: "true"
+        pod:
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 2000
+            runAsGroup: 2000
+            fsGroup: 2000
+            fsGroupChangePolicy: OnRootMismatch
         initContainers:
           init-db:
             image:
@@ -42,7 +47,7 @@ spec:
           app:
             image:
               repository: ghcr.io/bjw-s-labs/manyfold
-              tag: 0.116.2@sha256:d4b6475ce57636cf73f2da40d4c828f98d5be2849991b2d1c4f3987a0d070266
+              tag: 0.117.0@sha256:f69ae3ec4f53ae97e14b082d19ac9caca47cc3a8993c16870e7fe15b6d50b3bb
             env:
               MULTIUSER: false
               REGISTRATION: false
@@ -74,7 +79,6 @@ spec:
             resources:
               requests:
                 cpu: 20m
-                memory: 128Mi
               limits:
                 memory: 1536Mi
             securityContext:
@@ -96,6 +100,12 @@ spec:
             sectionName: https
 
     persistence:
+      app:
+        existingClaim: *name
+        advancedMounts:
+          manyfold:
+            app:
+              - path: /app
       tmpfs:
         type: emptyDir
         globalMounts:
@@ -108,7 +118,9 @@ spec:
       media:
         type: nfs
         server: nas.homelab.internal
-        path: /mnt/Arcanum/shared/media
-        globalMounts:
-          - path: /data/libraries/main
-            subPath: model
+        path: /mnt/Arcanum/Media
+        advancedMounts:
+          manyfold:
+            app:
+              - path: /data/libraries/main
+                subPath: model

@@ -49,18 +49,16 @@
 - apps:alist
 - apps:auto-bangumi
 - apps:komga
+- apps:ocis
 - apps:ytdl-sub
 
-> kubernetes:monitor
+> kubernetes:monitoring
 
-- apps:alertmanager
 - apps:cronitor
 - apps:echo-server
-- apps:loki
-- apps:kube-prometheus-stack
-- apps:kube-state-metrics
-- apps:node-exporter
-- apps:promtail
+- apps:fluent-bit
+- apps:victoria-metrics
+- apps:victoria-logs
 
 > kubernetes:networking
 
@@ -89,7 +87,7 @@
 
 - database: prefer native volume management instead of stateful set;
 - media: arrs is not my goal;
-- monitoring: victroia-stack perform more and cost less, same to fluent-bit;
+- monitoring: victroia-stack perform better yet not stable (helmrelease render errors);
 - security: reduce complexity;
 - selfhosted: using aqara stack instead of home-assistant; hence [local-voice-assistant](https://www.home-assistant.io/voice_control/voice_remote_local_assistant/) is not planned;
 - storage: migrated to rook-ceph for better support and stability;

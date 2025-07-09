@@ -24,27 +24,31 @@ spec:
     keepHistory: false
 
   values:
-    defaultPodOptions:
-      hostUsers: false # was uid:gid=1000:1000
     controllers:
       n8n:
         annotations:
           reloader.stakater.com/auto: "true"
+        pod: # this is a must for n8n
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            runAsGroup: 1000
         containers:
           app:
             image:
               repository: ghcr.io/n8n-io/n8n
-              tag: 1.101.1
+              tag: 1.102.0
             env:
               DB_SQLITE_VACUUM_ON_STARTUP: true
               EXECUTIONS_DATA_PRUNE: true
               EXECUTIONS_DATA_MAX_AGE: 7
               EXECUTIONS_DATA_PRUNE_MAX_COUNT: 50000
-              GENERIC_TIMEZONE: "Asia/Shanghai"
+              GENERIC_TIMEZONE: "${TIMEZONE}"
               N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS: false
+              N8N_HOST: n8n.noirprime.com
               N8N_PROTOCOL: "https"
               N8N_PORT: &port 8080
-              N8N_HOST: n8n.noirprime.com
+              N8N_RUNNERS_ENABLED: true
               N8N_LOG_LEVEL: info
               N8N_LOG_OUTPUT: console
               N8N_ENCRYPTION_KEY:
@@ -55,7 +59,6 @@ spec:
             resources:
               requests:
                 cpu: 5m
-                memory: 128Mi
               limits:
                 memory: 2Gi
             securityContext:
@@ -94,3 +97,7 @@ spec:
         existingClaim: *name
         globalMounts:
           - path: /home/node/.n8n
+      tmpfs:
+        type: emptyDir
+        globalMounts:
+          - path: /home/node/.cache

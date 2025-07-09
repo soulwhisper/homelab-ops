@@ -12,3 +12,5 @@ generatorOptions:
   annotations:
     kustomize.toolkit.fluxcd.io/substitute: disabled
   disableNameSuffixHash: true
+
+  # ! bypass configs is required for qbtools in bt-webui. subnet=10.100.0.0/16

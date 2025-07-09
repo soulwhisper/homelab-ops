@@ -51,7 +51,8 @@ spec:
         enabled: true
         urlPrefix: /
         ssl: false
-        prometheusEndpoint: http://vmsingle-stack.monitoring-system.svc.cluster.local:8429
+        # prometheusEndpoint: http://vmsingle-stack.monitoring-system.svc.cluster.local:8429
+        prometheusEndpoint: http://prometheus-operated.monitoring-system.svc.cluster.local:9090
       mgr:
         modules:
           - name: diskprediction_local

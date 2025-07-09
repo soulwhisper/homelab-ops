@@ -23,7 +23,8 @@ spec:
     keepHistory: false
 
   values:
-    alertmanagerAddress: http://vmalertmanager-stack.monitoring-system.svc.cluster.local:9093
+    # alertmanagerAddress: http://vmalertmanager-stack.monitoring-system.svc.cluster.local:9093
+    alertmanagerAddress: http://alertmanager-operated.monitoring-system.svc.cluster.local:9093
     image:
       registry: quay.io
     networkPolicy:

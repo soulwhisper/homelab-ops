@@ -17,10 +17,7 @@
       description: "BJW-S LABS Group",
       groupName: "BJW-S LABS",
       matchDatasources: ["docker"],
-      matchPackageNames: [
-        "/bjw-s/",
-        "/bjw-s-labs/",
-      ],
+      matchPackageNames: ["/bjw-s/", "/bjw-s-labs/"],
       group: {
         commitMessageTopic: "{{{groupName}}} group",
       },
@@ -57,15 +54,6 @@
       groupName: "CoreDNS",
       matchDatasources: ["docker"],
       matchPackageNames: ["/coredns/"],
-      group: {
-        commitMessageTopic: "{{{groupName}}} group",
-      },
-    },
-    {
-      description: "Envoy Group",
-      groupName: "Envoy",
-      matchDatasources: ["docker"],
-      matchPackageNames: ["/envoyproxy/"],
       group: {
         commitMessageTopic: "{{{groupName}}} group",
       },
@@ -120,15 +108,6 @@
       groupName: "Spegel",
       matchPackageNames: ["/spegel-org"],
       matchDatasources: ["docker"],
-      group: {
-        commitMessageTopic: "{{{groupName}}} group",
-      },
-    },
-    {
-      description: "Victoria-Metrics Group",
-      groupName: "Victoria-Metrics",
-      matchPackageNames: ["/victoriametrics/"],
-      matchDatasources: ["docker", "github-releases"],
       group: {
         commitMessageTopic: "{{{groupName}}} group",
       },

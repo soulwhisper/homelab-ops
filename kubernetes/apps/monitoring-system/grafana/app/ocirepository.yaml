@@ -4,12 +4,11 @@ apiVersion: source.toolkit.fluxcd.io/v1
 kind: OCIRepository
 metadata:
   name: grafana
-  namespace: monitoring-system
 spec:
   interval: 5m
   layerSelector:
     mediaType: application/vnd.cncf.helm.chart.content.v1.tar+gzip
     operation: copy
   ref:
-    tag: 9.2.9
+    tag: 9.2.10
   url: oci://ghcr.io/grafana/helm-charts/grafana

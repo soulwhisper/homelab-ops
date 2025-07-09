@@ -45,23 +45,36 @@ spec:
     name: gitops-system
     namespace: gitops-system
   wait: true
-  dependsOn:
-    - name: rook-ceph
-      namespace: storage-system
   healthChecks:
-    - apiVersion: helm.toolkit.fluxcd.io/v2
-      kind: HelmRelease
-      name: rook-ceph-cluster
-      namespace: *namespace
     - apiVersion: ceph.rook.io/v1
       kind: CephCluster
       name: *namespace
       namespace: *namespace
+    - apiVersion: ceph.rook.io/v1
+      kind: CephBlockPool
+      name: ceph-blockpool
+      namespace: *namespace
+    - apiVersion: ceph.rook.io/v1
+      kind: CephObjectStore
+      name: ceph-objectstore
+      namespace: *namespace
   healthCheckExprs:
+    # status checks is case-sensitive
     - apiVersion: ceph.rook.io/v1
       kind: CephCluster
       failed: status.ceph.health == 'HEALTH_ERR'
       current: status.ceph.health == 'HEALTH_OK' || status.ceph.health == 'HEALTH_WARN'
+    - apiVersion: ceph.rook.io/v1
+      kind: CephBlockPool
+      failed: status.phase != 'Ready'
+      current: status.phase == 'Ready'
+    - apiVersion: ceph.rook.io/v1
+      kind: CephObjectStore
+      failed: status.phase != 'Ready'
+      current: status.phase == 'Ready'
+  dependsOn:
+    - name: rook-ceph
+      namespace: storage-system
   components:
     - ../../../../components/gatus/internal
   postBuild:
@@ -90,6 +103,21 @@ spec:
     name: gitops-system
     namespace: gitops-system
   wait: true
+  healthChecks:
+    - apiVersion: objectbucket.io/v1alpha1
+      kind: ObjectBucketClaim
+      name: ceph-bucket-postgres
+      namespace: *namespace
+    - apiVersion: objectbucket.io/v1alpha1
+      kind: ObjectBucketClaim
+      name: ceph-bucket-volsync
+      namespace: *namespace
+  healthCheckExprs:
+    # status checks is case-sensitive
+    - apiVersion: objectbucket.io/v1alpha1
+      kind: ObjectBucketClaim
+      failed: status.phase != 'Bound'
+      current: status.phase == 'Bound'
   dependsOn:
     - name: onepassword-store
       namespace: security-system
