@@ -39,7 +39,11 @@ spec:
               - name: TZ
                 value: "${TIMEZONE}"
               - name: APPRISE_ATTACH_SIZE
-                value: 0
+                value: "0"
+              - name: PUID
+                value: "0"
+              - name: PGID
+                value: "0"
             envFrom:
               - secretRef:
                   name: *name
