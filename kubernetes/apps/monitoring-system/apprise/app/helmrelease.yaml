@@ -33,13 +33,15 @@ spec:
         containers:
           app:
             image:
-              repository: lscr.io/linuxserver/apprise-api
+              repository: ghcr.io/caronc/apprise
               tag: 1.2.0
             env:
               - name: TZ
                 value: "${TIMEZONE}"
-              - name: APPRISE_ATTACH_SIZE
-                value: "0"
+              - name: APPRISE_STATEFUL_MODE
+                value: "simple"
+              - name: APPRISE_WORKER_COUNT
+                value: "1"
               - name: PUID
                 value: "0"
               - name: PGID
@@ -55,7 +57,7 @@ spec:
             securityContext: &securityContext
               allowPrivilegeEscalation: false
               capabilities: { drop: ["ALL"] }
-              readOnlyRootFilesystem: true
+              readOnlyRootFilesystem: false # required for 'chown'
           webhook:
             image:
               repository: ghcr.io/camalot/apprise-webhook
@@ -85,9 +87,9 @@ spec:
       tmpfs:
         type: emptyDir
         globalMounts:
-          - path: /attachments
-            subPath: attachments
-          - path: /config # dont need persistence
+          - path: /attach
+            subPath: attach
+          - path: /config
             subPath: config
           - path: /run
             subPath: run
