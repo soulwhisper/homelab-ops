@@ -12,14 +12,15 @@ resources:
   - ./smartctl-exporter/ks.yaml
   # monitoring stack
   - ./grafana/ks.yaml
-  - ./kube-prometheus-stack/ks.yaml
   - ./kube-state-metrics/ks.yaml
-  - ./loki/ks.yaml
   - ./prometheus-operator/ks.yaml
-  - ./promtail/ks.yaml
   - ./silence-operator/ks.yaml
-  # alternative stack
-  - ./victoria-logs/ks.yaml # replace loki
+  # monitoring backend
+  - ./kube-prometheus-stack/ks.yaml
+  - ./loki/ks.yaml
+  - ./promtail/ks.yaml
+  # alternative backend
+  - ./victoria-logs/ks.yaml # replace loki and promtail
   - ./victoria-metrics/ks.yaml # replace kube-prometheus-stack
   # others
   - ./apprise/ks.yaml

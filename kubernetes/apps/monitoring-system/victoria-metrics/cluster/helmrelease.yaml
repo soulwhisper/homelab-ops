@@ -38,7 +38,8 @@ spec:
           kubernetesSystemScheduler:
             create: false
 
-    # : vmsingle
+    # : vmsingle as prometheus
+    # : http://vmsingle-victoria-metrics.monitoring-system.svc.cluster.local:8429
     vmsingle:
       spec:
         replicaCount: 1
@@ -81,6 +82,7 @@ spec:
             memory: 1Gi
 
     # : alertmanager
+    # : http://vmalertmanager-victoria-metrics.monitoring-system.svc.cluster.local:9093
     alertmanager:
       spec:
         externalURL: https://vmalert.noirprime.com

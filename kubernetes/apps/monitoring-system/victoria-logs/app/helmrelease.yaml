@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &name victoria-logs
+  name: victoria-logs
 spec:
   interval: 30m
   chartRef:
@@ -23,9 +23,8 @@ spec:
     keepHistory: false
 
   values:
-    fullnameOverride: *name
-    retentionPeriod: 3 # months
     server:
+      retentionPeriod: 14d
       image:
         registry: "quay.io"
       persistentVolume:
@@ -34,3 +33,5 @@ spec:
         size: 50Gi
       serviceMonitor:
         enabled: true
+    vector:
+      enabled: true
