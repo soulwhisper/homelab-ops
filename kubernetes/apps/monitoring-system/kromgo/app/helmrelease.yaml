@@ -35,8 +35,6 @@ spec:
               app.kubernetes.io/name: kromgo
     controllers:
       kromgo:
-        replicas: 1
-        strategy: RollingUpdate
         annotations:
           reloader.stakater.com/auto: "true"
         containers:
@@ -45,15 +43,30 @@ spec:
               repository: ghcr.io/kashalls/kromgo
               tag: v0.7.0
             env:
-              PROMETHEUS_URL: http://vmsingle-stack.monitoring-system.svc.cluster.local:8429
+              # PROMETHEUS_URL: http://vmsingle-victoria-metrics.monitoring-system.svc.cluster.local:8429
+              PROMETHEUS_URL: http://prometheus-operated.monitoring-system.svc.cluster.local:9090
               SERVER_HOST: 0.0.0.0
               SERVER_PORT: &port 8080
+              HEALTH_HOST: 0.0.0.0
+              HEALTH_PORT: &hport 8888
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /readyz
+                    port: *hport
+                  initialDelaySeconds: 0
+                  periodSeconds: 10
+                  timeoutSeconds: 1
+                  failureThreshold: 3
+              readiness: *probes
             resources:
               requests:
                 cpu: 5m
-                memory: 10M
               limits:
-                memory: 64M
+                memory: 64Mi
             securityContext:
               allowPrivilegeEscalation: false
               capabilities: { drop: ["ALL"] }
@@ -63,7 +76,10 @@ spec:
       app:
         ports:
           http:
+            primary: true
             port: *port
+          health:
+            port: *hport
     route:
       app:
         hostnames: ["kromgo.noirprime.com"]

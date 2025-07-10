@@ -35,8 +35,5 @@ spec:
     enableDiscoveryDaemon: true
     monitoring:
       enabled: true
-    resources:
-      requests:
-        memory: 128Mi # unchangable
-        cpu: 100m # unchangable
-      limits: {}
+    # default obc fields = "maxObjects,maxSize"
+    obcAllowAdditionalConfigFields: "bucketOwner,bucketPolicy,bucketLifecycle"

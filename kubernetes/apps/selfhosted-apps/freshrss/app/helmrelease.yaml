@@ -47,13 +47,12 @@ spec:
             resources:
               requests:
                 cpu: 12m
-                memory: 128Mi
               limits:
                 memory: 512Mi
             securityContext:
               allowPrivilegeEscalation: false
               capabilities: { drop: ["ALL"] }
-              readOnlyRootFilesystem: true
+              readOnlyRootFilesystem: false # required for 'chown'
 
     service:
       app:

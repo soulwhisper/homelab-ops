@@ -28,8 +28,6 @@ spec:
       hostUsers: false
     controllers:
       echo:
-        replicas: 1
-        strategy: RollingUpdate
         containers:
           app:
             image:

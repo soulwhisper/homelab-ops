@@ -26,6 +26,6 @@ spec:
   uninstall:
     keepHistory: false
 
-  valuesFrom:
-    - kind: ConfigMap
-      name: karmada-operator
+  values:
+    operator:
+      replicaCount: 1

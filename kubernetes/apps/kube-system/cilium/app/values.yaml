@@ -43,7 +43,29 @@ gatewayAPI:
   enableAlpn: true
   xffNumTrustedHops: 1
 hubble:
-  enabled: false
+  enabled: true
+  metrics:
+    enabled:
+      - dns:query
+      - drop
+      - flow
+      - httpV2
+      - icmp
+      - port-distribution
+      - tcp
+    serviceMonitor:
+      enabled: true
+    dashboards:
+      enabled: true
+  relay:
+    enabled: true
+    rollOutPods: true
+    prometheus:
+      serviceMonitor:
+        enabled: true
+  ui:
+    enabled: true
+    rollOutPods: true
 ipam:
   mode: "kubernetes"
 ipv4NativeRoutingCIDR: 10.100.0.0/17
@@ -68,6 +90,7 @@ operator:
       enabled: true
   replicas: 3 # critical for HA
   rollOutPods: true
+  tolerations: [] # ref:https://github.com/cilium/cilium/issues/28549
 prometheus:
   enabled: true
   serviceMonitor:

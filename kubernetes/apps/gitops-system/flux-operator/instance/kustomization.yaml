@@ -9,6 +9,7 @@ resources:
   # utils
   - ./prometheusrules.yaml
   - ./github/
+# this file is needed during bootstrap
 configMapGenerator:
   - name: flux-instance
     files:

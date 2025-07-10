@@ -7,9 +7,7 @@
 
 > infrastructure
 
-- router:vyos
 - terraform:minio
-- webhook:slack
 
 > taskfiles
 
@@ -28,16 +26,10 @@
 > cronjobs
 
 - cronjob:talos-backup
-- cronjob:talos-healthcheck
-
-> kubernetes:base
-
-- apps:ingress-nginx
 
 > kubernetes:database
 
 - apps:emqx-operator
-- apps:crunchy-postgres-operator
 
 > kubernetes:management
 
@@ -49,24 +41,17 @@
 - apps:alist
 - apps:auto-bangumi
 - apps:komga
+- apps:ocis
 - apps:ytdl-sub
 
-> kubernetes:monitor
+> kubernetes:monitoring
 
-- apps:alertmanager
-- apps:cronitor
 - apps:echo-server
-- apps:loki
-- apps:kube-prometheus-stack
-- apps:kube-state-metrics
-- apps:node-exporter
-- apps:promtail
+- apps:fluent-bit
 
 > kubernetes:networking
 
 - apps:externaldns-rfc2136
-- apps:envoy-gateway
-- apps:gateway-api-crds
 
 > kubernetes:security
 
@@ -82,14 +67,34 @@
 > kubernetes:storage
 
 - apps:openebs
-- apps:rook-ceph(fs)
 - apps:volsync(nfs)
 
 ## Reasons
 
-- database: prefer native volume management instead of stateful set;
-- media: arrs is not my goal;
-- monitoring: victroia-stack perform more and cost less, same to fluent-bit;
-- security: reduce complexity;
-- selfhosted: using aqara stack instead of home-assistant; hence [local-voice-assistant](https://www.home-assistant.io/voice_control/voice_remote_local_assistant/) is not planned;
-- storage: migrated to rook-ceph for better support and stability;
+> infrastructure
+
+- minio is deprecated, use ceph-buckets instead;
+
+> database
+
+- prefer cnpg than cpgo; 
+- emqx is deprecated, like home-assistant;
+
+> monitoring
+
+- apprise API too old to use;
+- external healthchecks like `cronitor/uptime` is not needed;
+
+> networking
+
+- cilium gateway-api support better than envoy-gateway; 
+- envoy-gateway-api too big for bootstrap;
+
+> security
+
+- internal network dont need extra auth;
+
+> storage
+
+- rook-ceph has better support than openebs-replicated;
+- snapshots to nfs is not planned;

@@ -24,12 +24,17 @@ spec:
     keepHistory: false
 
   values:
-    defaultPodOptions:
-      hostUsers: false
     controllers:
       cross-seed:
         annotations:
           reloader.stakater.com/auto: "true"
+        pod:
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 2000
+            runAsGroup: 2000
+            fsGroup: 2000
+            fsGroupChangePolicy: OnRootMismatch
         containers:
           app:
             image:
@@ -51,7 +56,6 @@ spec:
             resources:
               requests:
                 cpu: 10m
-                memory: 128Mi
               limits:
                 memory: 256Mi
             securityContext:
@@ -80,6 +84,6 @@ spec:
       media:
         type: nfs
         server: nas.homelab.internal
-        path: /mnt/Arcanum/shared/media
+        path: /mnt/Arcanum/Media
         globalMounts:
           - path: /data/nas-media

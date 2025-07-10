@@ -43,7 +43,7 @@ spec:
               DATA_DIR: /data
               DISABLE_SIGNUPS: true
               MEILI_ADDR: http://localhost:7700
-              NEXTAUTH_URL: http://bookmark.noirprime.com
+              NEXTAUTH_URL: https://karakeep.noirprime.com
               DISABLE_NEW_RELEASE_CHECK: true
               COREPACK_INTEGRITY_KEYS: 0
               HTTP_PROXY: "${HTTP_PROXY}"
@@ -58,7 +58,6 @@ spec:
             resources:
               requests: &requests
                 cpu: 10m
-                memory: 128Mi
               limits:
                 memory: 1Gi
             securityContext: &securityContext
@@ -124,7 +123,7 @@ spec:
             port: *port
     route:
       app:
-        hostnames: ["bookmark.noirprime.com"]
+        hostnames: ["karakeep.noirprime.com"]
         parentRefs:
           - name: internal
             namespace: kube-system
@@ -138,3 +137,10 @@ spec:
             subPath: karakeep
           - path: /meili_data
             subPath: meilisearch
+      tmpfs:
+        type: emptyDir
+        globalMounts:
+          - path: /run
+            subPath: run
+          - path: /tmp
+            subPath: tmp

@@ -4,7 +4,7 @@ apiVersion: source.toolkit.fluxcd.io/v1
 kind: OCIRepository
 metadata:
   name: app-template
-  namespace: gitops-system
+  namespace: gitops-system # keep this
 spec:
   interval: 10m
   layerSelector:

@@ -6,11 +6,3 @@ resources:
   # app
   - ./helmrelease.yaml
   - ./helmrepository.yaml
-configMapGenerator:
-  - name: karmada-operator
-    files:
-      - values.yaml=./values.yaml
-generatorOptions:
-  annotations:
-    kustomize.toolkit.fluxcd.io/substitute: disabled
-  disableNameSuffixHash: true

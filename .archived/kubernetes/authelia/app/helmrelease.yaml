@@ -36,8 +36,6 @@ spec:
               app.kubernetes.io/name: *name
     controllers:
       authelia:
-        replicas: 1
-        strategy: RollingUpdate
         annotations:
           reloader.stakater.com/auto: "true"
         initContainers:
@@ -106,7 +104,6 @@ spec:
             resources:
               requests:
                 cpu: 50m
-                memory: 100Mi
               limits:
                 memory: 500Mi
             securityContext:

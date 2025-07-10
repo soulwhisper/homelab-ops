@@ -16,4 +16,3 @@ resources:
   - ./emby/ks.yaml
   - ./immich/ks.yaml
   - ./manyfold/ks.yaml
-  - ./ocis/ks.yaml

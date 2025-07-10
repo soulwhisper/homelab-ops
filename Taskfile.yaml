@@ -33,10 +33,19 @@ tasks:
 
   reconcile:
     desc: Force Flux to pull in changes from your Git repository
-    cmd: flux --namespace gitops-system reconcile kustomization gitops-system --with-source
     preconditions:
       - which flux
       - test -f {{.KUBECONFIG}}
+    cmd: flux --namespace gitops-system reconcile kustomization gitops-system --with-source
+
+  flush:
+    desc: Force Flux to flush ks in all namespaces
+    preconditions:
+      - which flux
+      - test -f {{.KUBECONFIG}}
+    cmds:
+      - task: :flux:suspend-ks-all
+      - task: :flux:resume-ks-all
 
   env:
     desc: Restore configuration files from backup location

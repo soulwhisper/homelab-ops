@@ -11,7 +11,7 @@ _... managed by Flux, Renovate and GitHub Actions_ <img src="https://fonts.gstat
 [![Talos](https://img.shields.io/endpoint?url=https%3A%2F%2Fkromgo.noirprime.com%2Ftalos_version&style=for-the-badge&logo=talos&logoColor=white&color=blue&label=talos)](https://talos.dev)&nbsp;
 [![Kubernetes](https://img.shields.io/endpoint?url=https%3A%2F%2Fkromgo.noirprime.com%2Fkubernetes_version&style=for-the-badge&logo=kubernetes&logoColor=white&color=blue&label=k8s)](https://kubernetes.io)&nbsp;
 [![Flux](https://img.shields.io/endpoint?url=https%3A%2F%2Fkromgo.noirprime.com%2Fflux_version&style=for-the-badge&logo=flux&logoColor=white&color=blue&label=flux)](https://fluxcd.io)&nbsp;
-![Status](https://img.shields.io/website?url=https%3A%2F%2Fstatus.noirprime.com&up_message=UP&up_color=white&down_message=DOWN&down_color=red&style=for-the-badge&logo=statuspal&logoColor=white&label=STATUS&color=blue)
+[![Status](https://img.shields.io/website?url=https%3A%2F%2Fstatus.noirprime.com&up_message=UP&up_color=white&down_message=DOWN&down_color=red&style=for-the-badge&logo=statuspal&logoColor=white&label=STATUS&color=blue)](https://status.noirprime.com)
 
 [![Age](https://img.shields.io/endpoint?url=https%3A%2F%2Fkromgo.noirprime.com%2Fcluster_age_days&style=flat-square&label=Age&color=green)](https://github.com/kashalls/kromgo)&nbsp;
 [![Node](https://img.shields.io/endpoint?url=https%3A%2F%2Fkromgo.noirprime.com%2Fcluster_node_count&style=flat-square&label=Nodes&color=green)](https://github.com/kashalls/kromgo)&nbsp;

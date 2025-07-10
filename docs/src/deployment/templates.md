@@ -134,7 +134,6 @@ spec:
             resources:
               requests:
                 cpu: 15m
-                memory: 128Mi
               limits:
                 memory: 512Mi
             securityContext:
@@ -186,7 +185,7 @@ spec:
       media:
         type: nfs
         server: nas.homelab.internal
-        path: /mnt/Arcanum/shared/media
+        path: /mnt/Arcanum/Media
         advancedMounts:
           example-app:
             app:

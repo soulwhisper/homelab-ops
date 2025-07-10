@@ -8,6 +8,7 @@ resources:
   - ./helmrepository.yaml
   # utils
   - ./httproute.yaml
+# this file is needed during bootstrap
 configMapGenerator:
   - name: cilium
     files:

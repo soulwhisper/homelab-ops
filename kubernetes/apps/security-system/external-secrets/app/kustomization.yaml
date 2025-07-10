@@ -6,6 +6,7 @@ resources:
   # app
   - ./helmrelease.yaml
   - ./ocirepository.yaml
+# this file is needed during bootstrap
 configMapGenerator:
   - name: external-secrets
     files:

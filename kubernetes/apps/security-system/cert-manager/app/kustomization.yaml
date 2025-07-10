@@ -8,12 +8,3 @@ resources:
   - ./ocirepository.yaml
   # utils
   - ./prometheusrules.yaml
-configMapGenerator:
-  - name: cert-manager
-    files:
-      - values.yaml=./values.yaml
-generatorOptions:
-  # : fluxcd substitute disabled for https_proxy
-  # annotations:
-  #   kustomize.toolkit.fluxcd.io/substitute: disabled
-  disableNameSuffixHash: true
