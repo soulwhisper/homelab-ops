@@ -56,7 +56,7 @@ spec:
                 memory: 128Mi
             securityContext: &securityContext
               allowPrivilegeEscalation: false
-              capabilities: { drop: ["ALL"] }
+              capabilities: { drop: ["ALL"], add: ["CHOWN"] } # required for 'chown'
               readOnlyRootFilesystem: false # required for 'chown'
           webhook:
             image:
