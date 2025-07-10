@@ -37,14 +37,14 @@ spec:
           app:
             image:
               repository: ghcr.io/n8n-io/n8n
-              tag: 1.102.0
+              tag: 1.101.1
             env:
               DB_SQLITE_VACUUM_ON_STARTUP: true
               EXECUTIONS_DATA_PRUNE: true
               EXECUTIONS_DATA_MAX_AGE: 7
               EXECUTIONS_DATA_PRUNE_MAX_COUNT: 50000
               GENERIC_TIMEZONE: "${TIMEZONE}"
-              N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS: false
+              N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS: true
               N8N_HOST: n8n.noirprime.com
               N8N_PROTOCOL: "https"
               N8N_PORT: &port 8080
@@ -64,7 +64,7 @@ spec:
             securityContext:
               allowPrivilegeEscalation: false
               capabilities: { drop: ["ALL"] }
-              readOnlyRootFilesystem: true
+              readOnlyRootFilesystem: false # required for 'chown'
 
     service:
       app:

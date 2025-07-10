@@ -24,6 +24,8 @@ spec:
     keepHistory: false
 
   values:
+    defaultPodOptions:
+      hostUsers: false
     controllers:
       apprise:
         replicas: 1
@@ -38,10 +40,6 @@ spec:
             env:
               - name: TZ
                 value: "${TIMEZONE}"
-              - name: UID
-                value: 1000
-              - name: GID
-                value: 1000
             envFrom:
               - secretRef:
                   name: *name
@@ -87,3 +85,7 @@ spec:
             subPath: config
           - path: /attachments
             subPath: attachments
+      tmpfs:
+        type: emptyDir
+        globalMounts:
+          - path: /run

@@ -137,3 +137,7 @@ spec:
             subPath: karakeep
           - path: /meili_data
             subPath: meilisearch
+      tmpfs:
+        type: emptyDir
+        globalMounts:
+          - path: /run

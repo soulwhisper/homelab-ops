@@ -67,7 +67,7 @@ spec:
             securityContext:
               allowPrivilegeEscalation: false
               capabilities: { drop: ["ALL"] }
-              readOnlyRootFilesystem: false # requires 'chown' to app files
+              readOnlyRootFilesystem: false # required for 'chown'
 
     service:
       app:
