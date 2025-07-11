@@ -24,17 +24,12 @@ spec:
     keepHistory: false
 
   values:
+    defaultPodOptions:
+      hostUsers: false
     controllers:
       manyfold:
         annotations:
           reloader.stakater.com/auto: "true"
-        pod:
-          securityContext:
-            runAsNonRoot: true
-            runAsUser: 2000
-            runAsGroup: 2000
-            fsGroup: 2000
-            fsGroupChangePolicy: OnRootMismatch
         initContainers:
           init-db:
             image:
@@ -80,7 +75,7 @@ spec:
               requests:
                 cpu: 20m
               limits:
-                memory: 1536Mi
+                memory: 1Gi
             securityContext:
               allowPrivilegeEscalation: false
               capabilities: { drop: ["ALL"] }

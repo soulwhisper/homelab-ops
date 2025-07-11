@@ -41,6 +41,9 @@ spec:
               repository: ghcr.io/home-operations/sonarr
               tag: 4.0.15.2940
             env:
+              HTTP_PROXY: "${HTTP_PROXY}"
+              HTTPS_PROXY: "${HTTPS_PROXY}"
+              NO_PROXY: "${NO_PROXY}"
               SONARR__APP__INSTANCENAME: Sonarr
               SONARR__AUTH__APIKEY:
                 valueFrom:
