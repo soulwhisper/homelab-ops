@@ -66,7 +66,7 @@ spec:
                 memory: 4Gi
             securityContext:
               allowPrivilegeEscalation: false
-              capabilities: { drop: ["ALL"] }
+              capabilities: { drop: ["ALL"], add: ["CHOWN"] } # required for 'chown'
               readOnlyRootFilesystem: false # required for 'chown'
 
     service:
@@ -93,6 +93,8 @@ spec:
       tmpfs:
         type: emptyDir
         globalMounts:
+          - path: /tmp
+            subPath: tmp
           - path: /moviepilot/.cache/ms-playwright
             subPath: cache
       media:
