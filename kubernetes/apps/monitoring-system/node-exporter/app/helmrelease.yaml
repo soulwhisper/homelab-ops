@@ -33,26 +33,29 @@ spec:
       limits:
         memory: 64M
     hostNetwork: false
+    extraArgs: # ignore mountpoints and virtual filesystems
+      - --collector.filesystem.ignored-mount-points=^/(dev|proc|sys|var/lib/docker/.+|var/lib/kubelet/.+)($|/)
+      - --collector.filesystem.ignored-fs-types=^(autofs|binfmt_misc|bpf|cgroup2?|configfs|debugfs|devpts|devtmpfs|fusectl|hugetlbfs|iso9660|mqueue|nsfs|overlay|proc|procfs|pstore|rpc_pipefs|securityfs|selinuxfs|squashfs|erofs|sysfs|tracefs)$
     prometheus:
       monitor:
         enabled: true
         jobLabel: app.kubernetes.io/instance
         relabelings:
+          - action: drop
+            regex: /var/lib/kubelet/pods.+
+            source_labels: [mountpoint]
           - action: replace
             regex: (.*)
             replacement: $1
-            sourceLabels:
-              - __meta_kubernetes_pod_node_name
+            sourceLabels: [__meta_kubernetes_pod_node_name]
             targetLabel: kubernetes_node
           - action: replace
             regex: (.*)
             replacement: $1
-            sourceLabels:
-              - __meta_kubernetes_pod_node_name
+            sourceLabels: [__meta_kubernetes_pod_node_name]
             targetLabel: nodename
           - action: replace
             regex: (.*)
             replacement: $1.homelab.internal:9100
-            sourceLabels:
-              - kubernetes_node
+            sourceLabels: [kubernetes_node]
             targetLabel: instance

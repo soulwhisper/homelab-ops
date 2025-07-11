@@ -21,6 +21,8 @@ spec:
     namespace: gitops-system
   wait: false
   dependsOn:
+    - name: keda
+      namespace: kube-system
     - name: onepassword-store
       namespace: security-system
     - name: rook-ceph-cluster
@@ -29,6 +31,7 @@ spec:
       namespace: storage-system
   components:
     - ../../../../../components/gatus/internal
+    - ../../../../../components/keda/nas-nfs-scaler
     - ../../../../../components/volsync
   postBuild:
     substitute:

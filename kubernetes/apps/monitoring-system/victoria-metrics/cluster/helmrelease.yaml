@@ -42,44 +42,17 @@ spec:
     # : http://vmsingle-victoria-metrics.monitoring-system.svc.cluster.local:8429
     vmsingle:
       spec:
-        replicaCount: 1
-        port: "8429"
         retentionPeriod: "14d"
-        extraArgs:
-          maxLabelsPerTimeseries: "50"
         storage:
-          accessModes:
-            - ReadWriteOnce
           resources:
             requests:
               storage: 50Gi
-        resources:
-          requests:
-            cpu: 500m
-          limits:
-            memory: 6Gi
 
     # : vmalert
-    vmalert:
-      spec:
-        port: "8080"
-        extraArgs:
-          http.pathPrefix: /
-        selectAllByDefault: true
+    # : http://vmalert-victoria-metrics.monitoring-system.svc.cluster.local:8080
 
     # : vmagent
-    vmagent:
-      spec:
-        port: "8429"
-        extraArgs:
-          promscrape.maxScrapeSize: 50MiB
-          promscrape.streamParse: "true"
-          promscrape.dropOriginalLabels: "true"
-        resources:
-          requests:
-            cpu: 500m
-          limits:
-            memory: 1Gi
+    # : http://vmagent-victoria-metrics.monitoring-system.svc.cluster.local:8429
 
     # : alertmanager
     # : http://vmalertmanager-victoria-metrics.monitoring-system.svc.cluster.local:9093
@@ -165,6 +138,7 @@ spec:
               action: drop
               regex: "container_(tasks_state|threads_max)"
 
+    # disable chart components
     grafana:
       enabled: false
     prometheus-node-exporter:
@@ -172,6 +146,7 @@ spec:
     kube-state-metrics:
       enabled: false
 
+    # disable not-used metrics scraping
     kubeControllerManager:
       enabled: false
     kubeEtcd:
@@ -181,6 +156,7 @@ spec:
     kubeScheduler:
       enabled: false
 
+    # vmalertmanager rules
     additionalVictoriaMetricsMap:
       dockerhub-rules:
         groups:

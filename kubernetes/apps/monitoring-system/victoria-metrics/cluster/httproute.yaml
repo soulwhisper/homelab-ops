@@ -3,9 +3,9 @@
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:
-  name: &name vmsingle-victoria-metrics
+  name: &name vmagent-victoria-metrics
 spec:
-  hostnames: ["vmsingle.noirprime.com"]
+  hostnames: ["vmagent.noirprime.com"]
   parentRefs:
     - name: internal
       namespace: kube-system

@@ -27,4 +27,9 @@ spec:
     prometheus:
       monitor:
         enabled: true
-        honorLabels: true
+        http:
+          honorLabels: true
+          metricRelabelings:
+            # Drop high-cardinality labels
+            - action: labeldrop
+              regex: (uid|container_id|image_id)

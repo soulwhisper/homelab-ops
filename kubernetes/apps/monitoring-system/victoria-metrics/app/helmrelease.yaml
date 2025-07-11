@@ -23,16 +23,10 @@ spec:
     keepHistory: false
 
   values:
-    fullnameOverride: *name
     admissionWebhooks:
       enabled: true
       certManager:
         enabled: true
-    hostNetwork: false
-    operator:
-      enable_converter_ownership: true # Required to allow VM to remove VM rules it imports if a prometheus rule is deleted
-    image:
-      registry: "quay.io"
     env:
       - name: VM_VMALERTDEFAULT_CONFIGRELOADERCPU
         value: 0
@@ -68,3 +62,10 @@ spec:
         value: "${HTTPS_PROXY}"
       - name: NO_PROXY
         value: "${NO_PROXY}"
+    fullnameOverride: *name
+    image:
+      registry: "quay.io"
+    operator:
+      enable_converter_ownership: true # Required to allow VM to remove VM rules it imports if a prometheus rule is deleted
+    serviceMonitor:
+      enabled: true # use prometheus-operator ServiceMonitor CRD

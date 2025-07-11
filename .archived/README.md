@@ -49,6 +49,12 @@
 - apps:echo-server
 - apps:fluent-bit
 
+> kubernetes:monitoring:old-stack
+
+- apps:kube-prometheus-stack
+- apps:loki
+- apps:promtail
+
 > kubernetes:networking
 
 - apps:externaldns-rfc2136
@@ -77,7 +83,7 @@
 
 > database
 
-- prefer cnpg than cpgo; 
+- prefer cnpg than cpgo;
 - emqx is deprecated, like home-assistant;
 
 > monitoring
@@ -87,7 +93,7 @@
 
 > networking
 
-- cilium gateway-api support better than envoy-gateway; 
+- cilium gateway-api support better than envoy-gateway;
 - envoy-gateway-api too big for bootstrap;
 
 > security

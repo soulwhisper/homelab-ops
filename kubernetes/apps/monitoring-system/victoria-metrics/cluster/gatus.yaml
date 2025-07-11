@@ -8,7 +8,7 @@ metadata:
 data:
   config.yaml: |
     endpoints:
-      - name: vmsingle-victoria-metrics
+      - name: vmagent-victoria-metrics
         group: internal
         url: 1.1.1.1
         interval: 1m
@@ -16,7 +16,7 @@ data:
           hide-hostname: true
           hide-url: true
         dns:
-          query-name: "vmsingle.noirprime.com"
+          query-name: "vmagent.noirprime.com"
           query-type: A
         conditions:
           - "[DNS_RCODE] == NOERROR"

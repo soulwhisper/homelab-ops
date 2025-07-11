@@ -16,10 +16,6 @@ resources:
   - ./prometheus-operator/ks.yaml
   - ./silence-operator/ks.yaml
   # monitoring backend
-  - ./kube-prometheus-stack/ks.yaml
-  - ./loki/ks.yaml
-  - ./promtail/ks.yaml
-  # alternative backend
   - ./victoria-logs/ks.yaml # replace loki and promtail
   - ./victoria-metrics/ks.yaml # replace kube-prometheus-stack
   # others

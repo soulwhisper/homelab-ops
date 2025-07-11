@@ -57,6 +57,3 @@ spec:
     name: gitops-system
     namespace: gitops-system
   wait: false
-  dependsOn:
-    - name: qbittorrent
-      namespace: media-apps

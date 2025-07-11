@@ -24,6 +24,7 @@ spec:
 
   values:
     server:
+      fullnameOverride: victoria-logs-server
       retentionPeriod: 14d
       image:
         registry: "quay.io"
