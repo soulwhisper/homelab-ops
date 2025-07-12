@@ -4,7 +4,7 @@ originRequest:
 
 ingress:
   - hostname: "noirprime.com"
-    service: &svc https://cilium-gateway-external.kube-system.svc.cluster.local
+    service: &svc cilium-gateway-external.kube-system.svc.cluster.local
   - hostname: "*.noirprime.com"
     service: *svc
   - service: http_status:404

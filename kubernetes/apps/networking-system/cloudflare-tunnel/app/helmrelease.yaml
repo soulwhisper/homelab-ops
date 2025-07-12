@@ -45,6 +45,7 @@ spec:
             args: ["tunnel", "run"]
             env:
               ALL_PROXY: "${ALL_PROXY}"
+              NO_PROXY: "${NO_PROXY}"
               NO_AUTOUPDATE: "true"
               TUNNEL_LOGLEVEL: "debug"
               TUNNEL_TRANSPORT_PROTOCOL: "http2"
