@@ -103,13 +103,15 @@ spec:
               - path: /app
       tmpfs:
         type: emptyDir
-        globalMounts:
-          - path: /tmp
-            subPath: host-tmp
-          - path: /app/tmp
-            subPath: app-tmp
-          - path: /app/log
-            subPath: app-log
+        advancedMounts:
+          manyfold:
+            app:
+              - path: /tmp
+                subPath: host-tmp
+              - path: /app/tmp
+                subPath: app-tmp
+              - path: /app/log
+                subPath: app-log
       media:
         type: nfs
         server: nas.homelab.internal

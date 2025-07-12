@@ -17,7 +17,7 @@ spec:
   triggers:
     - type: prometheus
       metadata:
-        serverAddress: http://vmsingle-victoria-metrics.monitoring-system.svc.cluster.local:8429
+        serverAddress: http://vmsingle-victoria-metrics-cluster.monitoring-system.svc.cluster.local:8429
         # serverAddress: http://prometheus-operated.monitoring-system.svc.cluster.local:9090
         query: probe_success{instance=~"nas.homelab.internal:2049"}
         activationThreshold: "0.5"
