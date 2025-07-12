@@ -14,14 +14,10 @@ spec:
     routes:
       - receiver: "null"
         matchers:
-          - name: alertname
-            value: Watchdog|InfoInhibitor
-            matchType: =~
+          - alertname =~ "InfoInhibitor|Watchdog"
       - receiver: "default"
         matchers:
-          - name: severity
-            value: warning|critical
-            matchType: =~
+          - severity =~ "warning|critical"
   inhibitRules:
     - equal: ["alertname", "namespace"]
       sourceMatch:

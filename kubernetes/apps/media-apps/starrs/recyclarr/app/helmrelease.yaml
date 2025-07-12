@@ -26,9 +26,16 @@ spec:
   values:
     controllers:
       recyclarr:
-        annotations:
-          reloader.stakater.com/auto: "true"
+        type: cronjob
+        cronjob:
+          schedule: 0 0 * * *
+          backoffLimit: 0
+          concurrencyPolicy: Forbid
+          successfulJobsHistory: 1
+          failedJobsHistory: 1
+          ttlSecondsAfterFinished: 86400
         pod:
+          restartPolicy: Never
           securityContext:
             runAsNonRoot: true
             runAsUser: 2000
@@ -51,7 +58,7 @@ spec:
                   name: *name
             resources:
               requests:
-                cpu: 5m
+                cpu: 10m
               limits:
                 memory: 128Mi
             securityContext:
@@ -75,3 +82,10 @@ spec:
         type: emptyDir
         globalMounts:
           - path: /config/cache
+            subPath: cache
+          - path: /config/logs
+            subPath: logs
+          - path: /config/repositories
+            subPath: repositories
+          - path: /tmp
+            subPath: tmp
