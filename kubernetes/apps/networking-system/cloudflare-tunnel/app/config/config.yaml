@@ -3,6 +3,7 @@ originRequest:
   originServerName: gateway-ext.noirprime.com
 
 ingress:
+  # if connection failed, could also be dns/lbipam/bgp routing errors
   - hostname: "noirprime.com"
     service: &svc https://cilium-gateway-external.kube-system.svc.cluster.local
   - hostname: "*.noirprime.com"
