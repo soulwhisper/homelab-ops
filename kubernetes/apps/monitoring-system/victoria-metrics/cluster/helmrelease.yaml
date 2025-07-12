@@ -73,12 +73,12 @@ spec:
               matchers:
                 - name: alertname
                   value: Watchdog|InfoInhibitor
-                  matchType: =
+                  matchType: =~
             - receiver: "default"
               matchers:
                 - name: severity
                   value: warning|critical
-                  matchType: =
+                  matchType: =~
         inhibitRules:
           - equal: ["alertname", "namespace"]
             sourceMatch:
