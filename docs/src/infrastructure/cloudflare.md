@@ -16,5 +16,10 @@
 
 > routing internal domains to Cloudflare network
 
-- create a cloudflare tunnel, leave configs empty, record your tunnel id and token;
 - http/s based proxy has a negative impact on quic;
+- create a local-managed tunnel, record credential json;
+
+```shell
+cloudflared tunnel login
+cloudflared tunnel create --credentials-file cloudflare-tunnel.json kubernetes
+```
