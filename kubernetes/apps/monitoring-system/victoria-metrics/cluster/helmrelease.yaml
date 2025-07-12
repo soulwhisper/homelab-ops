@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &name victoria-metrics
+  name: &name victoria-metrics-cluster
 spec:
   interval: 30m
   chartRef:
@@ -74,6 +74,8 @@ spec:
                 - name: alertname
                   value: Watchdog
                   matchType: =
+            - receiver: "null"
+              matchers:
                 - name: alertname
                   value: InfoInhibitor
                   matchType: =

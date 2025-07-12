@@ -89,6 +89,10 @@ spec:
         existingClaim: *name
         globalMounts:
           - path: /config
+      tmpfs:
+        type: emptyDir
+        globalMounts:
+          - path: /tmp
 
     route:
       app:
