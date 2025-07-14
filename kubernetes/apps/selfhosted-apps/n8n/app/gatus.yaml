@@ -22,7 +22,7 @@ data:
           - "[DNS_RCODE] == NOERROR"
       - name: n8n-webhook
         group: external
-        url: "n8n-webhook.noirprime.com"
+        url: "https://n8n-webhook.noirprime.com"
         interval: 1m
         client:
           dns-resolver: tcp://1.1.1.1:53
