@@ -73,6 +73,13 @@ spec:
             primary: true
           bittorrent:
             port: *torrentPort
+    route:
+      app:
+        hostnames: ["bt.noirprime.com"]
+        parentRefs:
+          - name: internal
+            namespace: kube-system
+            sectionName: https
 
     persistence:
       app:
@@ -90,11 +97,3 @@ spec:
         globalMounts:
           - path: /data/nas-media/Downloads/qbittorrent
             subPath: Downloads/qbittorrent
-
-    route:
-      app:
-        hostnames: ["bt.noirprime.com"]
-        parentRefs:
-          - name: internal
-            namespace: kube-system
-            sectionName: https
