@@ -25,9 +25,16 @@ spec:
 
   values:
     controllers:
-      netbox:
+      xiaoya:
         annotations:
           reloader.stakater.com/auto: "true"
+        pod:
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 2000
+            runAsGroup: 2000
+            fsGroup: 2000
+            fsGroupChangePolicy: OnRootMismatch
         containers:
           app:
             image:
@@ -48,7 +55,7 @@ spec:
               requests:
                 cpu: 100m
               limits:
-                memory: 4Gi
+                memory: 512Mi
             securityContext: &securityContext
               allowPrivilegeEscalation: false
               capabilities: { drop: ["ALL"] }
@@ -72,7 +79,11 @@ spec:
             env:
               TZ: "${TIMEZONE}"
               ALIST_ADDR: http://localhost:5678
-            resources: *resources
+            resources:
+              requests:
+                cpu: 100m
+              limits:
+                memory: 4Gi
             securityContext: *securityContext
 
     service:
