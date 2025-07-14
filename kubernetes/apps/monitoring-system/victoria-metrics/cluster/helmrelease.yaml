@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &name victoria-metrics
+  name: &name victoria-metrics-cluster
 spec:
   interval: 30m
   chartRef:
@@ -39,7 +39,7 @@ spec:
             create: false
 
     # : vmsingle as prometheus
-    # : http://vmsingle-victoria-metrics.monitoring-system.svc.cluster.local:8429
+    # : http://vmsingle-victoria-metrics-cluster.monitoring-system.svc.cluster.local:8429
     vmsingle:
       spec:
         retentionPeriod: "14d"
@@ -49,13 +49,13 @@ spec:
               storage: 50Gi
 
     # : vmalert
-    # : http://vmalert-victoria-metrics.monitoring-system.svc.cluster.local:8080
+    # : http://vmalert-victoria-metrics-cluster.monitoring-system.svc.cluster.local:8080
 
     # : vmagent
-    # : http://vmagent-victoria-metrics.monitoring-system.svc.cluster.local:8429
+    # : http://vmagent-victoria-metrics-cluster.monitoring-system.svc.cluster.local:8429
 
     # : alertmanager
-    # : http://vmalertmanager-victoria-metrics.monitoring-system.svc.cluster.local:9093
+    # : http://vmalertmanager-victoria-metrics-cluster.monitoring-system.svc.cluster.local:9093
     alertmanager:
       spec:
         externalURL: https://vmalert.noirprime.com
@@ -71,27 +71,16 @@ spec:
           routes:
             - receiver: "null"
               matchers:
-                - name: alertname
-                  value: Watchdog
-                  matchType: =
-                - name: alertname
-                  value: InfoInhibitor
-                  matchType: =
-            - receiver: default
+                - alertname =~ "InfoInhibitor|Watchdog"
+            - receiver: "default"
               matchers:
-                - name: severity
-                  value: critical
-                  matchType: =
+                - severity =~ "warning|critical"
         inhibitRules:
           - equal: ["alertname", "namespace"]
             sourceMatch:
-              - name: severity
-                value: critical
-                matchType: =
+              - severity = "critical"
             targetMatch:
-              - name: severity
-                value: warning
-                matchType: =
+              - severity = "warning"
         receivers:
           - name: "null"
           - name: "default"

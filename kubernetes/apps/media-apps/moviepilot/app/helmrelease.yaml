@@ -39,7 +39,7 @@ spec:
           app:
             image:
               repository: jxxghp/moviepilot-v2
-              tag: 2.6.4
+              tag: 2.6.5
             env:
               TZ: "${TIMEZONE}"
               NGINX_PORT: &port 3000
@@ -48,15 +48,11 @@ spec:
               CACHE_BACKEND_URL: redis://moviepilot-dragonfly.media-apps.svc.cluster.local:6379/0
               CACHE_REDIS_MAXMEMORY: "1024mb"
               PROXY_HOST: "${HTTPS_PROXY}"
-              MOVIEPILOT_AUTO_UPDATE: "false"
-              ENABLE_SSL: "false"
-              SUPERUSER: "admin"
-              BIG_MEMORY_MODE: "true"
-              AUTO_DOWNLOAD_USER: "all"
-              SEARCH_MULTIPLE_NAME: "true"
-              SUBSCRIBE_STATISTIC_SHARE: "false"
-              PLUGIN_STATISTIC_SHARE: "false"
+              PGID: "2000"
+              PUID: "2000"
             envFrom:
+              - configMapRef:
+                  name: *name
               - secretRef:
                   name: *name
             resources:
@@ -93,6 +89,8 @@ spec:
       tmpfs:
         type: emptyDir
         globalMounts:
+          - path: /tmp
+            subPath: tmp
           - path: /moviepilot/.cache/ms-playwright
             subPath: cache
       media:

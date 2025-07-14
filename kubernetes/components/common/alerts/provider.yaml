@@ -6,5 +6,5 @@ metadata:
   name: alertmanager
 spec:
   type: alertmanager
-  # address: http://vmalertmanager-victoria-metrics.monitoring-system.svc.cluster.local:9093/api/v2/alerts/
+  # address: http://vmalertmanager-victoria-metrics-cluster.monitoring-system.svc.cluster.local:9093/api/v2/alerts/
   address: http://alertmanager-operated.monitoring-system.svc.cluster.local:9093/api/v2/alerts/

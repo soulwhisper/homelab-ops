@@ -284,6 +284,8 @@ patches:
   - |-
     machine:
       sysctls:
+        fs.inotify.max_user_watches: 524288       # moviepilot
+        fs.inotify.max_user_instances: 524288     # moviepilot
         net.core.rmem_max: 134217728              # 10G NIC, tunning
         net.core.wmem_max: 134217728              # 10G NIC, tunning
         net.ipv4.tcp_rmem: 4096 87380 67108864    # 10G NIC, tunning

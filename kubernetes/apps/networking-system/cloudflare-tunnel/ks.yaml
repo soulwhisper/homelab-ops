@@ -23,7 +23,7 @@ spec:
     namespace: gitops-system
   wait: false
   dependsOn:
-    - name: externaldns-cloudflare
+    - name: externaldns-cloudflare # needed for secret substitution
       namespace: networking-system
     - name: onepassword-store
       namespace: security-system

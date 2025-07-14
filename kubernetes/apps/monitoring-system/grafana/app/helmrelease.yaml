@@ -148,7 +148,7 @@ spec:
           - name: Prometheus
             type: prometheus
             access: proxy
-            url: http://vmsingle-victoria-metrics.monitoring-system.svc.cluster.local:8429
+            url: http://vmsingle-victoria-metrics-cluster.monitoring-system.svc.cluster.local:8429
             # url: http://prometheus-operated.monitoring-system.svc.cluster.local:9090
             isDefault: true
             jsonData:
@@ -156,7 +156,7 @@ spec:
           - name: Alertmanager
             type: alertmanager
             access: proxy
-            url: http://vmalertmanager-victoria-metrics.monitoring-system.svc.cluster.local:9093
+            url: http://vmalertmanager-victoria-metrics-cluster.monitoring-system.svc.cluster.local:9093
             # url: http://alertmanager-operated.monitoring-system.svc.cluster.local:9093
             jsonData:
               implementation: prometheus
@@ -164,11 +164,6 @@ spec:
           #   type: loki
           #   access: proxy
           #   url: http://loki-headless.monitoring-system.svc.cluster.local:3100
-          # - name: VictoriaMetrics
-          #   type: victoriametrics-metrics-datasource
-          #   access: proxy
-          #   url: http://vmsingle-victoria-metrics.monitoring-system.svc.cluster.local:8429
-          #   isDefault: true
           - name: VictoriaLogs
             type: victoriametrics-logs-datasource
             access: proxy

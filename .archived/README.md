@@ -49,7 +49,7 @@
 - apps:echo-server
 - apps:fluent-bit
 
-> kubernetes:monitoring:old-stack
+> kubernetes:monitoring:stack
 
 - apps:kube-prometheus-stack
 - apps:loki
@@ -68,7 +68,14 @@
 > kubernetes:selfhosted
 
 - apps:atuin
+- apps:homepage
 - apps:voicechat
+
+> kubernetes:selfhosted:automation
+
+- apps:home-assistant
+- apps:matter-server
+- apps:zigbee2mqtt
 
 > kubernetes:storage
 
@@ -85,6 +92,11 @@
 
 - prefer cnpg than cpgo;
 - emqx is deprecated, like home-assistant;
+
+> media
+
+- prefer emby subscriptions to starrs(usenet) and moviepilot(pt)
+- downloaders pair with starrs;
 
 > monitoring
 

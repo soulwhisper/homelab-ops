@@ -39,8 +39,4 @@ spec:
       servicemonitor:
         enabled: true
     replicaCount: 1
-    # gateway-api support
-    config:
-      apiVersion: "controller.config.cert-manager.io/v1alpha1"
-      kind: "ControllerConfiguration"
-      enableGatewayAPI: true
+    # gateway-api support removed for simplicity

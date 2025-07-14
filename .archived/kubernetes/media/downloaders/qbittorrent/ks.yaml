@@ -1,0 +1,59 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.noirprime.com/kustomize.toolkit.fluxcd.io/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: &appname qbittorrent
+  namespace: &namespace media-apps
+spec:
+  targetNamespace: *namespace
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *appname
+  interval: 30m
+  timeout: 5m
+  retryInterval: 1m
+  path: "./kubernetes/apps/media-apps/qbittorrent/app"
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: gitops-system
+    namespace: gitops-system
+  wait: false
+  dependsOn:
+    - name: keda
+      namespace: kube-system
+    - name: rook-ceph-cluster
+      namespace: storage-system
+    - name: volsync
+      namespace: storage-system
+  components:
+    - ../../../../components/gatus/internal
+    - ../../../../components/keda/nas-nfs-scaler
+    - ../../../../components/volsync
+  postBuild:
+    substitute:
+      APP: *appname
+      GATUS_SUBDOMAIN: bt
+---
+yaml-language-server: $schema=https://kubernetes-schemas.noirprime.com/kustomize.toolkit.fluxcd.io/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: &appname qbtools
+  namespace: &namespace media-apps
+spec:
+  targetNamespace: *namespace
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *appname
+  interval: 30m
+  timeout: 5m
+  retryInterval: 1m
+  path: "./kubernetes/apps/media-apps/qbittorrent/tools"
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: gitops-system
+    namespace: gitops-system
+  wait: false

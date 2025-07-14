@@ -29,6 +29,6 @@ spec:
         namespaces:
           from: All
       tls:
-        mode: Terminate
         certificateRefs:
-          - name: noirprime-com-tls
+          - kind: Secret
+            name: noirprime-com-tls

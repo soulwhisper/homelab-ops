@@ -7,11 +7,8 @@ components:
   - ../../components/common
 resources:
   # : scaling
-  # :: arrs apps
-  - ./starrs
   - ./moviepilot/ks.yaml
-  # :: downloader
-  - ./cross-seed/ks.yaml
+  # :: downloaders
   - ./qbittorrent/ks.yaml
   # :: other media apps
   - ./emby/ks.yaml

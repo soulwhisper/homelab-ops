@@ -17,10 +17,9 @@ spec:
       APP: *appname
 ```
 
-## Moviepilot
+## Media stack choice
 
-- bt auto lib
-  `curl "http://moviepilot:3000/api/v1/transfer/now?token=moviepilot"`
-- admin password
-  `kubectl logs -n media-apps moviepilot | grep "超级管理员初始密码"`
-- notify via webPush, [ref](https://wiki.movie-pilot.org/zh/notification)
+- [docker-xiaoya](https://github.com/monlor/docker-xiaoya), need aliyun/115/pikpak accounts; not used;
+- [moviepilot](https://movie-pilot.org/), need pt accounts; not used but active;
+- starrs, need usenet subscriptions; not used;
+- usd/yr => emby-4k-subs(100) > usenet(130 1st year, 50 later) >= pt-4k-subs(50) > xiaoya(nearly free);

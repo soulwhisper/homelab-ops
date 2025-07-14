@@ -8,3 +8,4 @@ resources:
   - ./internal.yaml
   # utils
   - ./redirect.yaml
+  - ./certificate.yaml

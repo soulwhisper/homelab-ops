@@ -1,0 +1,19 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: moviepilot
+data:
+  # basic
+  MOVIEPILOT_AUTO_UPDATE: "false"
+  # https
+  ENABLE_SSL: "false"
+  # authentication
+  SUPERUSER: "admin"
+  AUTH_SITE: "iyuu"
+  # optimization
+  BIG_MEMORY_MODE: "true"
+  AUTO_DOWNLOAD_USER: "all"
+  SEARCH_MULTIPLE_NAME: "true"
+  SUBSCRIBE_STATISTIC_SHARE: "false"
+  PLUGIN_STATISTIC_SHARE: "false"
