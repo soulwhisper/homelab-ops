@@ -45,7 +45,7 @@ spec:
           app:
             image: &image
               repository: ghcr.io/netbox-community/netbox
-              tag: v4.3.3
+              tag: v4.3.4
             envFrom: &envFrom
               - secretRef:
                   name: *name
