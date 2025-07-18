@@ -8,7 +8,7 @@ endpoint: "https://k8s.homelab.internal:6443"
 # disabled features:
 # cni,coredns,forwardKubeDNSToHost,kube-proxy;
 # k8s features 1.33:
-# userNamespace:default, MutatingAdmissionPolicy:disabled;
+# userNamespace:default;
 
 # renovate: depName=ghcr.io/siderolabs/installer datasource=docker
 talosVersion: v1.10.5
@@ -111,15 +111,10 @@ controlPlane:
 
   # controlPlane only patches
   patches:
-    # :: ApiServer configuration, disable admission plugins, enable CSIVolumeHealth
+    # :: ApiServer configuration, disable admission plugins
     - |-
       - op: remove
         path: /cluster/apiServer/admissionControl
-    - |-
-      cluster:
-        apiServer:
-          extraArgs:
-            feature-gates: CSIVolumeHealth=true
 
     # : ETCD configuration, increase etcd quota to 8G, keep advertisedSubnets if using tailscale / kubespan
     - |-
@@ -210,20 +205,6 @@ patches:
         http_proxy: http://172.19.82.10:1080
         https_proxy: http://172.19.82.10:1080
         no_proxy: .noirprime.com,.homelab.internal,localhost,127.0.0.1,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16
-
-  # : Configure NFS mount options
-  - |
-    machine:
-      files:
-        - op: overwrite
-          path: /etc/nfsmount.conf
-          permissions: 0o644
-          content: |
-            [ NFSMount_Global_Options ]
-            nfsvers=4.2
-            hard=True
-            noatime=True
-            nconnect=16
 
   # : Kernel modules, Enable thunderbolt/USB4 networking support
   - |-

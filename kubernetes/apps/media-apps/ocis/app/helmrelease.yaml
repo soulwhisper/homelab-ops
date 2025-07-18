@@ -86,7 +86,7 @@ spec:
             port: *port
     route:
       app:
-        hostnames: ["pan.noirprime.com"]
+        hostnames: ["ocis.noirprime.com"]
         parentRefs:
           - name: internal
             namespace: kube-system
@@ -100,6 +100,12 @@ spec:
             subPath: data
           - path: /etc/ocis
             subPath: config
+      media:
+        existingClaim: nfs-media
+        advancedMounts:
+          ocis:
+            app:
+              - path: /media
       config:
         type: configMap
         name: *name
@@ -111,11 +117,3 @@ spec:
         type: emptyDir
         globalMounts:
           - path: /tmp
-      media:
-        type: nfs
-        server: nas.homelab.internal
-        path: /mnt/Arcanum/Media
-        advancedMounts:
-          ocis:
-            app:
-              - path: /media

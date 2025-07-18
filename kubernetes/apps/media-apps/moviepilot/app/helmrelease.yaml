@@ -77,6 +77,10 @@ spec:
         existingClaim: *name
         globalMounts:
           - path: /config
+      media:
+        existingClaim: nfs-media
+        globalMounts:
+          - path: /media
       tmpfs:
         type: emptyDir
         globalMounts:
@@ -84,9 +88,3 @@ spec:
             subPath: tmp
           - path: /moviepilot/.cache/ms-playwright
             subPath: cache
-      media:
-        type: nfs
-        server: nas.homelab.internal
-        path: /mnt/Arcanum/Media
-        globalMounts:
-          - path: /media

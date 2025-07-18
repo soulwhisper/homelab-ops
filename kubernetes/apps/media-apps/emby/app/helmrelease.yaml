@@ -89,6 +89,10 @@ spec:
         existingClaim: *name
         globalMounts:
           - path: /config
+      media:
+        existingClaim: nfs-media
+        globalMounts:
+          - path: /media
       tmpfs:
         type: emptyDir
         globalMounts:
@@ -96,9 +100,3 @@ spec:
             subPath: tmp
           - path: /transcode
             subPath: transcode
-      media:
-        type: nfs
-        server: nas.homelab.internal
-        path: /mnt/Arcanum/Media
-        globalMounts:
-          - path: /media

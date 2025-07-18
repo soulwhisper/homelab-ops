@@ -6,11 +6,11 @@ namespace: media-apps
 components:
   - ../../components/common
 resources:
-  # : scaling
+  # storage
+  - ./nfs-media/ks.yaml
+  # apps
   - ./moviepilot/ks.yaml
-  # :: downloaders
   - ./qbittorrent/ks.yaml
-  # :: other media apps
   - ./emby/ks.yaml
   - ./immich/ks.yaml
-  - ./manyfold/ks.yaml
+  - ./ocis/ks.yaml

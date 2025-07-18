@@ -88,25 +88,29 @@
 
 - minio is deprecated, use ceph-buckets instead;
 
+> base
+
+- keda and nfs-scaler is archived with nfs-mounts;
+
 > database
 
-- prefer cnpg than cpgo;
+- prefer cnpg to cpgo;
 - emqx is deprecated, like home-assistant;
 
 > media
 
-- prefer emby subscriptions to starrs(usenet) and moviepilot(pt)
 - downloaders pair with starrs;
+- manyfold is primitive for `Bambu Lab` printers;
 
 > monitoring
 
 - apprise API too old to use;
-- external healthchecks like `cronitor/uptime` is not needed;
+- external healthchecks like `cronitor/uptimekuma` is not needed;
 
 > networking
 
 - cilium gateway-api support better than envoy-gateway;
-- envoy-gateway-api too big for bootstrap;
+- envoy-gateway-api too big for bootstrap helmfile;
 
 > security
 

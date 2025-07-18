@@ -21,8 +21,8 @@ spec:
     namespace: gitops-system
   wait: false
   dependsOn:
-    - name: keda
-      namespace: kube-system
+    - name: nfs-media
+      namespace: media-apps
     - name: onepassword-store
       namespace: security-system
     - name: rook-ceph-cluster
@@ -32,7 +32,6 @@ spec:
   components:
     - ../../../../components/dragonfly
     - ../../../../components/gatus/internal
-    - ../../../../components/keda/nas-nfs-scaler
     - ../../../../components/volsync
   postBuild:
     substitute:

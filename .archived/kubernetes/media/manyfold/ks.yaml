@@ -3,7 +3,7 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &appname ocis
+  name: &appname manyfold
   namespace: &namespace media-apps
 spec:
   targetNamespace: *namespace
@@ -13,7 +13,7 @@ spec:
   interval: 30m
   timeout: 5m
   retryInterval: 1m
-  path: "./kubernetes/apps/media-apps/ocis/app"
+  path: "./kubernetes/apps/media-apps/manyfold/app"
   prune: true
   sourceRef:
     kind: GitRepository
@@ -21,8 +21,10 @@ spec:
     namespace: gitops-system
   wait: false
   dependsOn:
-    - name: keda
-      namespace: kube-system
+    - name: cnpg-cluster
+      namespace: database-system
+    - name: dragonfly-operator
+      namespace: database-system
     - name: onepassword-store
       namespace: security-system
     - name: rook-ceph-cluster
@@ -30,11 +32,11 @@ spec:
     - name: volsync
       namespace: storage-system
   components:
+    - ../../../../components/cnpg
+    - ../../../../components/dragonfly
     - ../../../../components/gatus/internal
-    - ../../../../components/keda/nas-nfs-scaler
     - ../../../../components/volsync
   postBuild:
     substitute:
       APP: *appname
-      GATUS_SUBDOMAIN: pan
-      VOLSYNC_CAPACITY: 10Gi
+      GATUS_SUBDOMAIN: model

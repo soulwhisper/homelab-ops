@@ -86,14 +86,12 @@ spec:
         existingClaim: *name
         globalMounts:
           - path: /config
+      media:
+        existingClaim: nfs-media
+        globalMounts:
+          - path: /data/nas-media/Downloads/qbittorrent
+            subPath: Downloads/qbittorrent
       tmpfs:
         type: emptyDir
         globalMounts:
           - path: /tmp
-      media:
-        type: nfs
-        server: nas.homelab.internal
-        path: /mnt/Arcanum/Media
-        globalMounts:
-          - path: /data/nas-media/Downloads/qbittorrent
-            subPath: Downloads/qbittorrent
