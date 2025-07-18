@@ -61,9 +61,7 @@ spec:
               limits:
                 memory: 4Gi
             securityContext:
-              allowPrivilegeEscalation: false
-              capabilities: { drop: ["ALL"] }
-              readOnlyRootFilesystem: false # required for 'chown'
+              privileged: true
 
     service:
       app:

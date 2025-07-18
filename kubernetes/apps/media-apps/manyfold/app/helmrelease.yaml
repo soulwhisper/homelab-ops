@@ -36,6 +36,18 @@ spec:
             fsGroup: 2000
             fsGroupChangePolicy: OnRootMismatch
         initContainers:
+          chown-tmpdirs:
+            image:
+              repository: docker.io/library/alpine
+              tag: "3.22"
+            command:
+              - /bin/sh
+              - -c
+            args:
+              - |
+                chmod o-rwx /tmp
+            securityContext:
+              runAsUser: 0
           init-db:
             image:
               repository: ghcr.io/home-operations/postgres-init
@@ -110,13 +122,14 @@ spec:
         type: emptyDir
         advancedMounts:
           manyfold:
-            app:
+            app: &tmpdirs
               - path: /tmp
                 subPath: host-tmp
               - path: /app/tmp
                 subPath: app-tmp
               - path: /app/log
                 subPath: app-log
+            chown-tmpdirs: *tmpdirs
       media:
         type: nfs
         server: nas.homelab.internal
