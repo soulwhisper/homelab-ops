@@ -122,10 +122,15 @@ controlPlane:
 
   # controlPlane only patches
   patches:
-    # :: ApiServer configuration, disable admission plugins
+    # :: ApiServer configuration, disable admission plugins, enable CSIVolumeHealth
     - |-
       - op: remove
         path: /cluster/apiServer/admissionControl
+    - |-
+      cluster:
+        apiServer:
+          extraArgs:
+            feature-gates: CSIVolumeHealth=true
 
     # :: ApiServer configuration, MutatingAdmissionPolicy enabled
     # - |-

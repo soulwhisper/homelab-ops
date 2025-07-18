@@ -111,10 +111,15 @@ controlPlane:
 
   # controlPlane only patches
   patches:
-    # :: ApiServer configuration, disable admission plugins
+    # :: ApiServer configuration, disable admission plugins, enable CSIVolumeHealth
     - |-
       - op: remove
         path: /cluster/apiServer/admissionControl
+    - |-
+      cluster:
+        apiServer:
+          extraArgs:
+            feature-gates: CSIVolumeHealth=true
 
     # : ETCD configuration, increase etcd quota to 8G, keep advertisedSubnets if using tailscale / kubespan
     - |-

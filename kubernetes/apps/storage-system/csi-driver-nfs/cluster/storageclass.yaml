@@ -1,0 +1,20 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.noirprime.com/storage.k8s.io/storageclass_v1.json
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: nfs-media
+provisioner: nfs.csi.k8s.io
+parameters:
+  server: nas.homelab.internal
+  share: /mnt/Arcanum/Media
+  csi.storage.k8s.io/provisioner-secret-name: "nfs-mount-options"
+  csi.storage.k8s.io/provisioner-secret-namespace: "storage-system"
+reclaimPolicy: Delete
+volumeBindingMode: Immediate
+allowVolumeExpansion: true
+mountOptions:
+  - nfsvers=4.2
+  - hard
+  - noatime
+  - nconnect=16
