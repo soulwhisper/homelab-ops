@@ -120,18 +120,10 @@ controlPlane:
 
   # : controlPlane only patches
   patches:
-    # :: ApiServer configuration
+    # :: ApiServer configuration, disable admission plugins
     - |-
-      cluster:
-        apiServer:
-          admissionControl:
-            - name: PodSecurity
-              configuration:
-                exemptions:
-                  namespaces:
-                    - gitops-system
-                    - monitoring-system
-                    - storage-system
+      - op: remove
+        path: /cluster/apiServer/admissionControl
 
     # :: ETCD configuration, increase etcd quota to 8G, keep advertisedSubnets if using tailscale / kubespan
     - |-

@@ -122,22 +122,26 @@ controlPlane:
 
   # controlPlane only patches
   patches:
-    # : ApiServer configuration
-    # :: MutatingAdmissionPolicy disabled;
+    # :: ApiServer configuration, disable admission plugins
     - |-
-      cluster:
-        apiServer:
-          admissionControl:
-            - name: PodSecurity
-              configuration:
-                exemptions:
-                  namespaces:
-                    - gitops-system
-                    - monitoring-system
-                    - storage-system
-          # extraArgs:
-          #   runtime-config: admissionregistration.k8s.io/v1alpha1=true
-          #   feature-gates: MutatingAdmissionPolicy=true
+      - op: remove
+        path: /cluster/apiServer/admissionControl
+
+    # :: ApiServer configuration, MutatingAdmissionPolicy enabled
+    # - |-
+    #   cluster:
+    #     apiServer:
+    #       admissionControl:
+    #         - name: PodSecurity
+    #           configuration:
+    #             exemptions:
+    #               namespaces:
+    #                 - gitops-system
+    #                 - monitoring-system
+    #                 - storage-system
+    #       extraArgs:
+    #         runtime-config: admissionregistration.k8s.io/v1alpha1=true
+    #         feature-gates: MutatingAdmissionPolicy=true
 
     # : ETCD configuration, increase etcd quota to 8G, keep advertisedSubnets if using tailscale / kubespan
     - |-
