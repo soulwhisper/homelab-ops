@@ -30,4 +30,5 @@ spec:
         enabled: false
     feature:
       # use securityContext.fsGroupChangePolicy: "OnRootMismatch" instead
+      # ref:https://github.com/kubernetes-csi/csi-driver-nfs/issues/870
       enableFSGroupPolicy: false
