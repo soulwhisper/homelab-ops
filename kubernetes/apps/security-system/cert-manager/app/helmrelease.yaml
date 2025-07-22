@@ -38,5 +38,5 @@ spec:
       enabled: true
       servicemonitor:
         enabled: true
-    replicaCount: 1
+    replicaCount: 2
     # gateway-api support removed for simplicity
