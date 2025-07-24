@@ -62,6 +62,9 @@ spec:
               tag: v5.20.0@sha256:e655d13d0cb89c64a2e53a853bbca9556a7238e788bc4a08c19aa5fb7938d0da
             env:
               TZ: "${TIMEZONE}"
+              HTTP_PROXY: "${HTTP_PROXY}"
+              HTTPS_PROXY: "${HTTPS_PROXY}"
+              NO_PROXY: "${NO_PROXY}"
               GATUS_CONFIG_PATH: /config
               GATUS_DELAY_START_SECONDS: 5
               WEB_PORT: &port 80
