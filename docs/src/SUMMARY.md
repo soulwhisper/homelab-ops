@@ -7,9 +7,9 @@
 # Infrastructure
 
 - [Kubernetes](./infrastructure/kubernetes.md)
-  - [Backup](./infrastructure/backup.md)
   - [Database](./deployment/database.md)
   - [External Secrets](./deployment/externalSecrets.md)
+  - [Storage](./infrastructure/storage.md)
   - [Templates](./deployment/templates.md)
 - [Networking](./infrastructure/networking.md)
   - [Cloudflare](./infrastructure/cloudflare.md)
