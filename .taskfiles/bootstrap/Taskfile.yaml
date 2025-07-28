@@ -37,3 +37,24 @@ tasks:
         {{if ne .FIX "true"}} until kubectl wait nodes --for=condition=Ready=False --all --timeout=10m; do sleep 5; done {{end}}
       - op run --env-file {{.K8S_DIR}}/bootstrap/bootstrap.env --no-masking -- minijinja-cli {{.MINIJINJA_ARGS}} "{{.K8S_DIR}}/bootstrap/resources.yaml.j2" | kubectl apply --server-side --filename -
       - helmfile --file {{.K8S_DIR}}/bootstrap/helmfile.yaml apply {{.HELMFILE_ARGS}}
+
+  garage:
+    desc: Bootstrap Garage buckets/keys
+    prompt: Bootstrap local garage instance?
+    vars:
+      BUCKETS:
+        - postgres
+        - volsync
+    preconditions:
+      - which garage
+      - test -f "/etc/garage.toml"
+      - garage status
+    cmds:
+      - for:
+          var: BUCKETS
+        cmd: |
+          access_key=$(op item get minio --fields "{{.ITEM}}_access_key" --reveal)
+          secret_key=$(op item get minio --fields "{{.ITEM}}_secret_key" --reveal)
+          garage bucket create "{{.ITEM}}"
+          garage key import "$access_key" "$secret_key"
+          garage bucket allow --read --write --owner "{{.ITEM}}" --key "$access_key"
