@@ -1,8 +1,10 @@
 ## Storage
 
-- previously, using out-of-cluster s3 for snapshots;
-- following `3-2-1` strategy, using in-cluster `ceph-bucket` for snapshots, `rsync-on-nas` and `rsync-to-dropbox` for backups;
-- media files on `TrueNAS Scale`;
+- following `3-2-1` strategy;
+- cluster `ceph-block` for app;
+- cluster `ceph-bucket` for snapshots;
+- nas/nfs for media;
+- manually rsync for s3 backups;
 
 ### ObjectStore
 

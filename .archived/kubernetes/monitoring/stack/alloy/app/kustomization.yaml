@@ -6,3 +6,11 @@ resources:
   # app
   - ./helmrelease.yaml
   - ./ocirepository.yaml
+configMapGenerator:
+  - name: alloy
+    files:
+      - config.alloy=./config/config.alloy
+generatorOptions:
+  annotations:
+    kustomize.toolkit.fluxcd.io/substitute: disabled
+  disableNameSuffixHash: true
