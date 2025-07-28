@@ -44,3 +44,13 @@ resource "minio_iam_user_policy_attachment" "user_rw" {
   user_name   = minio_iam_user.user.id
   policy_name = minio_iam_policy.rw_policy.id
 }
+
+resource "minio_ilm_policy" "combined" {
+  bucket = minio_s3_bucket.bucket.bucket
+
+  rule {
+    id = "auto-delete-30d"
+    status = "Enabled"
+    expiration = "30d"
+  }
+}
