@@ -49,13 +49,13 @@ tasks:
     preconditions:
       - which garage
       - test -f "/etc/garage.toml"
-      - garage status
+      - garage layout show
     cmds:
       - for:
           var: BUCKETS
         cmd: |
-          access_key=$(op item get minio --fields "{{.ITEM}}_access_key" --reveal)
-          secret_key=$(op item get minio --fields "{{.ITEM}}_secret_key" --reveal)
+          access_key=$(op item get garage --fields "{{.ITEM}}_access_key" --reveal)
+          secret_key=$(op item get garage --fields "{{.ITEM}}_secret_key" --reveal)
           garage bucket create "{{.ITEM}}"
-          garage key import "$access_key" "$secret_key" -n "{{.ITEM}}"
-          garage bucket allow --read --write --owner "{{.ITEM}}" --key "$access_key"
+          garage key import "$access_key" "$secret_key" -n "{{.ITEM}}" --yes
+          garage bucket allow --read --write "{{.ITEM}}" --key "{{.ITEM}}"

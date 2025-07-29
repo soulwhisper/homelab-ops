@@ -32,8 +32,8 @@ tasks:
       - kubectl delete node {{.NODE}}
 
   garage:
-    desc: Reset garage buckets and keys for new install
-    prompt: Reset garage buckets and keys?
+    desc: Reset garage buckets (not keys) for new install
+    prompt: Reset garage buckets?
     silent: true
     vars:
       BUCKETS:
@@ -42,10 +42,9 @@ tasks:
     preconditions:
       - which garage
       - test -f "/etc/garage.toml"
-      - garage status
+      - garage bucket list
     cmds:
       - for:
           var: BUCKETS
         cmd: |
           garage bucket delete "{{.ITEM}}"
-          garage key delete "{{.ITEM}}" --yes

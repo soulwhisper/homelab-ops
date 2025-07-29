@@ -47,8 +47,10 @@ docker run --name versitygw --user 2000:2000 \
   -d ghcr.io/versity/versitygw:latest posix /tmp/vgw
 
 # boostrap
-mc alias set vgw http://127.0.0.1:7070 "$ROOT_ACCESS_KEY" "$ROOT_SECRET_KEY"
-mc mb vgw/postgres
+export AWS_ACCESS_KEY_ID=admin
+export AWS_SECRET_ACCESS_KEY=adminadmin
+export AWS_ENDPOINT_URL=http://127.0.0.1:7070
+aws s3api create-bucket --bucket postgres
 ```
 
 > Garage
@@ -71,6 +73,6 @@ docker run --name garage \
 
 # bootstrap
 garage bucket create postgres
-garage key import "$access_key" "$secret_key"
-garage bucket allow --read --write --owner postgres --key "$access_key"
+garage key import "$access_key" "$secret_key" -n postgres --yes
+garage bucket allow --read --write postgres --key postgres
 ```
