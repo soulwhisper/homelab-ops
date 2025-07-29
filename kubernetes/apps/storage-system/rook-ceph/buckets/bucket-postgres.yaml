@@ -28,6 +28,7 @@ spec:
           }
         ]
       }
+    # postgres objects have retentionPolicy 30d
     bucketLifecycle: |
       {
         "Rules": [
@@ -37,14 +38,6 @@ spec:
             "Prefix": "",
             "AbortIncompleteMultipartUpload": {
               "DaysAfterInitiation": 1
-            }
-          },
-          {
-            "ID": "ExpireAfter365Days",
-            "Status": "Enabled",
-            "Prefix": "",
-            "Expiration": {
-              "Days": 365
             }
           }
         ]

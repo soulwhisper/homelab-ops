@@ -4,8 +4,9 @@ version: "3"
 
 tasks:
   talos:
-    desc: reset talos cluster for new install
+    desc: Reset talos cluster for new install
     prompt: Reset talos cluster?
+    silent: true
     preconditions:
       - which talosctl
       - test -f "${TALOSCONFIG}"
@@ -14,8 +15,9 @@ tasks:
       - talosctl reset --system-labels-to-wipe STATE --system-labels-to-wipe EPHEMERAL --graceful=false --wait=false --reboot
 
   "node-*":
-    desc: scale down talos node [node hostname required]
+    desc: Reset talos node [node hostname required]
     prompt: Reset talos node?
+    silent: true
     vars:
       NODE: "{{index .MATCH 0}}"
     preconditions:
@@ -28,3 +30,22 @@ tasks:
     cmds:
       - talosctl reset -n {{.NODE}}
       - kubectl delete node {{.NODE}}
+
+  garage:
+    desc: Reset garage buckets and keys for new install
+    prompt: Reset garage buckets and keys?
+    silent: true
+    vars:
+      BUCKETS:
+        - postgres
+        - volsync
+    preconditions:
+      - which garage
+      - test -f "/etc/garage.toml"
+      - garage status
+    cmds:
+      - for:
+          var: BUCKETS
+        cmd: |
+          garage bucket delete "{{.ITEM}}"
+          garage key delete "{{.ITEM}}" --yes

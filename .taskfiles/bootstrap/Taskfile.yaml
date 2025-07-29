@@ -41,6 +41,7 @@ tasks:
   garage:
     desc: Bootstrap Garage buckets/keys
     prompt: Bootstrap local garage instance?
+    silent: true
     vars:
       BUCKETS:
         - postgres
@@ -56,5 +57,5 @@ tasks:
           access_key=$(op item get minio --fields "{{.ITEM}}_access_key" --reveal)
           secret_key=$(op item get minio --fields "{{.ITEM}}_secret_key" --reveal)
           garage bucket create "{{.ITEM}}"
-          garage key import "$access_key" "$secret_key"
+          garage key import "$access_key" "$secret_key" -n "{{.ITEM}}"
           garage bucket allow --read --write --owner "{{.ITEM}}" --key "$access_key"

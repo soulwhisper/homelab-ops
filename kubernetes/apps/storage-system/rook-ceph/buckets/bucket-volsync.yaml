@@ -28,6 +28,7 @@ spec:
           }
         ]
       }
+    # volsync objects never expire
     bucketLifecycle: |
       {
         "Rules": [
@@ -37,14 +38,6 @@ spec:
             "Prefix": "",
             "AbortIncompleteMultipartUpload": {
               "DaysAfterInitiation": 1
-            }
-          },
-          {
-            "ID": "ExpireAfter30Days",
-            "Status": "Enabled",
-            "Prefix": "",
-            "Expiration": {
-              "Days": 30
             }
           }
         ]
