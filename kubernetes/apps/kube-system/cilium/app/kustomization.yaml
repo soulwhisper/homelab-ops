@@ -5,7 +5,7 @@ kind: Kustomization
 resources:
   # app
   - ./helmrelease.yaml
-  - ./helmrepository.yaml
+  - ./ocirepository.yaml
   # utils
   - ./httproute.yaml
 # this file is needed during bootstrap

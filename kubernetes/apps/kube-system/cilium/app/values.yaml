@@ -90,7 +90,6 @@ operator:
       enabled: true
   replicas: 3 # critical for HA
   rollOutPods: true
-  tolerations: [] # ref:https://github.com/cilium/cilium/issues/28549
 prometheus:
   enabled: true
   serviceMonitor:
