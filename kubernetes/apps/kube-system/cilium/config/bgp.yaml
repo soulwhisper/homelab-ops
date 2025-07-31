@@ -5,15 +5,13 @@ kind: CiliumBGPAdvertisement
 metadata:
   name: cilium-bgp-advertisement
   labels:
-    advertise: "bgp"
+    advertise: bgp
 spec:
   advertisements:
-    - advertisementType: "Service"
+    - advertisementType: Service
       service:
         addresses:
-          - ClusterIP
           - LoadBalancerIP
-          - ExternalIP
       selector:
         matchExpressions:
           - { key: somekey, operator: NotIn, values: ["never-used-value"] }
@@ -35,12 +33,12 @@ spec:
       safi: unicast
       advertisements:
         matchLabels:
-          advertise: "bgp"
+          advertise: bgp
     - afi: ipv6
       safi: unicast
       advertisements:
         matchLabels:
-          advertise: "bgp"
+          advertise: bgp
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.noirprime.com/cilium.io/ciliumbgpclusterconfig_v2.json
 apiVersion: cilium.io/v2
@@ -52,11 +50,11 @@ spec:
     matchLabels:
       kubernetes.io/os: linux
   bgpInstances:
-    - name: "instance-65510"
+    - name: instance-65510
       localASN: 65510
       peers:
-        - name: "peer-65510"
+        - name: peer-65510
           peerASN: 65510
           peerAddress: "${BGP_PEER}"
           peerConfigRef:
-            name: "cilium-bgp-peer-config"
+            name: cilium-bgp-peer-config
