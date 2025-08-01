@@ -39,7 +39,7 @@ spec:
           app:
             image:
               repository: emby/embyserver
-              tag: 4.9.1.8
+              tag: 4.9.1.12
             env:
               TZ: "${TIMEZONE}"
               GIDLIST: 2000,0
