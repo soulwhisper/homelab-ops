@@ -3,7 +3,7 @@
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: &name ${APP}-pg-backup
+  name: ${APP}-pg-backup
 spec:
   schedule: 5 */4 * * *
   concurrencyPolicy: Forbid
