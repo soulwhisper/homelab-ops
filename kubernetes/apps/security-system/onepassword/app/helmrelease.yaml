@@ -32,8 +32,8 @@ spec:
         containers:
           api:
             image:
-              repository: docker.io/1password/connect-api
-              tag: 1.7.3@sha256:0601c7614e102eada268dbda6ba4b5886ce77713be2c332ec6a2fd0f028484ba
+              repository: ghcr.io/1password/connect-api
+              tag: 1.7.4
             env:
               XDG_DATA_HOME: &configDir /config
               OP_HTTP_PORT: &port 8080
@@ -74,8 +74,8 @@ spec:
               readOnlyRootFilesystem: true
           sync:
             image:
-              repository: docker.io/1password/connect-sync
-              tag: 1.7.3@sha256:2f17621c7eb27bbcb1f86bbc5e5a5198bf54ac3b9c2ffac38064d03c932b07d5
+              repository: ghcr.io/1password/connect-sync
+              tag: 1.7.4
             env:
               XDG_DATA_HOME: *configDir
               OP_HTTP_PORT: 8081
