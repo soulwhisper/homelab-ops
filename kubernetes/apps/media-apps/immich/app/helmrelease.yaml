@@ -50,7 +50,7 @@ spec:
           app:
             image:
               repository: ghcr.io/immich-app/immich-server
-              tag: v1.135.3@sha256:df5bbf4e29eff4688063a005708f8b96f13073200b4a7378f7661568459b31e9
+              tag: v1.137.1@sha256:fc2516bcd3a9e76a68447049bd3a69b84b618670c7a3a1d409b7d20606b2761f
             env:
               DB_USERNAME:
                 valueFrom:
