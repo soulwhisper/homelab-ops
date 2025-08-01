@@ -45,7 +45,7 @@ spec:
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &name example-app
+  name: example-app
 spec:
   interval: 30m
   chartRef:
@@ -125,9 +125,9 @@ spec:
                     key: port
             envFrom: &envFrom
               - configMapRef:
-                  name: *name
+                  name: "{{ .Release.Name }}"
               - secretRef:
-                  name: *name
+                  name: "{{ .Release.Name }}"
             ports:
               - name: http
                 containerPort: &port 8080
@@ -143,7 +143,7 @@ spec:
 
     service:
       app:
-        controller: *name     # can be ignored if only one controller
+        controller: "{{ .Release.Name }}"     # can be ignored if only one controller
         ports:
           http:
             primary: true     # can be ignored if only one port
@@ -153,7 +153,7 @@ spec:
         primary: true         # can be ignored if only one service, only one primary
     serviceMonitor:
       app:
-        serviceName: *name    # can be ignored if only one service
+        serviceName: "{{ .Release.Name }}"    # can be ignored if only one service
         endpoints:
           - port: metrics
     route:
@@ -173,7 +173,7 @@ spec:
       example-app: {}
     persistence:
       app:
-        existingClaim: *name
+        existingClaim: "{{ .Release.Name }}"
         globalMounts:
           - path: /app/data
             subPath: data     # can be ignored if only one path

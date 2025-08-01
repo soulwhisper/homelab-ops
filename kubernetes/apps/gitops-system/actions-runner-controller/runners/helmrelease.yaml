@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &name homelab-ops-runner
+  name: homelab-ops-runner
 spec:
   interval: 30m
   chartRef:
@@ -66,8 +66,8 @@ spec:
               - mountPath: /var/run/secrets/talos.dev
                 name: talos
                 readOnly: true
-        serviceAccountName: *name
+        serviceAccountName: "{{ .Release.Name }}"
         volumes:
           - name: talos
             secret:
-              secretName: *name
+              secretName: "{{ .Release.Name }}"

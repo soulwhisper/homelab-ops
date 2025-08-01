@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &name externaldns-adguard
+  name: externaldns-adguard
 spec:
   interval: 30m
   chartRef:
@@ -23,7 +23,7 @@ spec:
     keepHistory: false
 
   values:
-    fullnameOverride: *name
+    fullnameOverride: "{{ .Release.Name }}"
     domainFilters: ["noirprime.com"]
     extraArgs:
       - --webhook-provider-url=http://localhost:8888
@@ -63,12 +63,12 @@ spec:
           - name: ADGUARD_USER
             valueFrom:
               secretKeyRef:
-                name: *name
+                name: "{{ .Release.Name }}"
                 key: adguard-user
           - name: ADGUARD_PASSWORD
             valueFrom:
               secretKeyRef:
-                name: *name
+                name: "{{ .Release.Name }}"
                 key: adguard-password
     resources:
       requests:

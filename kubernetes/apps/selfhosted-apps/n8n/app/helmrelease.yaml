@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &name n8n
+  name: n8n
 spec:
   interval: 30m
   chartRef:
@@ -91,12 +91,12 @@ spec:
               - path:
                   value: /webhook
             backendRefs:
-              - name: *name
+              - name: "{{ .Release.Name }}"
                 port: *port
 
     persistence:
       app:
-        existingClaim: *name
+        existingClaim: "{{ .Release.Name }}"
         globalMounts:
           - path: /home/node/.n8n
       tmpfs:

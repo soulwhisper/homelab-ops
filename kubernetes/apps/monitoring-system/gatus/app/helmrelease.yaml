@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &name gatus
+  name: gatus
 spec:
   interval: 30m
   chartRef:
@@ -122,18 +122,18 @@ spec:
         gatus:
           type: ClusterRoleBinding
           roleRef:
-            identifier: *name
+            identifier: "{{ .Release.Name }}"
           subjects:
-            - identifier: *name
+            - identifier: "{{ .Release.Name }}"
 
     persistence:
       app:
-        existingClaim: *name
+        existingClaim: "{{ .Release.Name }}"
         globalMounts:
           - path: /config
       config:
         type: configMap
-        name: *name
+        name: "{{ .Release.Name }}"
         globalMounts:
           - path: /config/config.yaml
             subPath: config.yaml

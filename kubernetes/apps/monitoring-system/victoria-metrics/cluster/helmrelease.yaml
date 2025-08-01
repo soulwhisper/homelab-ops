@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &name victoria-metrics-cluster
+  name: victoria-metrics-cluster
 spec:
   interval: 30m
   chartRef:
@@ -23,7 +23,7 @@ spec:
     keepHistory: false
 
   values:
-    fullnameOverride: *name
+    fullnameOverride: "{{ .Release.Name }}"
     victoria-metrics-operator:
       enabled: false
     defaultDashboards:

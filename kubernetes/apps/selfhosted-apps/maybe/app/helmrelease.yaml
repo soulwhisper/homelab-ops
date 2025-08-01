@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &name maybe
+  name: maybe
 spec:
   interval: 30m
   chartRef:
@@ -58,7 +58,7 @@ spec:
                     key: uri
             envFrom:
               - secretRef:
-                  name: *name
+                  name: "{{ .Release.Name }}"
             ports:
               - name: http
                 containerPort: &port 3000
@@ -79,7 +79,7 @@ spec:
             env: *shared-env
             envFrom:
               - secretRef:
-                  name: *name
+                  name: "{{ .Release.Name }}"
               - secretRef:
                   name: maybe-pguser
             resources: *resources
@@ -100,7 +100,7 @@ spec:
 
     persistence:
       app:
-        existingClaim: *name
+        existingClaim: "{{ .Release.Name }}"
         globalMounts:
           - path: /rails/storage
       tmpfs:

@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &name manyfold
+  name: manyfold
 spec:
   interval: 30m
   chartRef:
@@ -73,7 +73,7 @@ spec:
               SECRET_KEY_BASE:
                 valueFrom:
                   secretKeyRef:
-                    name: *name
+                    name: "{{ .Release.Name }}"
                     key: MANYFOLD_SECRET_KEY
             probes:
               liveness: &probes
@@ -113,7 +113,7 @@ spec:
 
     persistence:
       app:
-        existingClaim: *name
+        existingClaim: "{{ .Release.Name }}"
         advancedMounts:
           manyfold:
             app:

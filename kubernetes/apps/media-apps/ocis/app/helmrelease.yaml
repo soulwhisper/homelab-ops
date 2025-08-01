@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &name ocis
+  name: ocis
 spec:
   interval: 30m
   chartRef:
@@ -60,7 +60,7 @@ spec:
               PROXY_TLS: false
             envFrom:
               - secretRef:
-                  name: *name
+                  name: "{{ .Release.Name }}"
             ports:
               - name: http
                 containerPort: &port 9200
@@ -94,7 +94,7 @@ spec:
 
     persistence:
       app:
-        existingClaim: *name
+        existingClaim: "{{ .Release.Name }}"
         globalMounts:
           - path: /var/lib/ocis
             subPath: data
@@ -108,7 +108,7 @@ spec:
               - path: /media
       config:
         type: configMap
-        name: *name
+        name: "{{ .Release.Name }}"
         globalMounts:
           - path: /etc/ocis/web.yaml
             subPath: web.yaml

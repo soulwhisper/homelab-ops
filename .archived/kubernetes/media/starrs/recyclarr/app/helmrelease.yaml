@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &name recyclarr
+  name: recyclarr
 spec:
   interval: 30m
   chartRef:
@@ -55,7 +55,7 @@ spec:
               NO_PROXY: "${NO_PROXY}"
             envFrom:
               - secretRef:
-                  name: *name
+                  name: "{{ .Release.Name }}"
             resources:
               requests:
                 cpu: 10m
@@ -68,12 +68,12 @@ spec:
 
     persistence:
       app:
-        existingClaim: *name
+        existingClaim: "{{ .Release.Name }}"
         globalMounts:
           - path: /config
       config:
         type: configMap
-        name: *name
+        name: "{{ .Release.Name }}"
         globalMounts:
           - path: /config/recyclarr.yml
             subPath: recyclarr.yml

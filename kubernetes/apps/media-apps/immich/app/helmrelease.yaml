@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &name immich
+  name: immich
 spec:
   interval: 30m
   chartRef:
@@ -79,7 +79,7 @@ spec:
                     key: port
             envFrom: &envFrom
               - configMapRef:
-                  name: *name
+                  name: "{{ .Release.Name }}"
             ports:
               - name: http
                 containerPort: &port 2283

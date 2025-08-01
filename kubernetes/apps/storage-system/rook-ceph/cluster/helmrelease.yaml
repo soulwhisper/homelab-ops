@@ -23,9 +23,9 @@ spec:
     keepHistory: false
 
   values:
-    clusterName: &cluster_namespace storage-system
-    csiDriverNamePrefix: *cluster_namespace
-    operatorNamespace: *cluster_namespace
+    clusterName: "{{ .Release.Namespace }}"
+    csiDriverNamePrefix: "{{ .Release.Namespace }}"
+    operatorNamespace: "{{ .Release.Namespace }}"
     monitoring:
       enabled: true
       createPrometheusRules: true
@@ -91,11 +91,11 @@ spec:
             imageFormat: "2"
             imageFeatures: layering,fast-diff,object-map,deep-flatten,exclusive-lock
             csi.storage.k8s.io/provisioner-secret-name: rook-csi-rbd-provisioner
-            csi.storage.k8s.io/provisioner-secret-namespace: *cluster_namespace
+            csi.storage.k8s.io/provisioner-secret-namespace: "{{ .Release.Namespace }}"
             csi.storage.k8s.io/controller-expand-secret-name: rook-csi-rbd-provisioner
-            csi.storage.k8s.io/controller-expand-secret-namespace: *cluster_namespace
+            csi.storage.k8s.io/controller-expand-secret-namespace: "{{ .Release.Namespace }}"
             csi.storage.k8s.io/node-stage-secret-name: rook-csi-rbd-node
-            csi.storage.k8s.io/node-stage-secret-namespace: *cluster_namespace
+            csi.storage.k8s.io/node-stage-secret-namespace: "{{ .Release.Namespace }}"
             csi.storage.k8s.io/fstype: ext4
     cephBlockPoolsVolumeSnapshotClass:
       enabled: true

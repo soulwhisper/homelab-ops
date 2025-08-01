@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &name externaldns-rfc2136
+  name: externaldns-rfc2136
 spec:
   interval: 30m
   chart:
@@ -27,7 +27,7 @@ spec:
     keepHistory: false
 
   values:
-    fullnameOverride: *name
+    fullnameOverride: "{{ .Release.Name }}"
     domainFilters:
       - noirprime.com
     env:
@@ -74,7 +74,7 @@ spec:
           - target:
               version: v1
               kind: Deployment
-              name: *name
+              name: "{{ .Release.Name }}"
             patch: |
               - op: add
                 path: /spec/template/spec/enableServiceLinks

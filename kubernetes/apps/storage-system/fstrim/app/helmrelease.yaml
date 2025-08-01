@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &name fstrim
+  name: fstrim
 spec:
   interval: 30m
   chartRef:
@@ -42,7 +42,7 @@ spec:
               whenUnsatisfiable: DoNotSchedule
               labelSelector:
                 matchLabels:
-                  app.kubernetes.io/name: *name
+                  app.kubernetes.io/name: "{{ .Release.Name }}"
         containers:
           app:
             image:

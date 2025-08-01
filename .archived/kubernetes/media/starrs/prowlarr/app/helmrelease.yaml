@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &name prowlarr
+  name: prowlarr
 spec:
   interval: 30m
   chartRef:
@@ -48,7 +48,7 @@ spec:
               PROWLARR__AUTH__APIKEY:
                 valueFrom:
                   secretKeyRef:
-                    name: *name
+                    name: "{{ .Release.Name }}"
                     key: PROWLARR_API_KEY
               PROWLARR__AUTH__METHOD: External
               PROWLARR__LOG__DBENABLED: "False"
@@ -86,7 +86,7 @@ spec:
 
     persistence:
       app:
-        existingClaim: *name
+        existingClaim: "{{ .Release.Name }}"
         globalMounts:
           - path: /config
       tmpfs:

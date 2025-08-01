@@ -3,14 +3,14 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &name blackbox-exporter
+  name: blackbox-exporter
 spec:
   interval: 30m
   chartRef:
     kind: OCIRepository
     name: blackbox-exporter
   values:
-    fullnameOverride: *name
+    fullnameOverride: "{{ .Release.Name }}"
     image:
       registry: quay.io
     config:

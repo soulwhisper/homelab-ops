@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &name open-webui
+  name: open-webui
 spec:
   interval: 30m
   chartRef:
@@ -39,7 +39,7 @@ spec:
             #  OLLAMA_BASE_URL: http://10.20.0.101:11434
             envFrom:
               - secretRef:
-                  name: *name
+                  name: "{{ .Release.Name }}"
             ports:
               - name: http
                 containerPort: &port 8080
@@ -68,6 +68,6 @@ spec:
 
     persistence:
       app:
-        existingClaim: *name
+        existingClaim: "{{ .Release.Name }}"
         globalMounts:
           - path: /app/backend/data

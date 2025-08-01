@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &name homepage
+  name: homepage
 spec:
   interval: 30m
   chartRef:
@@ -31,7 +31,7 @@ spec:
         annotations:
           reloader.stakater.com/auto: "true"
         serviceAccount:
-          identifier: *name
+          identifier: "{{ .Release.Name }}"
         containers:
           app:
             image:
@@ -42,7 +42,7 @@ spec:
               HOMEPAGE_ALLOWED_HOSTS: "home.noirprime.com"
             envFrom:
               - secretRef:
-                  name: *name
+                  name: "{{ .Release.Name }}"
             ports:
               - name: http
                 containerPort: &port 3000
@@ -80,9 +80,9 @@ spec:
           type: ClusterRoleBinding
           roleRef:
             kind: ClusterRole
-            identifier: *name
+            identifier: "{{ .Release.Name }}"
           subjects:
-            - identifier: *name
+            - identifier: "{{ .Release.Name }}"
 
     service:
       app:
@@ -100,7 +100,7 @@ spec:
     persistence:
       config:
         type: configMap
-        name: *name
+        name: "{{ .Release.Name }}"
         globalMounts:
           - subPath: bookmarks.yaml
             path: /app/config/bookmarks.yaml

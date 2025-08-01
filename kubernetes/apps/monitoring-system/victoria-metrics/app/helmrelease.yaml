@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &name victoria-metrics-operator
+  name: victoria-metrics-operator
 spec:
   interval: 30m
   chartRef:
@@ -62,7 +62,7 @@ spec:
         value: "${HTTPS_PROXY}"
       - name: NO_PROXY
         value: "${NO_PROXY}"
-    fullnameOverride: *name
+    fullnameOverride: "{{ .Release.Name }}"
     image:
       registry: "quay.io"
     operator:

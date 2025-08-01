@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &name k8s-schemas
+  name: k8s-schemas
 spec:
   interval: 30m
   chartRef:
@@ -67,7 +67,7 @@ spec:
                 value: "${NO_PROXY}"
             envFrom:
               - secretRef:
-                  name: *name
+                  name: "{{ .Release.Name }}"
             args:
               - pages
               - deploy
@@ -102,9 +102,9 @@ spec:
           type: ClusterRoleBinding
           roleRef:
             kind: ClusterRole
-            identifier: *name
+            identifier: "{{ .Release.Name }}"
           subjects:
-            - identifier: *name
+            - identifier: "{{ .Release.Name }}"
 
     persistence:
       tmpfs:
