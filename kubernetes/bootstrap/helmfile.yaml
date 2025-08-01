@@ -62,7 +62,7 @@ releases:
     namespace: gitops-system
     atomic: true
     chart: oci://ghcr.io/controlplaneio-fluxcd/charts/flux-operator
-    version: 0.24.1
+    version: 0.26.0
     values: ["../apps/gitops-system/flux-operator/app/values.yaml"]
     needs: ["security-system/external-secrets"]
     hooks:
@@ -79,6 +79,6 @@ releases:
     namespace: gitops-system
     atomic: true
     chart: oci://ghcr.io/controlplaneio-fluxcd/charts/flux-instance
-    version: 0.24.1
+    version: 0.26.0
     values: ["../apps/gitops-system/flux-operator/instance/values.yaml"]
     needs: ["gitops-system/flux-operator"]
