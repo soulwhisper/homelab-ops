@@ -43,7 +43,7 @@ spec:
           app:
             image:
               repository: ghcr.io/maybe-finance/maybe
-              tag: 0.5.0
+              tag: 0.6.0
             env: &shared-env
               TZ: "${TIMEZONE}"
               SELF_HOSTED: "true"
@@ -74,7 +74,7 @@ spec:
           worker:
             image:
               repository: ghcr.io/maybe-finance/maybe
-              tag: 0.5.0
+              tag: 0.6.0
             command: ["bundle", "exec", "sidekiq"]
             env: *shared-env
             envFrom:
