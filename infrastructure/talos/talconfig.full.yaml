@@ -286,6 +286,12 @@ patches:
       sysctls:
         fs.inotify.max_user_watches: 524288       # moviepilot
         fs.inotify.max_user_instances: 524288     # moviepilot
+        net.ipv4.neigh.default.gc_thresh1: 32768  # ARP cache, tunning
+        net.ipv4.neigh.default.gc_thresh2: 65536  # ARP cache, tunning
+        net.ipv4.neigh.default.gc_thresh3: 131072 # ARP cache, tunning
+        net.ipv6.neigh.default.gc_thresh1: 32768  # ARP cache, tunning
+        net.ipv6.neigh.default.gc_thresh2: 65536  # ARP cache, tunning
+        net.ipv6.neigh.default.gc_thresh3: 131072 # ARP cache, tunning
         net.core.rmem_max: 134217728              # 10G NIC, tunning
         net.core.wmem_max: 134217728              # 10G NIC, tunning
         net.ipv4.tcp_rmem: 4096 87380 67108864    # 10G NIC, tunning
