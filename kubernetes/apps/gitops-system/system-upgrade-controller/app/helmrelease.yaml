@@ -63,7 +63,7 @@ spec:
             kind: ClusterRole
             name: cluster-admin
           subjects:
-            - identifier: *name
+            - identifier: system-upgrade-controller
     rawResources:
       system-upgrade-controller:
         apiVersion: talos.dev/v1alpha1
