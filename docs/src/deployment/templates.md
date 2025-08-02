@@ -3,6 +3,7 @@
 - This is a template for most self-hosted apps without its own charts
 - with substitute support, non-sensitive but repeative environments are set in configMap:cluster-settings;
 - sensitive environments could be set using `label: override.substitution.flux.home.arpa/enabled=true` and `substituteFrom` secrets;
+- "{{ .Release.Name }}" and "{{ .Release.Namespace }}" not always rendered, use yaml anchors instead;
 
 ```yaml
 # ks.yaml
@@ -79,7 +80,7 @@ spec:
         annotations:
           reloader.stakater.com/auto: "true"
         serviceAccount: # can be ignored if only one serviceaccount
-          identifier: example-app
+          identifier: *name
         initContainers:
           init-db:
             image:

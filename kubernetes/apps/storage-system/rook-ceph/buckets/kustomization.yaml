@@ -8,3 +8,4 @@ resources:
   - ./bucket-volsync.yaml
   # utils
   - ./externalsecret.yaml
+  - ./httproute.yaml
