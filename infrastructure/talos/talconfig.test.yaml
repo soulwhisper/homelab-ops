@@ -271,6 +271,8 @@ patches:
         net.ipv4.tcp_wmem: 4096 65536 67108864    # 10G NIC, tunning
         net.ipv6.tcp_rmem: 4096 87380 67108864    # 10G NIC, tunning
         net.ipv6.tcp_wmem: 4096 65536 67108864    # 10G NIC, tunning
+        sunrpc.tcp_slot_table_entries: 128        # 10G NIC, tunning
+        sunrpc.tcp_max_slot_table_entries: 1024   # 10G NIC, tunning
         user.max_user_namespaces: 11255           # UserNamespaces
 
   # : Udev configuration, thunderbolt & i915
