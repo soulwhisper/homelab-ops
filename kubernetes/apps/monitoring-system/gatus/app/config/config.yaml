@@ -1,19 +1,29 @@
 ---
 web:
-  port: ${WEB_PORT}
+  port: ${GATUS_WEB_PORT}
 storage:
   type: sqlite
   path: /config/sqlite.db
   caching: true
+
 metrics: true
-debug: false
+
 ui:
   title: Status | Gatus
   header: Status
+  logo: https://avatars.githubusercontent.com/soulwhisper
+  link: https://github.com/soulwhisper
+  buttons:
+    - name: Github
+      link: https://github.com/soulwhisper
+    - name: Homelab
+      link: https://github.com/soulwhisper/homelab-ops
+
 connectivity:
   checker:
     target: 1.1.1.1:53
     interval: 1m
+
 endpoints:
   - name: flux-webhook
     group: external

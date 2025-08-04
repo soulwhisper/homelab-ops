@@ -67,7 +67,7 @@ spec:
               NO_PROXY: "${NO_PROXY}"
               GATUS_CONFIG_PATH: /config
               GATUS_DELAY_START_SECONDS: 5
-              WEB_PORT: &port 80
+              GATUS_WEB_PORT: &port 80
             probes:
               liveness: &probes
                 enabled: true
@@ -127,8 +127,8 @@ spec:
             - identifier: *name
 
     persistence:
-      app:
-        existingClaim: *name
+      tmpfs:
+        type: emptyDir
         globalMounts:
           - path: /config
       config:
