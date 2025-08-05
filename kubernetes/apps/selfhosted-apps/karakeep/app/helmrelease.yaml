@@ -55,8 +55,8 @@ spec:
             ports:
               - name: http
                 containerPort: &port 3000
-            resources:
-              requests: &requests
+            resources: &resources
+              requests:
                 cpu: 10m
               limits:
                 memory: 1Gi
@@ -86,10 +86,7 @@ spec:
             ports:
               - name: http
                 containerPort: 9222
-            resources:
-              requests: *requests
-              limits:
-                memory: 1Gi
+            resources: *resources
             securityContext: *securityContext
 
           meilisearch:
@@ -110,10 +107,7 @@ spec:
             ports:
               - name: http
                 containerPort: 7700
-            resources:
-              requests: *requests
-              limits:
-                memory: 4Gi
+            resources: *resources
             securityContext: *securityContext
 
     service:
