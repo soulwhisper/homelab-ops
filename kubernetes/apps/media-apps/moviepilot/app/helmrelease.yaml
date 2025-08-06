@@ -24,13 +24,11 @@ spec:
     keepHistory: false
 
   values:
-    defaultPodOptions:
-      hostUsers: false
     controllers:
       moviepilot:
         annotations:
           reloader.stakater.com/auto: "true"
-        containers:
+        containers: # this pod has to start as root
           app:
             image:
               repository: jxxghp/moviepilot-v2
@@ -43,6 +41,8 @@ spec:
               CACHE_BACKEND_URL: redis://moviepilot-dragonfly.media-apps.svc.cluster.local:6379/0
               CACHE_REDIS_MAXMEMORY: "1024mb"
               PROXY_HOST: "${HTTPS_PROXY}"
+              PUID: "2000"
+              PGID: "2000"
             envFrom:
               - configMapRef:
                   name: *name
@@ -53,8 +53,6 @@ spec:
                 cpu: 20m
               limits:
                 memory: 4Gi
-            securityContext:
-              privileged: true
 
     service:
       app:

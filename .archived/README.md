@@ -69,6 +69,7 @@
 
 - apps:atuin
 - apps:homepage
+- apps:xiaoya
 - apps:voicechat
 
 > kubernetes:selfhosted:automation
