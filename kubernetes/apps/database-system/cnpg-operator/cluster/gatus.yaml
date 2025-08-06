@@ -12,8 +12,5 @@ data:
         group: infrastructure
         url: "tcp://postgres.noirprime.com:5432"
         interval: 1m
-        ui:
-          hide-hostname: true
-          hide-url: true
         conditions:
           - "[CONNECTED] == true"

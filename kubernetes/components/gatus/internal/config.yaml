@@ -3,13 +3,9 @@ endpoints:
   # internal
   - name: "${APP}"
     group: internal
-    url: 1.1.1.1
+    url: "https://${GATUS_SUBDOMAIN:=${APP}}.noirprime.com${GATUS_PATH:=/}"
     interval: 1m
-    ui:
-      hide-hostname: true
-      hide-url: true
-    dns:
-      query-name: "${GATUS_SUBDOMAIN:=${APP}}.noirprime.com"
-      query-type: A
+    client:
+      dns-resolver: "tcp://${DNS_HOST}:53"
     conditions:
-      - "[DNS_RCODE] == NOERROR"
+      - "[STATUS] == ${GATUS_STATUS:=200}"
