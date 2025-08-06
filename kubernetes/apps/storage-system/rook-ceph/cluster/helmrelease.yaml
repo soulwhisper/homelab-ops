@@ -9,7 +9,7 @@ spec:
   chartRef:
     kind: OCIRepository
     name: rook-ceph-cluster
-  maxHistory: 2
+  maxHistory: 1
   install:
     crds: CreateReplace
     remediation:
