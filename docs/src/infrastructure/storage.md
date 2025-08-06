@@ -28,7 +28,7 @@ kubectl rook_ceph --namespace=storage-system --operator-namespace=storage-system
 
 - endpoint: `nas.homelab.internal`;
 - shares: `/mnt/Arcanum/Media`;
-- permissions: `uid:gid=2000:2000, rwx, mapAllUser`;
+- permissions: `uid:gid=2000:2000, rwx, all_squash`; truenas: `MapRoot`;
 - folders: `model` and `Downloads,comic,ebook,manga,movie,music,photo,tvshow`;
 
 > NFS-mounts

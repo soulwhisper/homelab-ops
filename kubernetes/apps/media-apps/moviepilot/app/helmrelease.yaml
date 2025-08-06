@@ -24,11 +24,13 @@ spec:
     keepHistory: false
 
   values:
+    defaultPodOptions:
+      hostUsers: false
     controllers:
       moviepilot:
         annotations:
           reloader.stakater.com/auto: "true"
-        containers: # this pod has to start as root
+        containers: # this container has to start as root
           app:
             image:
               repository: jxxghp/moviepilot-v2
