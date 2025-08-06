@@ -10,7 +10,7 @@ data:
     endpoints:
       - name: vmagent-victoria-metrics-cluster
         group: internal
-        url: "https://vmagent.noirprime.com/
+        url: "https://vmagent.noirprime.com/"
         interval: 1m
         client:
           dns-resolver: "tcp://${DNS_HOST}:53"
@@ -18,7 +18,7 @@ data:
           - "[STATUS] == 200"
       - name: vmalertmanager-victoria-metrics-cluster
         group: internal
-        url: "https://vmalert.noirprime.com/
+        url: "https://vmalert.noirprime.com/"
         interval: 1m
         client:
           dns-resolver: "tcp://${DNS_HOST}:53"

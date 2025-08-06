@@ -6,13 +6,9 @@ metadata:
   name: openebs
 spec:
   interval: 30m
-  chart:
-    spec:
-      chart: openebs
-      version: 4.2.0
-      sourceRef:
-        kind: HelmRepository
-        name: openebs
+  chartRef:
+    kind: OCIRepository
+    name: openebs
   maxHistory: 1
   install:
     crds: CreateReplace
@@ -34,6 +30,19 @@ spec:
         name: openebs-hostpath
         isDefaultClass: false
         basePath: /var/local/openebs
+      localpv:
+        image:
+          registry: quay.io
+      helperPod:
+        image:
+          registry: quay.io
+
+    alloy:
+      enabled: false
+    loki:
+      enabled: false
+    minio:
+      enabled: false
 
     engines:
       local:
