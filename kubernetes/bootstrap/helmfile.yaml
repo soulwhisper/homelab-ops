@@ -17,7 +17,7 @@ releases:
   - name: cilium
     namespace: kube-system
     atomic: true
-    chart: ci://ghcr.io/home-operations/charts-mirror/cilium
+    chart: oci://ghcr.io/home-operations/charts-mirror/cilium
     version: 1.18.0
     values: ["../apps/kube-system/cilium/app/values.yaml"]
     needs: ["monitoring-system/prometheus-operator-crds"]
