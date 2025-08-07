@@ -22,3 +22,10 @@ spec:
     args:
       - --node=$(SYSTEM_UPGRADE_NODE_NAME)
       - --tag=$(SYSTEM_UPGRADE_PLAN_LATEST_VERSION)
+    envs:
+      - name: HTTP_PROXY
+        value: "${HTTP_PROXY}"
+      - name: HTTPS_PROXY
+        value: "${HTTPS_PROXY}"
+      - name: NO_PROXY
+        value: "${NO_PROXY}"
