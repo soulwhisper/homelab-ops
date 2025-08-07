@@ -19,11 +19,6 @@ ui:
     - name: Homelab
       link: https://github.com/soulwhisper/homelab-ops
 
-connectivity:
-  checker:
-    target: 223.5.5.5:53
-    interval: 1m
-
 endpoints:
   - name: flux-webhook
     group: infrastructure
