@@ -21,7 +21,7 @@ ui:
 
 connectivity:
   checker:
-    target: https://google.com
+    target: 223.5.5.5:53
     interval: 1m
 
 endpoints:
