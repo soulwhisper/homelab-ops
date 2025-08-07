@@ -78,17 +78,6 @@ spec:
             <<: *container
             args: ["orphan", "qb"]
 
-    serviceAccount:
-      talos-backup: {}
-    rawResources:
-      talos-backup:
-        apiVersion: talos.dev/v1alpha1
-        kind: ServiceAccount
-        spec:
-          spec:
-            roles:
-              - os:etcd:backup
-
     persistence:
       config:
         type: secret
