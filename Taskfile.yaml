@@ -39,7 +39,6 @@ tasks:
   flush:
     desc: Force Flux to flush ks in all namespaces
     preconditions:
-      - which flux
       - test -f {{.KUBECONFIG}}
     cmds:
       - task: :flux:suspend-ks-all
@@ -49,6 +48,7 @@ tasks:
     desc: Restore configuration files from backup location
     silent: true
     preconditions:
+      - which bash direnv
       - bash -c 'test -f ~/.kube/config'
       - bash -c 'test -f ~/.talos/config'
     cmds:

@@ -9,7 +9,7 @@ tasks:
   bootstrap:
     desc: Install Arch workstation dependencies with Yay
     preconditions:
-      - which yay
+      - which bash yay
       - test -f {{.ARCHFILE}}
     cmds:
       - "yay -Syu --needed --noconfirm --noprogressbar $(cat {{.ARCHFILE}} | xargs)"
