@@ -3,13 +3,13 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &name victoria-metrics-operator
+  name: &name victoria-metrics-crds
 spec:
   interval: 30m
   chartRef:
     kind: OCIRepository
-    name: victoria-metrics-operator
-  maxHistory: 2
+    name: victoria-metrics-crds
+  maxHistory: 1
   install:
     crds: CreateReplace
     remediation:
@@ -21,51 +21,3 @@ spec:
       retries: 3
   uninstall:
     keepHistory: false
-
-  values:
-    admissionWebhooks:
-      enabled: true
-      certManager:
-        enabled: true
-    env:
-      - name: VM_VMALERTDEFAULT_CONFIGRELOADERCPU
-        value: 0
-      - name: VM_VMAGENTDEFAULT_CONFIGRELOADERCPU
-        value: 0
-      - name: VM_VMALERTMANAGER_CONFIGRELOADERCPU
-        value: 0
-      # - name: "VM_USECUSTOMCONFIGRELOADER"
-      #   value: "true"
-      # - name: VM_CUSTOMCONFIGRELOADERIMAGE
-      #   value: "quay.io/victoriametrics/operator:config-reloader-v0.53.0"
-      - name: "VM_VMALERTDEFAULT_IMAGE"
-        value: "quay.io/victoriametrics/vmalert"
-      - name: "VM_VMAGENTDEFAULT_IMAGE"
-        value: "quay.io/victoriametrics/vmagent"
-      - name: "VM_VMSINGLEDEFAULT_IMAGE"
-        value: "quay.io/victoriametrics/victoria-metrics"
-      - name: "VM_VMCLUSTERDEFAULT_VMSELECTDEFAULT_IMAGE"
-        value: "quay.io/victoriametrics/vmselect"
-      - name: "VM_VMCLUSTERDEFAULT_VMSTORAGEDEFAULT_IMAGE"
-        value: "quay.io/victoriametrics/vmstorage"
-      - name: "VM_VMCLUSTERDEFAULT_VMINSERTDEFAULT_IMAGE"
-        value: "quay.io/victoriametrics/vminsert"
-      - name: "VM_VMBACKUP_IMAGE"
-        value: "quay.io/victoriametrics/vmbackupmanager"
-      - name: "VM_VMAUTHDEFAULT_IMAGE"
-        value: "quay.io/victoriametrics/vmauth"
-      - name: "VM_VMALERTMANAGER_ALERTMANAGERDEFAULTBASEIMAGE"
-        value: "quay.io/prometheus/alertmanager"
-      - name: HTTP_PROXY
-        value: "${HTTP_PROXY}"
-      - name: HTTPS_PROXY
-        value: "${HTTPS_PROXY}"
-      - name: NO_PROXY
-        value: "${NO_PROXY}"
-    fullnameOverride: *name
-    image:
-      registry: "quay.io"
-    operator:
-      enable_converter_ownership: true # Required to allow VM to remove VM rules it imports if a prometheus rule is deleted
-    serviceMonitor:
-      enabled: true # use prometheus-operator ServiceMonitor CRD

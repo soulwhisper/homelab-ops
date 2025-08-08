@@ -19,17 +19,10 @@ ui:
     - name: Homelab
       link: https://github.com/soulwhisper/homelab-ops
 
-connectivity:
-  checker:
-    target: 1.1.1.1:53
-    interval: 1m
-
 endpoints:
   - name: flux-webhook
-    group: external
-    url: https://flux-webhook.noirprime.com
+    group: infrastructure
+    url: "tcp://flux-webhook.noirprime.com:443"
     interval: 1m
-    client:
-      dns-resolver: tcp://1.1.1.1:53
     conditions:
-      - "[STATUS] == 404"
+      - "[CONNECTED] == true"

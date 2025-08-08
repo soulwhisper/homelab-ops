@@ -10,7 +10,7 @@ spec:
     kind: OCIRepository
     name: app-template
     namespace: gitops-system
-  maxHistory: 2
+  maxHistory: 1
   install:
     crds: CreateReplace
     remediation:
@@ -61,7 +61,7 @@ spec:
     serviceAccount:
       talos-backup: {}
     rawResources:
-      talos-backup:
+      talosServiceAccount:
         apiVersion: talos.dev/v1alpha1
         kind: ServiceAccount
         spec:

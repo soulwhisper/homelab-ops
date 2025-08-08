@@ -10,7 +10,7 @@ spec:
     kind: OCIRepository
     name: app-template
     namespace: gitops-system
-  maxHistory: 2
+  maxHistory: 1
   install:
     crds: CreateReplace
     remediation:
@@ -39,7 +39,7 @@ spec:
           app:
             image:
               repository: ghcr.io/n8n-io/n8n
-              tag: 1.106.0
+              tag: 1.106.1
             env:
               DB_SQLITE_VACUUM_ON_STARTUP: true
               EXECUTIONS_DATA_PRUNE: true
@@ -62,7 +62,7 @@ spec:
               requests:
                 cpu: 5m
               limits:
-                memory: 2Gi
+                memory: 1Gi
             securityContext:
               allowPrivilegeEscalation: false
               capabilities: { drop: ["ALL"] }

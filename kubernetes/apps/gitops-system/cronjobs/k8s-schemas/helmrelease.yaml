@@ -10,7 +10,7 @@ spec:
     kind: OCIRepository
     name: app-template
     namespace: gitops-system
-  maxHistory: 2
+  maxHistory: 1
   install:
     crds: CreateReplace
     remediation:
@@ -57,7 +57,7 @@ spec:
           app:
             image:
               repository: ghcr.io/bjw-s-labs/wrangler
-              tag: 4.27.0@sha256:ba985bb38990f662c3fb3a5f6a7932c871f750b01d28efd6447f409ef8018d1c
+              tag: 4.28.1@sha256:579c77a1de313d20fea1e967373f33afb5f2fdcb85dfd4738fd95134dc329ce5
             env:
               - name: HTTP_PROXY
                 value: "${HTTP_PROXY}"

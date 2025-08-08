@@ -9,7 +9,7 @@ spec:
   chartRef:
     kind: OCIRepository
     name: victoria-metrics-k8s-stack
-  maxHistory: 2
+  maxHistory: 1
   install:
     crds: CreateReplace
     remediation:
@@ -39,7 +39,7 @@ spec:
             create: false
 
     # : vmsingle as prometheus
-    # : http://vmsingle-victoria-metrics-cluster.monitoring-system.svc.cluster.local:8429
+    # : http://vmsingle-victoria-metrics-cluster.monitoring-system.svc.cluster.local:8428
     vmsingle:
       spec:
         retentionPeriod: "14d"
@@ -52,7 +52,7 @@ spec:
     # : http://vmalert-victoria-metrics-cluster.monitoring-system.svc.cluster.local:8080
 
     # : vmagent
-    # : http://vmagent-victoria-metrics-cluster.monitoring-system.svc.cluster.local:8429
+    # : http://vmagent-victoria-metrics-cluster.monitoring-system.svc.cluster.local:8428
 
     # : alertmanager
     # : http://vmalertmanager-victoria-metrics-cluster.monitoring-system.svc.cluster.local:9093

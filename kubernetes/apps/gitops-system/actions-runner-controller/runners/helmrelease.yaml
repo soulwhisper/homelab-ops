@@ -9,7 +9,7 @@ spec:
   chartRef:
     kind: OCIRepository
     name: actions-runner-controller
-  maxHistory: 2
+  maxHistory: 1
   install:
     crds: CreateReplace
     remediation:
@@ -21,9 +21,6 @@ spec:
       retries: 3
   uninstall:
     keepHistory: false
-
-  driftDetection:
-    mode: enabled
 
   values:
     githubConfigUrl: https://github.com/soulwhisper/homelab-ops

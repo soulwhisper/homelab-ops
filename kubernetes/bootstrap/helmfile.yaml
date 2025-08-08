@@ -12,12 +12,12 @@ releases:
     namespace: monitoring-system
     atomic: true
     chart: oci://ghcr.io/prometheus-community/charts/prometheus-operator-crds
-    version: 22.0.1
+    version: 22.0.2
 
   - name: cilium
     namespace: kube-system
     atomic: true
-    chart: ci://ghcr.io/home-operations/charts-mirror/cilium
+    chart: oci://ghcr.io/home-operations/charts-mirror/cilium
     version: 1.18.0
     values: ["../apps/kube-system/cilium/app/values.yaml"]
     needs: ["monitoring-system/prometheus-operator-crds"]
@@ -62,7 +62,7 @@ releases:
     namespace: gitops-system
     atomic: true
     chart: oci://ghcr.io/controlplaneio-fluxcd/charts/flux-operator
-    version: 0.26.0
+    version: 0.27.0
     values: ["../apps/gitops-system/flux-operator/app/values.yaml"]
     needs: ["security-system/external-secrets"]
     hooks:
@@ -79,6 +79,6 @@ releases:
     namespace: gitops-system
     atomic: true
     chart: oci://ghcr.io/controlplaneio-fluxcd/charts/flux-instance
-    version: 0.26.0
+    version: 0.27.0
     values: ["../apps/gitops-system/flux-operator/instance/values.yaml"]
     needs: ["gitops-system/flux-operator"]
