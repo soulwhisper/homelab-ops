@@ -49,12 +49,12 @@ spec:
         - secretRef:
             name: *name
       sendAdditionalTelemetry: false
+    sinksConfig:
+      - robusta_sink:
+          name: robusta_ui_sink
+          token: "{{ env.RUBUSTA_TOKEN }}"
     # : HolmesGPT is a paid feature
-    # enableHolmesGPT: true
-    # sinksConfig:
-    #   - robusta_sink:
-    #       name: robusta_ui_sink
-    #       token: "{{ env.RUBUSTA_TOKEN }}"
+    enableHolmesGPT: false
     # holmes:
     #   additionalEnvVars:
     #     - name: ROBUSTA_AI
