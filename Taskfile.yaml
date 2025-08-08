@@ -18,13 +18,11 @@ includes:
 vars:
   K8S_DIR: "{{.ROOT_DIR}}/kubernetes"
   TALOS_DIR: "{{.ROOT_DIR}}/infrastructure/talos"
-  KUBECONFIG: "{{.TALOS_DIR}}/clusterconfig/kubeconfig"
-  TALOSCONFIG: "{{.TALOS_DIR}}/clusterconfig/talosconfig"
   MINIJINJA_ARGS: "--autoescape none --env --lstrip-blocks --trim-blocks"
 
 env:
-  KUBECONFIG: "{{.KUBECONFIG}}"
-  TALOSCONFIG: "{{.TALOSCONFIG}}"
+  KUBECONFIG: "{{.TALOS_DIR}}/clusterconfig/kubeconfig"
+  TALOSCONFIG: "{{.TALOS_DIR}}/clusterconfig/talosconfig"
 
 tasks:
   default:
