@@ -29,32 +29,14 @@ spec:
   values:
     fullnameOverride: *name
     clusterName: homelab
+    enablePrometheusStack: false
+    enablePlatformPlaybooks: false
+    enabledManagedConfiguration: false
     globalConfig:
       account_id: "{{ env.RUBUSTA_ID }}"
       signing_key: "{{ env.RUBUSTA_KEY }}"
-    sinksConfig:
-      - robusta_sink:
-          name: robusta_ui_sink
-          token: "{{ env.RUBUSTA_TOKEN }}"
-    enablePrometheusStack: false
-    enablePlatformPlaybooks: true
-    enableHolmesGPT: true
-    enabledManagedConfiguration: true
-    holmes: # robusta sink token
-      additionalEnvVars:
-        - name: ROBUSTA_AI
-          value: "true"
-        - name: RUBUSTA_TOKEN
-          valueFrom:
-            secretKeyRef:
-              name: *name
-              key: RUBUSTA_TOKEN
-        - name: HTTP_PROXY
-          value: "${HTTP_PROXY}"
-        - name: HTTPS_PROXY
-          value: "${HTTPS_PROXY}"
-        - name: NO_PROXY
-          value: "${NO_PROXY}"
+      alertmanager_url: "http://vmalertmanager-victoria-metrics-cluster.monitoring-system.svc.cluster.local:9093"
+      prometheus_url: "http://vmsingle-victoria-metrics-cluster.monitoring-system.svc.cluster.local:8428"
     runner: # account id & key
       additional_env_vars:
         - name: HTTP_PROXY
@@ -67,3 +49,24 @@ spec:
         - secretRef:
             name: *name
       sendAdditionalTelemetry: false
+    # : HolmesGPT is a paid feature
+    # enableHolmesGPT: true
+    # sinksConfig:
+    #   - robusta_sink:
+    #       name: robusta_ui_sink
+    #       token: "{{ env.RUBUSTA_TOKEN }}"
+    # holmes:
+    #   additionalEnvVars:
+    #     - name: ROBUSTA_AI
+    #       value: "true"
+    #     - name: RUBUSTA_TOKEN
+    #       valueFrom:
+    #         secretKeyRef:
+    #           name: *name
+    #           key: RUBUSTA_TOKEN
+    #     - name: HTTP_PROXY
+    #       value: "${HTTP_PROXY}"
+    #     - name: HTTPS_PROXY
+    #       value: "${HTTPS_PROXY}"
+    #     - name: NO_PROXY
+    #       value: "${NO_PROXY}"

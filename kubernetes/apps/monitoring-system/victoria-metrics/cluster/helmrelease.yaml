@@ -87,6 +87,8 @@ spec:
             webhook_configs:
               - send_resolved: true
                 url: http://webhook.monitoring-system.svc.cluster.local:8001?template=alertmanager
+              - send_resolved: true
+                url: https://robusta-runner.monitoring-system.svc.cluster.local/api/alerts
 
     kubeApiServer:
       vmScrape:
