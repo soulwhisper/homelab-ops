@@ -1,6 +1,7 @@
 ---
 endpoints:
-  # external
+  # : external
+  # current, make sure domain can be accessed via https
   - name: "${APP}"
     group: external
     url: "https://${GATUS_SUBDOMAIN:=${APP}}.noirprime.com${GATUS_PATH:=/}"
