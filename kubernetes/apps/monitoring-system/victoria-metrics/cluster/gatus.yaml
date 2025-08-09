@@ -10,17 +10,25 @@ data:
     endpoints:
       - name: vmagent-victoria-metrics-cluster
         group: internal
-        url: "https://vmagent.noirprime.com/"
+        url: "1.1.1.1"
         interval: 1m
-        client:
-          dns-resolver: "tcp://${DNS_HOST}:53"
+        ui:
+          hide-hostname: true
+          hide-url: true
+        dns:
+          query-name: "vmagent.noirprime.com"
+          query-type: A
         conditions:
-          - "[STATUS] == 200"
+          - "len([BODY]) == 0"
       - name: vmalertmanager-victoria-metrics-cluster
         group: internal
-        url: "https://vmalert.noirprime.com/"
+        url: "1.1.1.1"
         interval: 1m
-        client:
-          dns-resolver: "tcp://${DNS_HOST}:53"
+        ui:
+          hide-hostname: true
+          hide-url: true
+        dns:
+          query-name: "vmalert.noirprime.com"
+          query-type: A
         conditions:
-          - "[STATUS] == 200"
+          - "len([BODY]) == 0"
