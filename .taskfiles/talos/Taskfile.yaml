@@ -50,7 +50,7 @@ tasks:
         --config-file {{.TALOS_DIR}}/talconfig.{{.MODE}}.yaml
         --secret-file {{.TALOS_DIR}}/talsecret.yaml
         --out-dir {{.TALOS_DIR}}/clusterconfig
-      - bash -c 'mkdir -p ~/.talos && cp $TALOSCONFIG ~/.talos/config'
+      - bash -c 'mkdir -p ~/.talos && cp ${TALOSCONFIG} ~/.talos/config'
 
   _bootstrap:
     internal: true

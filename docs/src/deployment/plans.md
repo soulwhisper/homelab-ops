@@ -11,7 +11,6 @@
 
 ### Apps
 
-- [ ] evaluate starrs utility
-- [ ] fix cloudflared connectivity, via proxies or not
+- [x] evaluate starrs utility
+- [x] fix cloudflared connectivity, via proxies or not
 - [x] optimize ceph-bucket stability
-- [ ] add scaler to qbtools or silence job failed alerts

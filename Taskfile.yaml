@@ -33,13 +33,13 @@ tasks:
     desc: Force Flux to pull in changes from your Git repository
     preconditions:
       - which flux
-      - test -f {{.KUBECONFIG}}
+      - test -f "${KUBECONFIG}"
     cmd: flux --namespace gitops-system reconcile kustomization gitops-system --with-source
 
   flush:
     desc: Force Flux to flush ks in all namespaces
     preconditions:
-      - test -f {{.KUBECONFIG}}
+      - test -f "${KUBECONFIG}"
     cmds:
       - task: :flux:suspend-ks-all
       - task: :flux:resume-ks-all
@@ -52,7 +52,7 @@ tasks:
       - bash -c 'test -f ~/.kube/config'
       - bash -c 'test -f ~/.talos/config'
     cmds:
-      - bash -c 'cp ~/.kube/config $KUBECONFIG'
-      - bash -c 'cp ~/.talos/config $TALOSCONFIG'
+      - bash -c 'cp ~/.kube/config ${KUBECONFIG}'
+      - bash -c 'cp ~/.talos/config ${TALOSCONFIG}'
       - direnv allow
       - echo "K8S environment restored."

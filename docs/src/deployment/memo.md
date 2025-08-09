@@ -1,10 +1,12 @@
 ## Memo
 
+- Workstation stick with NixOS, `Nix-Ops` [ref](https://github.com/soulwhisper/nix-config/tree/main/hosts/nix-ops);
 - `hostLegacyRouting:true` conflict wih BIGTCP and BBR, disabled; hence `forwardKubeDNSToHost` is disabled; [ref](https://github.com/siderolabs/talos/issues/10002#issuecomment-2557069620);
 - using hardcoded securityContext instead of kyverno;
 - external nfs_v4.2 backup using `uid:gid = 2000:2000`;
 - test env using proxmox-vm, with secureboot enabled, subnet `172.19.82.0/24`;
-- The Flux objects are created in the same namespace where the `FluxInstance` is deployed using the namespace name as the Flux source and Kustomization name.
+- The Flux objects are created in the same namespace where the `FluxInstance` is deployed using the namespace name as the Flux source and Kustomization name;
+- `Talhelper` is not deprecated due to the simplicity and maintainability it provides, deprecated tasks [ref](https://github.com/bjw-s-labs/home-ops/commit/44999bfa6e2764de3c0030321018d1bfa2748817);
 
 ### Infra
 
