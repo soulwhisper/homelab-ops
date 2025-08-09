@@ -4,7 +4,7 @@ endpoints:
   # make sure domain not exposed to the public internet
   - name: "${APP}"
     group: internal
-    url: "1.1.1.1"
+    url: "223.5.5.5" # until doh or dot
     interval: 1m
     ui:
       hide-hostname: true
