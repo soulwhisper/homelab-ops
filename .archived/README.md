@@ -5,10 +5,6 @@
 
 ## List
 
-> infrastructure
-
-- terraform:minio
-
 > taskfiles
 
 - postgres
@@ -84,10 +80,6 @@
 - apps:volsync(nfs)
 
 ## Reasons
-
-> infrastructure
-
-- minio is deprecated, use ceph-buckets instead;
 
 > base
 
