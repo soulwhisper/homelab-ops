@@ -38,4 +38,4 @@ This repository serves as a monorepository for the infrastructure and Kubernetes
 
 ---
 
-{{#include ./deployment/hardware.md}}
+{{#include ./infrastructure/hardware.md}}
