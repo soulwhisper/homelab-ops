@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="https://github.com/soulwhisper/homelab-ops/blob/main/docs/_assets/logo.jpg?raw=true" width="144px" height="144px"/>
+<img src="https://github.com/soulwhisper/homelab-ops/blob/main/docs/_assets/logo.png?raw=true" width="144px" height="144px"/>
 
 ### <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f680/512.gif" alt="🚀" width="16" height="16"> My Homelab Operations repository <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f6a7/512.gif" alt="🚧" width="16" height="16">
 
