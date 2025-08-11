@@ -10,7 +10,7 @@ spec:
     kind: OCIRepository
     name: app-template
     namespace: gitops-system
-  maxHistory: 2
+  maxHistory: 1
   install:
     crds: CreateReplace
     remediation:
@@ -24,17 +24,15 @@ spec:
     keepHistory: false
 
   values:
-    defaultPodOptions:
-      hostUsers: false
     controllers:
       moviepilot:
         annotations:
           reloader.stakater.com/auto: "true"
-        containers:
+        containers: # this container has to start as host root
           app:
             image:
               repository: jxxghp/moviepilot-v2
-              tag: 2.6.9
+              tag: 2.7.0
             env:
               TZ: "${TIMEZONE}"
               NGINX_PORT: &port 3000
@@ -43,6 +41,8 @@ spec:
               CACHE_BACKEND_URL: redis://moviepilot-dragonfly.media-apps.svc.cluster.local:6379/0
               CACHE_REDIS_MAXMEMORY: "1024mb"
               PROXY_HOST: "${HTTPS_PROXY}"
+              PUID: "2000"
+              PGID: "2000"
             envFrom:
               - configMapRef:
                   name: *name
@@ -53,8 +53,6 @@ spec:
                 cpu: 20m
               limits:
                 memory: 4Gi
-            securityContext:
-              privileged: true
 
     service:
       app:

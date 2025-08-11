@@ -5,10 +5,6 @@
 
 ## List
 
-> infrastructure
-
-- terraform:minio
-
 > taskfiles
 
 - postgres
@@ -69,6 +65,7 @@
 
 - apps:atuin
 - apps:homepage
+- apps:xiaoya
 - apps:voicechat
 
 > kubernetes:selfhosted:automation
@@ -83,10 +80,6 @@
 - apps:volsync(nfs)
 
 ## Reasons
-
-> infrastructure
-
-- minio is deprecated, use ceph-buckets instead;
 
 > base
 

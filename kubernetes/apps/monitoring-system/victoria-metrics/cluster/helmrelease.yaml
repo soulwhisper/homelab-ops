@@ -9,7 +9,7 @@ spec:
   chartRef:
     kind: OCIRepository
     name: victoria-metrics-k8s-stack
-  maxHistory: 2
+  maxHistory: 1
   install:
     crds: CreateReplace
     remediation:
@@ -39,7 +39,7 @@ spec:
             create: false
 
     # : vmsingle as prometheus
-    # : http://vmsingle-victoria-metrics-cluster.monitoring-system.svc.cluster.local:8429
+    # : http://vmsingle-victoria-metrics-cluster.monitoring-system.svc.cluster.local:8428
     vmsingle:
       spec:
         retentionPeriod: "14d"
@@ -52,7 +52,7 @@ spec:
     # : http://vmalert-victoria-metrics-cluster.monitoring-system.svc.cluster.local:8080
 
     # : vmagent
-    # : http://vmagent-victoria-metrics-cluster.monitoring-system.svc.cluster.local:8429
+    # : http://vmagent-victoria-metrics-cluster.monitoring-system.svc.cluster.local:8428
 
     # : alertmanager
     # : http://vmalertmanager-victoria-metrics-cluster.monitoring-system.svc.cluster.local:9093
@@ -87,18 +87,22 @@ spec:
             webhook_configs:
               - send_resolved: true
                 url: http://webhook.monitoring-system.svc.cluster.local:8001?template=alertmanager
+              - send_resolved: true
+                url: https://robusta-runner.monitoring-system.svc.cluster.local/api/alerts
 
     kubeApiServer:
       vmScrape:
         spec:
-          metricRelabelConfigs:
-            # Drop high cardinality labels
-            - action: drop
-              sourceLabels: ["__name__"]
-              regex: (apiserver|etcd|rest_client)_request(|_sli|_slo)_duration_seconds_bucket
-            - action: drop
-              sourceLabels: ["__name__"]
-              regex: (apiserver_response_sizes_bucket|apiserver_watch_events_sizes_bucket)
+          endpoints:
+            - port: https
+              metricRelabelConfigs:
+                # Drop high cardinality labels
+                - action: drop
+                  sourceLabels: ["__name__"]
+                  regex: (apiserver|etcd|rest_client)_request(|_sli|_slo)_duration_seconds_bucket
+                - action: drop
+                  sourceLabels: ["__name__"]
+                  regex: (apiserver_response_sizes_bucket|apiserver_watch_events_sizes_bucket)
 
     kubelet:
       vmScrape:

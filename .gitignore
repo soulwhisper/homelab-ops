@@ -1,18 +1,16 @@
-# Folders
-logs/
-test/
-
 # Trash
 .DS_Store
 Thumbs.db
 
+# Sops
+.decrypted~*
+
 # Devenv
 .devenv*
-devenv.local.nix
-devenv.lock
 .pre-commit-config.yaml
 
 # Other files
 kubeconfig
 talosconfig
 .env
+.iso

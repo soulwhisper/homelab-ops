@@ -10,7 +10,7 @@ spec:
     kind: OCIRepository
     name: app-template
     namespace: gitops-system
-  maxHistory: 2
+  maxHistory: 1
   install:
     crds: CreateReplace
     remediation:
@@ -26,6 +26,7 @@ spec:
   values:
     controllers:
       system-upgrade-controller:
+        replicas: 2
         pod:
           securityContext:
             runAsNonRoot: true
@@ -65,7 +66,7 @@ spec:
           subjects:
             - identifier: system-upgrade-controller
     rawResources:
-      system-upgrade-controller:
+      talosServiceAccount:
         apiVersion: talos.dev/v1alpha1
         kind: ServiceAccount
         spec:

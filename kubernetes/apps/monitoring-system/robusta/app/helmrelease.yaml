@@ -1,0 +1,72 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.noirprime.com/helm.toolkit.fluxcd.io/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &name robusta
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: robusta
+      version: 0.26.1
+      sourceRef:
+        kind: HelmRepository
+        name: robusta
+  maxHistory: 1
+  install:
+    crds: CreateReplace
+    remediation:
+      retries: -1
+  upgrade:
+    cleanupOnFail: true
+    crds: CreateReplace
+    remediation:
+      retries: 3
+  uninstall:
+    keepHistory: false
+
+  values:
+    fullnameOverride: *name
+    clusterName: homelab
+    enablePrometheusStack: false
+    enablePlatformPlaybooks: false
+    enabledManagedConfiguration: false
+    globalConfig:
+      account_id: "{{ env.RUBUSTA_ID }}"
+      signing_key: "{{ env.RUBUSTA_KEY }}"
+      alertmanager_url: "http://vmalertmanager-victoria-metrics-cluster.monitoring-system.svc.cluster.local:9093"
+      prometheus_url: "http://vmsingle-victoria-metrics-cluster.monitoring-system.svc.cluster.local:8428"
+    runner: # account id & key
+      additional_env_vars:
+        - name: HTTP_PROXY
+          value: "${HTTP_PROXY}"
+        - name: HTTPS_PROXY
+          value: "${HTTPS_PROXY}"
+        - name: NO_PROXY
+          value: "${NO_PROXY}"
+      additional_env_froms:
+        - secretRef:
+            name: *name
+      sendAdditionalTelemetry: false
+    sinksConfig:
+      - robusta_sink:
+          name: robusta_ui_sink
+          token: "{{ env.RUBUSTA_TOKEN }}"
+    # : HolmesGPT is a paid feature
+    enableHolmesGPT: false
+    # holmes:
+    #   additionalEnvVars:
+    #     - name: ROBUSTA_AI
+    #       value: "true"
+    #     - name: RUBUSTA_TOKEN
+    #       valueFrom:
+    #         secretKeyRef:
+    #           name: *name
+    #           key: RUBUSTA_TOKEN
+    #     - name: HTTP_PROXY
+    #       value: "${HTTP_PROXY}"
+    #     - name: HTTPS_PROXY
+    #       value: "${HTTPS_PROXY}"
+    #     - name: NO_PROXY
+    #       value: "${NO_PROXY}"

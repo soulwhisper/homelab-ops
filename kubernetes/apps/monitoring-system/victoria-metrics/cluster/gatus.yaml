@@ -10,7 +10,7 @@ data:
     endpoints:
       - name: vmagent-victoria-metrics-cluster
         group: internal
-        url: 1.1.1.1
+        url: "223.5.5.5" # until doh or dot
         interval: 1m
         ui:
           hide-hostname: true
@@ -19,10 +19,10 @@ data:
           query-name: "vmagent.noirprime.com"
           query-type: A
         conditions:
-          - "[DNS_RCODE] == NOERROR"
+          - "len([BODY]) == 0"
       - name: vmalertmanager-victoria-metrics-cluster
         group: internal
-        url: 1.1.1.1
+        url: "223.5.5.5" # until doh or dot
         interval: 1m
         ui:
           hide-hostname: true
@@ -31,4 +31,4 @@ data:
           query-name: "vmalert.noirprime.com"
           query-type: A
         conditions:
-          - "[DNS_RCODE] == NOERROR"
+          - "len([BODY]) == 0"

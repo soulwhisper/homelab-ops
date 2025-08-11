@@ -2,7 +2,7 @@
 
 - This namespace manages media applications
 - backed by nfs-volume `shared-media` on TrueNAS
-- use `keda` to reduce nas mount noise, if nas schedule offline;
+- nfs-server, maproot/owner = `2000:2000`
 
 ```yaml
 # ks.yaml

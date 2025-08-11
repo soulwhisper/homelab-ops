@@ -11,7 +11,8 @@ metrics:
     title: Talos
 
   - name: kubernetes_version
-    query: label_replace(kubernetes_build_info{service="kubernetes"}, "git_version", "$1", "git_version", "v(.+)")
+    # query: label_replace(kubernetes_build_info{service="kubernetes"}, "git_version", "$1", "git_version", "v(.+)")
+    query: label_replace(kubernetes_build_info, "git_version", "$1", "git_version", "v(.+)")
     label: git_version
     title: Kubernetes
 

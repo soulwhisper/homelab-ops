@@ -17,13 +17,14 @@ tasks:
       PLATFORM: '{{.PLATFORM | default "metal"}}'
       SECUREBOOT: '{{.SECUREBOOT | default "true"}}'
       VERSION:
-        sh: curl -s https://factory.talos.dev/versions | jq -r '
+        sh:
+          curl --silent --noproxy '*' https://factory.talos.dev/versions | jq --raw-output '
           map(select(test("^v[0-9.]+$"))) | sort_by(. | ltrimstr("v") | split(".") | map(tonumber)) | reverse | .[0]' | tail -n1
       ID:
         sh: |
           yq '.controlPlane.schematic' "{{.TALOS_DIR}}/talconfig.{{.MODE}}.yaml" > /tmp/schematic.yaml
-          curl -s -X POST --data-binary @/tmp/schematic.yaml https://factory.talos.dev/schematics | jq -r '.id'
-      IMAGE: "{{if .SECUREBOOT}}{{.PLATFORM}}-{{.ARCH}}-secureboot.iso{{else}}{{.PLATFORM}}-{{.ARCH}}.iso{{end}}"
+          curl --silent --noproxy '*' -X POST --data-binary @/tmp/schematic.yaml https://factory.talos.dev/schematics | jq --raw-output '.id'
+      IMAGE: '{{.PLATFORM}}-{{.ARCH}}{{if (eq .SECUREBOOT "true")}}-secureboot.iso{{end}}.iso'
     cmds:
       - |
         echo "Latest version: {{.VERSION}}"
@@ -49,7 +50,7 @@ tasks:
         --config-file {{.TALOS_DIR}}/talconfig.{{.MODE}}.yaml
         --secret-file {{.TALOS_DIR}}/talsecret.yaml
         --out-dir {{.TALOS_DIR}}/clusterconfig
-      - bash -c 'mkdir -p ~/.talos && cp $TALOSCONFIG ~/.talos/config'
+      - bash -c 'mkdir -p ~/.talos && cp ${TALOSCONFIG} ~/.talos/config'
 
   _bootstrap:
     internal: true

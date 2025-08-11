@@ -1,9 +1,10 @@
 ---
 endpoints:
-  # internal
+  # : internal
+  # make sure domain not exposed to the public internet
   - name: "${APP}"
     group: internal
-    url: 1.1.1.1
+    url: "223.5.5.5" # until doh or dot
     interval: 1m
     ui:
       hide-hostname: true
@@ -12,4 +13,4 @@ endpoints:
       query-name: "${GATUS_SUBDOMAIN:=${APP}}.noirprime.com"
       query-type: A
     conditions:
-      - "[DNS_RCODE] == NOERROR"
+      - "len([BODY]) == 0"

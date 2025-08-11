@@ -61,7 +61,7 @@ tasks:
   crunchy-exec:
     desc: Exec into the master instance of a CrunchyData Postgres cluster. [NS=database-system] [DB_CLUSTER=postgres]
     preconditions:
-      - which kubectl
+      - which bash kubectl
       - test -f "${KUBECONFIG}"
       - sh: |
           kkubectl get pods -n {{.DB_NS}} \

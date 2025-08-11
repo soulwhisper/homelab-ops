@@ -1,0 +1,112 @@
+---
+# yaml-language-server: $schema=https://taskfile.dev/schema.json
+version: "3"
+
+# : 'talhelper-less' talos bootstrap tasks
+# :: folder structure
+# ./infrastructure/talos/{{.MODE}}/{node-'nodename',machineconfig,schematic}.yaml.j2; extraManifests in machineconfig.yaml.j2;
+
+vars:
+  SYSTEM_UPGRADE_KS: "{{.K8S_DIR}}/apps/gitops-system/system-upgrade-controller/ks.yaml"
+env:
+  KUBERNETES_VERSION:
+    sh: yq '.spec.postBuild.substitute.KUBERNETES_VERSION | select(.)' {{.SYSTEM_UPGRADE_KS}}
+  TALOS_VERSION:
+    sh: yq '.spec.postBuild.substitute.TALOS_VERSION | select(.)' {{.SYSTEM_UPGRADE_KS}}
+
+tasks:
+  ## :: replace 'bootstrap:talos'
+  talos:
+    desc: Bootstrap Talos
+    vars:
+      RANDOM_CONTROLLER:
+        sh: talosctl config info --output json | jq --raw-output '.endpoints[]' | shuf -n 1
+      K8S_CONTEXT: '{{.K8S_CONTEXT | default "main"}}'
+      K8S_ENDPOINT: '{{.K8S_ENDPOINT | default "https://k8s.homelab.internal:6443"}}'
+    preconditions:
+      - which bash jq kubectl talosctl
+      - talosctl config info
+      - talosctl --nodes {{.RANDOM_CONTROLLER}} get machineconfig
+    cmds:
+      - task: talos:_bootstrap
+      - until talosctl --nodes {{.RANDOM_CONTROLLER}} bootstrap; do sleep 5; done
+      - kubectl config set-cluster {{.K8S_CONTEXT}} --server {{.K8S_ENDPOINT}}
+      - talosctl kubeconfig --nodes {{.RANDOM_CONTROLLER}} --force ${KUBECONFIG}
+      - bash -c 'mkdir -p ~/.kube && cp ${KUBECONFIG} $KUBEBACKUP'
+
+  ## :: replace 'talos:generate'
+  generate:
+    desc: Generate/Refresh Talos client configuration
+    vars:
+      MODE: '{{.MODE | default "prod"}}'
+    preconditions:
+      - '[[ "{{.MODE}}" == "test" || "{{.MODE}}" == "prod" ]]'
+      - which minijinja-cli talosctl
+      - test -f {{.TALOS_DIR}}/{{.MODE}}/machineconfig.yaml.j2
+    cmds:
+      - |
+        minijinja-cli {{.TALOS_DIR}}/{{.MODE}}/machineconfig.yaml.j2 \
+          | op inject \
+          | yq eval .machine.ca.crt /dev/stdin | base64 -d > ca.crt
+      - |
+        minijinja-cli {{.TALOS_DIR}}/{{.MODE}}/machineconfig.yaml.j2 \
+          | op inject \
+          | yq eval .machine.ca.key /dev/stdin | base64 -d > ca.key
+      - talosctl gen key --name admin
+      - talosctl gen csr --key admin.key --ip 127.0.0.1
+      - talosctl gen crt --ca ca --csr admin.csr --name admin --force
+      - rm -f ca.crt ca.key admin.key admin.csr admin.crt
+      - bash -c 'mkdir -p ~/.talos && cp ${TALOSCONFIG} ~/.talos/config'
+
+  ## :: add to 'talos:'
+  apply-node:
+    desc: Apply Talos config for a node [NODE=required]
+    vars:
+      MODE: '{{.MODE | default "prod"}}'
+      DRYRUN: '{{.DRYRUN | default "false"}}'
+      INSECURE:
+        sh: talosctl --nodes {{.NODE}} get machineconfig &> /dev/null || echo true
+      MACHINE_TYPE:
+        sh: yq 'select(documentIndex == 0) | .machine.type // "worker"' {{.TALOS_DIR}}/{{.MODE}}/{{.NODE}}.yaml
+    requires:
+      vars:
+        - NODE
+    preconditions:
+      - '[[ "{{.MODE}}" == "test" || "{{.MODE}}" == "prod" ]]'
+      - which curl jq minijinja-cli op talosctl
+      - test -f {{.TALOS_DIR}}/{{.MODE}}/machineconfig.yaml.j2
+      - test -f {{.TALOS_DIR}}/{{.MODE}}/schematic.yaml
+      - test -f {{.TALOS_DIR}}/{{.MODE}}/node-{{.NODE}}.yaml
+      - talosctl config info
+      - op user get --me
+    env:
+      MACHINE_TYPE: "{{.MACHINE_TYPE}}"
+      TALOS_SCHEMATIC:
+        sh: |
+          cat {{.TALOS_DIR}}/{{.MODE}}/schematic.yaml \
+            | curl --silent --noproxy '*' -X POST --data-binary @- https://factory.talos.dev/schematics \
+            | jq --raw-output '.id'
+    cmd: |
+      minijinja-cli {{.TALOS_DIR}}/{{.MODE}}/machineconfig.yaml.j2 \
+        | op inject \
+        | talosctl --nodes {{.NODE}} apply-config \
+          --config-patch @{{.TALOS_DIR}}/{{.MODE}}/node-{{.NODE}}.yaml \
+          --file /dev/stdin {{if (eq .INSECURE "true")}}--insecure{{end}} {{if (eq .DRYRUN "true")}}--dry-run{{end}}
+
+  # :: replace 'talos:_bootstrap', remove 'talos:_apply-machineconfig'
+  _bootstrap:
+    internal: true
+    desc: Apply bootstrap configs to talos cluster
+    silent: true
+    vars:
+      MODE: '{{.MODE | default "prod"}}'
+      FILES:
+        sh: ls {{.TALOS_DIR}}/{{.NODE}}/*.yaml
+    cmds:
+      - for:
+          var: FILES
+        task: apply-node
+        vars:
+          MODE: "{{.MODE}}"
+          NODE: |-
+            {{ trimPrefix (printf "node-") (base .ITEM) | trimSuffix ".yaml" }}

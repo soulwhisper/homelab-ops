@@ -3,7 +3,6 @@
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: HelmRepository
 metadata:
-  name: openebs
-  namespace: storage-system
+  name: robusta
 spec:
-  url: https://openebs.github.io/openebs
+  url: https://robusta-charts.storage.googleapis.com

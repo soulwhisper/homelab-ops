@@ -15,3 +15,5 @@ generatorOptions:
   annotations:
     kustomize.toolkit.fluxcd.io/substitute: disabled
   disableNameSuffixHash: true
+configurations:
+  - kustomizeconfig.yaml
