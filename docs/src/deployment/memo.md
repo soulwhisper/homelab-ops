@@ -38,12 +38,14 @@ direnv allow
 
 eval $(op signin)
 
-# bootstrap
+# bootstrap talos
 task talos:generate
-## if test
-task talos:generate MODE=test
-
+talosctl config endpoint CP1 CP2 CP3
 task bootstrap:talos
+## if test
+task bootstrap:talos MODE=test
+
+# then apps
 task bootstrap:apps
 
 # check

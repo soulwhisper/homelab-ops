@@ -19,6 +19,7 @@ tasks:
   talos:
     desc: Bootstrap Talos
     vars:
+      MODE: '{{.MODE | default "prod"}}'
       RANDOM_CONTROLLER:
         sh: talosctl config info --output json | jq --raw-output '.endpoints[]' | shuf -n 1
       K8S_CONTEXT: '{{.K8S_CONTEXT | default "main"}}'
@@ -28,34 +29,35 @@ tasks:
       - talosctl config info
       - talosctl --nodes {{.RANDOM_CONTROLLER}} get machineconfig
     cmds:
-      - task: talos:_bootstrap
+      - task: talos:_bootstrap MODE={{.MODE}}
       - until talosctl --nodes {{.RANDOM_CONTROLLER}} bootstrap; do sleep 5; done
       - kubectl config set-cluster {{.K8S_CONTEXT}} --server {{.K8S_ENDPOINT}}
       - talosctl kubeconfig --nodes {{.RANDOM_CONTROLLER}} --force ${KUBECONFIG}
-      - bash -c 'mkdir -p ~/.kube && cp ${KUBECONFIG} $KUBEBACKUP'
+      - bash -c 'mkdir -p ~/.kube && cp ${KUBECONFIG} ~/.kube/config'
 
   ## :: replace 'talos:generate'
   generate:
     desc: Generate/Refresh Talos client configuration
-    vars:
-      MODE: '{{.MODE | default "prod"}}'
     preconditions:
-      - '[[ "{{.MODE}}" == "test" || "{{.MODE}}" == "prod" ]]'
-      - which minijinja-cli talosctl
-      - test -f {{.TALOS_DIR}}/{{.MODE}}/machineconfig.yaml.j2
+      - which op talosctl
+      - op user get --me
     cmds:
-      - |
-        minijinja-cli {{.TALOS_DIR}}/{{.MODE}}/machineconfig.yaml.j2 \
-          | op inject \
-          | yq eval .machine.ca.crt /dev/stdin | base64 -d > ca.crt
-      - |
-        minijinja-cli {{.TALOS_DIR}}/{{.MODE}}/machineconfig.yaml.j2 \
-          | op inject \
-          | yq eval .machine.ca.key /dev/stdin | base64 -d > ca.key
+      - op item get talos-homelab --fields label=cert_os_crt --reveal | base64 -d > ca.crt
+      - op item get talos-homelab --fields label=cert_os_key --reveal | base64 -d > ca.key
       - talosctl gen key --name admin
       - talosctl gen csr --key admin.key --ip 127.0.0.1
-      - talosctl gen crt --ca ca --csr admin.csr --name admin --force
+      - talosctl gen crt --ca ca --csr admin.csr --name admin --force --hours 8760
+      - |
+        cat <<EOF > talosconfig
+        context: admin@main
+        contexts:
+          admin@main:
+            ca: $(base64 ca.crt | tr -d '\n')
+            crt: $(base64 admin.crt | tr -d '\n')
+            key: $(base64 admin.key | tr -d '\n')
+        EOF
       - rm -f ca.crt ca.key admin.key admin.csr admin.crt
+      - mv -f talosconfig ${TALOSCONFIG}
       - bash -c 'mkdir -p ~/.talos && cp ${TALOSCONFIG} ~/.talos/config'
 
   ## :: add to 'talos:'
