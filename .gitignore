@@ -2,9 +2,6 @@
 .DS_Store
 Thumbs.db
 
-# Sops
-.decrypted~*
-
 # Devenv
 .devenv*
 .pre-commit-config.yaml

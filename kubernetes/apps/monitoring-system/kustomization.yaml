@@ -21,7 +21,6 @@ resources:
   # others
   - ./coroot/ks.yaml
   - ./gatus/ks.yaml
-  - ./goldilocks/ks.yaml
   - ./kromgo/ks.yaml
   - ./robusta/ks.yaml
   - ./webhook/ks.yaml

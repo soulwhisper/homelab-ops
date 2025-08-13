@@ -75,9 +75,9 @@ tasks:
     preconditions:
       - '[[ "{{.MODE}}" == "test" || "{{.MODE}}" == "prod" ]]'
       - which curl jq minijinja-cli op talosctl
-      - test -f {{.TALOS_DIR}}/test/schematic.yaml.j2
-      - test -f {{.TALOS_DIR}}/test/{{.MACHINE_TYPE}}.yaml.j2
-      - test -f {{.TALOS_DIR}}/test/{{.MACHINE_TYPE}}-{{.NODE}}.yaml.j2
+      - test -f {{.TALOS_DIR}}/schematic.yaml.j2
+      - test -f {{.TALOS_DIR}}/{{.MACHINE_TYPE}}.yaml.j2
+      - test -f {{.TALOS_DIR}}/{{.MACHINE_TYPE}}-{{.NODE}}.yaml.j2
       - talosctl config info
       - op user get --me
     env:
@@ -88,10 +88,10 @@ tasks:
             | curl --silent --noproxy '*' -X POST --data-binary @- https://factory.talos.dev/schematics \
             | jq --raw-output '.id'
     cmd: |
-      minijinja-cli {{.TALOS_DIR}}/test/{{.MACHINE_TYPE}}.yaml.j2 \
+      minijinja-cli {{.TALOS_DIR}}/{{.MACHINE_TYPE}}.yaml.j2 \
         | op inject \
         | talosctl --nodes {{.NODE}} apply-config \
-          --config-patch @<(minijinja-cli {{.TALOS_DIR}}/test/{{.MACHINE_TYPE}}-{{.NODE}}.yaml.j2) \
+          --config-patch @<(minijinja-cli {{.TALOS_DIR}}/{{.MACHINE_TYPE}}-{{.NODE}}.yaml.j2) \
           --file /dev/stdin {{if (eq .INSECURE "true")}}--insecure{{end}} {{if (eq .DRYRUN "true")}}--dry-run{{end}}
 
   # :: replace 'talos:_bootstrap', remove 'talos:_apply-machineconfig'
@@ -102,7 +102,7 @@ tasks:
     vars:
       MODE: '{{.MODE | default "prod"}}'
       FILES:
-        sh: ls {{.TALOS_DIR}}/test/*.yaml.j2
+        sh: ls {{.TALOS_DIR}}/*.yaml.j2
     cmds:
       # bootstrap controlplane nodes
       - for:
