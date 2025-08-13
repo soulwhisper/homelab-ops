@@ -49,7 +49,7 @@ releases:
   - name: external-secrets
     namespace: security-system
     chart: oci://ghcr.io/external-secrets/charts/external-secrets
-    version: 0.19.1
+    version: 0.19.2
     values: ["../apps/security-system/external-secrets/app/values.yaml"]
     needs: ["kube-system/spegel"]
 
