@@ -24,4 +24,3 @@
 
 - [CRDs](./deployment/crds.md)
 - [Memo](./deployment/memo.md)
-- [Plans](./deployment/plans.md)

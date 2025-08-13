@@ -1,8 +1,10 @@
-## Plans
+## TODO
 
 ### Infrastructure
 
 - [ ] add switch scripts to infra
+- [x] NAS archived, move to CephFS
+- [ ] add USB4 DAS backup document
 
 ### Talos
 
@@ -12,7 +14,7 @@
 ### Apps
 
 - [x] evaluate starrs utility
-- [x] fix cloudflared connectivity, via proxies or not
+- [x] fix cloudflared connectivity, via proxies
 - [x] optimize ceph-bucket stability
 
 ### On-hold
