@@ -1,0 +1,47 @@
+{% set is_vm = (ENV.MODE == 'test') %}
+{% set is_baremetal = (ENV.MODE == 'prod') %}
+{% if ENV.MODE == 'test' %}
+  {% set subnet = '172.19.82' %}
+{% else %}
+  {% set subnet = '10.10.0' %}
+{% endif %}
+---
+machine:
+  install:
+    diskSelector:
+      model: SQF-C3AV1-256GDEDM
+  network:
+    hostname: exarch-01
+    interfaces:
+      - interface: bond0
+        {% if is_vm %}
+        bond:
+          interfaces: []
+          deviceSelectors:
+            - permanentAddr: "00:*" # vmware
+            - permanentAddr: "bc:*" # proxmox
+          mode: active-backup
+        {% endif %}
+        {% if is_baremetal %}
+        bond:
+          interfaces:
+            - enp2s0f0np0
+            - enp2s0f1np1
+          mode: 802.3ad
+          lacpRate: fast
+          xmitHashPolicy: layer3+4
+          miimon: 100
+          updelay: 200
+          downdelay: 200
+        mtu: 9000
+        {% endif %}
+        dhcp: false
+        vip:
+          ip: {{ subnet }}.100
+        addresses:
+          - {{ subnet }}.101/24
+        routes:
+          - network: 0.0.0.0/0
+            gateway: {{ subnet }}.1
+  nodeLabels:
+    intel.feature.node.kubernetes.io/gpu: "true"

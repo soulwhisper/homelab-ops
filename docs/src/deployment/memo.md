@@ -52,6 +52,8 @@ task bootstrap:apps
 kubectl get ks -A
 kubectl get hr -A
 
+# reboot each machine at least once before any upgrade to ensure proxy env propagated
+
 ## Flux Debug
 task reconcile
 flux get sources git gitops-system
