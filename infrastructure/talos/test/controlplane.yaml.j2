@@ -72,6 +72,10 @@ machine:
     disableManifestsDirectory: true
   network:
     disableSearchDomain: true
+    extraHostEntries:
+      - ip: {{ subnet }}.100
+        aliases:
+          - k8s.homelab.internal
   sysctls:
     fs.inotify.max_user_instances: "524288"
     fs.inotify.max_user_watches: "524288"
@@ -110,6 +114,7 @@ cluster:
     image: registry.k8s.io/kube-apiserver:{{ ENV.KUBERNETES_VERSION }}
     certSANs:
       - k8s.homelab.internal
+      - {{ subnet }}.100
       - 127.0.0.1 # KubePrism
     disablePodSecurityPolicy: true
   controllerManager:

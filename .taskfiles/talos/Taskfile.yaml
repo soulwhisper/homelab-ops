@@ -24,7 +24,7 @@ tasks:
         sh: |
           yq '.controlPlane.schematic' "{{.TALOS_DIR}}/talconfig.{{.MODE}}.yaml" > /tmp/schematic.yaml
           curl --silent --noproxy '*' -X POST --data-binary @/tmp/schematic.yaml https://factory.talos.dev/schematics | jq --raw-output '.id'
-      IMAGE: '{{.PLATFORM}}-{{.ARCH}}{{if (eq .SECUREBOOT "true")}}-secureboot.iso{{end}}.iso'
+      IMAGE: '{{.PLATFORM}}-{{.ARCH}}{{if (eq .SECUREBOOT "true")}}-secureboot{{end}}.iso'
     cmds:
       - |
         echo "Latest version: {{.VERSION}}"

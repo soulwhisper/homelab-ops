@@ -16,7 +16,7 @@ talosVersion: v1.10.6
 # renovate: depName=ghcr.io/siderolabs/kubelet datasource=docker
 kubernetesVersion: v1.33.3
 
-additionalApiServerCertSans: &sans
+additionalApiServerCertSans:
   - k8s.homelab.internal
   - &talosControlplaneVip 10.10.0.100
   - 127.0.0.1
@@ -89,7 +89,6 @@ nodes:
           ip: *talosControlplaneVip
 
 controlPlane:
-  certSANs: *sans
   machineSpec:
     mode: metal
     arch: amd64
@@ -120,7 +119,7 @@ controlPlane:
             SHUTDOWNCMD "/sbin/poweroff"
           mountPath: /usr/local/etc/nut/upsmon.conf
 
-  # controlPlane only patches
+  # : controlPlane only patches
   patches:
     # :: ApiServer configuration, disable admission plugins
     - |-
