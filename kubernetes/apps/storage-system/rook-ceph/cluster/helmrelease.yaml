@@ -80,7 +80,7 @@ spec:
       storage:
         useAllNodes: true
         useAllDevices: false
-        deviceFilter: ^sd[b-d] # test only; ref:https://rook.io/docs/rook/v1.14/CRDs/Cluster/ceph-cluster-crd/?h=usealldevices#storage-selection-settings
+        deviceFilter: ^sd[b-z] # test only; ref:https://rook.io/docs/rook/v1.14/CRDs/Cluster/ceph-cluster-crd/?h=usealldevices#storage-selection-settings
         config:
           osdsPerDevice: "1"
     cephBlockPools:
@@ -89,12 +89,13 @@ spec:
           failureDomain: host
           replicated:
             size: 3
+          parameters:
+            compression_mode: passive
+            target_size_ratio: 0.8
         storageClass:
-          enabled: true
           name: ceph-block
           isDefault: true
-          reclaimPolicy: Delete
-          allowVolumeExpansion: true
+          allowVolumeExpansion: true # default
           mountOptions:
             - discard
           parameters:
@@ -112,7 +113,37 @@ spec:
       name: ceph-block-snapshot
       isDefault: true
       deletionPolicy: Delete
-    cephFileSystems: []
+    cephFileSystems:
+      - name: ceph-filesystem
+        spec:
+          metadataPool:
+            failureDomain: host
+            replicated:
+              size: 3
+          dataPools:
+            - name: default
+              replicated:
+                size: 3
+            - name: erasurecoded
+              erasureCoded:
+                dataChunks: 2
+                codingChunks: 1
+              parameters:
+                compression_mode: passive
+          preserveFilesystemOnDelete: true
+          metadataServer:
+            activeCount: 1
+            activeStandby: true
+        storageClass:
+          name: ceph-filesystem
+          pool: erasurecoded
+          parameters:
+            csi.storage.k8s.io/provisioner-secret-name: rook-csi-cephfs-provisioner
+            csi.storage.k8s.io/provisioner-secret-namespace: *cluster_namespace
+            csi.storage.k8s.io/controller-expand-secret-name: rook-csi-cephfs-provisioner
+            csi.storage.k8s.io/controller-expand-secret-namespace: *cluster_namespace
+            csi.storage.k8s.io/node-stage-secret-name: rook-csi-cephfs-node
+            csi.storage.k8s.io/node-stage-secret-namespace: *cluster_namespace
     cephObjectStores:
       - name: ceph-objectstore
         spec:
@@ -135,9 +166,6 @@ spec:
                 memory: 1Gi
             instances: 1
         storageClass:
-          enabled: true
           name: ceph-bucket
-          reclaimPolicy: Delete
-          volumeBindingMode: Immediate
         ingress:
           enabled: false

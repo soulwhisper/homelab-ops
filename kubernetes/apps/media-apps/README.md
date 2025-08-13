@@ -1,21 +1,8 @@
 # Media Apps
 
 - This namespace manages media applications
-- backed by nfs-volume `shared-media` on TrueNAS
-- nfs-server, maproot/owner = `2000:2000`
-
-```yaml
-# ks.yaml
-spec:
-  dependsOn:
-    - name: keda
-      namespace: kube-system
-  components:
-    - ../../../../components/keda/nas-nfs-scaler
-  postBuild:
-    substitute:
-      APP: *appname
-```
+- backed by `shared-media` PVC, previously NAS, now CephFS
+- volume, maproot/owner = `2000:2000`
 
 ## Media stack choice
 

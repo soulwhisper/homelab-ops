@@ -76,7 +76,7 @@ spec:
         globalMounts:
           - path: /config
       media:
-        existingClaim: nfs-media
+        existingClaim: shared-media
         globalMounts:
           - path: /media
       tmpfs:

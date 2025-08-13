@@ -8,8 +8,6 @@ spec:
   retentionPolicy: "30d"
   configuration:
     destinationPath: s3://postgres/
-    # s3-endpoint: truenas=nas.homelab.internal:7070, nixos=s3.noirprime.com
-    # endpointURL: http://nas.homelab.internal:7070
     endpointURL: http://rook-ceph-rgw-ceph-objectstore.storage-system.svc.cluster.local
     s3Credentials:
       accessKeyId:

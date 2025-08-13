@@ -21,7 +21,7 @@ spec:
     namespace: gitops-system
   wait: false
   dependsOn:
-    - name: nfs-media
+    - name: shared-media
       namespace: media-apps
     - name: rook-ceph-cluster
       namespace: storage-system

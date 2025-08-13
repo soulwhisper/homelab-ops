@@ -25,7 +25,7 @@ spec:
       namespace: database-system
     - name: dragonfly-operator
       namespace: database-system
-    - name: nfs-media
+    - name: shared-media
       namespace: media-apps
     - name: onepassword-store
       namespace: security-system

@@ -3,11 +3,12 @@
 apiVersion: monitoring.coreos.com/v1
 kind: Probe
 metadata:
-  name: devices
+  name: nfs
 spec:
-  module: icmp
+  module: tcp_connect
   prober:
     url: blackbox-exporter.monitoring-system.svc.cluster.local:9115
   targets:
     staticConfig:
-      static: [] # use hostname
+      static:
+        - nas.homelab.internal:2049

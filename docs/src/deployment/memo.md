@@ -13,9 +13,9 @@
 - vlan is managed by switch as ACCESS mode;
 - openebs-hostpath, deprecated due to MS-01 using 256G system disk;
 - ceph-block, for database and apps;
-- ceph-fs, deprecated, using nas-nfs for shared media;
+- ceph-filesystem, for shared media;
 - ceph-bucket, using this instead of nas-minio for volsync backup;
-- volsync nfs-backup using mutatingAdmissionPolicy;
+- volsync nfs-backup, deprecated, using mutatingAdmissionPolicy;
 - onepassword as main secret store;
 - externaldns-adguard store records in `custom-adblock` field;
 - internal and external domains both using `noirprime.com`, powered by cloudflared;

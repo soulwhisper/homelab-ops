@@ -3,7 +3,7 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &appname emby
+  name: &appname shared-media
   namespace: &namespace media-apps
 spec:
   targetNamespace: *namespace
@@ -13,24 +13,13 @@ spec:
   interval: 30m
   timeout: 5m
   retryInterval: 1m
-  path: "./kubernetes/apps/media-apps/emby/app"
-  prune: true
+  path: "./kubernetes/apps/media-apps/shared-media/app"
+  prune: false # Never delete this
   sourceRef:
     kind: GitRepository
     name: gitops-system
     namespace: gitops-system
-  wait: false
+  wait: true
   dependsOn:
-    - name: shared-media
-      namespace: media-apps
-    - name: rook-ceph-cluster
+    - name: csi-driver-nfs
       namespace: storage-system
-    - name: volsync
-      namespace: storage-system
-  components:
-    - ../../../../components/gatus/internal
-    - ../../../../components/volsync
-  postBuild:
-    substitute:
-      APP: *appname
-      GATUS_SUBDOMAIN: movie

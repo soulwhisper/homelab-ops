@@ -7,7 +7,7 @@ components:
   - ../../components/common
 resources:
   # storage
-  - ./nfs-media/ks.yaml
+  - ./shared-media/ks.yaml
   # apps
   - ./moviepilot/ks.yaml
   - ./qbittorrent/ks.yaml

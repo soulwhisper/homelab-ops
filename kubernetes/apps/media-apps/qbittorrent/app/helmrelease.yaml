@@ -87,7 +87,7 @@ spec:
         globalMounts:
           - path: /config
       media:
-        existingClaim: nfs-media
+        existingClaim: shared-media
         globalMounts:
           - path: /data/nas-media/Downloads/qbittorrent
             subPath: Downloads/qbittorrent

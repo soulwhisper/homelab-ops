@@ -103,7 +103,7 @@ spec:
           - path: /etc/ocis
             subPath: config
       media:
-        existingClaim: nfs-media
+        existingClaim: shared-media
         advancedMounts:
           ocis:
             app:
