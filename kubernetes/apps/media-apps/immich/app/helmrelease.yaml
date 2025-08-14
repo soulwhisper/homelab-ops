@@ -97,7 +97,7 @@ spec:
           machine-learning:
             image:
               repository: ghcr.io/immich-app/immich-machine-learning
-              tag: v1.137.3
+              tag: v1.138.0
             env:
               TRANSFORMERS_CACHE: /cache
             envFrom: *envFrom
