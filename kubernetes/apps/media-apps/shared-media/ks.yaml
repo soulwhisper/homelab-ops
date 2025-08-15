@@ -20,6 +20,3 @@ spec:
     name: gitops-system
     namespace: gitops-system
   wait: true
-  dependsOn:
-    - name: csi-driver-nfs
-      namespace: storage-system
