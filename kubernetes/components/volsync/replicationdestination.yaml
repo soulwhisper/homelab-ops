@@ -4,6 +4,8 @@ apiVersion: volsync.backube/v1alpha1
 kind: ReplicationDestination
 metadata:
   name: "${APP}-bootstrap"
+  labels:
+    kustomize.toolkit.fluxcd.io/ssa: IfNotPresent
 spec:
   trigger:
     manual: restore-once
@@ -14,15 +16,18 @@ spec:
       - "${VOLSYNC_CACHE_ACCESSMODES:-ReadWriteOnce}"
     cacheCapacity: "${VOLSYNC_CACHE_CAPACITY:-5Gi}"
     cacheStorageClassName: "${VOLSYNC_CACHE_SNAPSHOTCLASS:-openebs-hostpath}"
-    capacity: "${VOLSYNC_CAPACITY:-1Gi}"
+    capacity: "${VOLSYNC_CAPACITY:-5Gi}"
+    compression: zstd-fastest
     cleanupCachePVC: true
     cleanupTempPVC: true
+    copyMethod: Snapshot
     enableFileDeletion: true
-    copyMethod: "${VOLSYNC_COPYMETHOD:-Snapshot}"
     moverSecurityContext:
       runAsUser: "${APP_UID:-2000}"
       runAsGroup: "${APP_GID:-2000}"
       fsGroup: "${APP_GID:-2000}"
     repository: "${APP}-volsync"
+    sourceIdentity:
+      sourceName: ${APP}
     storageClassName: "${VOLSYNC_STORAGECLASS:-ceph-block}"
     volumeSnapshotClassName: "${VOLSYNC_SNAPSHOTCLASS:-ceph-block-snapshot}"
