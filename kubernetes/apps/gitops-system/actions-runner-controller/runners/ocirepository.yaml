@@ -3,7 +3,7 @@
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: OCIRepository
 metadata:
-  name: actions-runner-controller
+  name: gha-runner-scale-set
 spec:
   interval: 5m
   layerSelector:
@@ -11,4 +11,4 @@ spec:
     operation: copy
   ref:
     tag: 0.12.1
-  url: oci://ghcr.io/actions/actions-runner-controller-charts/gha-runner-scale-set-controller
+  url: oci://ghcr.io/actions/actions-runner-controller-charts/gha-runner-scale-set

@@ -8,7 +8,7 @@ spec:
   interval: 30m
   chartRef:
     kind: OCIRepository
-    name: actions-runner-controller
+    name: gha-runner-scale-set
   maxHistory: 1
   install:
     crds: CreateReplace
@@ -34,7 +34,7 @@ spec:
         storageClassName: ceph-block
         resources:
           requests:
-            storage: 10Gi
+            storage: 5Gi
     proxy:
       http:
         url: "${HTTP_PROXY}"
@@ -51,7 +51,7 @@ spec:
           - name: runner
             image: ghcr.io/home-operations/actions-runner:2.328.0@sha256:c43873ef6800697dfa181582f6bb02366a9a0afb52026bde7bad7c71b21b1052
             command:
-              - /homelab/runner/run.sh
+              - /home/runner/run.sh
             env:
               - name: ACTIONS_RUNNER_REQUIRE_JOB_CONTAINER
                 value: "false"
