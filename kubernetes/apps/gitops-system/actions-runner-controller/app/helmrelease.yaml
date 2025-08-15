@@ -8,7 +8,7 @@ spec:
   interval: 30m
   chartRef:
     kind: OCIRepository
-    name: actions-runner-controller
+    name: gha-runner-scale-set-controller
   maxHistory: 1
   install:
     crds: CreateReplace

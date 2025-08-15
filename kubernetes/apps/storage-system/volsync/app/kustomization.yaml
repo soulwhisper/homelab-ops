@@ -5,6 +5,6 @@ kind: Kustomization
 resources:
   # app
   - ./helmrelease.yaml
-  - ./ocirepository.yaml
+  - ./helmrepository.yaml
   # utils
   - ./prometheusrule.yaml

@@ -95,7 +95,7 @@ spec:
         storageClass:
           name: ceph-block
           isDefault: true
-          allowVolumeExpansion: true # default
+          allowVolumeExpansion: true
           mountOptions:
             - discard
           parameters:
@@ -137,6 +137,7 @@ spec:
         storageClass:
           name: ceph-filesystem
           pool: erasurecoded
+          allowVolumeExpansion: true
           parameters:
             csi.storage.k8s.io/provisioner-secret-name: rook-csi-cephfs-provisioner
             csi.storage.k8s.io/provisioner-secret-namespace: *cluster_namespace
