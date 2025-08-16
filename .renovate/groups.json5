@@ -77,6 +77,15 @@
       },
     },
     {
+      description: "Gateway API Group",
+      groupName: "Gateway API",
+      matchDatasources: ["docker"],
+      matchPackageNames: ["/gateway-api-crds/"],
+      group: {
+        commitMessageTopic: "{{{groupName}}} group",
+      },
+    },
+    {
       description: "Prometheus Group",
       groupName: "Prometheus",
       matchDatasources: ["docker"],
