@@ -7,6 +7,6 @@ endpoints:
     url: "https://${GATUS_SUBDOMAIN:=${APP}}.noirprime.com${GATUS_PATH:=/}"
     interval: 1m
     client:
-      dns-resolver: "tcp://223.5.5.5:53" # until doh or dot
+      dns-resolver: "1.1.1.1" # until doh or dot
     conditions:
       - "[STATUS] == ${GATUS_STATUS:=200}"

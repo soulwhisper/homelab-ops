@@ -16,7 +16,7 @@ spec:
         barmanObjectName: minio-store
         serverName: postgres-v1 # changeme if restored
   storage:
-    size: 20Gi
+    size: 50Gi
     storageClass: ceph-block
   superuserSecret:
     name: cloudnative-pg
