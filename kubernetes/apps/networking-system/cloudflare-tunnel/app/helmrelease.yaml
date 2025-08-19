@@ -41,7 +41,7 @@ spec:
             image:
               # cloudflared fork with socks5 support
               repository: ghcr.io/alliottech/cloudflared_proxy
-              tag: 2025.7.0
+              tag: 2025.8.0
             args: ["tunnel", "run"]
             env:
               ALL_PROXY: "${ALL_PROXY}"
