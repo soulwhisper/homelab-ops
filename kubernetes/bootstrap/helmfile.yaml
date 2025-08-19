@@ -2,7 +2,6 @@
 # yaml-language-server: $schema=https://json.schemastore.org/helmfile
 helmDefaults:
   cleanupOnFail: true
-  force: true
   timeout: 600
   wait: true
   waitForJobs: true
@@ -23,7 +22,11 @@ releases:
     chart: oci://ghcr.io/home-operations/charts-mirror/cilium
     version: 1.18.1
     values: ["../apps/kube-system/cilium/app/values.yaml"]
-    needs: ["monitoring-system/prometheus-operator-crds" "kube-system/gateway-api-crds"]
+    needs:
+      [
+        "monitoring-system/prometheus-operator-crds",
+        "kube-system/gateway-api-crds",
+      ]
 
   - name: coredns
     namespace: kube-system
@@ -50,7 +53,7 @@ releases:
   - name: flux-operator
     namespace: gitops-system
     chart: oci://ghcr.io/controlplaneio-fluxcd/charts/flux-operator
-    version: 0.27.0
+    version: 0.28.0
     values: ["../apps/gitops-system/flux-operator/app/values.yaml"]
     needs: ["security-system/external-secrets"]
     hooks:
@@ -66,6 +69,6 @@ releases:
   - name: flux-instance
     namespace: gitops-system
     chart: oci://ghcr.io/controlplaneio-fluxcd/charts/flux-instance
-    version: 0.27.0
+    version: 0.28.0
     values: ["../apps/gitops-system/flux-operator/instance/values.yaml"]
     needs: ["gitops-system/flux-operator"]
