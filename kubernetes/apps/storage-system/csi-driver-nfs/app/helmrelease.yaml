@@ -1,0 +1,34 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.noirprime.com/helm.toolkit.fluxcd.io/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: csi-driver-nfs
+spec:
+  interval: 30m
+  chartRef:
+    kind: OCIRepository
+    name: csi-driver-nfs
+  maxHistory: 1
+  install:
+    crds: CreateReplace
+    remediation:
+      retries: -1
+  upgrade:
+    cleanupOnFail: true
+    crds: CreateReplace
+    remediation:
+      retries: 3
+  uninstall:
+    keepHistory: false
+
+  values:
+    controller:
+      enableSnapshotter: false
+    externalSnapshotter:
+      customResourceDefinitions:
+        enabled: false
+    feature:
+      # use securityContext.fsGroupChangePolicy: "OnRootMismatch" instead
+      # ref:https://github.com/kubernetes-csi/csi-driver-nfs/issues/870
+      enableFSGroupPolicy: false

@@ -54,6 +54,14 @@ spec:
       kind: CephBlockPool
       name: ceph-blockpool
       namespace: *namespace
+    - apiVersion: ceph.rook.io/v1
+      kind: CephFilesystem
+      name: ceph-filesystem
+      namespace: *namespace
+    - apiVersion: ceph.rook.io/v1
+      kind: CephObjectStore
+      name: ceph-objectstore
+      namespace: *namespace
   healthCheckExprs:
     # status checks is case-sensitive
     - apiVersion: ceph.rook.io/v1
@@ -62,6 +70,14 @@ spec:
       current: status.ceph.health == 'HEALTH_OK' || status.ceph.health == 'HEALTH_WARN'
     - apiVersion: ceph.rook.io/v1
       kind: CephBlockPool
+      failed: status.phase != 'Ready'
+      current: status.phase == 'Ready'
+    - apiVersion: ceph.rook.io/v1
+      kind: CephFilesystem
+      failed: status.phase != 'Ready'
+      current: status.phase == 'Ready'
+    - apiVersion: ceph.rook.io/v1
+      kind: CephObjectStore
       failed: status.phase != 'Ready'
       current: status.phase == 'Ready'
   dependsOn:
@@ -73,3 +89,45 @@ spec:
     substitute:
       APP: *appname
       GATUS_SUBDOMAIN: rook
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.noirprime.com/kustomize.toolkit.fluxcd.io/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: &appname rook-ceph-buckets
+  namespace: &namespace storage-system
+spec:
+  targetNamespace: *namespace
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *appname
+  interval: 30m
+  timeout: 5m
+  retryInterval: 1m
+  path: "./kubernetes/apps/storage-system/rook-ceph/buckets"
+  prune: false # Never delete this
+  sourceRef:
+    kind: GitRepository
+    name: gitops-system
+    namespace: gitops-system
+  wait: true
+  healthChecks:
+    - apiVersion: objectbucket.io/v1alpha1
+      kind: ObjectBucketClaim
+      name: ceph-bucket-postgres
+      namespace: *namespace
+    - apiVersion: objectbucket.io/v1alpha1
+      kind: ObjectBucketClaim
+      name: ceph-bucket-volsync
+      namespace: *namespace
+  healthCheckExprs:
+    # status checks is case-sensitive
+    - apiVersion: objectbucket.io/v1alpha1
+      kind: ObjectBucketClaim
+      failed: status.phase != 'Bound'
+      current: status.phase == 'Bound'
+  dependsOn:
+    - name: onepassword-store
+      namespace: security-system
+    - name: rook-ceph-cluster
+      namespace: storage-system

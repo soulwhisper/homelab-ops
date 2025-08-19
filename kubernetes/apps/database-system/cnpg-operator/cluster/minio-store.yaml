@@ -8,7 +8,7 @@ spec:
   retentionPolicy: "30d"
   configuration:
     destinationPath: s3://postgres/
-    endpointURL: http://rook-ceph-rgw-ceph-objectstore.storage-system.svc.cluster.local
+    endpointURL: http://nas.homelab.internal:7070
     s3Credentials:
       accessKeyId:
         name: cloudnative-pg

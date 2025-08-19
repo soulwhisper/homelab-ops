@@ -10,3 +10,4 @@ resources:
   - ./externalsecret.yaml
   - ./gatus.yaml
   - ./httproute.yaml
+  - ./scrapeconfig.yaml

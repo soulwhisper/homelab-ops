@@ -39,6 +39,7 @@ terraform apply
 
 ```shell
 # deployment
+mkdir -p /root/vgw/data && chown -R 2000:2000 /root/vgw/data
 docker run --name versitygw --user 2000:2000 \
   -p 7070:7070/tcp \
   -v /root/vgw/data:/tmp/vgw \

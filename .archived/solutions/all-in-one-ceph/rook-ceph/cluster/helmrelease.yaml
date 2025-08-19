@@ -90,6 +90,7 @@ spec:
             size: 3
           parameters:
             compression_mode: passive
+            target_size_ratio: "0.8"
         storageClass:
           name: ceph-block
           isDefault: true
@@ -111,5 +112,60 @@ spec:
       name: ceph-block-snapshot
       isDefault: true
       deletionPolicy: Delete
-    cephFileSystems: []
-    cephObjectStores: []
+    cephFileSystems:
+      - name: ceph-filesystem
+        spec:
+          metadataPool:
+            failureDomain: host
+            replicated:
+              size: 3
+          dataPools:
+            - name: default
+              replicated:
+                size: 3
+            - name: erasurecoded
+              erasureCoded:
+                dataChunks: 2
+                codingChunks: 1
+              parameters:
+                compression_mode: passive
+          preserveFilesystemOnDelete: true
+          metadataServer:
+            activeCount: 1
+            activeStandby: true
+        storageClass:
+          name: ceph-filesystem
+          pool: erasurecoded
+          allowVolumeExpansion: true
+          parameters:
+            csi.storage.k8s.io/provisioner-secret-name: rook-csi-cephfs-provisioner
+            csi.storage.k8s.io/provisioner-secret-namespace: *cluster_namespace
+            csi.storage.k8s.io/controller-expand-secret-name: rook-csi-cephfs-provisioner
+            csi.storage.k8s.io/controller-expand-secret-namespace: *cluster_namespace
+            csi.storage.k8s.io/node-stage-secret-name: rook-csi-cephfs-node
+            csi.storage.k8s.io/node-stage-secret-namespace: *cluster_namespace
+    cephObjectStores:
+      - name: ceph-objectstore
+        spec:
+          metadataPool:
+            failureDomain: host
+            replicated:
+              size: 3
+          dataPool:
+            failureDomain: host
+            replicated:
+              size: 3
+          preservePoolsOnDelete: true
+          # endpint-url:http://rook-ceph-rgw-ceph-objectstore.storage-system.svc.cluster.local
+          gateway:
+            port: 80
+            resources:
+              requests:
+                cpu: 100m
+              limits:
+                memory: 1Gi
+            instances: 1
+        storageClass:
+          name: ceph-bucket
+        ingress:
+          enabled: false
