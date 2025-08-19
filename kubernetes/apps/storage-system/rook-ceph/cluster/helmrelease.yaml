@@ -91,7 +91,7 @@ spec:
             size: 3
           parameters:
             compression_mode: passive
-            target_size_ratio: 0.8
+            target_size_ratio: "0.8"
         storageClass:
           name: ceph-block
           isDefault: true
