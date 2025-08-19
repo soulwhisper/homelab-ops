@@ -27,7 +27,6 @@ tasks:
     preconditions:
       - which bash jq kubectl talosctl
       - talosctl config info
-      - talosctl --nodes {{.RANDOM_CONTROLLER}} get machineconfig
     cmds:
       - task: talos:_bootstrap MODE={{.MODE}}
       - until talosctl --nodes {{.RANDOM_CONTROLLER}} bootstrap; do sleep 5; done

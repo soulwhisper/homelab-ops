@@ -11,7 +11,6 @@ tasks:
     preconditions:
       - which bash talosctl
       - talosctl config info
-      - talosctl --nodes {{.RANDOM_CONTROLLER}} get machineconfig
     cmds:
       - task: :talos:_bootstrap
       - |
