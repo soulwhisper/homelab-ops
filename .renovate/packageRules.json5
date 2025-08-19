@@ -6,9 +6,15 @@
       pinDigests: false,
     },
     {
-      "matchDatasources": ["docker"],
-      "matchPackagePatterns": ["postgresql", "postgres-backup-local"],
-      "allowedVersions": "<17"
+      description: "Override Helmfile Dependency Name",
+      matchDatasources: ["docker"],
+      matchManagers: ["helmfile"],
+      overrideDepName: "{{packageName}}",
+    },
+    {
+      matchDatasources: ["docker"],
+      matchPackagePatterns: ["postgresql", "postgres-backup-local"],
+      allowedVersions: "<17",
     },
     {
       description: "Pin talos version if something breaks",

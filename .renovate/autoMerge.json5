@@ -22,5 +22,17 @@
       minimumReleaseAge: "3 days",
       ignoreTests: true,
     },
+    {
+      description: "Auto merge minors and patches",
+      matchDatasources: ["docker"],
+      automerge: true,
+      automergeType: "pr",
+      matchUpdateTypes: ["minor", "patch"],
+      matchPackageNames: [
+        "/kube-prometheus-stack/",
+        "ghcr.io/bjw-s-labs/wrangler",
+      ],
+      ignoreTests: false,
+    },
   ],
 }
