@@ -5,7 +5,10 @@
       description: "1Password Connect Group",
       groupName: "1Password Connect",
       matchDatasources: ["docker"],
-      matchPackageNames: ["/1password/"],
+      matchPackageNames: [
+        "/connect-api/",
+        "/connect-sync/",
+      ],
       group: {
         commitMessageTopic: "{{{groupName}}} group",
       },
@@ -25,10 +28,13 @@
       minimumGroupSize: 2,
     },
     {
-      description: ["Cloudnative-pg Group"],
-      groupName: "Cloudnative-pg",
+      description: ["Dragonflydb Group"],
+      groupName: "Dragonflydb",
       matchDatasources: ["docker"],
-      matchPackageNames: ["/cloudnative-pg/"],
+      matchPackageNames: [
+        "/dragonfly-operator/",
+        "/dragonfly/",
+      ],
       group: {
         commitMessageTopic: "{{{groupName}}} group",
       },
@@ -38,7 +44,10 @@
       description: "Flux Operator Group",
       groupName: "Flux Operator",
       matchDatasources: ["docker"],
-      matchPackageNames: ["/flux-operator/", "/flux-instance/"],
+      matchPackageNames: [
+        "/flux-operator/", 
+        "/flux-instance/",
+      ],
       group: {
         commitMessageTopic: "{{{groupName}}} group",
       },
@@ -48,7 +57,10 @@
       description: "Rook-Ceph Group",
       groupName: "Rook-Ceph",
       matchDatasources: ["docker"],
-      matchPackageNames: ["/rook-ceph/", "/rook-ceph-cluster/"],
+      matchPackageNames: [
+        "/rook-ceph/", 
+        "/rook-ceph-cluster/",
+      ],
       group: {
         commitMessageTopic: "{{{groupName}}} group",
       },
