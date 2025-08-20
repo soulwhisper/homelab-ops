@@ -28,6 +28,14 @@ spec:
       moviepilot:
         annotations:
           reloader.stakater.com/auto: "true"
+        initContainers:
+          init-db:
+            image:
+              repository: ghcr.io/home-operations/postgres-init
+              tag: "17"
+            envFrom:
+              - secretRef:
+                  name: moviepilot-initdb
         containers: # this container has to start as host root
           app:
             image:
@@ -40,6 +48,32 @@ spec:
               CACHE_BACKEND_TYPE: "redis"
               CACHE_BACKEND_URL: redis://moviepilot-dragonfly.media-apps.svc.cluster.local:6379/0
               CACHE_REDIS_MAXMEMORY: "1024mb"
+              DB_TYPE: "postgresql"
+              DB_POSTGRESQL_HOST:
+                valueFrom:
+                  secretKeyRef:
+                    name: &pguser moviepilot-pguser
+                    key: host
+              DB_POSTGRESQL_PORT:
+                valueFrom:
+                  secretKeyRef:
+                    name: *pguser
+                    key: port
+              DB_POSTGRESQL_DATABASE:
+                valueFrom:
+                  secretKeyRef:
+                    name: *pguser
+                    key: db
+              DB_POSTGRESQL_USERNAME:
+                valueFrom:
+                  secretKeyRef:
+                    name: *pguser
+                    key: user
+              DB_POSTGRESQL_PASSWORD:
+                valueFrom:
+                  secretKeyRef:
+                    name: *pguser
+                    key: password
               PROXY_HOST: "${HTTPS_PROXY}"
               PUID: "2000"
               PGID: "2000"

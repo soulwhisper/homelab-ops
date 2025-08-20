@@ -23,6 +23,8 @@ spec:
   dependsOn:
     - name: cnpg-cluster
       namespace: database-system
+    - name: dragonfly-operator
+      namespace: database-system
     - name: lldap
       namespace: security-system
     - name: onepassword-store

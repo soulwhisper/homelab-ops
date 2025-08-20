@@ -21,6 +21,10 @@ spec:
     namespace: gitops-system
   wait: false
   dependsOn:
+    - name: cnpg-cluster
+      namespace: database-system
+    - name: dragonfly-operator
+      namespace: database-system
     - name: shared-media
       namespace: media-apps
     - name: onepassword-store
@@ -30,6 +34,7 @@ spec:
     - name: volsync
       namespace: storage-system
   components:
+    - ../../../../components/cnpg
     - ../../../../components/dragonfly
     - ../../../../components/gatus/internal
     - ../../../../components/volsync
