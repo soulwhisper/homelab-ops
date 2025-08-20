@@ -280,7 +280,7 @@ patches:
   #         cipher: aes-xts-plain64
   #         keySize: 256
   #         keys:
-  #           - slot: 1
+  #           - slot: 0
   #             static:
   #               passphrase: ${DISK_ENCRYPTION_PASS}
   #         provider: luks2

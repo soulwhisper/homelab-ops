@@ -2,9 +2,8 @@
 
 ### Infrastructure
 
-- [ ] add switch scripts to infra
+- [x] add switch scripts to infra
 - [x] NAS archived, move to CephFS
-- [ ] add USB4 DAS backup document
 
 ### Talos
 
