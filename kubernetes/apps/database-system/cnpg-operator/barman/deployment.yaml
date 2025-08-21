@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
         - name: barman-cloud
-          image: ghcr.io/cloudnative-pg/plugin-barman-cloud:v0.5.0
+          image: ghcr.io/cloudnative-pg/plugin-barman-cloud:v0.6.0
           args:
             - operator
             - --server-cert=/server/tls.crt
