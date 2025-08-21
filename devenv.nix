@@ -8,6 +8,8 @@
   env.KUBECONFIG = "./infrastructure/talos/clusterconfig/kubeconfig";
   env.TALOSCONFIG = "./infrastructure/talos/clusterconfig/talosconfig";
   env.FLUX_SYSTEM_NAMESPACE = "gitops-system";
+  env.ROOK_OPERATOR_NAMESPACE = "storage-system";
+  env.ROOK_CLUSTER_NAMESPACE = "storage-system";
 
   # replace pre-commit and various linters
   git-hooks = {
