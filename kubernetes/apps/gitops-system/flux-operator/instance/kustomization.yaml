@@ -9,14 +9,3 @@ resources:
   # utils
   - ./prometheusrules.yaml
   - ./github/
-# this file is needed during bootstrap
-configMapGenerator:
-  - name: flux-instance
-    files:
-      - values.yaml=./values.yaml
-generatorOptions:
-  annotations:
-    kustomize.toolkit.fluxcd.io/substitute: disabled
-  disableNameSuffixHash: true
-configurations:
-  - kustomizeconfig.yaml

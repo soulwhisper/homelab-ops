@@ -22,6 +22,6 @@ spec:
   uninstall:
     keepHistory: false
 
-  valuesFrom:
-    - kind: ConfigMap
-      name: *name
+  values:
+    serviceMonitor:
+      create: true

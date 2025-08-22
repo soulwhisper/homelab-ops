@@ -8,14 +8,3 @@ resources:
   - ./ocirepository.yaml
   # utils
   - ./httproute.yaml
-# this file is needed during bootstrap
-configMapGenerator:
-  - name: cilium
-    files:
-      - values.yaml=./values.yaml
-generatorOptions:
-  annotations:
-    kustomize.toolkit.fluxcd.io/substitute: disabled
-  disableNameSuffixHash: true
-configurations:
-  - kustomizeconfig.yaml

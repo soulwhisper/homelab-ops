@@ -6,14 +6,3 @@ resources:
   # app
   - ./helmrelease.yaml
   - ./ocirepository.yaml
-# this file is needed during bootstrap
-configMapGenerator:
-  - name: coredns
-    files:
-      - values.yaml=./values.yaml
-generatorOptions:
-  annotations:
-    kustomize.toolkit.fluxcd.io/substitute: disabled
-  disableNameSuffixHash: true
-configurations:
-  - kustomizeconfig.yaml

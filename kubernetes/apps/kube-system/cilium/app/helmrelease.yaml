@@ -22,6 +22,103 @@ spec:
   uninstall:
     keepHistory: false
 
-  valuesFrom:
-    - kind: ConfigMap
-      name: *name
+  values:
+    # :: enabled tunning
+    # BIGTCP, xdp, for Intel-x710(ice);
+    # Recommendation:netkit, host-routing, bbr, ebpf-backend-memory, ebpf-clock-probe, preallocate-maps, maglev-hashing;
+    # :: features
+    # hubble:disabled, hostLegacyRouting:disabled, ipam:kubernetes;
+    # ::
+    autoDirectNodeRoutes: true
+    bandwidthManager:
+      enabled: true
+      bbr: true
+    bgpControlPlane:
+      enabled: true
+    bpf:
+      datapathMode: netkit
+      distributedLRU.enabled: true # cost more memory
+      mapDynamicSizeRatio: 0.08
+      masquerade: true
+      preallocateMaps: true
+    bpfClockProbe: true
+    cgroup:
+      autoMount:
+        enabled: false
+      hostRoot: /sys/fs/cgroup
+    cluster:
+      id: 1
+      name: main
+    cni:
+      exclusive: false
+    dashboards:
+      enabled: true
+      annotations:
+        grafana_folder: Cilium
+    devices: bond+
+    # enableIPv4BIGTCP: true  # disable for test only
+    endpointRoutes:
+      enabled: true
+    envoy:
+      enabled: true
+      rollOutPods: true
+      prometheus:
+        serviceMonitor:
+          enabled: true
+    gatewayAPI:
+      enabled: true
+      enableAlpn: true
+      xffNumTrustedHops: 1
+    hubble:
+      enabled: false
+    ipam:
+      mode: "kubernetes"
+    ipv4NativeRoutingCIDR: 10.100.0.0/17
+    k8sServiceHost: localhost
+    k8sServicePort: 7445
+    kubeProxyReplacement: true
+    kubeProxyReplacementHealthzBindAddr: 0.0.0.0:10256
+    l2announcements:
+      enabled: false
+    loadBalancer:
+      acceleration: best-effort
+      algorithm: maglev
+      mode: hybrid
+    operator:
+      dashboards:
+        enabled: true
+        annotations:
+          grafana_folder: Cilium
+      prometheus:
+        enabled: true
+        serviceMonitor:
+          enabled: true
+      replicas: 3 # critical for HA
+      rollOutPods: true
+    prometheus:
+      enabled: true
+      serviceMonitor:
+        enabled: true
+        trustCRDsExist: true
+    rollOutCiliumPods: true
+    routingMode: native
+    securityContext:
+      capabilities:
+        ciliumAgent:
+          - CHOWN
+          - KILL
+          - NET_ADMIN
+          - NET_RAW
+          - IPC_LOCK
+          - SYS_ADMIN
+          - SYS_RESOURCE
+          - PERFMON
+          - BPF
+          - DAC_OVERRIDE
+          - FOWNER
+          - SETGID
+          - SETUID
+        cleanCiliumState:
+          - NET_ADMIN
+          - SYS_ADMIN
+          - SYS_RESOURCE
