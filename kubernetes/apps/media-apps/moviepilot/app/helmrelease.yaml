@@ -40,7 +40,7 @@ spec:
           app:
             image:
               repository: jxxghp/moviepilot-v2
-              tag: 2.7.5
+              tag: 2.7.6
             env:
               TZ: "${TIMEZONE}"
               NGINX_PORT: &port 3000
