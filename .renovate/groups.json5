@@ -54,6 +54,19 @@
       minimumGroupSize: 2,
     },
     {
+      description: "Immich App Group",
+      groupName: "Immich App",
+      matchDatasources: ["docker"],
+      matchPackageNames: [
+        "/immich-server/", 
+        "/immich-machine-learning/",
+      ],
+      group: {
+        commitMessageTopic: "{{{groupName}}} group",
+      },
+      minimumGroupSize: 2,
+    },
+    {
       description: "Rook-Ceph Group",
       groupName: "Rook-Ceph",
       matchDatasources: ["docker"],
