@@ -118,6 +118,18 @@ controlPlane:
             MONITOR santak-box@10.10.0.10 1 monuser monuser secondary
             SHUTDOWNCMD "/sbin/poweroff"
           mountPath: /usr/local/etc/nut/upsmon.conf
+  volumes:
+    - name: EPHEMERAL
+      encryption:
+        keys:
+          - slot: 0
+            static:
+              passphrase: ${DISK_ENCRYPTION_PASS}
+    - name: STATE
+      encryption:
+        keys:
+          - slot: 0
+            tpm: {}
 
   # : controlPlane only patches
   patches:
@@ -297,27 +309,27 @@ patches:
         sunrpc.tcp_max_slot_table_entries: 1024   # 10G NIC, tunning
         user.max_user_namespaces: 11255           # UserNamespaces
 
-  # : Enable disk encryption, passphrase >= 20 characters
+  # : Enable disk encryption, passphrase >= 20 characters; migrate to volumeConfigs
   # :: https://github.com/siderolabs/talos/issues/8972
   # :: https://en.m.wikipedia.org/wiki/Evil_maid_attack
-  - |-
-    machine:
-      systemDiskEncryption:
-        ephemeral:
-          cipher: aes-xts-plain64
-          keySize: 256
-          keys:
-            - slot: 0
-              static:
-                passphrase: ${DISK_ENCRYPTION_PASS}
-          provider: luks2
-        state:
-          cipher: aes-xts-plain64
-          keySize: 256
-          keys:
-            - slot: 0
-              tpm: {}
-          provider: luks2
+  # - |-
+  #   machine:
+  #     systemDiskEncryption:
+  #       ephemeral:
+  #         cipher: aes-xts-plain64
+  #         keySize: 256
+  #         keys:
+  #           - slot: 0
+  #             static:
+  #               passphrase: ${DISK_ENCRYPTION_PASS}
+  #         provider: luks2
+  #       state:
+  #         cipher: aes-xts-plain64
+  #         keySize: 256
+  #         keys:
+  #           - slot: 0
+  #             tpm: {}
+  #         provider: luks2
 
   # : Enable pull through mirror, powered by zotregistry
   # - |-
