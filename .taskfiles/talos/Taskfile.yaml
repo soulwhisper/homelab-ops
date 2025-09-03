@@ -73,7 +73,7 @@ tasks:
     desc: Apply bootstrap machineConfig to talos node
     preconditions:
       - which talosctl
-      - test -f "${TALOSCONFIG}"
+      - talosctl config info
       - test -f "{{.FILENAME}}"
     requires:
       vars:

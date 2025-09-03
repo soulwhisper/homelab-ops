@@ -27,7 +27,7 @@ tasks:
       - which helmfile kubectl op
       - test -f "{{.K8S_DIR}}/bootstrap/helmfile.yaml"
       - test -f "{{.K8S_DIR}}/bootstrap/resources.yaml"
-      - kubectl config view
+      - kubectl get nodes
       - op user get --me
     cmds:
       - |

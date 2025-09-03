@@ -9,8 +9,7 @@ tasks:
     silent: true
     preconditions:
       - which talosctl
-      - test -f "${TALOSCONFIG}"
-      - talosctl config info
+      - talosctl get members
     cmds:
       - talosctl reset --system-labels-to-wipe STATE --system-labels-to-wipe EPHEMERAL --graceful=false --wait=false --reboot
 
@@ -22,10 +21,8 @@ tasks:
       NODE: "{{index .MATCH 0}}"
     preconditions:
       - which kubectl talosctl
-      - test -f "${TALOSCONFIG}"
-      - talosctl config info
+      - talosctl get members
       - ping -4 -c 1 {{.NODE}}
-      - test -f "${KUBECONFIG}"
       - kubectl get node -l kubernetes.io/hostname={{.NODE}} --no-headers 2>/dev/null | grep -q .
     cmds:
       - talosctl reset -n {{.NODE}}
@@ -48,3 +45,28 @@ tasks:
           var: BUCKETS
         cmd: |
           garage bucket delete "{{.ITEM}}"
+
+  versitygw:
+    desc: Reset versitygw buckets (not keys) for new install
+    prompt: Reset versitygw buckets?
+    silent: true
+    vars:
+      AWS_ACCESS_KEY_ID:
+        sh: op item get app_user --fields admin_user --reveal
+      AWS_SECRET_ACCESS_KEY:
+        sh: op item get app_user --fields admin_pass --reveal
+      AWS_ENDPOINT_URL: '{{.ENDPOINT | default "http://localhost:7070"}}'
+      BUCKETS:
+        - postgres
+        - volsync
+    preconditions:
+      - which aws op
+    cmds:
+      - |
+        export AWS_ACCESS_KEY_ID="{{.AWS_ACCESS_KEY_ID}}"
+        export AWS_SECRET_ACCESS_KEY="{{.AWS_SECRET_ACCESS_KEY}}"
+      - for:
+          var: BUCKETS
+        cmd: |
+          aws --endpoint-url "{{.AWS_ENDPOINT_URL}}" s3api delete-bucket --bucket "{{.ITEM}}"
+      - aws --endpoint-url "{{.AWS_ENDPOINT_URL}}" s3api list-buckets

@@ -83,9 +83,16 @@ kubectl create job --from=cronjob/talos-healthcheck talos-hc -n gitops-system
 - virtual nic not support BIGTCP and XDP;
 - dragonfly needs `avx`, cpu should be `host` model;
 
-### Multi-Cluster plan
+### Go-task checks
 
-- homelab using talconfig `prod`; corplab using talconfig `test`;
-- multi-cluster flux, [ref](https://github.com/h-wb/home-ops/tree/main);
-- multi-cluster talos task, [ref](https://github.com/h-wb/home-ops/blob/main/.taskfiles/Talos/Taskfile.yaml);
-- multi-cluster volsync task, [ref](https://github.com/h-wb/home-ops/blob/main/.taskfiles/VolSync/Taskfile.yaml);
+```shell
+## talos config check
+talosctl config info
+
+## talos cluster connectivity
+talosctl get members
+
+## k8s cluster connectivity
+kubectl get nodes
+
+```

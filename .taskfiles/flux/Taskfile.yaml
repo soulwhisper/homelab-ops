@@ -16,8 +16,8 @@ tasks:
     preconditions:
       - '[[ "{{.OPERATION}}" == "build" || "{{.OPERATION}}" == "apply" || "{{.OPERATION}}" == "delete" ]]'
       - which kubectl
+      - kubectl get nodes
       - test -d "{{.KS_DIR}}"
-      - test -f "${KUBECONFIG}"
       - bash -c 'flux-local -h' >/dev/null 2>&1
     cmds:
       - bash -c 'flux-local build ks --all-namespaces --path {{.KS_DIR}}
@@ -36,8 +36,8 @@ tasks:
         - NS
     preconditions:
       - '[[ "{{.RESOURCE}}" == "hr" || "{{.RESOURCE}}" == "ks" ]]'
-      - which flux
-      - test -f "${KUBECONFIG}"
+      - which flux kubectl
+      - kubectl get nodes
     cmds:
       - flux suspend {{.RESOURCE}} {{.NAME}} -n {{.NS}}
       - flux resume {{.RESOURCE}} {{.NAME}} -n {{.NS}}
@@ -53,7 +53,7 @@ tasks:
       - '[[ "{{.OPERATION}}" == "resume" || "{{.OPERATION}}" == "suspend" ]]'
       - '[[ "{{.RESOURCE}}" == "hr" || "{{.RESOURCE}}" == "ks" ]]'
       - which flux kubectl
-      - test -f "${KUBECONFIG}"
+      - kubectl get nodes
     cmds:
       - for:
           var: NAMESPACES
