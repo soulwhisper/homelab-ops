@@ -7,19 +7,17 @@ metadata:
 spec:
   trigger:
     manual: restore-once
-  kopia:
+  restic:
     accessModes: {{ ENV.ACCESS_MODES }}
     cleanupCachePVC: true
     cleanupTempPVC: true
+    enableFileDeletion: true
     copyMethod: Direct
     destinationPVC: {{ ENV.CLAIM }}
-    enableFileDeletion: true
+    previous: {{ ENV.PREVIOUS }}
     moverSecurityContext:
       runAsUser: {{ ENV.PUID }}
       runAsGroup: {{ ENV.PGID }}
       fsGroup: {{ ENV.PGID }}
-    previous: {{ ENV.PREVIOUS }}
     repository: {{ ENV.APP }}-volsync
-    sourceIdentity:
-      sourceName: {{ ENV.APP }}
     storageClassName: {{ ENV.STORAGE_CLASS_NAME }}

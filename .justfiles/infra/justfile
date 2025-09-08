@@ -1,0 +1,44 @@
+set quiet := true
+set shell := ['bash', '-euo', 'pipefail', '-c']
+
+BUCKETS := 'postgres volsync'
+
+# versitygw
+export AWS_ACCESS_KEY_ID := `op item get app_user --fields admin_user --reveal`
+export AWS_SECRET_ACCESS_KEY := `op item get app_user --fields admin_password --reveal`
+AWS_ENDPOINT_URL := env_var_or_default('AWS_ENDPOINT_URL', 'http://localhost:7070')
+
+
+[doc('Init/Reset Garage')]
+garage mode:
+  for BUCKET in {{BUCKETS}}; do \
+    if [ "{{mode}}" = "init" ]; then \
+      access_key=$(op item get garage --fields "$BUCKET_access_key" --reveal); \
+      secret_key=$(op item get garage --fields "$BUCKET_secret_key" --reveal); \
+      garage bucket create "$BUCKET"; \
+      garage key import "$access_key" "$secret_key" -n "$BUCKET" --yes; \
+      garage bucket allow --read --write "$BUCKET" --key "$BUCKET"; \
+      @echo "Created bucket: $BUCKET"; \
+    elif [ "{{mode}}" = "reset" ]; then \
+      garage bucket delete $BUCKET; \
+      @echo "Deleted bucket: $BUCKET"; \
+    else \
+      echo "Unknown mode: {{mode}}"; \
+      exit 1; \
+    fi; \
+  done
+
+[doc('Init/Reset Versity S3 Gateway')]
+versitygw mode:
+  for BUCKET in {{BUCKETS}}; do \
+    if [ "{{mode}}" = "init" ]; then \
+      aws --endpoint-url "{{AWS_ENDPOINT_URL}}" s3api create-bucket --bucket "$BUCKET"; \
+      @echo "Created bucket: $BUCKET"; \
+    elif [ "{{mode}}" = "reset" ]; then \
+      aws --endpoint-url "{{AWS_ENDPOINT_URL}}" s3api delete-bucket --bucket "$BUCKET"; \
+      @echo "Deleted bucket: $BUCKET"; \
+    else \
+      echo "Unknown mode: {{mode}}"; \
+      exit 1; \
+    fi; \
+  done

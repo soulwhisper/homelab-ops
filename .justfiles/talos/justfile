@@ -1,0 +1,79 @@
+set quiet := true
+set shell := ['bash', '-euo', 'pipefail', '-c']
+
+IMAGE_VERSION := ```
+    curl --silent --noproxy '*' https://factory.talos.dev/versions | jq --raw-output '
+    map(select(test("^v[0-9.]+$"))) | sort_by(. | ltrimstr("v") | split(".") | map(tonumber)) | reverse | .[0]' | tail -n1
+  ```
+
+[private]
+default:
+  @just --list
+
+[doc('Get latest secureboot ISO for talos')]
+image MODE:
+  @echo "Latest version: {{IMAGE_VERSION}}"
+  @echo "Image Downloading: talos_{{MODE}}_{{IMAGE_VERSION}}_metal_amd64_secureboot.iso"
+  curl --progress-bar -L "https://factory.talos.dev/image/$(just _schema {{MODE}})/{{IMAGE_VERSION}}/metal-amd64-secureboot.iso" \
+    -o /tmp/talos-{{MODE}}-{{IMAGE_VERSION}}-metal-amd64-secureboot.iso
+  mv /tmp/talos-{{MODE}}-{{IMAGE_VERSION}}-metal-amd64-secureboot.iso $ROOT_DIR
+
+[doc('Get schema ID for specific environment')]
+_schema MODE:
+  yq '.controlPlane.schematic' "$TALOS_DIR/talconfig.{{MODE}}.yaml" > /tmp/schematic.yaml
+  curl --silent --noproxy '*' -X POST --data-binary @/tmp/schematic.yaml https://factory.talos.dev/schematics | jq --raw-output '.id'
+
+[doc('Generate talos configuration')]
+generate MODE:
+  op run --env-file $TALOS_DIR/talhelper.env --no-masking -- talhelper genconfig \
+      --config-file $TALOS_DIR/talconfig.{{MODE}}.yaml \
+      --secret-file $TALOS_DIR/talsecret.yaml \
+      --out-dir $TALOS_DIR/clusterconfig
+  mkdir -p ~/.talos && cp $TALOSCONFIG ~/.talos/config
+
+[doc('Apply talos configuration to node, HOST required')]
+apply HOST *ARGS:
+  @echo "Applying talos configuration to {{HOST}}"
+  talosctl apply-config --nodes {{HOST}} --file $TALOS_DIR/clusterconfig/main-{{HOST}}.yaml {{ARGS}}
+
+[doc('Bootstrap talos cluster, INSECURE')]
+bootstrap:
+  for FILE in $(ls $TALOS_DIR/clusterconfig/*.yaml); do \
+    just apply $(basename "$FILE" .yaml | sed 's/^main-//') --insecure; \
+  done
+
+[doc('Reboot node')]
+reboot HOST:
+  #!/usr/bin/env bash
+  printf "Reboot node {{HOST}}? (y/N) "
+  read -r confirm
+  case "$confirm" in
+    y|Y)
+      talosctl -n {{HOST}} reboot -m powercycle
+      ;;
+    *)
+      echo "Cancelled."
+      exit 0
+      ;;
+  esac
+
+[doc('Reset node or cluster')]
+reset HOST:
+  #!/usr/bin/env bash
+  printf "Reset {{HOST}}? (y/N) "
+  read -r confirm
+  case "$confirm" in
+    y|Y)
+      if [ "{{HOST}}" = "cluster" ]; then
+        talosctl reset --system-labels-to-wipe STATE \
+          --system-labels-to-wipe EPHEMERAL \
+          --graceful=false --wait=false --reboot
+      else
+        talosctl -n {{HOST}} reset --graceful=false --reboot
+      fi
+      ;;
+    *)
+      echo "Cancelled."
+      exit 0
+      ;;
+  esac
