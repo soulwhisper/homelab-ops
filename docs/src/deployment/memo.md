@@ -38,15 +38,10 @@ direnv allow
 
 eval $(op signin)
 
-# bootstrap talos
-task talos:generate
-talosctl config endpoint CP1 CP2 CP3
-task bootstrap:talos
-## if test
-task bootstrap:talos MODE=test
-
-# then apps
-task bootstrap:apps
+# bootstrap, mode='prod'
+just talos image prod
+just talos generate prod
+just bootstrap
 
 # check
 kubectl get ks -A

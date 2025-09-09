@@ -4,11 +4,12 @@
 
 - [x] add switch scripts to infra
 - [x] NAS archived, move to CephFS
+- [x] re-enable NAS
 
 ### Talos
 
 - [x] disable swap/zswap
-- [ ] migrate disk encryption into UserVolumeConfig, after 1.11
+- [x] migrate disk encryption into UserVolumeConfig, after 1.11
 
 ### Apps
 

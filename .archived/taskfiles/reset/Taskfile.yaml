@@ -70,3 +70,42 @@ tasks:
         cmd: |
           aws --endpoint-url "{{.AWS_ENDPOINT_URL}}" s3api delete-bucket --bucket "{{.ITEM}}"
       - aws --endpoint-url "{{.AWS_ENDPOINT_URL}}" s3api list-buckets
+
+  minio:
+    desc: reset minio buckets for new install (only buckets defined)
+    prompt: Reset minio buckets?
+    silent: true
+    preconditions:
+      - which mc op
+      - op user get --me
+    vars:
+      MINIO_HOST: '{{.MINIO_HOST | default "s3.homelab.internal:9000"}}'
+      MINIO_ITEM: '{{.MINIO_ITEM | default "minio"}}'
+      MINIO_ADMIN_USER:
+        sh: op item get minio --fields label=username
+      MINIO_ADMIN_PASS:
+        sh: op item get minio --fields label=password --reveal
+    cmds:
+      - mc alias set minio http://{{.MINIO_HOST}} {{.MINIO_ADMIN_USER}} {{.MINIO_ADMIN_PASS}}
+      - |
+        IFS=$'\n'
+        KEY_LIST=($(op item get {{.MINIO_ITEM}} --format json --reveal | \
+            jq -r '.fields[] | select(.label | test("_access_key$")) | .value'))
+        unset IFS
+        echo "removing accesskeys and users ..."
+        for ITEM in "${KEY_LIST[@]}"; do
+          mc admin accesskey rm minio "${ITEM}" || true
+          mc admin user rm minio "${ITEM}" || true
+        done
+        echo "completed."
+      - |
+        IFS=$'\n'
+        BUCKET_LIST=($(op item get {{.MINIO_ITEM}} --format json | \
+            jq -r '.fields[] | select(.label | test("_secret_key$")) | .label | sub("_secret_key$"; "")'))
+        unset IFS
+        echo "removing buckets and policies ..."
+        for ITEM in "${BUCKET_LIST[@]}"; do
+          mc rb --force minio/"${ITEM}"
+          mc admin policy rm minio "${ITEM}-rw"
+        done
+        echo "completed."
