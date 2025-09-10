@@ -5,10 +5,7 @@
       description: "1Password Connect Group",
       groupName: "1Password Connect",
       matchDatasources: ["docker"],
-      matchPackageNames: [
-        "/connect-api/",
-        "/connect-sync/",
-      ],
+      matchPackageNames: ["/connect-api/", "/connect-sync/"],
       group: {
         commitMessageTopic: "{{{groupName}}} group",
       },
@@ -31,10 +28,7 @@
       description: ["Dragonflydb Group"],
       groupName: "Dragonflydb",
       matchDatasources: ["docker"],
-      matchPackageNames: [
-        "/dragonfly-operator/",
-        "/dragonfly/",
-      ],
+      matchPackageNames: ["/dragonfly-operator/", "/dragonfly/"],
       group: {
         commitMessageTopic: "{{{groupName}}} group",
       },
@@ -44,10 +38,7 @@
       description: "Flux Operator Group",
       groupName: "Flux Operator",
       matchDatasources: ["docker"],
-      matchPackageNames: [
-        "/flux-operator/", 
-        "/flux-instance/",
-      ],
+      matchPackageNames: ["/flux-operator/", "/flux-instance/"],
       group: {
         commitMessageTopic: "{{{groupName}}} group",
       },
@@ -57,10 +48,7 @@
       description: "Immich App Group",
       groupName: "Immich App",
       matchDatasources: ["docker"],
-      matchPackageNames: [
-        "/immich-server/", 
-        "/immich-machine-learning/",
-      ],
+      matchPackageNames: ["/immich-server/", "/immich-machine-learning/"],
       group: {
         commitMessageTopic: "{{{groupName}}} group",
       },
@@ -70,10 +58,7 @@
       description: "Rook-Ceph Group",
       groupName: "Rook-Ceph",
       matchDatasources: ["docker"],
-      matchPackageNames: [
-        "/rook-ceph/", 
-        "/rook-ceph-cluster/",
-      ],
+      matchPackageNames: ["/rook-ceph/", "/rook-ceph-cluster/"],
       group: {
         commitMessageTopic: "{{{groupName}}} group",
       },

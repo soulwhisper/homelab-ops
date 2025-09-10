@@ -6,14 +6,9 @@ metadata:
   name: volsync
 spec:
   interval: 30m
-  chart:
-    spec:
-      chart: volsync
-      version: 0.16.5
-      sourceRef:
-        kind: HelmRepository
-        name: volsync-kopia
-        namespace: storage-system
+  chartRef:
+    kind: OCIRepository
+    name: volsync
   maxHistory: 1
   install:
     crds: CreateReplace

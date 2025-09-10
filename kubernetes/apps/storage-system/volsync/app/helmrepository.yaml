@@ -1,8 +1,0 @@
----
-# yaml-language-server: $schema=https://kubernetes-schemas.noirprime.com/source.toolkit.fluxcd.io/helmrepository_v1.json
-apiVersion: source.toolkit.fluxcd.io/v1
-kind: HelmRepository
-metadata:
-  name: volsync-kopia
-spec:
-  url: https://perfectra1n.github.io/volsync/charts/
