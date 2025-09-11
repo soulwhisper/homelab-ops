@@ -104,8 +104,8 @@ controlPlane:
         - talos.network.interface.ignore=enp88s0 # block i226-lm in ms-01
       systemExtensions:
         officialExtensions:
-          - siderolabs/intel-ucode
           - siderolabs/i915
+          - siderolabs/intel-ucode
           - siderolabs/mei
           - siderolabs/nut-client
           - siderolabs/thunderbolt

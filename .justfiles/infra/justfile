@@ -2,10 +2,6 @@ set quiet := true
 set shell := ['bash', '-euo', 'pipefail', '-c']
 
 BUCKETS := 'postgres volsync'
-
-# versity
-export AWS_ACCESS_KEY_ID := `op item get app_user --fields admin_user --reveal`
-export AWS_SECRET_ACCESS_KEY := `op item get app_user --fields admin_pass --reveal`
 AWS_ENDPOINT_URL := env_var_or_default('AWS_ENDPOINT_URL', 'http://localhost:7070')
 
 [doc('Init/Reset Garage'), no-exit-message]
@@ -29,6 +25,8 @@ garage mode:
 
 [doc('Init/Reset Versity S3 Gateway'), no-exit-message]
 versity mode:
+  export AWS_ACCESS_KEY_ID=$(op item get app_user --fields admin_user --reveal); \
+  export AWS_SECRET_ACCESS_KEY=$(op item get app_user --fields admin_pass --reveal); \
   for BUCKET in {{BUCKETS}}; do \
     if [ "{{mode}}" = "init" ]; then \
       aws --endpoint-url "{{AWS_ENDPOINT_URL}}" s3api create-bucket --bucket "${BUCKET}" || true; \

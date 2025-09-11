@@ -95,8 +95,8 @@ controlPlane:
         - console=ttyS0 # hci only
       systemExtensions:
         officialExtensions:
-          - siderolabs/intel-ucode
           - siderolabs/i915
+          - siderolabs/intel-ucode
           - siderolabs/mei
           - siderolabs/nut-client
           - siderolabs/thunderbolt

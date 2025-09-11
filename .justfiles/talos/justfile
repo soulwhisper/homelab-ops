@@ -11,11 +11,11 @@ TALOS_ENDPOINT := `talosctl config info --output json | jq --raw-output '.endpoi
 default:
   @just --list
 
-[doc('Get latest secureboot ISO for talos')]
+[doc('Get latest secureboot ISO for talos, with https_proxy support')]
 image mode:
   @echo "Latest version: {{IMAGE_VERSION}}"
-  @echo "Image Downloading: talos_{{mode}}_{{IMAGE_VERSION}}_metal_amd64_secureboot.iso"
-  curl --progress-bar -L "https://factory.talos.dev/image/$(just _schema {{mode}})/{{IMAGE_VERSION}}/metal-amd64-secureboot.iso" \
+  @echo "Image Downloading: talos-{{mode}}-{{IMAGE_VERSION}}-metal-amd64-secureboot.iso"
+  curl -x "${https_proxy}" --progress-bar -L "https://factory.talos.dev/image/$(just _schema {{mode}})/{{IMAGE_VERSION}}/metal-amd64-secureboot.iso" \
     -o /tmp/talos-{{mode}}-{{IMAGE_VERSION}}-metal-amd64-secureboot.iso
   mv /tmp/talos-{{mode}}-{{IMAGE_VERSION}}-metal-amd64-secureboot.iso "${OPS_DIR}"
 
