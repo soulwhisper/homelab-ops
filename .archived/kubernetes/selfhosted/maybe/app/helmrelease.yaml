@@ -45,7 +45,6 @@ spec:
               repository: ghcr.io/maybe-finance/maybe
               tag: 0.6.0
             env: &shared-env
-              TZ: "${TIMEZONE}"
               SELF_HOSTED: "true"
               RAILS_FORCE_SSL: "false"
               RAILS_ASSUME_SSL: "false"

@@ -36,7 +36,6 @@ spec:
               repository: ghcr.io/home-assistant-libs/python-matter-server
               tag: 8.0.0
             env:
-              TZ: "${TIMEZONE}"
               MATTER_SERVER__INSTANCE_NAME: Matter-Server
               MATTER_SERVER__PORT: &port 5580
               MATTER_SERVER__APPLICATION_URL: matter.noirprime.com

@@ -42,7 +42,6 @@ spec:
               repository: jxxghp/moviepilot-v2
               tag: 2.8.0
             env:
-              TZ: "${TIMEZONE}"
               NGINX_PORT: &port 3000
               PORT: &apiPort 3001
               CACHE_BACKEND_TYPE: "redis"

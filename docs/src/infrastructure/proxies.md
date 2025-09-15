@@ -2,6 +2,7 @@
 
 - In my homelab, internet connections, especially to registries, need a corporate proxy;
 - However, this HTTP/S based proxy has a negative impact on 'HTTPS POST' and 'QUIC';
+- Also, proxies are handled outside the cluster, `todo: replace with tproxy gateway`;
 
 ### Cloudflared proxied
 

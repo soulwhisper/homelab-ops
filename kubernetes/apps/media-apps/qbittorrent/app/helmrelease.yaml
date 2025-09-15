@@ -86,6 +86,9 @@ spec:
         existingClaim: *name
         globalMounts:
           - path: /config
+      qbrr:
+        type: image
+        image: ghcr.io/buroa/qbrr:0.1.1
       media:
         existingClaim: shared-media
         globalMounts:
@@ -95,3 +98,5 @@ spec:
         type: emptyDir
         globalMounts:
           - path: /tmp
+# qbrr usage
+# : re-announce, 'Run on torrent added', `/qbrr/qbrr --hash %I`

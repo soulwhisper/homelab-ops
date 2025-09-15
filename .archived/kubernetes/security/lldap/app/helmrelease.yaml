@@ -52,7 +52,6 @@ spec:
               repository: ghcr.io/lldap/lldap
               tag: 2024-01-05-alpine-rootless
             env:
-              TZ: "${TIMEZONE}"
               LLDAP_HTTP_PORT: &port 80
               LLDAP_HTTP_URL: https://lldap.noirprime.com
               LLDAP_LDAP_PORT: &ldapPort 389

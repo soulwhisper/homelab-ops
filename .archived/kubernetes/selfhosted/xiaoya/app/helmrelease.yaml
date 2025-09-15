@@ -41,7 +41,6 @@ spec:
               repository: ghcr.io/monlor/xiaoya-alist
               tag: v1.2.21
             env:
-              TZ: "${TIMEZONE}"
               AUTO_CLEAR_ENABLED: true
             envFrom:
               - secretRef:
@@ -65,7 +64,6 @@ spec:
               repository: ghcr.io/monlor/xiaoya-metadata
               tag: v1.2.21
             env:
-              TZ: "${TIMEZONE}"
               ALIST_ADDR: http://localhost:5678
               EMBY_ENABLED: true
               AUTO_UPDATE_EMBY_CONFIG_ENABLED: true
@@ -77,7 +75,6 @@ spec:
               repository: ghcr.io/monlor/xiaoya-embyserver
               tag: v1.2.21
             env:
-              TZ: "${TIMEZONE}"
               ALIST_ADDR: http://localhost:5678
             resources:
               requests:

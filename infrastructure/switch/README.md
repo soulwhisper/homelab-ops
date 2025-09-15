@@ -20,3 +20,11 @@ graph LR
   LAB -->|iBGP| H3C
   H3C -->|eBGP| OPNsense
 ```
+
+### Components
+
+- Router / Firewall / VLAN / External-DNS / eBGP : `OPNsense`;
+- TProxy / Internal-DNS / LAB-Management : `Nix-Ops`;
+- Gateway / DHCP / iBGP : `H3C Core Switch`;
+- Shared-Storage : `NAS`;
+- Computing / Service : `K8S`;

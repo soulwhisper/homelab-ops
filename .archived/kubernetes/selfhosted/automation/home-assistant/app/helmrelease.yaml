@@ -37,7 +37,6 @@ spec:
               tag: 2025.5.2
             env:
               VENV_FOLDER: /venv
-              TZ: "${TIMEZONE}"
               HTTP_PROXY: "${HTTP_PROXY}"
               HTTPS_PROXY: "${HTTPS_PROXY}"
               NO_PROXY: "${NO_PROXY}"
@@ -101,17 +100,15 @@ spec:
           - backendRefs:
               - identifier: app
                 port: *port
-          - matches:
-              - path:
-                  type: PathPrefix
-                  value: /code/
-            filters:
-              - type: URLRewrite
-                urlRewrite:
-                  path:
-                    type: ReplacePrefixMatch
-                    replacePrefixMatch: /
-            backendRefs:
+      code:
+        hostnames:
+          - ["hass-code.noirprime.com"]
+        parentRefs:
+          - name: internal
+            namespace: kube-system
+            sectionName: https
+        rules:
+          - backendRefs:
               - identifier: code-server
                 port: *codePort
 

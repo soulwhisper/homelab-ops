@@ -96,7 +96,6 @@ spec:
               repository: path/to/repo
               tag: 1.0.0
             env:
-              TZ: "${TIMEZONE}"
               HTTP_PROXY: "${HTTP_PROXY}"
               HTTPS_PROXY: "${HTTPS_PROXY}"
               NO_PROXY: "${NO_PROXY}"

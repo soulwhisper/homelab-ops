@@ -146,18 +146,16 @@ spec:
           - backendRefs:
               - identifier: app
                 port: *port
-          - matches:
-              - path:
-                  type: PathPrefix
-                  value: /code/
-            filters:
-              - type: URLRewrite
-                urlRewrite:
-                  path:
-                    type: ReplacePrefixMatch
-                    replacePrefixMatch: /
-            backendRefs:
-              - identifier: app
+      code:
+        hostnames:
+          - ["zigbee-code.noirprime.com"]
+        parentRefs:
+          - name: internal
+            namespace: kube-system
+            sectionName: https
+        rules:
+          - backendRefs:
+              - identifier: code-server
                 port: *codePort
 
     persistence:

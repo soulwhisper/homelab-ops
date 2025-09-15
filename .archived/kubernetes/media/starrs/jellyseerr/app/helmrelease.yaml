@@ -41,7 +41,6 @@ spec:
               repository: ghcr.io/fallenbagel/jellyseerr
               tag: 2.7.0
             env:
-              TZ: "${TIMEZONE}"
               LOG_LEVEL: "info"
               JELLYFIN_TYPE: emby
               PORT: &port 80

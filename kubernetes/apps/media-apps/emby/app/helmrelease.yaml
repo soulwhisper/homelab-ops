@@ -39,10 +39,10 @@ spec:
           app:
             image:
               repository: emby/embyserver
-              tag: 4.9.4.15
+              tag: 4.9.1.31
             env:
-              TZ: "${TIMEZONE}"
               GIDLIST: 2000,0
+              DOTNET_SYSTEM_IO_DISABLEFILELOCKING: "true"
             ports:
               - name: http
                 containerPort: &port 8096
@@ -62,7 +62,6 @@ spec:
             resources:
               requests:
                 cpu: 100m
-                gpu.intel.com/i915: 1
               limits:
                 gpu.intel.com/i915: 1
                 memory: 4Gi
@@ -96,6 +95,8 @@ spec:
       tmpfs:
         type: emptyDir
         globalMounts:
+          - path: /config/logs
+            subPath: logs
           - path: /tmp
             subPath: tmp
           - path: /transcode

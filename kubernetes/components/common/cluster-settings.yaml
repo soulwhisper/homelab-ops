@@ -4,7 +4,6 @@ kind: ConfigMap
 metadata:
   name: cluster-settings
 data:
-  TIMEZONE: "Asia/Shanghai"
   # : infra
   BGP_PEER: "172.19.82.254"
   DNS_HOST: "172.19.82.10"
