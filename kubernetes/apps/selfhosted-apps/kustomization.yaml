@@ -6,6 +6,8 @@ namespace: selfhosted-apps
 components:
   - ../../components/common
 resources:
+  - ./foundryvtt/ks.yaml
   - ./freshrss/ks.yaml
   - ./karakeep/ks.yaml
   - ./n8n/ks.yaml
+  - ./sillytavern/ks.yaml
