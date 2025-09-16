@@ -40,7 +40,7 @@ spec:
           app:
             image:
               repository: jxxghp/moviepilot-v2
-              tag: 2.8.0
+              tag: 2.8.1
             env:
               NGINX_PORT: &port 3000
               PORT: &apiPort 3001
