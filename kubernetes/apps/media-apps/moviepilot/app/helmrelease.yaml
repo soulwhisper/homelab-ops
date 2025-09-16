@@ -67,7 +67,7 @@ spec:
                 valueFrom:
                   secretKeyRef:
                     name: *pguser
-                    key: user
+                    key: username
               DB_POSTGRESQL_PASSWORD:
                 valueFrom:
                   secretKeyRef:

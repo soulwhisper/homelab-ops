@@ -35,8 +35,10 @@ spec:
             image:
               repository: ghcr.io/open-webui/open-webui
               tag: main
-            # env:
-            #  OLLAMA_BASE_URL: http://10.20.0.101:11434
+            env:
+              HTTP_PROXY: "${HTTP_PROXY}"
+              HTTPS_PROXY: "${HTTPS_PROXY}"
+              NO_PROXY: "${NO_PROXY}"
             envFrom:
               - secretRef:
                   name: *name
@@ -45,7 +47,7 @@ spec:
                 containerPort: &port 8080
             resources:
               requests:
-                cpu: 50m
+                cpu: 10m
               limits:
                 memory: 1Gi
             securityContext:

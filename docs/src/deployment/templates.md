@@ -103,7 +103,7 @@ spec:
                 valueFrom:
                   secretKeyRef:
                     name: &pguser example-app-pguser
-                    key: user
+                    key: username
               DB_PASSWORD:
                 valueFrom:
                   secretKeyRef:

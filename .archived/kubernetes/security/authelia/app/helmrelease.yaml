@@ -77,7 +77,7 @@ spec:
                 valueFrom:
                   secretKeyRef:
                     name: *pguser
-                    key: user
+                    key: username
               AUTHELIA_STORAGE_POSTGRES_PASSWORD:
                 valueFrom:
                   secretKeyRef:

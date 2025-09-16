@@ -10,4 +10,6 @@ resources:
   - ./freshrss/ks.yaml
   - ./karakeep/ks.yaml
   - ./n8n/ks.yaml
+  - ./netbox/ks.yaml
+  - ./open-webui/ks.yaml
   - ./sillytavern/ks.yaml

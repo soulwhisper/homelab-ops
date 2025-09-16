@@ -1,7 +1,7 @@
 # Media Apps
 
 - This namespace manages media applications
-- backed by `shared-media` PVC, previously NAS, now CephFS
+- backed by `shared-media` PVC, supported by NAS
 - volume, maproot/owner = `2000:2000`
 
 ## Media stack choice

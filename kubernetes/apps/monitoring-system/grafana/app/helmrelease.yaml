@@ -86,7 +86,7 @@ spec:
       GF_DATABASE_USER:
         secretKeyRef:
           name: grafana-pguser
-          key: user
+          key: username
       GF_DATABASE_PASSWORD:
         secretKeyRef:
           name: grafana-pguser
