@@ -49,7 +49,7 @@ spec:
               OC_ENABLE_OCM: false
               OC_INSECURE: false
               OC_LOG_LEVEL: info
-              OC_URL: https://ocis.noirprime.com
+              OC_URL: https://oc.noirprime.com
               PROXY_TLS: false
             envFrom:
               - secretRef:
@@ -96,7 +96,7 @@ spec:
       media:
         existingClaim: shared-media
         advancedMounts:
-          ocis:
+          opencloud:
             app:
               - path: /media
       tmpfs:
