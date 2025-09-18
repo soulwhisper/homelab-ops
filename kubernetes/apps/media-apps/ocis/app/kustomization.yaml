@@ -7,11 +7,3 @@ resources:
   - ./helmrelease.yaml
   # utils
   - ./externalsecret.yaml
-configMapGenerator:
-  - name: ocis
-    files:
-      - web.yaml=./config/web.yaml
-generatorOptions:
-  annotations:
-    kustomize.toolkit.fluxcd.io/substitute: disabled
-  disableNameSuffixHash: true

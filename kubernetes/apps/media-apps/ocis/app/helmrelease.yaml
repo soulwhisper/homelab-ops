@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &name ocis
+  name: &name opencloud
 spec:
   interval: 30m
   chartRef:
@@ -25,7 +25,7 @@ spec:
 
   values:
     controllers:
-      ocis:
+      opencloud:
         annotations:
           reloader.stakater.com/auto: "true"
         pod:
@@ -35,30 +35,21 @@ spec:
             runAsNonRoot: true
             fsGroup: 2000
             fsGroupChangePolicy: OnRootMismatch
-        initContainers:
-          init-config:
-            image:
-              repository: docker.io/owncloud/ocis
-              tag: 7.2.0
-            command:
-              - /bin/sh
-              - -c
-            args:
-              - |
-                if [ ! -f /etc/ocis/ocis.yaml ]; then ocis init; else exit 0; fi
-            env:
-              OCIS_INSECURE: true
         containers:
           app:
             image:
-              repository: docker.io/owncloud/ocis
-              tag: 7.2.0
+              repository: docker.io/opencloudeu/opencloud-rolling
+              tag: 3.4.0
+            command:
+              - "/bin/sh"
+              - "-c"
+              - "opencloud init || true; opencloud server"
             env:
-              DEMO_USERS: false
-              OCIS_LOG_COLOR: true
-              OCIS_LOG_LEVEL: info
-              OCIS_LOG_PRETTY: true
-              OCIS_URL: https://ocis.noirprime.com
+              IDM_CREATE_DEMO_USERS: false
+              OC_ENABLE_OCM: false
+              OC_INSECURE: false
+              OC_LOG_LEVEL: info
+              OC_URL: https://ocis.noirprime.com
               PROXY_TLS: false
             envFrom:
               - secretRef:
@@ -88,7 +79,7 @@ spec:
             port: *port
     route:
       app:
-        hostnames: ["ocis.noirprime.com"]
+        hostnames: ["oc.noirprime.com"]
         parentRefs:
           - name: internal
             namespace: kube-system
@@ -98,9 +89,9 @@ spec:
       app:
         existingClaim: *name
         globalMounts:
-          - path: /var/lib/ocis
+          - path: /var/lib/opencloud
             subPath: data
-          - path: /etc/ocis
+          - path: /etc/opencloud
             subPath: config
       media:
         existingClaim: shared-media
@@ -108,13 +99,6 @@ spec:
           ocis:
             app:
               - path: /media
-      config:
-        type: configMap
-        name: *name
-        globalMounts:
-          - path: /etc/ocis/web.yaml
-            subPath: web.yaml
-            readOnly: true
       tmpfs:
         type: emptyDir
         globalMounts:
