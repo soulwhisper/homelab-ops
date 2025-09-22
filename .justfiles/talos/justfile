@@ -1,10 +1,6 @@
 set quiet := true
 set shell := ['bash', '-euo', 'pipefail', '-c']
 
-IMAGE_VERSION := ```
-    curl --silent --noproxy '*' https://factory.talos.dev/versions | jq --raw-output '
-    map(select(test("^v[0-9.]+$"))) | sort_by(. | ltrimstr("v") | split(".") | map(tonumber)) | reverse | .[0]' | tail -n1
-  ```
 TALOS_ENDPOINT := `talosctl config info --output json | jq --raw-output '.endpoints[]' | shuf -n 1`
 
 [private]
@@ -13,11 +9,17 @@ default:
 
 [doc('Get latest secureboot ISO for talos, with https_proxy support')]
 image mode:
-  @echo "Latest version: {{IMAGE_VERSION}}"
-  @echo "Image Downloading: talos-{{mode}}-{{IMAGE_VERSION}}-metal-amd64-secureboot.iso"
-  curl -x "${https_proxy}" --progress-bar -L "https://factory.talos.dev/image/$(just _schema {{mode}})/{{IMAGE_VERSION}}/metal-amd64-secureboot.iso" \
-    -o /tmp/talos-{{mode}}-{{IMAGE_VERSION}}-metal-amd64-secureboot.iso
-  mv /tmp/talos-{{mode}}-{{IMAGE_VERSION}}-metal-amd64-secureboot.iso "${OPS_DIR}"
+  export IMAGE_VERSION=$(
+    curl --silent --noproxy '*' https://factory.talos.dev/versions \
+      | jq --raw-output 'map(select(test("^v[0-9.]+$"))) | sort_by(. | ltrimstr("v") | split(".") | map(tonumber)) | reverse | .[0]' \
+      | tail -n1
+  )
+  export IMAGE_SCHEMA=$(just _schema {{mode}})
+  @echo "Latest version: ${IMAGE_VERSION}"
+  @echo "Image Downloading: talos-{{mode}}-${IMAGE_VERSION}-metal-amd64-secureboot.iso"
+  curl -x "${https_proxy}" --progress-bar -L "https://factory.talos.dev/image/${IMAGE_SCHEMA}/${IMAGE_VERSION}/metal-amd64-secureboot.iso" \
+    -o /tmp/talos-{{mode}}-"${IMAGE_VERSION}"-metal-amd64-secureboot.iso
+  mv /tmp/talos-{{mode}}-"${IMAGE_VERSION}"-metal-amd64-secureboot.iso "${OPS_DIR}"
 
 [doc('Get schema ID for specific environment')]
 _schema mode:
