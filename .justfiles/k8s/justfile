@@ -16,13 +16,13 @@ node-shell node:
 
 [doc('Prune pods in Failed, Pending, or Succeeded state')]
 prune-pods:
-  for phase in 'Failed Pending Succeeded'; do \
+  for phase in Failed Pending Succeeded; do \
     kubectl delete pods -A --field-selector status.phase="$phase" --ignore-not-found=true; \
   done
 
 [doc('Apply local Flux Kustomization')]
 apply-ks dir ks="*":
-  flux-local build ks --all-namespaces --path "$K8S_DIR/apps/{{dir}}" {{ if ks != "*" {ks} else {""} }} \
+  uvx flux-local build ks --all-namespaces --path "$K8S_DIR/apps/{{dir}}" {{ if ks != "*" {ks} else {""} }} \
   | kubectl apply --server-side --field-manager=kustomize-controller -f -
 
 [doc('Delete local Flux Kustomization')]

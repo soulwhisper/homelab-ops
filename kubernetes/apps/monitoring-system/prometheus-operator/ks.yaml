@@ -19,4 +19,4 @@ spec:
     kind: GitRepository
     name: gitops-system
     namespace: gitops-system
-  wait: false
+  wait: true # wait for crd to be ready

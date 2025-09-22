@@ -9,4 +9,5 @@ resources:
   - ./actions-runner-controller/ks.yaml
   - ./cronjobs/ks.yaml
   - ./flux-operator/ks.yaml
+  - ./flux-instance/ks.yaml
   - ./system-upgrade-controller/ks.yaml

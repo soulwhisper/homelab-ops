@@ -3,27 +3,29 @@
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: GitRepository
 metadata:
-  name: barman-cloud-crd
+  name: victoria-metrics-crds
+  namespace: monitoring-system
 spec:
   interval: 30m
-  url: https://github.com/cloudnative-pg/plugin-barman-cloud
+  url: https://github.com/VictoriaMetrics/helm-charts
   ref:
-    tag: v0.6.0
+    tag: victoria-metrics-operator-crds-0.5.0
   ignore: |
     # exclude
     /*
     # include
-    !config/crd/bases/barmancloud.cnpg.io_objectstores.yaml
+    !/charts/victoria-metrics-operator/crd.yaml
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.noirprime.com/kustomize.toolkit.fluxcd.io/kustomization_v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: barman-cloud-crd
+  name: victoria-metrics-crds-patch
+  namespace: monitoring-system
 spec:
   sourceRef:
     kind: GitRepository
-    name: barman-cloud-crd
+    name: victoria-metrics-crds
   interval: 30m
   timeout: 5m
   retryInterval: 1m
