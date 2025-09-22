@@ -23,4 +23,4 @@ resources:
   - ./gatus/ks.yaml
   - ./kromgo/ks.yaml
   - ./robusta/ks.yaml
-  - ./webhook/ks.yaml
+  - ./apprise-webhook/ks.yaml

@@ -3,8 +3,8 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &appname k8s-schemas
-  namespace: &namespace gitops-system
+  name: &appname apprise-webhook
+  namespace: &namespace monitoring-system
 spec:
   targetNamespace: *namespace
   commonMetadata:
@@ -13,13 +13,10 @@ spec:
   interval: 30m
   timeout: 5m
   retryInterval: 1m
-  path: "./kubernetes/apps/gitops-system/cronjobs/k8s-schemas"
+  path: "./kubernetes/apps/monitoring-system/apprise-webhook/app"
   prune: true
   sourceRef:
     kind: GitRepository
     name: gitops-system
     namespace: gitops-system
   wait: false
-  dependsOn:
-    - name: onepassword-store
-      namespace: security-system

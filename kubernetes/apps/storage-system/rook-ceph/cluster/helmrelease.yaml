@@ -94,8 +94,6 @@ spec:
           name: ceph-block
           isDefault: true
           allowVolumeExpansion: true
-          mountOptions:
-            - discard
           parameters:
             imageFormat: "2"
             imageFeatures: layering,fast-diff,object-map,deep-flatten,exclusive-lock

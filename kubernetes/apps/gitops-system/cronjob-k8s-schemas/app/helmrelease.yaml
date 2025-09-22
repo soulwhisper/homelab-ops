@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &name k8s-schemas
+  name: &name cronjob-k8s-schemas
 spec:
   interval: 30m
   chartRef:
