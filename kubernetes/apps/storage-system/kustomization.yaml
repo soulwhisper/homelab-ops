@@ -7,7 +7,6 @@ components:
   - ../../components/common
 resources:
   - ./csi-driver-nfs/ks.yaml
-  - ./fstrim/ks.yaml
   - ./openebs/ks.yaml
   - ./rook-ceph/ks.yaml
   - ./snapshot-controller/ks.yaml

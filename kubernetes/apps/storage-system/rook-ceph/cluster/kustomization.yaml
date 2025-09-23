@@ -6,3 +6,5 @@ resources:
   # app
   - ./helmrelease.yaml
   - ./ocirepository.yaml
+  # patch, official chart sc might be missing
+  # - ./storageclass.yaml

@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &name homelab-ops-runner
+  name: actions-runner
 spec:
   interval: 30m
   chartRef:
@@ -24,7 +24,7 @@ spec:
 
   values:
     githubConfigUrl: https://github.com/soulwhisper/homelab-ops
-    githubConfigSecret: actions-runner-controller-github-app
+    githubConfigSecret: github-app
     minRunners: 1
     maxRunners: 3
     containerMode:
@@ -43,7 +43,7 @@ spec:
       noProxy:
         url: "${NO_PROXY}"
     controllerServiceAccount:
-      name: actions-runner-controller
+      name: actions-controller
       namespace: gitops-system
     template:
       spec:
@@ -63,8 +63,8 @@ spec:
               - mountPath: /var/run/secrets/talos.dev
                 name: talos
                 readOnly: true
-        serviceAccountName: *name
+        serviceAccountName: actions-runner
         volumes:
           - name: talos
             secret:
-              secretName: *name
+              secretName: actions-runner

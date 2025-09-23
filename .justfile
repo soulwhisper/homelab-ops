@@ -29,10 +29,6 @@ env:
 reconcile:
   flux --namespace gitops-system reconcile kustomization gitops-system --with-source
 
-[private]
-template file:
-  minijinja-cli {{file}} {{minijinja_args}} | op inject
-
 [doc('Bootstrap Cluster')]
 bootstrap:
   @echo "Bootstrapping Talos..."
@@ -42,10 +38,22 @@ bootstrap:
   just talos _bootstrap_k8s
   just talos kubeconfig
   @echo "completed."
+  @if ! kubectl wait nodes --for=condition=Ready=True --all --timeout=10s &>/dev/null; then \
+    until kubectl wait nodes --for=condition=Ready=False --all --timeout=10s &>/dev/null; do \
+      echo "Nodes not available, waiting for nodes to be available. Retrying in 5 seconds..."; \
+      sleep 5; \
+    done \
+  fi
   @echo "Bootstrapping Apps..."
-  just template "{{K8S_DIR}}/bootstrap/resources.yaml.j2" | kubectl apply --server-side -f -
-  helmfile --file "{{K8S_DIR}}/bootstrap/helmfile.yaml" sync --hide-notes
+  just _bootstrap_apps
   @echo "completed."
   @echo "Cluster bootstrapped. Rebooting nodes..."
   talosctl reboot
   @echo "completed."
+
+_template file:
+  minijinja-cli {{file}} {{minijinja_args}} | op inject
+
+_bootstrap_apps:
+  just _template "{{K8S_DIR}}/bootstrap/resources.yaml.j2" | kubectl apply --server-side -f -
+  helmfile --file "{{K8S_DIR}}/bootstrap/helmfile.yaml" sync --hide-notes

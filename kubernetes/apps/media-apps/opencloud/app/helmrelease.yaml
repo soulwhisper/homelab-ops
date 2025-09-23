@@ -39,7 +39,7 @@ spec:
           app:
             image:
               repository: docker.io/opencloudeu/opencloud-rolling
-              tag: 3.4.0
+              tag: 3.5.0
             command:
               - "/bin/sh"
               - "-c"

@@ -68,7 +68,21 @@
       description: "Victoria Metrics Group",
       groupName: "Victoria Metrics",
       matchDatasources: ["docker"],
-      matchPackageNames: ["/victoria-metrics-k8s-stack/", "/victoria-metrics-operator-crds/", "/victoria-metrics-operator/"],
+      matchPackageNames: [
+        "/victoria-metrics-k8s-stack/",
+        "/victoria-metrics-operator-crds/",
+        "/victoria-metrics-operator/",
+      ],
+      group: {
+        commitMessageTopic: "{{{groupName}}} group",
+      },
+      minimumGroupSize: 2,
+    },
+    {
+      description: "Volsync Group",
+      groupName: "Volsync",
+      matchDatasources: ["docker"],
+      matchPackageNames: ["/volsync/", "/volsync-perfectra1n/"],
       group: {
         commitMessageTopic: "{{{groupName}}} group",
       },

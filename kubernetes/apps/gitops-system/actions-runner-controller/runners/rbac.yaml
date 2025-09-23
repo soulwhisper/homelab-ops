@@ -2,26 +2,26 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: homelab-ops-runner
+  name: actions-runner
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
   name: cluster-admin
 subjects:
   - kind: ServiceAccount
-    name: homelab-ops-runner
+    name: actions-runner
     namespace: gitops-system
 ---
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: homelab-ops-runner
+  name: actions-runner
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.noirprime.com/talos.dev/serviceaccount_v1alpha1.json
 apiVersion: talos.dev/v1alpha1
 kind: ServiceAccount
 metadata:
-  name: homelab-ops-runner
+  name: actions-runner
 spec:
   roles:
     - os:admin

@@ -32,3 +32,4 @@
 > storage
 
 - rook-ceph has better support than openebs-replicated;
+- fstrim is not needed with `storageClass.mountOptions: -discard`;

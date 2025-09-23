@@ -78,3 +78,5 @@ spec:
   dependsOn:
     - name: cilium
       namespace: kube-system
+    - name: cert-manager
+      namespace: security-system
