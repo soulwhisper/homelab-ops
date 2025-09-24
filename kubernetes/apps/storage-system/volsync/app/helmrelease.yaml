@@ -23,6 +23,7 @@ spec:
     keepHistory: false
 
   values:
+    fullnameOverride: volsync-perfectra1n
     image: &image
       repository: ghcr.io/perfectra1n/volsync
       tag: 0.16.7
