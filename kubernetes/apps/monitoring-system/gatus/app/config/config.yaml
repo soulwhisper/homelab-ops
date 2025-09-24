@@ -25,6 +25,6 @@ endpoints:
     url: "https://flux-webhook.noirprime.com"
     interval: 1m
     client:
-      dns-resolver: "1.1.1.1"
+      dns-resolver: "tcp://1.1.1.1:53"
     conditions:
       - "[STATUS] == 404"
