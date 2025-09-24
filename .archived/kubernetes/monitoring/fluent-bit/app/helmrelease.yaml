@@ -5,12 +5,12 @@ kind: HelmRelease
 metadata:
   name: fluent-bit
 spec:
-  interval: 30m
+  interval: 1h
   chart:
     spec:
       chart: fluent-bit
       version: 0.50.0
-      interval: 30m
+      interval: 1h
       sourceRef:
         kind: HelmRepository
         name: fluent

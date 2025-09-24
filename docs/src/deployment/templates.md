@@ -22,7 +22,7 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *appname
-  interval: 30m
+  interval: 1h
   timeout: 5m
   path: "./kubernetes/apps/example-ns-1/example-app-1/app"
   prune: true
@@ -49,7 +49,7 @@ kind: HelmRelease
 metadata:
   name: &name example-app
 spec:
-  interval: 30m
+  interval: 1h
   chartRef:
     kind: OCIRepository
     name: app-template

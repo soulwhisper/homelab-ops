@@ -6,7 +6,7 @@ metadata:
   name: victoria-metrics-crds
   namespace: monitoring-system
 spec:
-  interval: 30m
+  interval: 1h
   url: https://github.com/VictoriaMetrics/helm-charts
   ref:
     tag: victoria-metrics-operator-crds-0.5.0
@@ -26,7 +26,7 @@ spec:
   sourceRef:
     kind: GitRepository
     name: victoria-metrics-crds
-  interval: 30m
+  interval: 1h
   timeout: 5m
   retryInterval: 1m
   prune: true

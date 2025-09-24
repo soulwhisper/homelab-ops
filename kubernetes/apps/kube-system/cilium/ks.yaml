@@ -10,7 +10,7 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *appname
-  interval: 30m
+  interval: 1h
   timeout: 5m
   retryInterval: 1m
   path: "./kubernetes/apps/kube-system/cilium/app"
@@ -39,7 +39,7 @@ spec:
     labels:
       app.kubernetes.io/name: cilium
       app.kubernetes.io/controller: config
-  interval: 30m
+  interval: 1h
   timeout: 5m
   retryInterval: 1m
   path: "./kubernetes/apps/kube-system/cilium/config"
@@ -65,7 +65,7 @@ spec:
     labels:
       app.kubernetes.io/name: cilium
       app.kubernetes.io/component: gateway
-  interval: 30m
+  interval: 1h
   timeout: 5m
   retryInterval: 1m
   path: "./kubernetes/apps/kube-system/cilium/gateway"

@@ -5,7 +5,7 @@ kind: HelmRelease
 metadata:
   name: victoria-logs
 spec:
-  interval: 30m
+  interval: 1h
   chartRef:
     kind: OCIRepository
     name: victoria-logs-single

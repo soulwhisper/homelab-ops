@@ -5,7 +5,7 @@ kind: GitRepository
 metadata:
   name: barman-cloud-crd
 spec:
-  interval: 30m
+  interval: 1h
   url: https://github.com/cloudnative-pg/plugin-barman-cloud
   ref:
     tag: v0.6.0
@@ -24,7 +24,7 @@ spec:
   sourceRef:
     kind: GitRepository
     name: barman-cloud-crd
-  interval: 30m
+  interval: 1h
   timeout: 5m
   retryInterval: 1m
   prune: true

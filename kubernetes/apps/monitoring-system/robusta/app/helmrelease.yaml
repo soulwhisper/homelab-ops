@@ -5,7 +5,7 @@ kind: HelmRelease
 metadata:
   name: &name robusta
 spec:
-  interval: 30m
+  interval: 1h
   chart:
     spec:
       chart: robusta

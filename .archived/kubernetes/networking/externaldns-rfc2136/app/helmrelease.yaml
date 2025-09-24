@@ -5,7 +5,7 @@ kind: HelmRelease
 metadata:
   name: &name externaldns-rfc2136
 spec:
-  interval: 30m
+  interval: 1h
   chart:
     spec:
       chart: external-dns

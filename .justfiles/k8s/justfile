@@ -59,3 +59,9 @@ sync-all-es:
   kubectl get es --no-headers -A | while read -r ns name _; do \
     just sync-es "$ns" "$name"; \
   done
+
+[doc('Snapshot VolSync PVCs')]
+snapshot:
+  kubectl get replicationsources --no-headers -A | while read -r ns name _; do \
+    kubectl -n "$ns" patch replicationsources "$name" --type merge -p '{"spec":{"trigger":{"manual":"$(date +%s)"}}}'; \
+  done

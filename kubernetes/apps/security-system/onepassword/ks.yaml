@@ -10,7 +10,7 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *appname
-  interval: 30m
+  interval: 1h
   path: "./kubernetes/apps/security-system/onepassword/app"
   prune: true
   sourceRef:
@@ -30,7 +30,7 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *appname
-  interval: 30m
+  interval: 1h
   path: "./kubernetes/apps/security-system/onepassword/store"
   prune: true
   sourceRef:

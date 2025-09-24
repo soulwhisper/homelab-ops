@@ -10,7 +10,7 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *appname
-  interval: 30m
+  interval: 1h
   path: "./kubernetes/apps/storage-system/openebs/app"
   prune: false # Never delete this
   sourceRef:
@@ -31,7 +31,7 @@ spec:
     labels:
       app.kubernetes.io/name: openebs
       app.kubernetes.io/controller: replicated
-  interval: 30m
+  interval: 1h
   path: "./kubernetes/apps/storage-system/openebs/replicated"
   prune: false # Never delete this
   sourceRef:

@@ -12,7 +12,7 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *appname
-  interval: 30m
+  interval: 1h
   timeout: 5m
   retryInterval: 1m
   path: "./kubernetes/apps/networking-system/cloudflare-tunnel/app"
