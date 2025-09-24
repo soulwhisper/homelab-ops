@@ -86,6 +86,7 @@ spec:
                 cpu: 20m
               limits:
                 memory: 1Gi
+                gpu.intel.com/i915: 1
 
     service:
       app:

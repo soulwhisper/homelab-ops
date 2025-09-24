@@ -8,7 +8,7 @@ resources:
   # utils
   - ./externalsecret.yaml
 configMapGenerator:
-  - name: webhook
+  - name: apprise-webhook
     files:
       - hooks.yaml=./config/hooks.yaml
       - serverchan.sh=./config/serverchan.sh

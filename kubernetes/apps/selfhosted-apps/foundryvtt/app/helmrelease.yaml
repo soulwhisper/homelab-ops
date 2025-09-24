@@ -28,7 +28,8 @@ spec:
       foundryvtt:
         annotations:
           reloader.stakater.com/auto: "true"
-        pod: # this is a must for fvtt
+        pod:
+          # this is a must for fvtt
           securityContext:
             runAsNonRoot: true
             runAsUser: 1000
@@ -41,9 +42,17 @@ spec:
               repository: felddy/foundryvtt
               tag: 13.348.0
             env:
+              CONTAINER_CACHE: ""
               FOUNDRY_HOSTNAME: "fvtt.noirprime.com"
               FOUNDRY_PROXY_PORT: "443"
               FOUNDRY_PROXY_SSL: "true"
+              # until https_proxy supported, ref:https://github.com/felddy/foundryvtt-docker/issues/1284
+              HTTP_PROXY: "${HTTP_PROXY}"
+              HTTPS_PROXY: "${HTTPS_PROXY}"
+              NO_PROXY: "${NO_PROXY}"
+            envFrom:
+              - secretRef:
+                  name: *name
             resources:
               requests:
                 cpu: 10m

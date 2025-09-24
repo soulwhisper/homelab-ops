@@ -33,7 +33,7 @@ spec:
       host: postgres-rw.database-system.svc.cluster.local
       database: *name
       username: *name
-      passord: *name
+      password: *name
     initContainers:
       - name: init-db
         image: ghcr.io/home-operations/postgres-init:17
@@ -59,10 +59,10 @@ spec:
     plugins:
       - netbox_attachments
       - netbox_bgp
-      - netbox_floorplan_plugin
+      - netbox_floorplan
       - netbox_interface_synchronization
-      - netbox_plugin_dns
-      - netbox_plugin_prometheus_sd
+      - netbox_dns
+      - netbox_prometheus_sd
       - netbox_qrcode
       - netbox_reorder_rack
       - netbox_topology_views
