@@ -106,7 +106,7 @@ spec:
               [
                 "sh",
                 "-c",
-                "cp /docker-entrypoint-mount.sh /docker-entrypoint.sh && sed -i 's/\r$$//' /docker-entrypoint.sh && chmod +x /docker-entrypoint.sh && /docker-entrypoint.sh",
+                "chmod +x /docker-entrypoint.sh && /docker-entrypoint.sh",
               ]
             env:
               HTTP_PORT: "3128"
@@ -148,14 +148,11 @@ spec:
             sandbox:
               - path: /config/sandbox-config.yaml
                 subPath: /conf/config.yaml
-                readOnly: true
             ssrf-proxy:
               - path: /config/squid.conf.template
                 subPath: /etc/squid/squid.conf.template
-                readOnly: true
               - path: /config/docker-entrypoint.sh
-                subPath: /docker-entrypoint-mount.sh
-                readOnly: true
+                subPath: /docker-entrypoint.sh
       tmpfs:
         type: emptyDir
         advancedMounts:
