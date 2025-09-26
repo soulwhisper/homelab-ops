@@ -37,7 +37,7 @@ spec:
               - secretRef:
                   name: dify-database-initdb
         containers:
-          plugin_daemon:
+          plugin-daemon:
             image:
               repository: langgenius/dify-plugin-daemon
               tag: 0.3.0-local
@@ -98,7 +98,7 @@ spec:
             resources: *resources
             securityContext: *securityContext
 
-          ssrf_proxy:
+          ssrf-proxy:
             image:
               repository: ubuntu/squid
               tag: 5.2-22.04_beta
@@ -118,14 +118,14 @@ spec:
             securityContext: *securityContext
 
     service:
-      plugin_daemon:
+      plugin-daemon:
         primary: true
         ports:
           daemon:
             port: 5002
           debug:
             port: 5003
-      ssrf_proxy:
+      ssrf-proxy:
         ports:
           proxy:
             port: 3128
@@ -137,7 +137,7 @@ spec:
         existingClaim: *name
         advancedMounts:
           dify-database:
-            plugin_daemon:
+            plugin-daemon:
               - path: /app/storage
                 subPath: plugin-daemon
       config:
@@ -149,7 +149,7 @@ spec:
               - path: /config/sandbox-config.yaml
                 subPath: /conf/config.yaml
                 readOnly: true
-            ssrf_proxy:
+            ssrf-proxy:
               - path: /config/squid.conf.template
                 subPath: /etc/squid/squid.conf.template
                 readOnly: true
@@ -160,5 +160,5 @@ spec:
         type: emptyDir
         advancedMounts:
           dify-database:
-            ssrf_proxy:
+            ssrf-proxy:
               - path: /var/spool/squid
