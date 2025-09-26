@@ -74,7 +74,7 @@ spec:
             resources: *resources
             securityContext: *securityContext
 
-          worker_beat:
+          worker-beat:
             image:
               repository: langgenius/dify-api
               tag: 1.9.0

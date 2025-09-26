@@ -102,7 +102,7 @@ spec:
             image:
               repository: ubuntu/squid
               tag: 5.2-22.04_beta
-            entrypoint:
+            command:
               [
                 "sh",
                 "-c",
