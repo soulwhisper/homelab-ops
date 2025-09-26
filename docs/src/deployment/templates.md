@@ -23,7 +23,7 @@ spec:
     labels:
       app.kubernetes.io/name: *appname
   interval: 1h
-  timeout: 5m
+  timeout: 10m
   path: "./kubernetes/apps/example-ns-1/example-app-1/app"
   prune: true
   sourceRef:

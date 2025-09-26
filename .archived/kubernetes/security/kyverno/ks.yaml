@@ -12,7 +12,7 @@ spec:
       app.kubernetes.io/name: *appname
   interval: 1h
   retryInterval: 5m
-  timeout: 5m
+  timeout: 10m
   path: "./kubernetes/apps/security-system/kyverno/app"
   prune: true
   sourceRef:
@@ -34,7 +34,7 @@ spec:
       app.kubernetes.io/name: *appname
   interval: 1h
   retryInterval: 5m
-  timeout: 5m
+  timeout: 10m
   path: "./kubernetes/apps/security-system/kyverno/policy"
   prune: true
   sourceRef:

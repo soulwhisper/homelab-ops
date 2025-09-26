@@ -11,7 +11,7 @@ spec:
     labels:
       app.kubernetes.io/name: *appname
   interval: 1h
-  timeout: 5m
+  timeout: 10m
   retryInterval: 1m
   path: ./kubernetes/apps/database-system/cnpg-operator/app
   prune: true
@@ -36,7 +36,7 @@ spec:
     labels:
       app.kubernetes.io/name: *appname
   interval: 1h
-  timeout: 5m
+  timeout: 10m
   retryInterval: 1m
   path: ./kubernetes/apps/database-system/cnpg-operator/barman
   prune: true
@@ -63,7 +63,7 @@ spec:
     labels:
       app.kubernetes.io/name: *appname
   interval: 1h
-  timeout: 5m
+  timeout: 10m
   retryInterval: 1m
   path: ./kubernetes/apps/database-system/cnpg-operator/cluster
   prune: true
