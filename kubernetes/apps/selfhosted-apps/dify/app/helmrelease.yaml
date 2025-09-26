@@ -1,0 +1,158 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &name dify-app
+spec:
+  interval: 1h
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+    namespace: gitops-system
+  maxHistory: 1
+  install:
+    crds: CreateReplace
+    remediation:
+      retries: -1
+  upgrade:
+    cleanupOnFail: true
+    crds: CreateReplace
+    remediation:
+      retries: 3
+  uninstall:
+    keepHistory: false
+
+  values:
+    controllers:
+      dify-app:
+        annotations:
+          reloader.stakater.com/auto: "true"
+        initContainers:
+          init-db:
+            image:
+              repository: ghcr.io/home-operations/postgres-init
+              tag: "17"
+            envFrom:
+              - secretRef:
+                  name: dify-app-initdb
+        containers:
+          api:
+            image:
+              repository: langgenius/dify-api
+              tag: 1.9.0
+            env:
+              MODE: "api"
+              PLUGIN_REMOTE_INSTALL_HOST: "dify-database.selfhosted-apps.svc.cluster.local"
+              PLUGIN_REMOTE_INSTALL_PORT: "5003"
+            envFrom:
+              - configMapRef:
+                  name: *name
+              - secretRef:
+                  name: *name
+            resources: &resources
+              requests:
+                cpu: 20m
+              limits:
+                memory: 1Gi
+            securityContext: &securityContext
+              allowPrivilegeEscalation: false
+              capabilities: { drop: ["ALL"] }
+              readOnlyRootFilesystem: true
+
+          worker:
+            image:
+              repository: langgenius/dify-api
+              tag: 1.9.0
+            env:
+              MODE: "worker"
+            envFrom:
+              - configMapRef:
+                  name: *name
+              - secretRef:
+                  name: *name
+            resources: *resources
+            securityContext: *securityContext
+
+          worker-beat:
+            image:
+              repository: langgenius/dify-api
+              tag: 1.9.0
+            env:
+              MODE: "beat"
+            envFrom:
+              - configMapRef:
+                  name: *name
+              - secretRef:
+                  name: *name
+            resources: *resources
+            securityContext: *securityContext
+
+          web:
+            image:
+              repository: langgenius/dify-web
+              tag: 1.9.0
+            env:
+              NEXT_TELEMETRY_DISABLED: "0"
+              TEXT_GENERATION_TIMEOUT_MS: "60000"
+              ALLOW_EMBED: "false"
+              ALLOW_UNSAFE_DATA_SCHEME: "false"
+              MARKETPLACE_API_URL: "https://marketplace.dify.ai"
+              MARKETPLACE_URL: "https://marketplace.dify.ai"
+              PM2_INSTANCES: "2"
+              LOOP_NODE_MAX_COUNT: "100"
+              MAX_TOOLS_NUM: "10"
+              MAX_PARALLEL_LIMIT: "10"
+              MAX_ITERATIONS_NUM: "99"
+              MAX_TREE_DEPTH: "50"
+              ENABLE_WEBSITE_JINAREADER: "true"
+              ENABLE_WEBSITE_FIRECRAWL: "true"
+              ENABLE_WEBSITE_WATERCRAWL: "true"
+            resources: *resources
+            securityContext: *securityContext
+
+    service:
+      api:
+        primary: true
+        ports:
+          http:
+            port: 5001
+      web:
+        ports:
+          http:
+            port: 3000
+
+    persistence:
+      app:
+        existingClaim: *name
+        advancedMounts:
+          dify-app:
+            api:
+              - path: /app/api/storage
+                subPath: app
+            worker:
+              - path: /app/api/storage
+                subPath: app
+            worker-beat:
+              - path: /app/api/storage
+                subPath: app
+      tmpfs:
+        type: emptyDir
+        advancedMounts:
+          dify-app:
+            api:
+              - path: /app/logs
+                subPath: logs/api
+              - path: /tmp
+                subPath: tmp/api
+            worker:
+              - path: /app/logs
+                subPath: logs/worker
+              - path: /tmp
+                subPath: tmp/worker
+            worker-beat:
+              - path: /app/logs
+                subPath: logs/worker-beat
+            web:
+              - path: /.pm2
+                subPath: pm2

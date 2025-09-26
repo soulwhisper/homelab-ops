@@ -8,11 +8,3 @@ resources:
   # utils
   - ./dnsendpoint.yaml
   - ./externalsecret.yaml
-configMapGenerator:
-  - name: cloudflare-tunnel
-    files:
-      - config/config.yaml
-generatorOptions:
-  annotations:
-    kustomize.toolkit.fluxcd.io/substitute: disabled
-  disableNameSuffixHash: true

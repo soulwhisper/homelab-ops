@@ -11,7 +11,7 @@ spec:
     labels:
       app.kubernetes.io/name: *appname
   interval: 1h
-  timeout: 5m
+  timeout: 10m
   retryInterval: 1m
   path: ./kubernetes/apps/database-system/dragonfly-operator/app
   prune: true
@@ -19,4 +19,4 @@ spec:
     kind: GitRepository
     name: gitops-system
     namespace: gitops-system
-  wait: false
+  wait: true

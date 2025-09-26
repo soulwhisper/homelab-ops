@@ -11,7 +11,7 @@ spec:
     labels:
       app.kubernetes.io/name: *appname
   interval: 1h
-  timeout: 5m
+  timeout: 10m
   retryInterval: 1m
   path: "./kubernetes/apps/monitoring-system/victoria-metrics/app"
   prune: true
@@ -36,7 +36,7 @@ spec:
     labels:
       app.kubernetes.io/name: *appname
   interval: 1h
-  timeout: 5m
+  timeout: 10m
   retryInterval: 1m
   path: "./kubernetes/apps/monitoring-system/victoria-metrics/operator"
   prune: true
@@ -44,7 +44,7 @@ spec:
     kind: GitRepository
     name: gitops-system
     namespace: gitops-system
-  wait: false
+  wait: true
   dependsOn:
     - name: victoria-metrics-crds
       namespace: monitoring-system
@@ -61,7 +61,7 @@ spec:
     labels:
       app.kubernetes.io/name: *appname
   interval: 1h
-  timeout: 5m
+  timeout: 10m
   retryInterval: 1m
   path: "./kubernetes/apps/monitoring-system/victoria-metrics/cluster"
   prune: true

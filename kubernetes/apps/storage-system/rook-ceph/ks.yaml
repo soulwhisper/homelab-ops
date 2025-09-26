@@ -11,7 +11,7 @@ spec:
     labels:
       app.kubernetes.io/name: *appname
   interval: 1h
-  timeout: 5m
+  timeout: 10m
   retryInterval: 1m
   path: "./kubernetes/apps/storage-system/rook-ceph/app"
   prune: false # Never delete this
@@ -36,7 +36,7 @@ spec:
     labels:
       app.kubernetes.io/name: *appname
   interval: 1h
-  timeout: 5m
+  timeout: 10m
   retryInterval: 1m
   path: "./kubernetes/apps/storage-system/rook-ceph/cluster"
   prune: false # Never delete this
@@ -44,7 +44,6 @@ spec:
     kind: GitRepository
     name: gitops-system
     namespace: gitops-system
-  wait: true
   healthChecks:
     - apiVersion: ceph.rook.io/v1
       kind: CephCluster
@@ -64,6 +63,7 @@ spec:
       kind: CephBlockPool
       failed: status.phase != 'Ready'
       current: status.phase == 'Ready'
+  wait: true
   dependsOn:
     - name: rook-ceph
       namespace: storage-system

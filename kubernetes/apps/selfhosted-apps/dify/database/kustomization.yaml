@@ -1,0 +1,19 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/kustomization
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  # app
+  - ./helmrelease.yaml
+  # utils
+  - ./externalsecret.yaml
+configMapGenerator:
+  - name: dify-database
+    files:
+      - config/docker-entrypoint.sh
+      - config/sandbox-config.yaml
+      - config/squid.conf.template
+generatorOptions:
+  annotations:
+    kustomize.toolkit.fluxcd.io/substitute: disabled
+  disableNameSuffixHash: true

@@ -11,7 +11,7 @@ spec:
     labels:
       app.kubernetes.io/name: *appname
   interval: 1h
-  timeout: 5m
+  timeout: 10m
   retryInterval: 1m
   path: "./kubernetes/apps/gitops-system/system-upgrade-controller/app"
   prune: true
@@ -33,7 +33,7 @@ spec:
     labels:
       app.kubernetes.io/name: *appname
   interval: 1h
-  timeout: 5m
+  timeout: 10m
   retryInterval: 1m
   path: "./kubernetes/apps/gitops-system/system-upgrade-controller/plans"
   prune: true

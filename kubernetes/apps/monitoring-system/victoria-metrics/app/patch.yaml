@@ -27,7 +27,7 @@ spec:
     kind: GitRepository
     name: victoria-metrics-crds
   interval: 1h
-  timeout: 5m
+  timeout: 10m
   retryInterval: 1m
   prune: true
   wait: true

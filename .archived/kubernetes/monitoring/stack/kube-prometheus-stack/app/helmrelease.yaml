@@ -41,7 +41,7 @@ spec:
         alertmanagerConfiguration:
           name: alertmanager
           global:
-            resolveTimeout: 5m
+            resolvetimeout: 10m
         externalUrl: https://alertmanager.noirprime.com
         storage:
           volumeClaimTemplate:

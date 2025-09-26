@@ -124,11 +124,11 @@ spec:
           manyfold:
             app: &tmpdirs
               - path: /tmp
-                subPath: host-tmp
+                subPath: tmp/host
               - path: /app/tmp
-                subPath: app-tmp
+                subPath: tmp/app
               - path: /app/log
-                subPath: app-log
+                subPath: log
             chown-tmpdirs: *tmpdirs
       media:
         type: nfs
