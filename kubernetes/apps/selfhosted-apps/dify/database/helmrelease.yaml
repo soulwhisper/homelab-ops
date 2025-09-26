@@ -146,13 +146,13 @@ spec:
         advancedMounts:
           dify-database:
             sandbox:
-              - path: /config/sandbox-config.yaml
-                subPath: /conf/config.yaml
+              - path: /conf/config.yaml
+                subPath: sandbox-config.yaml
             ssrf-proxy:
-              - path: /config/squid.conf.template
-                subPath: /etc/squid/squid.conf.template
-              - path: /config/docker-entrypoint.sh
-                subPath: /docker-entrypoint.sh
+              - path: /etc/squid/squid.conf.template
+                subPath: squid.conf.template
+              - path: /docker-entrypoint.sh
+                subPath: docker-entrypoint.sh
       tmpfs:
         type: emptyDir
         advancedMounts:

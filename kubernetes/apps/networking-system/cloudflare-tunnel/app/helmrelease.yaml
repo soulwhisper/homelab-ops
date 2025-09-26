@@ -94,3 +94,16 @@ spec:
           - path: /etc/cloudflared/config.yaml
             subPath: config.yaml
             readOnly: true
+
+    configMaps:
+      config:
+        data:
+          config.yaml: |-
+            originRequest:
+              originServerName: gateway-ext.noirprime.com
+            ingress:
+              - hostname: "noirprime.com"
+                service: https://cilium-gateway-external.kube-system.svc.cluster.local
+              - hostname: "*.noirprime.com"
+                service: https://cilium-gateway-external.kube-system.svc.cluster.local
+              - service: http_status:404
