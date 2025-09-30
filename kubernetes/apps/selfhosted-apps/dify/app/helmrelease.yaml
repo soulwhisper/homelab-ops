@@ -40,7 +40,7 @@ spec:
           api:
             image:
               repository: langgenius/dify-api
-              tag: 1.9.0
+              tag: 1.9.1
             env:
               MODE: "api"
               PLUGIN_REMOTE_INSTALL_HOST: "dify-database.selfhosted-apps.svc.cluster.local"
@@ -63,7 +63,7 @@ spec:
           worker:
             image:
               repository: langgenius/dify-api
-              tag: 1.9.0
+              tag: 1.9.1
             env:
               MODE: "worker"
             envFrom:
@@ -77,7 +77,7 @@ spec:
           worker-beat:
             image:
               repository: langgenius/dify-api
-              tag: 1.9.0
+              tag: 1.9.1
             env:
               MODE: "beat"
             envFrom:
