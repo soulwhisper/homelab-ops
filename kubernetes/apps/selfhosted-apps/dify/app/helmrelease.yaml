@@ -91,7 +91,7 @@ spec:
           web:
             image:
               repository: langgenius/dify-web
-              tag: 1.9.0
+              tag: 1.9.1
             env:
               NEXT_TELEMETRY_DISABLED: "0"
               TEXT_GENERATION_TIMEOUT_MS: "60000"
