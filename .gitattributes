@@ -1,12 +1,9 @@
 docs/** linguist-vendored
 infrastructure/** linguist-vendored
 * text=auto eol=lf
-justfile -linguist-detectable
-.justfile -linguist-detectable
 *.env -linguist-detectable
 *.json -linguist-detectable
 *.json5 -linguist-detectable
-*.just -linguist-detectable
 *.md -linguist-detectable
 *.nix -linguist-detectable
 *.sh -linguist-detectable
@@ -14,3 +11,6 @@ justfile -linguist-detectable
 *.yml linguist-detectable linguist-language=YAML
 *.yaml linguist-detectable linguist-language=YAML
 *.yaml.j2 linguist-detectable linguist-language=YAML
+justfile linguist-detectable linguist-language=JUST
+.justfile linguist-detectable linguist-language=JUST
+*.just linguist-detectable linguist-language=JUST
