@@ -82,6 +82,12 @@ spec:
           - name: internal
             namespace: kube-system
             sectionName: https
+        rules:
+          - backendRefs:
+              - identifier: app
+            timeouts:
+              request: 0s
+              backendRequest: 0s
 
     persistence:
       app:
