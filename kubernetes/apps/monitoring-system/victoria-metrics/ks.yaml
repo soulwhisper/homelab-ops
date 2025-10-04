@@ -4,9 +4,7 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &appname victoria-metrics-crds
-  namespace: &namespace monitoring-system
 spec:
-  targetNamespace: *namespace
   commonMetadata:
     labels:
       app.kubernetes.io/name: *appname
@@ -29,9 +27,7 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &appname victoria-metrics-operator
-  namespace: &namespace monitoring-system
 spec:
-  targetNamespace: *namespace
   commonMetadata:
     labels:
       app.kubernetes.io/name: *appname
@@ -54,9 +50,7 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &appname victoria-metrics-cluster
-  namespace: &namespace monitoring-system
 spec:
-  targetNamespace: *namespace
   commonMetadata:
     labels:
       app.kubernetes.io/name: *appname
@@ -73,7 +67,7 @@ spec:
   dependsOn:
     - name: victoria-metrics-operator
       namespace: monitoring-system
-    - name: onepassword-store
+    - name: onepassword-connect
       namespace: security-system
     - name: rook-ceph-cluster
       namespace: storage-system

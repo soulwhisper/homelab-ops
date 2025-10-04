@@ -4,9 +4,7 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &appname maybe
-  namespace: &namespace selfhosted-apps
 spec:
-  targetNamespace: *namespace
   commonMetadata:
     labels:
       app.kubernetes.io/name: *appname
@@ -25,7 +23,7 @@ spec:
       namespace: database-system
     - name: dragonfly-operator
       namespace: database-system
-    - name: onepassword-store
+    - name: onepassword-connect
       namespace: security-system
     - name: rook-ceph-cluster
       namespace: storage-system

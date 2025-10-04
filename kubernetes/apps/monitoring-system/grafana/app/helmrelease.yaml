@@ -9,18 +9,6 @@ spec:
   chartRef:
     kind: OCIRepository
     name: grafana
-  maxHistory: 1
-  install:
-    crds: CreateReplace
-    remediation:
-      retries: -1
-  upgrade:
-    cleanupOnFail: true
-    crds: CreateReplace
-    remediation:
-      retries: 3
-  uninstall:
-    keepHistory: false
 
   values:
     # ref:https://github.com/mchestr/home-cluster/blob/main/kubernetes/apps/observability/grafana/app/helmrelease.yaml

@@ -5,6 +5,8 @@ kind: Kustomization
 namespace: storage-system
 components:
   - ../../components/common
+replacements:
+  - path: ../../replacements/ks.yaml
 resources:
   - ./csi-driver-nfs/ks.yaml
   - ./openebs/ks.yaml

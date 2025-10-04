@@ -5,7 +5,9 @@ kind: Kustomization
 namespace: security-system
 components:
   - ../../components/common
+replacements:
+  - path: ../../replacements/ks.yaml
 resources:
   - ./cert-manager/ks.yaml
   - ./external-secrets/ks.yaml
-  - ./onepassword/ks.yaml
+  - ./onepassword-connect/ks.yaml

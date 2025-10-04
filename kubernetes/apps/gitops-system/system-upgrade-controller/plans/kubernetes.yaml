@@ -1,26 +1,19 @@
 ---
-# yaml-language-server: $schema=https://kubernetes-schemas.noirprime.com/upgrade.cattle.io/plan_v1.json
-apiVersion: upgrade.cattle.io/v1
-kind: Plan
+# yaml-language-server: $schema=https://kubernetes-schemas.noirprime.com/tuppr.home-operations.com/kubernetesupgrade_v1alpha1.json
+apiVersion: tuppr.home-operations.com/v1alpha1
+kind: KubernetesUpgrade
 metadata:
   name: kubernetes
 spec:
-  version: ${KUBERNETES_VERSION}
-  concurrency: 1
-  jobActiveDeadlineSecs: 0
-  exclusive: true
-  nodeSelector:
-    matchExpressions:
-      - key: node-role.kubernetes.io/control-plane
-        operator: Exists
-  secrets:
-    - name: system-upgrade-controller
-      path: /var/run/secrets/talos.dev
-      ignoreUpdates: true
-  serviceAccountName: system-upgrade-controller
-  upgrade:
-    image: ghcr.io/siderolabs/talosctl:${TALOS_VERSION}
-    args:
-      - --nodes=$(SYSTEM_UPGRADE_NODE_NAME)
-      - upgrade-k8s
-      - --to=$(SYSTEM_UPGRADE_PLAN_LATEST_VERSION)
+  kubernetes:
+    # renovate: datasource=docker depName=ghcr.io/siderolabs/kubelet
+    version: v1.34.1
+  healthChecks:
+    - apiVersion: volsync.backube/v1alpha1
+      kind: ReplicationSource
+      expr: |-
+        status.conditions.filter(c, c.type == "Synchronizing").all(c, c.status == "False")
+    - apiVersion: ceph.rook.io/v1
+      kind: CephCluster
+      expr: |-
+        status.ceph.health in ['HEALTH_OK']

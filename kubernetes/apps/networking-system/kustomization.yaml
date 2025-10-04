@@ -5,6 +5,8 @@ kind: Kustomization
 namespace: networking-system
 components:
   - ../../components/common
+replacements:
+  - path: ../../replacements/ks.yaml
 resources:
   - ./cloudflare-tunnel/ks.yaml
   - ./externaldns-adguard/ks.yaml

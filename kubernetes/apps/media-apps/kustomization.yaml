@@ -5,6 +5,8 @@ kind: Kustomization
 namespace: media-apps
 components:
   - ../../components/common
+replacements:
+  - path: ../../replacements/ks.yaml
 resources:
   # storage
   - ./shared-media/ks.yaml

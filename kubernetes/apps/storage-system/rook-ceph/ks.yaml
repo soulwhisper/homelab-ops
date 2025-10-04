@@ -4,9 +4,7 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &appname rook-ceph
-  namespace: &namespace storage-system
 spec:
-  targetNamespace: *namespace
   commonMetadata:
     labels:
       app.kubernetes.io/name: *appname
@@ -21,7 +19,7 @@ spec:
     namespace: gitops-system
   wait: true
   dependsOn:
-    - name: onepassword-store
+    - name: onepassword-connect
       namespace: security-system
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.noirprime.com/kustomize.toolkit.fluxcd.io/kustomization_v1.json
@@ -29,9 +27,7 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &appname rook-ceph-cluster
-  namespace: &namespace storage-system
 spec:
-  targetNamespace: *namespace
   commonMetadata:
     labels:
       app.kubernetes.io/name: *appname
@@ -47,12 +43,12 @@ spec:
   healthChecks:
     - apiVersion: ceph.rook.io/v1
       kind: CephCluster
-      name: *namespace
-      namespace: *namespace
+      name: storage-system
+      namespace: storage-system
     - apiVersion: ceph.rook.io/v1
       kind: CephBlockPool
       name: ceph-blockpool
-      namespace: *namespace
+      namespace: storage-system
   healthCheckExprs:
     # status checks is case-sensitive
     - apiVersion: ceph.rook.io/v1
