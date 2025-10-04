@@ -43,12 +43,12 @@ spec:
   healthChecks:
     - apiVersion: ceph.rook.io/v1
       kind: CephCluster
-      name: *namespace
-      namespace: *namespace
+      name: storage-system
+      namespace: storage-system
     - apiVersion: ceph.rook.io/v1
       kind: CephBlockPool
       name: ceph-blockpool
-      namespace: *namespace
+      namespace: storage-system
   healthCheckExprs:
     # status checks is case-sensitive
     - apiVersion: ceph.rook.io/v1
