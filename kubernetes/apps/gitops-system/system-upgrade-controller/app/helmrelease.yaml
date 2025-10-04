@@ -8,68 +8,7 @@ spec:
   interval: 1h
   chartRef:
     kind: OCIRepository
-    name: app-template
-    namespace: gitops-system
-  maxHistory: 1
-  install:
-    crds: CreateReplace
-    remediation:
-      retries: -1
-  upgrade:
-    cleanupOnFail: true
-    crds: CreateReplace
-    remediation:
-      retries: 3
-  uninstall:
-    keepHistory: false
+    name: tuppr
 
   values:
-    controllers:
-      system-upgrade-controller:
-        replicas: 2
-        pod:
-          securityContext:
-            runAsNonRoot: true
-            runAsUser: 65534
-            runAsGroup: 65534
-        containers:
-          app:
-            image:
-              repository: docker.io/rancher/system-upgrade-controller
-              tag: v0.16.3@sha256:b9c6b90c10868ffa89d379812c1868edc1789b81e86a6e829e0e086529c0847b
-            env:
-              SYSTEM_UPGRADE_CONTROLLER_LEADER_ELECT: true
-              SYSTEM_UPGRADE_CONTROLLER_NAME: *name
-              SYSTEM_UPGRADE_CONTROLLER_NAMESPACE:
-                valueFrom:
-                  fieldRef:
-                    fieldPath: metadata.namespace
-              SYSTEM_UPGRADE_CONTROLLER_NODE_NAME:
-                valueFrom:
-                  fieldRef:
-                    fieldPath: spec.nodeName
-              SYSTEM_UPGRADE_JOB_PRIVILEGED: false
-            securityContext:
-              allowPrivilegeEscalation: false
-              capabilities: { drop: ["ALL"] }
-              readOnlyRootFilesystem: true
-
-    serviceAccount:
-      system-upgrade-controller: {}
-    rbac:
-      bindings:
-        system-upgrade-controller:
-          type: ClusterRoleBinding
-          roleRef:
-            kind: ClusterRole
-            name: cluster-admin
-          subjects:
-            - identifier: system-upgrade-controller
-    rawResources:
-      talosServiceAccount:
-        apiVersion: talos.dev/v1alpha1
-        kind: ServiceAccount
-        spec:
-          spec:
-            roles:
-              - os:admin
+    replicaCount: 2

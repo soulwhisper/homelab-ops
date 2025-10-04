@@ -5,6 +5,8 @@ kind: Kustomization
 namespace: gitops-system
 components:
   - ../../components/common
+replacements:
+  - path: ../../replacements/ks.yaml
 resources:
   - ./actions-runner-controller/ks.yaml
   - ./cronjob-k8s-schemas/ks.yaml

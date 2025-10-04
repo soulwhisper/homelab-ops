@@ -9,18 +9,6 @@ spec:
   chartRef:
     kind: OCIRepository
     name: gha-runner-scale-set
-  maxHistory: 1
-  install:
-    crds: CreateReplace
-    remediation:
-      retries: -1
-  upgrade:
-    cleanupOnFail: true
-    crds: CreateReplace
-    remediation:
-      retries: 3
-  uninstall:
-    keepHistory: false
 
   values:
     githubConfigUrl: https://github.com/soulwhisper/homelab-ops

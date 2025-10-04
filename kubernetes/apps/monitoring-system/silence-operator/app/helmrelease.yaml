@@ -9,18 +9,6 @@ spec:
   chartRef:
     kind: OCIRepository
     name: silence-operator
-  maxHistory: 1
-  install:
-    crds: CreateReplace
-    remediation:
-      retries: -1
-  upgrade:
-    cleanupOnFail: true
-    crds: CreateReplace
-    remediation:
-      retries: 3
-  uninstall:
-    keepHistory: false
 
   values:
     alertmanagerAddress: http://vmalertmanager-victoria-metrics-cluster.monitoring-system.svc.cluster.local:9093

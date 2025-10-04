@@ -14,11 +14,9 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &appname example-app-1
-  namespace: &namespace example-ns-1
   labels:
     override.substitution.flux.home.arpa/enabled: "true"
 spec:
-  targetNamespace: *namespace
   commonMetadata:
     labels:
       app.kubernetes.io/name: *appname
@@ -54,18 +52,6 @@ spec:
     kind: OCIRepository
     name: app-template
     namespace: gitops-system
-  maxHistory: 2
-  install:
-    crds: CreateReplace
-    remediation:
-      retries: -1
-  upgrade:
-    cleanupOnFail: true
-    crds: CreateReplace
-    remediation:
-      retries: 3
-  uninstall:
-    keepHistory: false
 
   values:
     defaultPodOptions:

@@ -5,6 +5,8 @@ kind: Kustomization
 namespace: monitoring-system
 components:
   - ../../components/common
+replacements:
+  - path: ../../replacements/ks.yaml
 resources:
   # exporters
   - ./blackbox-exporter/ks.yaml

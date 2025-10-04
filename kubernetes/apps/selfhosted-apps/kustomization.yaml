@@ -5,6 +5,8 @@ kind: Kustomization
 namespace: selfhosted-apps
 components:
   - ../../components/common
+replacements:
+  - path: ../../replacements/ks.yaml
 resources:
   - ./dify/ks.yaml
   - ./foundryvtt/ks.yaml
@@ -12,5 +14,4 @@ resources:
   - ./karakeep/ks.yaml
   - ./n8n/ks.yaml
   - ./netbox/ks.yaml
-  - ./open-webui/ks.yaml
   - ./sillytavern/ks.yaml
