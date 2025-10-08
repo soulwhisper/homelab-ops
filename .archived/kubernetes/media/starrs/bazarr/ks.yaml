@@ -26,7 +26,6 @@ spec:
     - name: volsync
       namespace: storage-system
   components:
-    - ../../../../../components/gatus/internal
     - ../../../../../components/keda/nas-nfs-scaler
     - ../../../../../components/volsync
   postBuild:

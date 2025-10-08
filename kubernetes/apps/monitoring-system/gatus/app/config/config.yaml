@@ -1,10 +1,8 @@
 ---
-web:
-  port: ${GATUS_WEB_PORT}
-storage:
-  type: sqlite
-  path: /config/sqlite.db
-  caching: true
+connectivity:
+  checker:
+    target: 1.1.1.1:53
+    interval: 1m
 
 metrics: true
 
@@ -19,12 +17,5 @@ ui:
     - name: Homelab
       link: https://github.com/soulwhisper/homelab-ops
 
-endpoints:
-  - name: flux-webhook
-    group: infrastructure
-    url: "https://flux-webhook.noirprime.com"
-    interval: 1m
-    client:
-      dns-resolver: "tcp://1.1.1.1:53"
-    conditions:
-      - "[STATUS] == 404"
+web:
+  port: ${GATUS_WEB_PORT}

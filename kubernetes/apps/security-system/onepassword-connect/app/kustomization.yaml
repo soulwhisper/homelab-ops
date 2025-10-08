@@ -6,4 +6,5 @@ resources:
   # app
   - ./helmrelease.yaml
   # utils
+  - ./externalsecret.yaml
   - ./clustersecretstore.yaml

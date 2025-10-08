@@ -21,9 +21,3 @@ spec:
   dependsOn:
     - name: onepassword-connect
       namespace: security-system
-  components:
-    - ../../../../components/gatus/internal
-  postBuild:
-    substitute:
-      APP: *appname
-      GATUS_SUBDOMAIN: home

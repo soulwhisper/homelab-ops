@@ -44,9 +44,3 @@ spec:
   dependsOn:
     - name: coroot
       namespace: monitoring-system
-  components:
-    - ../../../../components/gatus/internal
-  postBuild:
-    substitute:
-      APP: *appname
-      GATUS_SUBDOMAIN: coroot

@@ -30,8 +30,6 @@ spec:
   components:
     - ../../../../components/cnpg
     - ../../../../components/dragonfly
-    - ../../../../components/gatus/internal
   postBuild:
     substitute:
       APP: *appname
-      GATUS_SUBDOMAIN: photo

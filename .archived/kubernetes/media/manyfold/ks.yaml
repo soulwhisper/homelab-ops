@@ -32,9 +32,7 @@ spec:
   components:
     - ../../../../components/cnpg
     - ../../../../components/dragonfly
-    - ../../../../components/gatus/internal
     - ../../../../components/volsync
   postBuild:
     substitute:
       APP: *appname
-      GATUS_SUBDOMAIN: model

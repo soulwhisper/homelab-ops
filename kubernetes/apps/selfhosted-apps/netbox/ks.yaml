@@ -32,7 +32,6 @@ spec:
   components:
     - ../../../../components/cnpg
     - ../../../../components/dragonfly
-    - ../../../../components/gatus/internal
     - ../../../../components/volsync
   postBuild:
     substitute:

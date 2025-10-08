@@ -79,12 +79,6 @@ spec:
   dependsOn:
     - name: rook-ceph
       namespace: storage-system
-  components:
-    - ../../../../components/gatus/internal
-  postBuild:
-    substitute:
-      APP: *appname
-      GATUS_SUBDOMAIN: rook
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.noirprime.com/kustomize.toolkit.fluxcd.io/kustomization_v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1

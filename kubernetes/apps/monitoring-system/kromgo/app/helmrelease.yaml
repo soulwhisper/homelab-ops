@@ -69,6 +69,9 @@ spec:
             port: *hport
     route:
       app:
+        annotations:
+          gatus.home-operations.com/endpoint: |-
+            conditions: ["[STATUS] == 404"]
         hostnames: ["kromgo.noirprime.com"]
         parentRefs:
           - name: external
