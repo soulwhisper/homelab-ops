@@ -90,7 +90,7 @@ spec:
             image:
               repository: ubuntu/squid
               tag: 5.2-22.04_beta
-            command: ["sh", "-c", "/docker-entrypoint.sh"]
+            command: ["sh", "/docker-entrypoint.sh"]
             env:
               HTTP_PORT: "3128"
               COREDUMP_DIR: "/var/spool/squid"
