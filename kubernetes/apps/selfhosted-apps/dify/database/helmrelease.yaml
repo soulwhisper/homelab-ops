@@ -98,7 +98,10 @@ spec:
               SANDBOX_HOST: "dify-database.selfhosted-apps.svc.cluster.local"
               SANDBOX_PORT: "8194"
             resources: *resources
-            securityContext: *securityContext
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities: { drop: ["ALL"] }
+              readOnlyRootFilesystem: false
 
     service:
       plugin-daemon:
@@ -140,5 +143,7 @@ spec:
         type: emptyDir
         advancedMounts:
           dify-database:
+            sandbox:
+              - path: /logs
             ssrf-proxy:
               - path: /var/spool/squid
