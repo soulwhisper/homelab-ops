@@ -25,7 +25,5 @@ spec:
     kind: GitRepository
     name: barman-cloud-crd
   interval: 1h
-  timeout: 10m
-  retryInterval: 1m
   prune: true
   wait: true

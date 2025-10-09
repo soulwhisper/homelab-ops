@@ -22,6 +22,7 @@ metadata:
   name: cluster-apps
   namespace: gitops-system
 spec:
+  deletionPolicy: WaitForTermination
   interval: 10m
   path: ./kubernetes/apps
   prune: true
@@ -46,7 +47,7 @@ spec:
         group: kustomize.toolkit.fluxcd.io
         kind: Kustomization
         labelSelector: override.substitution.flux.home.arpa/enabled notin (true)
-    - # Add HelmRelease defaults to all Kustomizations
+    - # Add HelmRelease defaults to all child Kustomizations
       patch: |-
         apiVersion: kustomize.toolkit.fluxcd.io/v1
         kind: Kustomization
@@ -60,6 +61,7 @@ spec:
                 metadata:
                   name: not-used
                 spec:
+                  deletionPolicy: WaitForTermination
                   maxHistory: 1
                   install:
                     crds: CreateReplace

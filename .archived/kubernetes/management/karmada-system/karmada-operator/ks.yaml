@@ -3,14 +3,9 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &appname karmada-operator
+  name: karmada-operator
 spec:
-  commonMetadata:
-    labels:
-      app.kubernetes.io/name: *appname
   interval: 1h
-  timeout: 10m
-  retryInterval: 1m
   path: ./kubernetes/apps/karmada-system/karmada-operator/app
   prune: false # Never delete this
   sourceRef:

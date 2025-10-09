@@ -3,14 +3,9 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &appname emqx-operator
+  name: emqx-operator
 spec:
-  commonMetadata:
-    labels:
-      app.kubernetes.io/name: *appname
   interval: 1h
-  timeout: 10m
-  retryInterval: 1m
   path: ./kubernetes/apps/database-system/emqx-operator/app
   prune: true
   sourceRef:
@@ -28,14 +23,9 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &appname emqx-cluster
+  name: emqx-cluster
 spec:
-  commonMetadata:
-    labels:
-      app.kubernetes.io/name: *appname
   interval: 1h
-  timeout: 10m
-  retryInterval: 1m
   path: ./kubernetes/apps/database-system/emqx-operator/cluster
   prune: true
   sourceRef:

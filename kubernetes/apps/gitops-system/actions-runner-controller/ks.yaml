@@ -3,14 +3,9 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &appname actions-controller
+  name: actions-controller
 spec:
-  commonMetadata:
-    labels:
-      app.kubernetes.io/name: *appname
   interval: 1h
-  timeout: 10m
-  retryInterval: 1m
   path: "./kubernetes/apps/gitops-system/actions-runner-controller/app"
   prune: true
   sourceRef:
@@ -26,14 +21,9 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &appname actions-runner
+  name: actions-runner
 spec:
-  commonMetadata:
-    labels:
-      app.kubernetes.io/name: *appname
   interval: 1h
-  timeout: 10m
-  retryInterval: 1m
   path: "./kubernetes/apps/gitops-system/actions-runner-controller/runners"
   prune: true
   sourceRef:

@@ -6,6 +6,11 @@ connectivity:
 
 metrics: true
 
+storage:
+  type: sqlite
+  caching: true
+  path: ${GATUS_CONFIG_PATH}/gatus.db
+
 ui:
   title: Status | Gatus
   header: Status
@@ -19,3 +24,16 @@ ui:
 
 web:
   port: ${GATUS_WEB_PORT}
+
+endpoints:
+  - name: Cloudflare
+    url: icmp://1.1.1.1
+    interval: 1m
+    conditions:
+      - "[CONNECTED] == true"
+
+  - name: Google
+    url: icmp://8.8.8.8
+    interval: 1m
+    conditions:
+      - "[CONNECTED] == true"

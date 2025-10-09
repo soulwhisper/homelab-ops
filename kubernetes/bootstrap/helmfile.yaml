@@ -63,7 +63,7 @@ releases:
         args:
           - "apply"
           - "--namespace=gitops-system"
-          - "--filename=../components/common/cluster-settings.yaml"
+          - "--filename=../components/namespace/cluster-settings.yaml"
           - "--wait=true"
 
   - name: flux-instance

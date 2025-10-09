@@ -26,7 +26,7 @@ spec:
         initContainers:
           chown-tmpdirs:
             image:
-              repository: docker.io/library/alpine
+              repository: mirror.gcr.io/library/alpine
               tag: "3.22"
             command:
               - /bin/sh

@@ -3,14 +3,9 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &appname coroot
+  name: coroot
 spec:
-  commonMetadata:
-    labels:
-      app.kubernetes.io/name: *appname
   interval: 1h
-  timeout: 10m
-  retryInterval: 1m
   path: "./kubernetes/apps/monitoring-system/coroot/app"
   prune: true
   sourceRef:
@@ -26,14 +21,9 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &appname coroot-cluster
+  name: coroot-cluster
 spec:
-  commonMetadata:
-    labels:
-      app.kubernetes.io/name: *appname
   interval: 1h
-  timeout: 10m
-  retryInterval: 1m
   path: ./kubernetes/apps/monitoring-system/coroot/cluster
   prune: true
   sourceRef:

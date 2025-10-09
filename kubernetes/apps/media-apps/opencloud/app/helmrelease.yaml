@@ -26,7 +26,7 @@ spec:
         containers:
           app:
             image:
-              repository: docker.io/opencloudeu/opencloud-rolling
+              repository: mirror.gcr.io/opencloudeu/opencloud-rolling
               tag: 3.5.0
             command:
               - "/bin/sh"

@@ -20,14 +20,18 @@ prune-pods:
     kubectl delete pods -A --field-selector status.phase="$phase" --ignore-not-found=true; \
   done
 
+[doc('Render local Flux Kustomization')]
+render-ks ns ks:
+  uvx flux-local build ks --namespace "{{ ns }}" --path "$K8S_DIR/flux/cluster" "{{ ks }}"
+
 [doc('Apply local Flux Kustomization')]
-apply-ks dir ks="*":
-  uvx flux-local build ks --all-namespaces --path "$K8S_DIR/apps/{{dir}}" {{ if ks != "*" {ks} else {""} }} \
+apply-ks ns ks:
+  just render-ks "{{ ns }}" "{{ ks }}" \
   | kubectl apply --server-side --field-manager=kustomize-controller -f -
 
 [doc('Delete local Flux Kustomization')]
-delete-ks dir ks="*":
-  flux-local build ks --all-namespaces --path "$K8S_DIR/apps/{{dir}}" {{ if ks != "*" {ks} else {""} }} \
+delete-ks ns ks:
+  just render-ks "{{ ns }}" "{{ ks }}" \
   | kubectl delete -f -
 
 [doc('Sync single Flux HelmRelease')]

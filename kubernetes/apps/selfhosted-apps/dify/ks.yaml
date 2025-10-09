@@ -3,14 +3,9 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &appname dify-database
+  name: dify-database
 spec:
-  commonMetadata:
-    labels:
-      app.kubernetes.io/name: *appname
   interval: 1h
-  timeout: 10m
-  retryInterval: 1m
   path: "./kubernetes/apps/selfhosted-apps/dify/database"
   prune: true
   sourceRef:
@@ -41,14 +36,9 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &appname dify-app
+  name: dify-app
 spec:
-  commonMetadata:
-    labels:
-      app.kubernetes.io/name: *appname
   interval: 1h
-  timeout: 10m
-  retryInterval: 1m
   path: "./kubernetes/apps/selfhosted-apps/dify/app"
   prune: true
   sourceRef:

@@ -5,4 +5,4 @@ kind: Component
 resources:
   - ./alerts
   - ./cluster-settings.yaml
-  - ./namespace.yaml
+  - ./labels.yaml
