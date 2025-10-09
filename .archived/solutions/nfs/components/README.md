@@ -54,9 +54,9 @@ spec:
     - ../../../../components/keda/nas-nfs-scaler
   postBuild:
     substitute:
-      APP: *appname
+      APP: appname
 
-# helmrelease.yaml, example persistence
+    # helmrelease.yaml, example persistence
     persistence:
       media:
         type: nfs

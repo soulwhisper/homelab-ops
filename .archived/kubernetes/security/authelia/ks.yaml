@@ -27,4 +27,4 @@ spec:
     - ../../../../components/dragonfly
   postBuild:
     substitute:
-      APP: *appname
+      APP: authelia

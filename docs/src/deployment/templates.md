@@ -13,15 +13,9 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &appname example-app-1
-  labels:
-    override.substitution.flux.home.arpa/enabled: "true"
+  name: example-app-1
 spec:
-  commonMetadata:
-    labels:
-      app.kubernetes.io/name: *appname
   interval: 1h
-  timeout: 10m
   path: "./kubernetes/apps/example-ns-1/example-app-1/app"
   prune: true
   sourceRef:
@@ -32,12 +26,6 @@ spec:
   dependsOn:
     - name: example-app-2
       namespace: example-ns-2
-  postBuild:
-    substituteFrom:
-      - kind: ConfigMap
-        name: cluster-settings
-      - kind: Secret
-        name: example-app-2
 
 # helmrelease.yaml, since app-template-4.1.1
 ---

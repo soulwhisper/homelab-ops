@@ -27,4 +27,4 @@ spec:
     - ../../../../../components/volsync
   postBuild:
     substitute:
-      APP: *appname
+      APP: jellyseerr

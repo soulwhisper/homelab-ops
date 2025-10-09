@@ -22,4 +22,4 @@ spec:
     - ../../../../components/volsync
   postBuild:
     substitute:
-      APP: *appname
+      APP: auto-bangumi

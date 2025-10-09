@@ -22,5 +22,5 @@ spec:
     - ../../../../components/volsync
   postBuild:
     substitute:
-      APP: *appname
+      APP: home-assistant
       VOLSYNC_CAPACITY: 10Gi
