@@ -27,7 +27,7 @@ spec:
           app:
             image:
               repository: emby/embyserver
-              tag: 4.9.2.2
+              tag: 4.9.2.3
             env:
               GIDLIST: 2000,0
               DOTNET_SYSTEM_IO_DISABLEFILELOCKING: "true"
