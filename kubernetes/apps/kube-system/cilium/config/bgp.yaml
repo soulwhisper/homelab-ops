@@ -55,6 +55,6 @@ spec:
       peers:
         - name: peer-65510
           peerASN: 65510
-          peerAddress: "${BGP_PEER}"
+          peerAddress: "10.10.0.254"
           peerConfigRef:
             name: cilium-bgp-peer-config

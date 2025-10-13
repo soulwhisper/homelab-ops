@@ -4,25 +4,8 @@ kind: ConfigMap
 metadata:
   name: cluster-settings
 data:
-  # : infra
-  BGP_PEER: "172.19.82.254"
-  DNS_HOST: "172.19.82.10"
-  # : talos
-  KUBE_VIP: "172.19.82.100"
-  # : cilium-lbipam
-  LB_POOL_START: "172.19.82.201"
-  LB_POOL_STOP: "172.19.82.250"
-  # :: important
-  LB_INTERNAL: "172.19.82.201"
-  LB_EXTERNAL: "172.19.82.202"
-  LB_POSTGRES: "172.19.82.203"
-  LB_BUCKET: "172.19.82.204"
-  # :: home-assistant
-  LB_HASS: "172.19.82.210"
-  LB_MQTT: "172.19.82.211"
-  LB_MATTER: "172.19.82.212"
-  # :: media
-  LB_BT: "172.19.82.221"
+  # : general
+  SUBNET: "172.19.82"
   # : proxy
   ALL_PROXY: socks5://172.19.82.10:1080
   HTTP_PROXY: http://172.19.82.10:1080

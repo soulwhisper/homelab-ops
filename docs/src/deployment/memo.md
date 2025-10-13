@@ -30,6 +30,18 @@
 - production, replica >= 2;
 - homelab, cni/gateway/ingress = 3, others = 1;
 
+#### LB IP
+
+- LB range = "${SUBNET}.128/27"
+- internal-gateway = ".131"
+- external-gateway = ".132"
+- postgres = ".133"
+- s3bucket = ".134"
+- home-assistant = ".140"
+- mqtt-server = ".141"
+- matter-server = ".142"
+- bittorrent = ".151"
+
 ### Bootstrap
 
 ```shell

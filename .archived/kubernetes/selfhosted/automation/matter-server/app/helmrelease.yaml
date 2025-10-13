@@ -46,7 +46,7 @@ spec:
         type: LoadBalancer
         sessionAffinity: ClientIP
         annotations:
-          lbipam.cilium.io/ips: "${LB_MATTER}"
+          lbipam.cilium.io/ips: "${SUBNET}.142"
         ports:
           http:
             port: *port
