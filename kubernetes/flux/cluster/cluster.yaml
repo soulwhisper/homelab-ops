@@ -22,7 +22,6 @@ metadata:
   name: cluster-apps
   namespace: gitops-system
 spec:
-  deletionPolicy: WaitForTermination
   interval: 10m
   path: ./kubernetes/apps
   prune: true
@@ -61,7 +60,6 @@ spec:
                 metadata:
                   name: not-used
                 spec:
-                  deletionPolicy: WaitForTermination
                   maxHistory: 1
                   install:
                     crds: CreateReplace
