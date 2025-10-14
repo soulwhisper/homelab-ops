@@ -1,7 +1,7 @@
 ---
 connectivity:
   checker:
-    target: 1.1.1.1:53
+    target: 223.5.5.5:53
     interval: 1m
 
 metrics: true
@@ -27,7 +27,7 @@ web:
 
 endpoints:
   - name: Cloudflare
-    url: icmp://1.1.1.1
+    url: icmp://1.0.0.1
     interval: 1m
     conditions:
       - "[CONNECTED] == true"

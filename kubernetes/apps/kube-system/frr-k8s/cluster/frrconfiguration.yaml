@@ -15,7 +15,7 @@ spec:
             port: 179
             bfdProfile: fast
             ebgpMultiHop: false
-            gracefulRestart: true
+            enableGracefulRestart: true
             toAdvertise:
               allowed:
                 mode: all
@@ -31,4 +31,4 @@ spec:
         echoInterval: 50
         echoMode: false
         passiveMode: false
-        minimumTTL: 1
+        minimumTtl: 1
