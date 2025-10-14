@@ -46,7 +46,7 @@ releases:
   - name: external-secrets
     namespace: security-system
     chart: oci://ghcr.io/external-secrets/charts/external-secrets
-    version: 0.20.2
+    version: 0.20.3
     values: ["./values.yaml.gotmpl"]
     needs: ["kube-system/spegel"]
 
