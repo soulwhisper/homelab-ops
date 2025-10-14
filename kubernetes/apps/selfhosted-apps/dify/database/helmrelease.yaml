@@ -12,6 +12,8 @@ spec:
     namespace: gitops-system
 
   values:
+    defaultPodOptions:
+      hostUsers: false
     controllers:
       dify-database:
         annotations:
@@ -126,6 +128,9 @@ spec:
             sandbox:
               - path: /var/sandbox
                 subPath: sandbox
+            ssrf-proxy:
+              - path: /etc/squid
+                subPath: ssrf-proxy
       config:
         type: configMap
         name: *name

@@ -90,9 +90,9 @@ spec:
           type: ClusterRoleBinding
           roleRef:
             kind: ClusterRole
-            identifier: *name
+            identifier: cronjob-k8s-schemas
           subjects:
-            - identifier: *name
+            - identifier: cronjob-k8s-schemas
 
     persistence:
       tmpfs:
