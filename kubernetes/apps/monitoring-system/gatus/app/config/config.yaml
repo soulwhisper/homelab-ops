@@ -1,8 +1,8 @@
 ---
-connectivity:
-  checker:
-    target: 223.5.5.5:53
-    interval: 1m
+# connectivity:
+#   checker:
+#     target: 223.5.5.5:53
+#     interval: 1m
 
 metrics: true
 
@@ -26,14 +26,14 @@ web:
   port: ${GATUS_WEB_PORT}
 
 endpoints:
-  - name: Cloudflare
-    url: icmp://1.0.0.1
-    interval: 1m
-    conditions:
-      - "[CONNECTED] == true"
+#   - name: Cloudflare
+#     url: icmp://1.0.0.1
+#     interval: 1m
+#     conditions:
+#       - "[CONNECTED] == true"
 
-  - name: Google
-    url: icmp://8.8.8.8
-    interval: 1m
-    conditions:
-      - "[CONNECTED] == true"
+#   - name: Google
+#     url: icmp://8.8.8.8
+#     interval: 1m
+#     conditions:
+#       - "[CONNECTED] == true"
