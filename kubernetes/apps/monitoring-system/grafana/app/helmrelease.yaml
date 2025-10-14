@@ -29,7 +29,6 @@ spec:
       - vonage-status-panel
       - victoriametrics-metrics-datasource
       - victoriametrics-logs-datasource
-    replicas: 2
     resources:
       requests:
         cpu: 50m
