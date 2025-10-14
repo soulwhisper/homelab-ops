@@ -7,7 +7,7 @@ metadata:
   namespace: storage-system
 spec:
   repository:
-    repository: kopia-maintenance
+    repository: kopia
   trigger:
     schedule: "30 3 * * *"
   enabled: true

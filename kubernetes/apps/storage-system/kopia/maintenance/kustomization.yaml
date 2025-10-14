@@ -3,11 +3,4 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-  # app
-  - ./postgres.yaml
-  # utils
-  - ./gatus.yaml
-  - ./barman-cloud.yaml
-  - ./prometheusrule.yaml
-  - ./scheduledbackup.yaml
-  - ./service.yaml
+  - ./kopiamaintenance.yaml

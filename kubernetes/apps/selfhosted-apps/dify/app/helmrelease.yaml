@@ -108,7 +108,18 @@ spec:
       web:
         ports:
           http:
-            port: 3000
+            port: &port 3000
+    route:
+      app:
+        hostnames: ["dify.noirprime.com"]
+        parentRefs:
+          - name: internal
+            namespace: kube-system
+            sectionName: https
+        rules:
+          - backendRefs:
+              - identifier: app
+                port: *port
 
     persistence:
       app:
