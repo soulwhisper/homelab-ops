@@ -126,6 +126,9 @@ spec:
             plugin-daemon:
               - path: /app/storage
                 subPath: plugin-daemon
+            sandbox:
+              - path: /var/sandbox
+                subPath: sandbox
       config:
         type: configMap
         name: *name

@@ -27,12 +27,14 @@ web:
 
 endpoints:
   - name: Cloudflare
+    group: connectivity
     url: icmp://1.0.0.1
     interval: 1m
     conditions:
       - "[CONNECTED] == true"
 
   - name: Google
+    group: connectivity
     url: icmp://8.8.8.8
     interval: 1m
     conditions:

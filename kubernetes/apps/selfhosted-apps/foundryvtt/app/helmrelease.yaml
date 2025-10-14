@@ -35,8 +35,7 @@ spec:
               FOUNDRY_PROXY_PORT: "443"
               FOUNDRY_PROXY_SSL: "true"
               # until https_proxy supported, ref:https://github.com/felddy/foundryvtt-docker/issues/1284
-              HTTP_PROXY: "${HTTP_PROXY}"
-              HTTPS_PROXY: "${HTTPS_PROXY}"
+              ALL_PROXY: "${ALL_PROXY}"
               NO_PROXY: "${NO_PROXY}"
             envFrom:
               - secretRef:
