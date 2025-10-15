@@ -1,0 +1,34 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.noirprime.com/frrk8s.metallb.io/frrconfiguration_v1beta1.json
+apiVersion: frrk8s.metallb.io/v1beta1
+kind: FRRConfiguration
+metadata:
+  name: frr-k8s
+  namespace: kube-system
+spec:
+  bgp:
+    routers:
+      - asn: 65510
+        neighbors:
+          - address: "10.10.0.254" # Switch
+            asn: 65510
+            port: 179
+            bfdProfile: fast
+            ebgpMultiHop: false
+            enableGracefulRestart: true
+            toAdvertise:
+              allowed:
+                mode: all
+        prefixes:
+          - "10.100.0.0/17" # Pod
+          - "10.100.128.0/17" # Service
+          - "10.10.0.192/27" # LoadBalancer
+    bfdProfiles:
+      - name: fast
+        receiveInterval: 100
+        transmitInterval: 100
+        detectMultiplier: 3
+        echoInterval: 50
+        echoMode: false
+        passiveMode: false
+        minimumTtl: 1

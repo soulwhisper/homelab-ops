@@ -13,22 +13,12 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: cloudnative-pg
-  maxHistory: 1
-  install:
-    remediation:
-      retries: -1
-  upgrade:
-    cleanupOnFail: true
-    remediation:
-      retries: 3
-  uninstall:
-    keepHistory: false
 
   values:
     fullnameOverride: *name
+    replicaCount: 1
     crds:
       create: true
-    replicaCount: 1
     monitoring:
       podMonitorEnabled: true
       grafanaDashboard:

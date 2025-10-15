@@ -62,7 +62,7 @@ spec:
             type: PathPrefix
             value: /explore
       backendRefs:
-        - name: dify-app
+        - name: dify-web
           namespace: selfhosted-apps
           port: 3000
     # /
@@ -71,7 +71,7 @@ spec:
             type: PathPrefix
             value: /
       backendRefs:
-        - name: dify-app
+        - name: dify-web
           namespace: selfhosted-apps
           port: 3000
     # /e/

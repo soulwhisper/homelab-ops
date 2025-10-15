@@ -7,7 +7,8 @@ metadata:
 provisioner: nfs.csi.k8s.io
 parameters:
   server: nas.homelab.internal
-  share: /mnt/Arcanum/Media
+  # share: /mnt/Arcanum/Media
+  share: /var/lib/shared/media
   onDelete: retain
 reclaimPolicy: Delete
 volumeBindingMode: Immediate

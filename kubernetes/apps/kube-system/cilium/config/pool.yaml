@@ -7,5 +7,4 @@ metadata:
 spec:
   allowFirstLastIPs: "Yes"
   blocks:
-    - start: "${LB_POOL_START}"
-      stop: "${LB_POOL_STOP}"
+    - cidr: "${SUBNET}.128/27"

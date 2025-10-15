@@ -9,7 +9,6 @@ replacements:
   - path: ../../replacements/ks.yaml
 resources:
   - ./dify/ks.yaml
-  - ./foundryvtt/ks.yaml
   - ./freshrss/ks.yaml
   - ./karakeep/ks.yaml
   - ./n8n/ks.yaml

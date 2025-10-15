@@ -22,7 +22,7 @@ spec:
       enabled: true
       bbr: true
     bgpControlPlane:
-      enabled: true
+      enabled: false
     bpf:
       datapathMode: netkit
       distributedLRU.enabled: true # cost more memory

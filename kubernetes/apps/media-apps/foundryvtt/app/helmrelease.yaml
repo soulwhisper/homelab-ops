@@ -27,17 +27,15 @@ spec:
         containers:
           app:
             image:
-              repository: felddy/foundryvtt
+              repository: mirror.gcr.io/felddy/foundryvtt
               tag: 13.350.0
             env:
-              CONTAINER_CACHE: ""
+              CONTAINER_CACHE: "/data"
+              CONTAINER_PRESERVE_CONFIG: "true"
+              FOUNDRY_MINIFY_STATIC_FILES: "true"
               FOUNDRY_HOSTNAME: "fvtt.noirprime.com"
               FOUNDRY_PROXY_PORT: "443"
               FOUNDRY_PROXY_SSL: "true"
-              # until https_proxy supported, ref:https://github.com/felddy/foundryvtt-docker/issues/1284
-              HTTP_PROXY: "${HTTP_PROXY}"
-              HTTPS_PROXY: "${HTTPS_PROXY}"
-              NO_PROXY: "${NO_PROXY}"
             envFrom:
               - secretRef:
                   name: *name
@@ -65,7 +63,8 @@ spec:
             sectionName: https
 
     persistence:
-      app:
-        existingClaim: *name
+      media:
+        existingClaim: shared-media
         globalMounts:
           - path: /data
+            subPath: fvtt

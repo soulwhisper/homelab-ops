@@ -13,7 +13,7 @@ spec:
     - name: barman-cloud.cloudnative-pg.io
       isWALArchiver: true
       parameters:
-        barmanObjectName: minio-store
+        barmanObjectName: barman-cloud
         serverName: postgres-v1 # changeme if restored
   storage:
     size: 50Gi
@@ -51,5 +51,5 @@ spec:
   #     plugin:
   #       name: barman-cloud.cloudnative-pg.io
   #       parameters:
-  #         barmanObjectName: minio-store
+  #         barmanObjectName: barman-cloud
   #         serverName: postgres-v1

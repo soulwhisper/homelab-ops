@@ -1,0 +1,33 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.noirprime.com/kustomize.toolkit.fluxcd.io/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: frr-k8s
+spec:
+  interval: 1h
+  path: ./kubernetes/apps/kube-system/frr-k8s/app
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: gitops-system
+    namespace: gitops-system
+  wait: false
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.noirprime.com/kustomize.toolkit.fluxcd.io/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: frr-k8s-cluster
+spec:
+  interval: 1h
+  path: ./kubernetes/apps/kube-system/frr-k8s/cluster
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: gitops-system
+    namespace: gitops-system
+  wait: false
+  dependsOn:
+    - name: frr-k8s
+      namespace: kube-system

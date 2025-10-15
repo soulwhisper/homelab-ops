@@ -7,7 +7,7 @@ resources:
   - ./postgres.yaml
   # utils
   - ./gatus.yaml
-  - ./minio-store.yaml
+  - ./barman-cloud.yaml
   - ./prometheusrule.yaml
   - ./scheduledbackup.yaml
   - ./service.yaml

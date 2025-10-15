@@ -47,7 +47,7 @@ data:
   PGVECTO_RS_PASSWORD: "dify-app"
   PGVECTO_RS_DATABASE: "dify-app"
   # :: code
-  CODE_EXECUTION_ENDPOINT: "http://dify-database-dragonfly.selfhosted-apps.svc.cluster.local:8194"
+  CODE_EXECUTION_ENDPOINT: "http://dify-sandbox.selfhosted-apps.svc.cluster.local:8194"
   CODE_EXECUTION_API_KEY: "dify-sandbox"
   CODE_MAX_NUMBER: "9223372036854775807"
   CODE_MIN_NUMBER: "-9223372036854775808"

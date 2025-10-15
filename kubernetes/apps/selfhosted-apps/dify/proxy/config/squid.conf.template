@@ -26,7 +26,6 @@ http_access deny CONNECT !SSL_ports
 http_access allow localhost manager
 http_access deny manager
 http_access allow localhost
-include /etc/squid/conf.d/*.conf
 http_access deny all
 
 ################################## Proxy Server ################################
@@ -54,3 +53,6 @@ http_access allow src_all
 
 # Unless the option's size is increased, an error will occur when uploading more than two files.
 client_request_buffer_max_size 100 MB
+
+################################## Fix ################################
+# include /etc/squid/conf.d/*.conf

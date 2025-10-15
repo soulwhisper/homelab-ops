@@ -22,4 +22,4 @@ spec:
     - ../../../../components/cnpg
   postBuild:
     substitute:
-      APP: *appname
+      APP: lldap

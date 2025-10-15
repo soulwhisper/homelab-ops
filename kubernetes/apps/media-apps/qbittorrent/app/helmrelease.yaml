@@ -54,7 +54,7 @@ spec:
     service:
       app:
         annotations:
-          lbipam.cilium.io/ips: "${LB_BT}"
+          lbipam.cilium.io/ips: "${SUBNET}.151"
         ports:
           http:
             port: *port

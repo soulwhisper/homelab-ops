@@ -6,7 +6,7 @@ metadata:
   name: foundryvtt
 spec:
   interval: 1h
-  path: "./kubernetes/apps/selfhosted-apps/foundryvtt/app"
+  path: "./kubernetes/apps/media-apps/foundryvtt/app"
   prune: true
   sourceRef:
     kind: GitRepository
@@ -14,14 +14,7 @@ spec:
     namespace: gitops-system
   wait: false
   dependsOn:
+    - name: shared-media
+      namespace: media-apps
     - name: onepassword-connect
       namespace: security-system
-    - name: rook-ceph-cluster
-      namespace: storage-system
-    - name: volsync
-      namespace: storage-system
-  components:
-    - ../../../../components/volsync
-  postBuild:
-    substitute:
-      APP: *appname
