@@ -87,11 +87,10 @@ spec:
       config:
         data:
           config.yaml: |-
-            originRequest:
-              originServerName: gateway-ext.noirprime.com
             ingress:
-              - hostname: "noirprime.com"
-                service: https://cilium-gateway-external.kube-system.svc.cluster.local
               - hostname: "*.noirprime.com"
-                service: https://cilium-gateway-external.kube-system.svc.cluster.local
+                originRequest:
+                  http2Origin: true
+                  originServerName: gateway-ext.noirprime.com
+                service: https://cilium-gateway-external.kube-system.svc.cluster.local:443
               - service: http_status:404
