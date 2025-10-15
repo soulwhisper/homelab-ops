@@ -6,7 +6,6 @@ resources:
   # app
   - ./postgres.yaml
   # utils
-  - ./gatus.yaml
   - ./barman-cloud.yaml
   - ./prometheusrule.yaml
   - ./scheduledbackup.yaml

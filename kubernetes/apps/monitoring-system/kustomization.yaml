@@ -22,7 +22,5 @@ resources:
   - ./victoria-metrics/ks.yaml # replace kube-prometheus-stack
   # others
   - ./coroot/ks.yaml
-  - ./gatus/ks.yaml
   - ./kromgo/ks.yaml
   - ./robusta/ks.yaml
-  - ./apprise-webhook/ks.yaml
