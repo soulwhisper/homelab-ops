@@ -87,7 +87,7 @@ spec:
 
     persistence:
       app:
-        existingClaim: shared-volsync
+        existingClaim: volsync
         globalMounts:
           - path: /repository
       config:

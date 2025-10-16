@@ -82,7 +82,7 @@ spec:
           - path: /etc/opencloud
             subPath: config
       media:
-        existingClaim: shared-media
+        existingClaim: media
         advancedMounts:
           opencloud:
             app:

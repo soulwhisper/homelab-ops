@@ -2,12 +2,13 @@
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: shared-volsync
+  name: volsync
   namespace: storage-system
+  # server path: /{shared-path}/volsync
 spec:
   accessModes:
     - ReadWriteMany
   resources:
     requests:
       storage: 300Gi
-  storageClassName: nfs-kopia
+  storageClassName: nfs-shared

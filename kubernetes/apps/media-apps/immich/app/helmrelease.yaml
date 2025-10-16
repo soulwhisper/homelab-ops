@@ -116,7 +116,7 @@ spec:
 
     persistence:
       media:
-        existingClaim: shared-media
+        existingClaim: media
         advancedMounts:
           immich:
             app:

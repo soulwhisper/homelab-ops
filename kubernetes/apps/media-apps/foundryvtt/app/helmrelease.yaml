@@ -30,7 +30,7 @@ spec:
               repository: mirror.gcr.io/felddy/foundryvtt
               tag: 13.350.0
             env:
-              CONTAINER_CACHE: "/data"
+              CONTAINER_CACHE: "/data" # platform=node, name like 'foundryvtt-13.350.zip'
               CONTAINER_PRESERVE_CONFIG: "true"
               FOUNDRY_MINIFY_STATIC_FILES: "true"
               FOUNDRY_HOSTNAME: "fvtt.noirprime.com"
@@ -64,7 +64,7 @@ spec:
 
     persistence:
       media:
-        existingClaim: shared-media
+        existingClaim: media
         globalMounts:
           - path: /data
             subPath: fvtt
