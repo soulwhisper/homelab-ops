@@ -14,7 +14,7 @@ spec:
     namespace: gitops-system
   wait: false
   dependsOn:
-    - name: shared-media
+    - name: nfs-shared
       namespace: media-apps
     - name: onepassword-connect
       namespace: security-system

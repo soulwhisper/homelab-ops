@@ -3,10 +3,13 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: shared-media
+  name: nfs-shared
+  labels:
+    override.substitution.flux.home.arpa/disabled: "true"
+    # conflict with pvc subdir generator
 spec:
   interval: 1h
-  path: "./kubernetes/apps/media-apps/shared-media/app"
+  path: "./kubernetes/apps/media-apps/nfs-shared/app"
   prune: false # Never delete this
   sourceRef:
     kind: GitRepository

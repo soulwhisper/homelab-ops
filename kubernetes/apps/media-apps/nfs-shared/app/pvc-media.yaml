@@ -2,9 +2,9 @@
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: volsync
-  namespace: storage-system
-  # server path: /{shared-path}/volsync
+  name: media
+  namespace: media-apps
+  # nfs-path: /var/lib/shared/media
 spec:
   accessModes:
     - ReadWriteMany

@@ -17,12 +17,11 @@ spec:
         annotations:
           reloader.stakater.com/auto: "true"
         pod:
-          # this is a must for fvtt
           securityContext:
             runAsNonRoot: true
-            runAsUser: 1000
-            runAsGroup: 1000
-            fsGroup: 1000
+            runAsUser: 1000 # node
+            runAsGroup: 2000 # nfs
+            fsGroup: 2000 # nfs
             fsGroupChangePolicy: OnRootMismatch
         containers:
           app:
@@ -30,10 +29,10 @@ spec:
               repository: mirror.gcr.io/felddy/foundryvtt
               tag: 13.350.0
             env:
-              CONTAINER_CACHE: "/data"
-              CONTAINER_PRESERVE_CONFIG: "true"
-              FOUNDRY_MINIFY_STATIC_FILES: "true"
+              CONTAINER_CACHE: "/data" # platform=node, name like 'foundryvtt-13.350.zip'
               FOUNDRY_HOSTNAME: "fvtt.noirprime.com"
+              FOUNDRY_IP_DISCOVERY: "false"
+              FOUNDRY_MINIFY_STATIC_FILES: "true"
               FOUNDRY_PROXY_PORT: "443"
               FOUNDRY_PROXY_SSL: "true"
             envFrom:
@@ -64,7 +63,11 @@ spec:
 
     persistence:
       media:
-        existingClaim: shared-media
+        existingClaim: media
         globalMounts:
           - path: /data
             subPath: fvtt
+      tmpfs:
+        type: emptyDir
+        globalMounts:
+          - path: /home/node/resources/app

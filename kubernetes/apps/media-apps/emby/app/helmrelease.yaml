@@ -83,7 +83,7 @@ spec:
         globalMounts:
           - path: /config
       media:
-        existingClaim: shared-media
+        existingClaim: media
         globalMounts:
           - path: /media
       tmpfs:

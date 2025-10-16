@@ -50,7 +50,7 @@ spec:
             port: *port
     route:
       app:
-        hostnames: ["gpt.noirprime.com"]
+        hostnames: ["chat.noirprime.com"]
         parentRefs:
           - name: internal
             namespace: kube-system

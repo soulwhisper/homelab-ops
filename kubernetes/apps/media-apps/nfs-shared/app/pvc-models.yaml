@@ -2,12 +2,13 @@
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: shared-media
+  name: models
   namespace: media-apps
+  # nfs-path: /var/lib/shared/models
 spec:
   accessModes:
     - ReadWriteMany
   resources:
     requests:
-      storage: 300Gi
-  storageClassName: nfs-media
+      storage: 100Gi
+  storageClassName: nfs-shared

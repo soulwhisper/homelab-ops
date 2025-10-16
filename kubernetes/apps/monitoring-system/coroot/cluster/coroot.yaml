@@ -3,7 +3,7 @@
 apiVersion: coroot.com/v1
 kind: Coroot
 metadata:
-  name: cluster
+  name: coroot
 spec:
   replicas: 1
   authAnonymousRole: Admin

@@ -17,6 +17,7 @@
   - [Proxies](./infrastructure/proxies.md)
 - [Hardware](./infrastructure/hardware.md)
 - [Notification](./infrastructure/notification.md)
+- [AI-Ops](./infrastructure/aiops.md)
 
 ---
 

@@ -12,5 +12,5 @@ spec:
       sectionName: https
   rules:
     - backendRefs:
-        - name: coroot-cluster
+        - name: coroot-coroot
           port: 8080
