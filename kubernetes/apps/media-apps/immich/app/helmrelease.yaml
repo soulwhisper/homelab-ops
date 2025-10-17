@@ -109,6 +109,11 @@ spec:
     route:
       app:
         hostnames: ["photo.noirprime.com"]
+        annotations:
+          gethomepage.dev/enabled: "true"
+          gethomepage.dev/icon: immich.png
+          gethomepage.dev/name: Immich
+          gethomepage.dev/group: Media
         parentRefs:
           - name: internal
             namespace: kube-system

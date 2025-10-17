@@ -50,6 +50,11 @@ spec:
     route:
       app:
         hostnames: ["rss.noirprime.com"]
+        annotations:
+          gethomepage.dev/enabled: "true"
+          gethomepage.dev/icon: freshrss.png
+          gethomepage.dev/name: FreshRSS
+          gethomepage.dev/group: Home
         parentRefs:
           - name: internal
             namespace: kube-system

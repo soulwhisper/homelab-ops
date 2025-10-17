@@ -10,6 +10,7 @@ replacements:
 resources:
   - ./dify/ks.yaml
   - ./freshrss/ks.yaml
+  - ./homepage/ks.yaml
   - ./karakeep/ks.yaml
   - ./n8n/ks.yaml
   - ./netbox/ks.yaml

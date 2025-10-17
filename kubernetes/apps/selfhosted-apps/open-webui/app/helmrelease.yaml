@@ -51,6 +51,11 @@ spec:
     route:
       app:
         hostnames: ["chat.noirprime.com"]
+        annotations:
+          gethomepage.dev/enabled: "true"
+          gethomepage.dev/icon: open-webui.png
+          gethomepage.dev/name: open-webui
+          gethomepage.dev/group: AI
         parentRefs:
           - name: internal
             namespace: kube-system

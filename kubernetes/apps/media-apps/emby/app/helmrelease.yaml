@@ -66,6 +66,11 @@ spec:
     route:
       app:
         hostnames: ["movie.noirprime.com"]
+        annotations:
+          gethomepage.dev/enabled: "true"
+          gethomepage.dev/icon: emby.png
+          gethomepage.dev/name: Emby
+          gethomepage.dev/group: Media
         parentRefs:
           - name: internal
             namespace: kube-system

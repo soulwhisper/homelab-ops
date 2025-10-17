@@ -87,6 +87,11 @@ spec:
     route:
       app:
         hostnames: ["moviepilot.noirprime.com"]
+        annotations:
+          gethomepage.dev/enabled: "true"
+          gethomepage.dev/icon: moviepilot.png
+          gethomepage.dev/name: Moviepilot
+          gethomepage.dev/group: Media
         parentRefs:
           - name: internal
             namespace: kube-system

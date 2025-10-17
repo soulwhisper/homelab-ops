@@ -56,6 +56,11 @@ spec:
     route:
       app:
         hostnames: ["fvtt.noirprime.com"]
+        annotations:
+          gethomepage.dev/enabled: "true"
+          gethomepage.dev/icon: fvtt.png
+          gethomepage.dev/name: FoundryVTT
+          gethomepage.dev/group: Games
         parentRefs:
           - name: internal
             namespace: kube-system

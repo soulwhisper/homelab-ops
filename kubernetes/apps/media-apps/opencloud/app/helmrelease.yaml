@@ -68,6 +68,11 @@ spec:
     route:
       app:
         hostnames: ["oc.noirprime.com"]
+        annotations:
+          gethomepage.dev/enabled: "true"
+          gethomepage.dev/icon: ocis.png
+          gethomepage.dev/name: Opencloud
+          gethomepage.dev/group: Media
         parentRefs:
           - name: internal
             namespace: kube-system

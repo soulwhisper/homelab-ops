@@ -24,7 +24,7 @@ spec:
           app:
             image:
               repository: ghcr.io/gethomepage/homepage
-              tag: v1.2.0
+              tag: v1.5.0
             env:
               HOMEPAGE_ALLOWED_HOSTS: "home.noirprime.com"
             envFrom:
@@ -67,9 +67,9 @@ spec:
           type: ClusterRoleBinding
           roleRef:
             kind: ClusterRole
-            identifier: *name
+            identifier: homepage
           subjects:
-            - identifier: *name
+            - identifier: homepage
 
     service:
       app:

@@ -80,6 +80,11 @@ spec:
     route:
       app:
         hostnames: ["kopia.noirprime.com"]
+        annotations:
+          gethomepage.dev/enabled: "true"
+          gethomepage.dev/icon: kopia.png
+          gethomepage.dev/name: Kopia
+          gethomepage.dev/group: Storage
         parentRefs:
           - name: internal
             namespace: kube-system
