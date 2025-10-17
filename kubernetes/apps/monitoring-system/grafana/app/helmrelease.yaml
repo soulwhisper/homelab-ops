@@ -118,11 +118,11 @@ spec:
     route:
       main:
         hostnames: ["grafana.noirprime.com"]
-          annotations:
-            gethomepage.dev/enabled: "true"
-            gethomepage.dev/icon: grafana.png
-            gethomepage.dev/name: Grafana
-            gethomepage.dev/group: Observability
+        annotations:
+          gethomepage.dev/enabled: "true"
+          gethomepage.dev/icon: grafana.png
+          gethomepage.dev/name: Grafana
+          gethomepage.dev/group: Observability
         parentRefs:
           - name: internal
             namespace: kube-system
