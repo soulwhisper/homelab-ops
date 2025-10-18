@@ -18,8 +18,6 @@ spec:
       homepage:
         annotations:
           reloader.stakater.com/auto: "true"
-        serviceAccount:
-          identifier: *name
         containers:
           app:
             image:

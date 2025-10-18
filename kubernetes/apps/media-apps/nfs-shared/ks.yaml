@@ -5,7 +5,7 @@ kind: Kustomization
 metadata:
   name: nfs-shared
   labels:
-    override.substitution.flux.home.arpa/disabled: "true"
+    substitution.flux.home.arpa/disabled: "true"
     # conflict with pvc subdir generator
 spec:
   interval: 1h
