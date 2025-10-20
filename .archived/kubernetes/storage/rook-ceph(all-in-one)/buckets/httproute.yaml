@@ -6,7 +6,7 @@ metadata:
   name: &name rook-ceph-rgw-ceph-objectstore-external
   annotations:
     gethomepage.dev/enabled: "true"
-    gethomepage.dev/icon: s3.png
+    gethomepage.dev/icon: ceph.png
     gethomepage.dev/name: ceph-buckets
     gethomepage.dev/group: Storage
 spec:

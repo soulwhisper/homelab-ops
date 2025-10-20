@@ -6,7 +6,7 @@ metadata:
   name: hubble-dashboard
   annotations:
     gethomepage.dev/enabled: "true"
-    gethomepage.dev/icon: hubble.png
+    gethomepage.dev/icon: cilium.png
     gethomepage.dev/name: hubble
     gethomepage.dev/group: Observability
 spec:

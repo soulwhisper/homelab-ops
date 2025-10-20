@@ -70,7 +70,7 @@ spec:
         hostnames: ["oc.noirprime.com"]
         annotations:
           gethomepage.dev/enabled: "true"
-          gethomepage.dev/icon: ocis.png
+          gethomepage.dev/icon: open-cloud.png
           gethomepage.dev/name: Opencloud
           gethomepage.dev/group: Media
         parentRefs:

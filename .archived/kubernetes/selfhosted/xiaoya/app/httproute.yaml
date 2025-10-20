@@ -6,7 +6,7 @@ metadata:
   name: xiaoya-emby
   annotations:
     gethomepage.dev/enabled: "true"
-    gethomepage.dev/icon: xiaoya.png
+    gethomepage.dev/icon: "https://avatars.githubusercontent.com/u/193775892?s=200&v=4"
     gethomepage.dev/name: xiaoya
     gethomepage.dev/group: Media
 spec:

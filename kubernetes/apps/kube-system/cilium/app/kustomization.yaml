@@ -7,4 +7,5 @@ resources:
   - ./helmrelease.yaml
   - ./ocirepository.yaml
   # utils
+  - ./grafanadashboard.yaml
   - ./httproute.yaml

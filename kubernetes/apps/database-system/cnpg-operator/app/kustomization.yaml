@@ -8,3 +8,4 @@ resources:
   - ./helmrepository.yaml
   # utils
   - ./externalsecret.yaml
+  - ./grafanadashboard.yaml

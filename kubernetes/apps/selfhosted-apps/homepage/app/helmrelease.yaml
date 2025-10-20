@@ -25,6 +25,9 @@ spec:
               tag: v1.5.0
             env:
               HOMEPAGE_ALLOWED_HOSTS: "home.noirprime.com"
+              HTTP_PROXY: "${HTTP_PROXY}"
+              HTTPS_PROXY: "${HTTPS_PROXY}"
+              NO_PROXY: "${NO_PROXY}"
             envFrom:
               - secretRef:
                   name: *name

@@ -9,10 +9,10 @@
 
 - External, versitygw for snapshots;
 
-| bucket   | app           |
-| -------- | ------------- |
-| postgres | cnpg-operator |
-| volsync  | volsync       |
+| bucket   | app         |
+| -------- | ----------- |
+| postgres | cnpg-barman |
+| volsync  | volsync     |
 
 ### NFS
 
