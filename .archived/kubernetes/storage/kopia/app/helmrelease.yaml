@@ -85,6 +85,8 @@ spec:
           gethomepage.dev/icon: kopia.png
           gethomepage.dev/name: Kopia
           gethomepage.dev/group: Storage
+          gethomepage.dev/widget.type: kopia
+          gethomepage.dev/widget.url: http://kopia.storage-system.svc.cluster.local:8080
         parentRefs:
           - name: internal
             namespace: kube-system

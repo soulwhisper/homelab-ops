@@ -114,6 +114,9 @@ spec:
           gethomepage.dev/icon: immich.png
           gethomepage.dev/name: Immich
           gethomepage.dev/group: Media
+          gethomepage.dev/widget.type: immich
+          gethomepage.dev/widget.url: http://immich.media-apps.svc.cluster.local:2283
+          gethomepage.dev/widget.key: '{{ "{{HOMEPAGE_VAR_IMMICH_API_KEY}}" }}'
         parentRefs:
           - name: internal
             namespace: kube-system

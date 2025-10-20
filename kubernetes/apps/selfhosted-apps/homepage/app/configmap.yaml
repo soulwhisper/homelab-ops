@@ -109,33 +109,49 @@ data:
             href: https://dash.cloudflare.com/
             icon: cloudflare.png
             description: Cloudflare
+            widget:
+              type: cloudflared
+              accountid: {{HOMEPAGE_VAR_CLOUDFLARE_ACCOUNTID}}
+              tunnelid: {{HOMEPAGE_VAR_CLOUDFLARE_TUNNELID}}
+              key: {{HOMEPAGE_VAR_CLOUDFLARE_API_TOKEN}}
         - ESXi:
             href: https://10.0.0.100
-            icon: esxi.png
+            icon: vmware-esxi.png
     - System:
+        - OPNsense:
+            href: https://10.0.0.1
+            icon: opnsense.png
+            widget:
+              type: opnsense
+              url: https://10.0.0.1
+              username: {{HOMEPAGE_VAR_OPNSENSE_USERNAME}}
+              password: {{HOMEPAGE_VAR_OPNSENSE_PASSWORD}}
         - Unifi:
             href: https://10.0.0.10:8443
             icon: unifi.png
+            widget:
+              type: unifi
+              url: https://10.0.0.10:8443
+              username: {{HOMEPAGE_VAR_UNIFI_USERNAME}}
+              password: {{HOMEPAGE_VAR_UNIFI_PASSWORD}}
     - Storage:
-        - TrueNAS:
-            href: https://nas.homelab.internal
-            icon: truenas.png
+        - NAS:
+            href: https://10.0.0.20
+            icon: synology-dsm.png
+            widget:
+              type: diskstation
+              url: https://10.0.0.20:5001
+              username: {{HOMEPAGE_VAR_DSM_USERNAME}}
+              password: {{HOMEPAGE_VAR_DSM_PASSWORD}}
     - Calendar:
         - Calendar:
             widget:
               type: calendar
-              firstDayInWeek: sunday
+              firstDayInWeek: monday
               view: monthly
               maxEvents: 10
               showTime: true
               timezone: Asia/Shanghai
-              integrations:
-                - type: sonarr
-                  service_group: Downloads
-                  service_name: Sonarr
-                - type: radarr
-                  service_group: Downloads
-                  service_name: Radarr
   widgets.yaml: |
     - search:
         provider: [google]

@@ -69,6 +69,8 @@ spec:
           gethomepage.dev/icon: qbittorrent.png
           gethomepage.dev/name: qBittorrent
           gethomepage.dev/group: Downloads
+          gethomepage.dev/widget.type: qbittorrent
+          gethomepage.dev/widget.url: http://qbittorrent.media-apps.svc.cluster.local:8080
         parentRefs:
           - name: internal
             namespace: kube-system
