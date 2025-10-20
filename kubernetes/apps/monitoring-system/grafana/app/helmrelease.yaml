@@ -239,8 +239,8 @@ spec:
           # :: external_dns_source_(a,aaaa)_records => external_dns_source_records
           # :: external_dns_controller_verified_(a,aaaa)_records => external_dns_verified_records
           # renovate: dashboardName="External-DNS"
-          gnetId: 15038
-          revision: 3
+          gnetId: 23969
+          revision: 1
           datasource: Prometheus
 
         external-secrets:
