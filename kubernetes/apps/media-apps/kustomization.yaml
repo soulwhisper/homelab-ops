@@ -15,7 +15,9 @@ resources:
   - ./qbittorrent/ks.yaml
   - ./emby/ks.yaml
   - ./immich/ks.yaml
+  - ./lyrion/ks.yaml
+  - ./audiomuse/ks.yaml
   # others
   - ./foundryvtt/ks.yaml
   - ./opencloud/ks.yaml
-  - ./llama/ks.yaml
+  - ./ollama/ks.yaml

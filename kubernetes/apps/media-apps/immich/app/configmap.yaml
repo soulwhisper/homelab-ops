@@ -4,7 +4,6 @@ kind: ConfigMap
 metadata:
   name: immich
 data:
-  TZ: Asia/Shanghai
   DISABLE_REVERSE_GEOCODING: "true"
   ENABLE_MAPBOX: "false"
   LOG_LEVEL: log

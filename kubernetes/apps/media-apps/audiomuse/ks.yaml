@@ -1,0 +1,32 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.noirprime.com/kustomize.toolkit.fluxcd.io/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: audiomuse
+spec:
+  interval: 1h
+  path: "./kubernetes/apps/media-apps/audiomuse/app"
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: gitops-system
+    namespace: gitops-system
+  wait: false
+  dependsOn:
+    - name: cnpg-cluster
+      namespace: database-system
+    - name: dragonfly-operator
+      namespace: database-system
+    - name: ollama
+      namespace: media-apps
+    - name: nfs-shared
+      namespace: media-apps
+    - name: onepassword-connect
+      namespace: security-system
+  components:
+    - ../../../../components/cnpg
+    - ../../../../components/dragonfly
+  postBuild:
+    substitute:
+      APP: audiomuse

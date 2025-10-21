@@ -1,0 +1,23 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: audiomuse
+data:
+  # : general
+  TEMP_DIR: "/app/temp_audio"
+  AI_MODEL_PROVIDER: "OLLAMA"
+  OLLAMA_SERVER_URL: "http://ollama.media-apps.svc.cluster.local:11434/api/generate"
+  OLLAMA_MODEL_NAME: "mistral:7b"
+  # : backend
+  MEDIASERVER_TYPE: "lyrion"
+  LYRION_URL: "http://lyrion.media-apps.svc.cluster.local:9000"
+  MUSIC_LIBRARIES: "/music"
+  # : redis
+  REDIS_URL: "redis://audiomuse-dragonfly.media-apps.svc.cluster.local:6379/0"
+  # : postgres, values from secret 'audiomuse-pguser'
+  POSTGRES_USER: "audiomuse"
+  POSTGRES_PASSWORD: "audiomuse"
+  POSTGRES_DB: "audiomuse"
+  POSTGRES_HOST: "postgres-rw.database-system.svc.cluster.local"
+  POSTGRES_PORT: "5432"

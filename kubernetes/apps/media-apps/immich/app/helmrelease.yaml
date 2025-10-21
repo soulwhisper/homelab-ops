@@ -129,7 +129,7 @@ spec:
           immich:
             app:
               - path: /usr/src/app/upload
-                subPath: photo
+                subPath: Photo
       tmpfs:
         type: emptyDir
         advancedMounts:

@@ -1,0 +1,93 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &name audiomuse
+spec:
+  interval: 1h
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+    namespace: gitops-system
+
+  values:
+    controllers:
+      audiomuse:
+        annotations:
+          reloader.stakater.com/auto: "true"
+        pod:
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 2000
+            runAsGroup: 2000
+            fsGroup: 2000
+            fsGroupChangePolicy: OnRootMismatch
+        initContainers:
+          init-db:
+            image:
+              repository: ghcr.io/home-operations/postgres-init
+              tag: "17"
+            envFrom:
+              - secretRef:
+                  name: audiomuse-initdb
+        containers:
+          app:
+            image:
+              repository: ghcr.io/neptunehub/audiomuse-ai
+              tag: latest
+            env:
+              SERVICE_TYPE: "flask"
+            envFrom: &envFrom
+              - configMapRef:
+                  name: *name
+            ports:
+              - name: http
+                containerPort: &port 8000
+            resources: &resources
+              requests:
+                cpu: 40m
+              limits:
+                memory: 1Gi
+            securityContext: &securityContext
+              allowPrivilegeEscalation: false
+              capabilities: { drop: ["ALL"] }
+              readOnlyRootFilesystem: true
+          worker:
+            image:
+              repository: ghcr.io/neptunehub/audiomuse-ai
+              tag: latest
+            env:
+              SERVICE_TYPE: "worker"
+            envFrom: *envFrom
+            resources: *resources
+            securityContext: *securityContext
+
+    service:
+      app:
+        ports:
+          http:
+            port: *port
+    route:
+      app:
+        hostnames: ["muse.noirprime.com"]
+        annotations:
+          gethomepage.dev/enabled: "true"
+          gethomepage.dev/icon: hl-audiomuse-ai.png
+          gethomepage.dev/name: AudioMuse
+          gethomepage.dev/group: Media
+        parentRefs:
+          - name: internal
+            namespace: kube-system
+            sectionName: https
+
+    persistence:
+      media:
+        existingClaim: media
+        globalMounts:
+          - path: /music
+            subPath: Music
+      tmpfs:
+        type: emptyDir
+        globalMounts:
+          - path: /app/temp_audio
