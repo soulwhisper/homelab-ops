@@ -45,9 +45,9 @@ spec:
     # : alertmanager
     # : http://vmalertmanager-victoria-metrics-cluster.monitoring-system.svc.cluster.local:9093
     alertmanager:
-      spec:
-        externalURL: https://vmalert.noirprime.com
-        port: "9093"
+      # spec:
+      #   externalURL: https://vmalert.noirprime.com
+      #   port: "9093"
       useManagedConfig: true
       config:
         route:
@@ -121,16 +121,14 @@ spec:
     kubeApiServer:
       vmScrape:
         spec:
-          endpoints:
-            - port: https
-              metricRelabelConfigs:
-                # Drop high cardinality labels
-                - action: drop
-                  sourceLabels: ["__name__"]
-                  regex: (apiserver|etcd|rest_client)_request(|_sli|_slo)_duration_seconds_bucket
-                - action: drop
-                  sourceLabels: ["__name__"]
-                  regex: (apiserver_response_sizes_bucket|apiserver_watch_events_sizes_bucket)
+          metricRelabelConfigs:
+            # Drop high cardinality labels
+            - action: drop
+              sourceLabels: [__name__]
+              regex: (apiserver|etcd|rest_client)_request(|_sli|_slo)_duration_seconds_bucket
+            - action: drop
+              sourceLabels: [__name__]
+              regex: (apiserver_response_sizes_bucket|apiserver_watch_events_sizes_bucket)
 
     kubelet:
       vmScrape:
