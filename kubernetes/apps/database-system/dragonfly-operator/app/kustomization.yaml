@@ -8,3 +8,4 @@ resources:
   - ./ocirepository.yaml
   # utils
   - ./grafanadashboard.yaml
+  - ./servicemonitor.yaml

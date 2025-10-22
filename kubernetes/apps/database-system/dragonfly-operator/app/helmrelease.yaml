@@ -21,6 +21,6 @@ spec:
 
   values:
     serviceMonitor:
-      enabled: true
+      enabled: false # use fixed instead
     grafanaDashboard:
       enabled: true

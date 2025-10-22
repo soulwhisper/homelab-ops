@@ -6,13 +6,9 @@ metadata:
   name: &name cnpg-barman
 spec:
   interval: 1h
-  chart:
-    spec:
-      chart: plugin-barman-cloud
-      version: 0.2.0
-      sourceRef:
-        kind: HelmRepository
-        name: cloudnative-pg
+  chartRef:
+    kind: OCIRepository
+    name: plugin-barman-cloud
 
   values:
     fullnameOverride: *name

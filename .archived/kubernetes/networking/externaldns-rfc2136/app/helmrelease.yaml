@@ -6,13 +6,9 @@ metadata:
   name: &name externaldns-rfc2136
 spec:
   interval: 1h
-  chart:
-    spec:
-      chart: external-dns
-      version: 1.15.2
-      sourceRef:
-        kind: HelmRepository
-        name: external-dns
+  chartRef:
+    kind: OCIRepository
+    name: external-dns
 
   values:
     fullnameOverride: *name

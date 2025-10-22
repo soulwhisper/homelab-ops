@@ -33,4 +33,3 @@ spec:
   postBuild:
     substitute:
       APP: moviepilot
-      REDIS_MEM: 1024Mi

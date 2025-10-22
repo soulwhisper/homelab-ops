@@ -13,6 +13,7 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: robusta
+        namespace: monitoring-system
 
   values:
     fullnameOverride: *name

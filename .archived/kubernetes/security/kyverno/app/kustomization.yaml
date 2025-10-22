@@ -5,6 +5,6 @@ kind: Kustomization
 resources:
   # app
   - ./helmrelease.yaml
-  - ./helmrepository.yaml
+  - ./ocirepository.yaml
   # utils
   - ./rbac.yaml
