@@ -10,7 +10,7 @@ releases:
   - name: prometheus-operator-crds
     namespace: monitoring-system
     chart: oci://ghcr.io/prometheus-community/charts/prometheus-operator-crds
-    version: 23.0.0
+    version: 24.0.1
 
   - name: gateway-api-crds
     namespace: kube-system
