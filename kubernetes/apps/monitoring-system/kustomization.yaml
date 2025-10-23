@@ -15,7 +15,7 @@ resources:
   # monitoring stack
   - ./grafana/ks.yaml
   - ./kube-state-metrics/ks.yaml
-  - ./prometheus-operator/ks.yaml
+  - ./prometheus-crds/ks.yaml
   - ./silence-operator/ks.yaml
   # monitoring backend
   - ./victoria-logs/ks.yaml # replace loki and promtail

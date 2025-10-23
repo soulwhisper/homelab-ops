@@ -10,12 +10,22 @@ metadata:
     gethomepage.dev/name: VictoriaLogs
     gethomepage.dev/group: Observability
 spec:
-  hostnames: ["vlogs.noirprime.com"]
+  hostnames: ["logs.noirprime.com"]
   parentRefs:
     - name: internal
       namespace: kube-system
       sectionName: https
   rules:
+    - matches:
+        - path:
+            type: Exact
+            value: /
+      filters:
+        - type: URLRewrite
+          urlRewrite:
+            path:
+              type: ReplaceFullPath
+              replaceFullPath: /select/vmui/
     - backendRefs:
         - name: *name
           port: 9428

@@ -38,6 +38,7 @@ I got help from some cool repo like:
 - [bjw-s/home-ops](https://github.com/bjw-s/home-ops)
 - [onedr0p/home-ops](https://github.com/onedr0p/home-ops)
 - [mchestr/home-cluster](https://github.com/mchestr/home-cluster)
+- [rafaribe/home-ops](https://github.com/rafaribe/home-ops)
 
 ---
 

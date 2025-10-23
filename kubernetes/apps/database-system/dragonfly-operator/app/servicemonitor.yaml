@@ -9,6 +9,7 @@ metadata:
     app.kubernetes.io/created-by: dragonfly-operator
     app.kubernetes.io/instance: dragonfly-operator
     app.kubernetes.io/name: dragonfly-operator
+    app.kubernetes.io/part-of: dragonfly-operator
 spec:
   endpoints:
     - interval: 30s
@@ -19,7 +20,6 @@ spec:
       scheme: https
       tlsConfig:
         insecureSkipVerify: true
-      bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
       authorization:
         credentials:
           key: token

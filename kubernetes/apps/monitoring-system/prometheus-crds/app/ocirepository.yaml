@@ -3,7 +3,7 @@
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: OCIRepository
 metadata:
-  name: prometheus-operator-crds
+  name: prometheus-crds
 spec:
   interval: 5m
   layerSelector:

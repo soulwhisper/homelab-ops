@@ -8,4 +8,5 @@ resources:
   - ./ocirepository.yaml
   # utils
   - ./dashboard
+  - ./crds.yaml
   - ./externalsecret.yaml
