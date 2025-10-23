@@ -107,10 +107,11 @@ spec:
             subPath: TVShows
       tmpfs:
         type: emptyDir
-        dispatcharr:
-          app:
-            - path: /tmp
-              subPath: tmp/app
-          celery:
-            - path: /tmp
-              subPath: tmp/celery
+        advancedMounts:
+          dispatcharr:
+            app:
+              - path: /tmp
+                subPath: tmp/app
+            celery:
+              - path: /tmp
+                subPath: tmp/celery
