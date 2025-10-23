@@ -11,9 +11,8 @@ spec:
     name: app-template
     namespace: gitops-system
 
+  # lyrion handle users and permissions internally
   values:
-    defaultPodOptions:
-      hostUsers: false
     controllers:
       lyrion:
         annotations:

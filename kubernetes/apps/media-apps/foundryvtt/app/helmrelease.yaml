@@ -71,7 +71,7 @@ spec:
         existingClaim: media
         globalMounts:
           - path: /data
-            subPath: fvtt
+            subPath: FVTT
       tmpfs:
         type: emptyDir
         globalMounts:
