@@ -8,7 +8,7 @@ spec:
   allowCrossNamespaceImport: true
   instanceSelector:
     matchLabels:
-      app.kubernetes.io/instance: grafana
+      grafana.internal/instance: grafana
   datasources:
     - datasourceName: prometheus
       inputName: DS_PROMETHEUS

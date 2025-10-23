@@ -8,9 +8,17 @@ spec:
   replicas: 1
   image: ghcr.io/dragonflydb/dragonfly:v1.34.2
   args:
+    - --maxmemory=$(MAX_MEMORY)Mi
+    - --proactor_threads=2
     - --cluster_mode=emulated
+  env:
+    - name: MAX_MEMORY
+      valueFrom:
+        resourceFieldRef:
+          resource: limits.memory
+          divisor: 1Mi
   resources:
     requests:
       cpu: 100m
     limits:
-      memory: 1Gi
+      memory: "${REDIS_MEM:=512Mi}"
