@@ -14,6 +14,8 @@ spec:
     namespace: gitops-system
   wait: false
   dependsOn:
+    - name: grafana-crds
+      namespace: monitoring-system
     - name: cnpg-cluster
       namespace: database-system
     - name: onepassword-connect

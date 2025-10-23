@@ -32,5 +32,5 @@ spec:
     namespace: gitops-system
   wait: false
   dependsOn:
-    - name: coroot
+    - name: coroot-operator
       namespace: monitoring-system
