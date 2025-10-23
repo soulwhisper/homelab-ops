@@ -19,10 +19,13 @@ spec:
         pod:
           securityContext:
             runAsNonRoot: true
-            runAsUser: 2000
-            runAsGroup: 2000
-            fsGroup: 2000
+            runAsUser: 499
+            runAsGroup: 100
+            fsGroup: 100
             fsGroupChangePolicy: OnRootMismatch
+            supplementalGroups:
+              - 2000 # nfs-shared
+              - 65534 # qnap:guest
         containers:
           app:
             image:
@@ -33,7 +36,10 @@ spec:
                 cpu: 40m
               limits:
                 memory: 1Gi
-          # disable securityContext
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities: { drop: ["ALL"] }
+              readOnlyRootFilesystem: true
 
     service:
       app:
