@@ -35,7 +35,7 @@ spec:
           app:
             image:
               repository: ghcr.io/dispatcharr/dispatcharr
-              tag: 0.10.4
+              tag: 0.11.1
             env:
               DISPATCHARR_LOG_LEVEL: info
               DISPATCHARR_PORT: &port 9191
@@ -56,7 +56,7 @@ spec:
           celery:
             image:
               repository: ghcr.io/dispatcharr/dispatcharr
-              tag: 0.10.4
+              tag: 0.11.1
             command:
               - "/bin/sh"
               - "-c"
