@@ -91,3 +91,4 @@ spec:
         type: emptyDir
         globalMounts:
           - path: /app/temp_audio
+          - path: /tmp
