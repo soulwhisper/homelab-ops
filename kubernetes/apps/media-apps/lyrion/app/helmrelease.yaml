@@ -33,10 +33,7 @@ spec:
                 cpu: 40m
               limits:
                 memory: 1Gi
-            securityContext:
-              allowPrivilegeEscalation: false
-              capabilities: { drop: ["ALL"] }
-              readOnlyRootFilesystem: true
+          # disable securityContext
 
     service:
       app:
