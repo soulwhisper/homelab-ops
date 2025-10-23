@@ -27,5 +27,6 @@ spec:
     kind: GitRepository
     name: grafana-crds
   interval: 1h
-  prune: true
+  prune: false
+  force: true
   wait: true
