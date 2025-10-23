@@ -21,4 +21,5 @@ resources:
   # others
   - ./foundryvtt/ks.yaml
   - ./opencloud/ks.yaml
+  - ./openlist/ks.yaml
   - ./ollama/ks.yaml

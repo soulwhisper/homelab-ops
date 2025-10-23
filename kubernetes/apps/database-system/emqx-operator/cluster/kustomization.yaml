@@ -4,7 +4,8 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
   # app
-  - ./helmrelease.yaml
-  - ./ocirepository.yaml
+  - ./emqx.yaml
   # utils
   - ./externalsecret.yaml
+  - ./httproute.yaml
+  - ./podmonitor.yaml

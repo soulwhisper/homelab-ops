@@ -8,7 +8,6 @@
 > database
 
 - prefer cnpg to cpgo;
-- emqx is deprecated, like home-assistant;
 
 > media
 

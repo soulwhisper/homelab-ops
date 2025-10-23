@@ -3,17 +3,17 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &name cnpg-operator
+  name: &name emqx-operator
 spec:
   interval: 1h
   chartRef:
     kind: OCIRepository
-    name: cloudnative-pg
+    name: emqx-operator
 
   values:
-    fullnameOverride: *name
     replicaCount: 1
-    crds:
-      create: true
-    monitoring:
-      podMonitorEnabled: true
+    fullnameOverride: *name
+    image:
+      repository: mirror.gcr.io/emqx/emqx-operator-controller
+    cert-manager:
+      enable: true

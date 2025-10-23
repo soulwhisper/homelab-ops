@@ -1,0 +1,47 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: emqx-exporter
+  labels:
+    app: emqx-exporter
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: emqx-exporter
+  template:
+    metadata:
+      labels:
+        app: emqx-exporter
+    spec:
+      securityContext:
+        runAsUser: 1000
+      containers:
+        - name: exporter
+          image: emqx-exporter:0.2.11
+          imagePullPolicy: IfNotPresent
+          args:
+            - --config.file
+            - /etc/emqx-exporter/config.yaml
+          volumeMounts:
+            - name: config
+              mountPath: /etc/emqx-exporter
+          volumes:
+            - name: config
+              secret:
+                secretName: emqx-exporter
+          securityContext:
+            allowPrivilegeEscalation: false
+            runAsNonRoot: true
+          ports:
+            - containerPort: 8085
+              name: metrics
+              protocol: TCP
+          resources:
+            limits:
+              cpu: 100m
+              memory: 100Mi
+            requests:
+              cpu: 100m
+              memory: 20Mi
