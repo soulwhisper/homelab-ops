@@ -17,4 +17,4 @@
 ### MQTT
 
 - Use `EMQX` for home-assistant zigbee2mqtt;
-- Current Status: Archived;
+- No need to backup for homelab usage;

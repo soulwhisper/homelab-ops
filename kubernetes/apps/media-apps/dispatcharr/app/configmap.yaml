@@ -1,0 +1,14 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: &name dispatcharr
+data:
+  # postgres
+  POSTGRES_HOST: postgres-rw.database-system.svc.cluster.local
+  POSTGRES_DB: *name
+  POSTGRES_USER: *name
+  POSTGRES_PASSWORD: *name
+  # redis
+  REDIS_HOST: dispatcharr-dragonfly.media-apps.svc.cluster.local
+  CELERY_BROKER_URL: redis://dispatcharr-dragonfly.media-apps.svc.cluster.local:6379/0

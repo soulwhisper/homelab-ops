@@ -10,7 +10,6 @@ replacements:
 resources:
   - ./convertx/ks.yaml
   - ./dify/ks.yaml
-  - ./dispatcharr/ks.yaml
   - ./freshrss/ks.yaml
   - ./homepage/ks.yaml
   - ./karakeep/ks.yaml

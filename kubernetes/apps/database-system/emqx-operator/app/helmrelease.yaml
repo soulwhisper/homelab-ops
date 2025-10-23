@@ -6,9 +6,14 @@ metadata:
   name: &name emqx-operator
 spec:
   interval: 1h
-  chartRef:
-    kind: OCIRepository
-    name: emqx-operator
+  chart:
+    spec:
+      chart: emqx-operator
+      version: 2.2.29
+      sourceRef:
+        kind: HelmRepository
+        name: emqx
+        namespace: database-system
 
   values:
     replicaCount: 1

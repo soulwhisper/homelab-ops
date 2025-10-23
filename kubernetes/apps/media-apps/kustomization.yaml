@@ -18,6 +18,7 @@ resources:
   - ./lyrion/ks.yaml
   - ./audiomuse/ks.yaml
   - ./kavita/ks.yaml
+  - ./dispatcharr/ks.yaml
   # others
   - ./foundryvtt/ks.yaml
   - ./opencloud/ks.yaml
