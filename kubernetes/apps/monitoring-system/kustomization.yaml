@@ -22,6 +22,5 @@ resources:
   - ./victoria-logs/ks.yaml # replace loki and promtail
   - ./victoria-metrics/ks.yaml # replace kube-prometheus-stack
   # others
-  - ./coroot/ks.yaml
   - ./kromgo/ks.yaml
   - ./robusta/ks.yaml

@@ -12,20 +12,12 @@ spec:
     namespace: gitops-system
 
   values:
+    defaultPodOptions:
+      hostUsers: false
     controllers:
       lyrion:
         annotations:
           reloader.stakater.com/auto: "true"
-        pod:
-          securityContext:
-            runAsNonRoot: true
-            runAsUser: 499
-            runAsGroup: 100
-            fsGroup: 100
-            fsGroupChangePolicy: OnRootMismatch
-            supplementalGroups:
-              - 2000 # nfs-shared
-              - 65534 # qnap:guest
         containers:
           app:
             image:
@@ -36,10 +28,6 @@ spec:
                 cpu: 40m
               limits:
                 memory: 1Gi
-            securityContext:
-              allowPrivilegeEscalation: false
-              capabilities: { drop: ["ALL"] }
-              readOnlyRootFilesystem: true
 
     service:
       app:
