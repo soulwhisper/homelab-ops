@@ -13,3 +13,6 @@ spec:
     name: gitops-system
     namespace: gitops-system
   wait: true
+  dependsOn:
+    - name: grafana-crds
+      namespace: monitoring-system
