@@ -40,6 +40,7 @@
 - home-assistant = ".140"
 - mqtt-server = ".141"
 - matter-server = ".142"
+- lyrion = ".150"
 - bittorrent = ".151"
 
 ### Bootstrap

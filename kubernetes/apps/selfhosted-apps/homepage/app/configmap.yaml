@@ -1,0 +1,174 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: homepage
+  labels:
+    app.kubernetes.io/name: homepage
+data:
+  kubernetes.yaml: |
+    mode: cluster
+    gateway: true
+    ingress: false
+    traefik: false
+  settings.yaml: |
+    # https://github.com/homarr-labs/dashboard-icons
+    # https://pictogrammers.com/library/mdi/
+    # https://simpleicons.org/
+    title: Dashboard
+    favicon: https://github.com/homarr-labs/dashboard-icons/tree/main/png/heimdall.png
+    theme: dark
+    headerStyle: clean
+    hideVersion: true
+    quicklaunch:
+      searchDescriptions: true
+      hideInternetSearch: true
+    layout:
+      Calendar:
+        style: row
+        header: false
+      AI:
+        style: row
+        columns: 2
+        icon: si-openapiinitiative
+      Games:
+        style: row
+        columns: 2
+        icon: mdi-gamepad-variant-outline
+      Media:
+        style: row
+        columns: 2
+        icon: mdi-play-circle-outline
+      Service:
+        style: row
+        columns: 3
+        icon: si-local
+      Automation:
+        style: column
+        icon: mdi-home-automation
+      Observability:
+        style: column
+        icon: mdi-monitor-eye
+      Infrastructure:
+        style: column
+        icon: mdi-server-network-outline
+      Storage:
+        style: column
+        icon: si-databricks
+      System:
+        style: row
+        columns: 4
+        icon: mdi-application-brackets-outline
+  custom.css: ""
+  custom.js: ""
+  bookmarks.yaml: |
+    - Social:
+        - Discord:
+            - icon: discord.png
+              href: https://discord.com/app
+        - Gmail:
+            - icon: gmail.png
+              href: http://gmail.com
+        - Reddit:
+            - icon: reddit.png
+              href: https://reddit.com
+        - Twitch:
+            - icon: twitch.png
+              href: https://twitch.tv
+        - YouTube:
+            - icon: youtube.png
+              href: https://youtube.com/feed/subscriptions
+    - Cloud:
+        - CloudFlare:
+            - icon: cloudflare.png
+              href: https://dash.cloudflare.com
+        - Pushover:
+            - icon: pushover.png
+              href: https://client.pushover.net/
+    - Git:
+        - home-cluster:
+            - icon: github.png
+              description: Main
+              href: https://github.com/soulwhisper/homelab-ops
+        - Homepage Icons:
+            - icon: si-jpeg
+              href: https://dashboardicons.com/
+        - Homepage MDI:
+            - icon: si-materialdesign
+              href: https://pictogrammers.com/library/mdi/
+        - Homepage SI:
+            - icon: si-simpleicons
+              href: https://simpleicons.org/
+  services.yaml: |
+    - Infrastructure:
+        - Cloudflare:
+            href: https://dash.cloudflare.com/
+            icon: cloudflare.png
+            description: Cloudflare
+            widget:
+              type: cloudflared
+              accountid: {{HOMEPAGE_VAR_CLOUDFLARE_ACCOUNTID}}
+              tunnelid: {{HOMEPAGE_VAR_CLOUDFLARE_TUNNELID}}
+              key: {{HOMEPAGE_VAR_CLOUDFLARE_API_TOKEN}}
+        - ESXi:
+            href: https://10.0.0.100
+            icon: vmware-esxi.png
+    - System:
+        - OPNsense:
+            href: https://10.0.0.1
+            icon: opnsense.png
+            widget:
+              type: opnsense
+              url: https://10.0.0.1
+              username: {{HOMEPAGE_VAR_OPNSENSE_USERNAME}}
+              password: {{HOMEPAGE_VAR_OPNSENSE_PASSWORD}}
+        - Unifi:
+            href: https://10.0.0.10:8443
+            icon: unifi.png
+            widget:
+              type: unifi
+              url: https://10.0.0.10:8443
+              username: {{HOMEPAGE_VAR_UNIFI_USERNAME}}
+              password: {{HOMEPAGE_VAR_UNIFI_PASSWORD}}
+    - Storage:
+        - NAS:
+            href: https://10.0.0.20
+            icon: synology-dsm.png
+            widget:
+              type: diskstation
+              url: https://10.0.0.20:5001
+              username: {{HOMEPAGE_VAR_DSM_USERNAME}}
+              password: {{HOMEPAGE_VAR_DSM_PASSWORD}}
+    - Calendar:
+        - Calendar:
+            widget:
+              type: calendar
+              firstDayInWeek: monday
+              view: monthly
+              maxEvents: 10
+              showTime: true
+              timezone: Asia/Shanghai
+  widgets.yaml: |
+    - search:
+        provider: [google]
+        focus: false
+        target: _blank
+    - kubernetes:
+        cluster:
+          cpu: true
+          label: cluster
+          memory: true
+          show: true
+          showLabel: true
+        nodes:
+          cpu: true
+          memory: true
+          show: true
+          showLabel: true
+    - datetime:
+        text_size: l
+        format:
+          dateStyle: long
+          timeStyle: short
+          hourCycle: h23
+  docker.yaml: ""

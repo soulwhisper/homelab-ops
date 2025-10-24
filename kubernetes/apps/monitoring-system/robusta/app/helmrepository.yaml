@@ -4,5 +4,6 @@ apiVersion: source.toolkit.fluxcd.io/v1
 kind: HelmRepository
 metadata:
   name: robusta
+  namespace: monitoring-system
 spec:
   url: https://robusta-charts.storage.googleapis.com

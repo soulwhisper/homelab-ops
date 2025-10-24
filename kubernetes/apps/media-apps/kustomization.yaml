@@ -11,11 +11,17 @@ resources:
   # storage
   - ./nfs-shared/ks.yaml
   # media
-  - ./moviepilot/ks.yaml
-  - ./qbittorrent/ks.yaml
+  - ./audiomuse/ks.yaml
+  - ./dispatcharr/ks.yaml
   - ./emby/ks.yaml
   - ./immich/ks.yaml
+  - ./kavita/ks.yaml
+  - ./lyrion/ks.yaml
+  - ./moviepilot/ks.yaml
+  - ./qbittorrent/ks.yaml
   # others
   - ./foundryvtt/ks.yaml
+  - ./ollama/ks.yaml
   - ./opencloud/ks.yaml
-  - ./llama/ks.yaml
+  - ./openlist/ks.yaml
+  - ./orcaslicer/ks.yaml

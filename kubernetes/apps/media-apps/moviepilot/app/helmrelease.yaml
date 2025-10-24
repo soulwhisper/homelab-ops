@@ -72,6 +72,7 @@ spec:
             resources:
               requests:
                 cpu: 20m
+                gpu.intel.com/i915: 1
               limits:
                 memory: 1Gi
                 gpu.intel.com/i915: 1
@@ -87,6 +88,11 @@ spec:
     route:
       app:
         hostnames: ["moviepilot.noirprime.com"]
+        annotations:
+          gethomepage.dev/enabled: "true"
+          gethomepage.dev/icon: movie-pilot.png
+          gethomepage.dev/name: Moviepilot
+          gethomepage.dev/group: Media
         parentRefs:
           - name: internal
             namespace: kube-system

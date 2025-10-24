@@ -5,7 +5,7 @@ kind: Kustomization
 metadata:
   name: cloudflare-tunnel
   labels:
-    override.substitution.flux.home.arpa/disabled: "true"
+    substitution.flux.home.arpa/disabled: "true"
 spec:
   interval: 1h
   path: "./kubernetes/apps/networking-system/cloudflare-tunnel/app"

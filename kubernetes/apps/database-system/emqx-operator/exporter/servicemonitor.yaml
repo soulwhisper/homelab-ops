@@ -1,0 +1,48 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.noirprime.com/monitoring.coreos.com/servicemonitor_v1.json
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: emqx-exporter
+  labels:
+    app: emqx-exporter
+spec:
+  selector:
+    matchLabels:
+      app: emqx-exporter
+  endpoints:
+    - port: metrics
+      path: /metrics
+      relabelings:
+        - action: replace
+          replacement: emqx # cluster-name
+          targetLabel: cluster
+        - action: replace # fixed
+          replacement: exporter
+          targetLabel: from
+        - action: replace # fixed
+          sourceLabels: ["pod"]
+          regex: "(.*)-.*-.*"
+          replacement: $1
+          targetLabel: "instance"
+        - action: labeldrop # fixed
+          regex: "pod"
+    - port: metrics
+      path: /probe
+      params:
+        target:
+          - "emqx-listeners.database-system.svc.cluster.local:1883"
+      relabelings:
+        - action: replace
+          replacement: emqx # cluster-name
+          targetLabel: cluster
+        - action: replace # fixed
+          replacement: exporter
+          targetLabel: from
+        - action: replace # fixed
+          sourceLabels: ["pod"]
+          regex: "(.*)-.*-.*"
+          replacement: $1
+          targetLabel: "instance"
+        - action: labeldrop # fixed
+          regex: "pod"

@@ -15,14 +15,14 @@ spec:
     crds:
       enabled: true
     csi:
+      rookUseCsiOperator: true
       cephFSKernelMountOptions: ms_mode=prefer-crc
       csiDriverNamePrefix: storage-system
-      enableLiveness: true
-      rookUseCsiOperator: true
-      serviceMonitor:
-        enabled: true
+    enableLiveness: true
     enableDiscoveryDaemon: true
     monitoring:
+      enabled: true
+    serviceMonitor:
       enabled: true
     # default obc fields = "maxObjects,maxSize"
     obcAllowAdditionalConfigFields: "bucketOwner,bucketPolicy,bucketLifecycle"

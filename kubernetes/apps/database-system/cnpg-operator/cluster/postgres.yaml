@@ -33,8 +33,6 @@ spec:
       cpu: 500m
     limits:
       memory: 6Gi
-  monitoring:
-    enablePodMonitor: true
 
   bootstrap:
     initdb:
@@ -53,3 +51,11 @@ spec:
   #       parameters:
   #         barmanObjectName: barman-cloud
   #         serverName: postgres-v1
+
+  # :: This part is exclusive to latest immich, not safe for general use
+  managed:
+    roles:
+      - name: immich
+        ensure: present
+        login: true
+        superuser: true

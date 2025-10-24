@@ -23,11 +23,13 @@ spec:
             runAsGroup: 2000
             fsGroup: 2000
             fsGroupChangePolicy: OnRootMismatch
+            supplementalGroups:
+              - 65534 # qnap:guest
         containers:
           app:
             image:
               repository: emby/embyserver
-              tag: 4.9.2.4
+              tag: 4.9.2.6
             env:
               GIDLIST: 2000,0
               DOTNET_SYSTEM_IO_DISABLEFILELOCKING: "true"
@@ -50,6 +52,7 @@ spec:
             resources:
               requests:
                 cpu: 100m
+                gpu.intel.com/i915: 1
               limits:
                 gpu.intel.com/i915: 1
                 memory: 4Gi
@@ -66,6 +69,17 @@ spec:
     route:
       app:
         hostnames: ["movie.noirprime.com"]
+        annotations:
+          gethomepage.dev/enabled: "true"
+          gethomepage.dev/icon: emby.png
+          gethomepage.dev/name: Emby
+          gethomepage.dev/group: Media
+          gethomepage.dev/widget.type: emby
+          gethomepage.dev/widget.url: http://emby.media-apps.svc.cluster.local:8096
+          gethomepage.dev/widget.key: '{{ "{{HOMEPAGE_VAR_EMBY_API_KEY}}" }}'
+          gethomepage.dev/widget.enableBlocks: "true"
+          gethomepage.dev/widget.enableMediaControl: "false"
+          gethomepage.dev/widget.showEpisodeNumber: "true"
         parentRefs:
           - name: internal
             namespace: kube-system

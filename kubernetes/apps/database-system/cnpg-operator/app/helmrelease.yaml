@@ -6,20 +6,12 @@ metadata:
   name: &name cnpg-operator
 spec:
   interval: 1h
-  chart:
-    spec:
-      chart: cloudnative-pg
-      version: 0.26.0
-      sourceRef:
-        kind: HelmRepository
-        name: cloudnative-pg
+  chartRef:
+    kind: OCIRepository
+    name: cloudnative-pg
 
   values:
     fullnameOverride: *name
     replicaCount: 1
     crds:
       create: true
-    monitoring:
-      podMonitorEnabled: true
-      grafanaDashboard:
-        create: true

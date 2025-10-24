@@ -9,8 +9,9 @@ spec:
   chart:
     spec:
       chart: frr-k8s
-      version: 0.0.20
+      version: 0.0.21
       sourceRef:
         kind: HelmRepository
         name: frr-k8s
+        namespace: kube-system
 # ref:https://github.com/metallb/frr-k8s/tree/main/charts/frr-k8s

@@ -8,5 +8,6 @@ resources:
   # utils
   - ./barman-cloud.yaml
   - ./prometheusrule.yaml
+  - ./podmonitor.yaml
   - ./scheduledbackup.yaml
   - ./service.yaml

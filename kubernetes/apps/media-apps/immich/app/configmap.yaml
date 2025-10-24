@@ -4,7 +4,6 @@ kind: ConfigMap
 metadata:
   name: immich
 data:
-  TZ: Asia/Shanghai
   DISABLE_REVERSE_GEOCODING: "true"
   ENABLE_MAPBOX: "false"
   LOG_LEVEL: log
@@ -13,4 +12,4 @@ data:
   REDIS_PORT: "6379"
   REDIS_DBINDEX: "0"
   IMMICH_MACHINE_LEARNING_URL: http://localhost:3003
-  UPLOAD_LOCATION: /usr/src/app/upload
+  UPLOAD_LOCATION: /data

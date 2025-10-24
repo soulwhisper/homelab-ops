@@ -39,10 +39,6 @@ spec:
       name: main
     cni:
       exclusive: false
-    dashboards:
-      enabled: true
-      annotations:
-        grafana_folder: Cilium
     devices: bond+
     # enableIPv4BIGTCP: true  # disable for test only
     endpointRoutes:
@@ -73,10 +69,6 @@ spec:
       algorithm: maglev
       mode: hybrid
     operator:
-      dashboards:
-        enabled: true
-        annotations:
-          grafana_folder: Cilium
       prometheus:
         enabled: true
         serviceMonitor:

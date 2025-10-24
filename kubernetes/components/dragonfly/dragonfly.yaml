@@ -5,27 +5,20 @@ kind: Dragonfly
 metadata:
   name: ${APP}-dragonfly
 spec:
-  image: ghcr.io/dragonflydb/dragonfly:v1.34.2
   replicas: 1
+  image: ghcr.io/dragonflydb/dragonfly:v1.34.2
+  args:
+    - --maxmemory=$(MAX_MEMORY)Mi
+    - --proactor_threads=2
+    - --cluster_mode=emulated
   env:
     - name: MAX_MEMORY
       valueFrom:
         resourceFieldRef:
           resource: limits.memory
           divisor: 1Mi
-  args:
-    - --maxmemory=$(MAX_MEMORY)Mi
-    - --proactor_threads=2
-    - --cluster_mode=emulated
   resources:
     requests:
       cpu: 100m
     limits:
       memory: "${REDIS_MEM:=512Mi}"
-  topologySpreadConstraints:
-    - maxSkew: 1
-      topologyKey: kubernetes.io/hostname
-      whenUnsatisfiable: DoNotSchedule
-      labelSelector:
-        matchLabels:
-          app.kubernetes.io/part-of: dragonfly

@@ -1,0 +1,89 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &name orcaslicer
+spec:
+  interval: 1h
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+    namespace: gitops-system
+
+  values:
+    controllers:
+      orcaslicer:
+        annotations:
+          reloader.stakater.com/auto: "true"
+        pod:
+          securityContext:
+            runAsUser: 2000
+            runAsGroup: 2000
+            runAsNonRoot: true
+            fsGroup: 2000
+            fsGroupChangePolicy: OnRootMismatch
+            supplementalGroups:
+              - 65534 # qnap:guest
+        containers:
+          app:
+            image:
+              repository: ghcr.io/linuxserver/orcaslicer
+              tag: 2.3.1
+            env:
+              CUSTOM_PORT: &port 3000
+            resources:
+              requests:
+                cpu: 50m
+                gpu.intel.com/i915: 1
+              limits:
+                memory: 2Gi
+                gpu.intel.com/i915: 1
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities: { drop: ["ALL"] }
+              readOnlyRootFilesystem: true
+
+    service:
+      app:
+        ports:
+          http:
+            port: *port
+    route:
+      app:
+        hostnames: ["orca.noirprime.com"]
+        annotations:
+          gethomepage.dev/enabled: "true"
+          gethomepage.dev/icon: orcaslicer.png
+          gethomepage.dev/name: Orca-Slicer
+          gethomepage.dev/group: Service
+        parentRefs:
+          - name: internal
+            namespace: kube-system
+            sectionName: https
+
+    persistence:
+      app:
+        existingClaim: *name
+        globalMounts:
+          - path: /config/.config/OrcaSlicer
+      media:
+        existingClaim: media
+        advancedMounts:
+          opencloud:
+            app:
+              - path: /config/models
+                subPath: 3D-Models
+      tmpfs:
+        type: emptyDir
+        globalMounts:
+          - path: /run
+            subPath: run
+          - path: /tmp
+            subPath: tmp
+          - path: /config
+            subPath: config
+          - path: /config/.config/OrcaSlicer/log
+            subPath: log
+          - path: /config/.config/OrcaSlicer/cache
+            subPath: cache

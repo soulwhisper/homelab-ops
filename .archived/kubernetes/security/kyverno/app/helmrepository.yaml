@@ -1,9 +1,0 @@
----
-# yaml-language-server: $schema=https://kubernetes-schemas.noirprime.com/source.toolkit.fluxcd.io/helmrepository_v1.json
-apiVersion: source.toolkit.fluxcd.io/v1
-kind: HelmRepository
-metadata:
-  name: kyverno
-  namespace: security-system
-spec:
-  url: https://kyverno.github.io/kyverno/

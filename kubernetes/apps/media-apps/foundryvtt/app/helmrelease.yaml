@@ -23,6 +23,8 @@ spec:
             runAsGroup: 2000 # nfs
             fsGroup: 2000 # nfs
             fsGroupChangePolicy: OnRootMismatch
+            supplementalGroups:
+              - 65534 # qnap:guest
         containers:
           app:
             image:
@@ -56,6 +58,11 @@ spec:
     route:
       app:
         hostnames: ["fvtt.noirprime.com"]
+        annotations:
+          gethomepage.dev/enabled: "true"
+          gethomepage.dev/icon: foundry-vtt.png
+          gethomepage.dev/name: FoundryVTT
+          gethomepage.dev/group: Games
         parentRefs:
           - name: internal
             namespace: kube-system
@@ -66,7 +73,7 @@ spec:
         existingClaim: media
         globalMounts:
           - path: /data
-            subPath: fvtt
+            subPath: FVTT
       tmpfs:
         type: emptyDir
         globalMounts:

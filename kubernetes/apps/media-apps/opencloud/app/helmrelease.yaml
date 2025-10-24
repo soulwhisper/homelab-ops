@@ -23,6 +23,8 @@ spec:
             runAsNonRoot: true
             fsGroup: 2000
             fsGroupChangePolicy: OnRootMismatch
+            supplementalGroups:
+              - 65534 # qnap:guest
         containers:
           app:
             image:
@@ -68,6 +70,11 @@ spec:
     route:
       app:
         hostnames: ["oc.noirprime.com"]
+        annotations:
+          gethomepage.dev/enabled: "true"
+          gethomepage.dev/icon: open-cloud.png
+          gethomepage.dev/name: Opencloud
+          gethomepage.dev/group: Service
         parentRefs:
           - name: internal
             namespace: kube-system

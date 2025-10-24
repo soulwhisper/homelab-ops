@@ -23,6 +23,8 @@ spec:
             runAsGroup: 2000
             fsGroup: 2000
             fsGroupChangePolicy: OnRootMismatch
+            supplementalGroups:
+              - 65534 # qnap:guest
         containers:
           app:
             image:
@@ -64,6 +66,13 @@ spec:
     route:
       app:
         hostnames: ["bt.noirprime.com"]
+        annotations:
+          gethomepage.dev/enabled: "true"
+          gethomepage.dev/icon: qbittorrent.png
+          gethomepage.dev/name: qBittorrent
+          gethomepage.dev/group: Downloads
+          gethomepage.dev/widget.type: qbittorrent
+          gethomepage.dev/widget.url: http://qbittorrent.media-apps.svc.cluster.local:8080
         parentRefs:
           - name: internal
             namespace: kube-system

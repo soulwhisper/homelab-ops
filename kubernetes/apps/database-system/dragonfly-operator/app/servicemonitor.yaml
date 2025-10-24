@@ -1,0 +1,30 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.noirprime.com/monitoring.coreos.com/servicemonitor_v1.json
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: dragonfly-operator
+  namespace: database-system
+  labels:
+    app.kubernetes.io/instance: dragonfly-operator
+    app.kubernetes.io/name: dragonfly-operator
+spec:
+  endpoints:
+    - path: /metrics
+      port: https
+      scheme: https
+      tlsConfig:
+        insecureSkipVerify: true
+      bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
+      authorization:
+        credentials:
+          key: token
+          name: dragonfly-operator-controller-svc
+  jobLabel: dragonfly-operator
+  namespaceSelector:
+    matchNames:
+      - database-system
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: dragonfly-operator
+      app.kubernetes.io/name: dragonfly-operator

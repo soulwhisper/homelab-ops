@@ -4,6 +4,11 @@ apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:
   name: dify
+  annotations:
+    gethomepage.dev/enabled: "true"
+    gethomepage.dev/icon: "https://avatars.githubusercontent.com/u/127165244?s=200&v=4"
+    gethomepage.dev/name: Dify
+    gethomepage.dev/group: AI
 spec:
   hostnames: ["dify.noirprime.com"]
   parentRefs:

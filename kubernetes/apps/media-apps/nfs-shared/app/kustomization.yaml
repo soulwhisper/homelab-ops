@@ -6,3 +6,4 @@ resources:
   - ./storageclass.yaml
   - ./pvc-media.yaml
   - ./pvc-models.yaml
+  - ./pvc-storage.yaml

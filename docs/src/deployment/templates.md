@@ -2,12 +2,13 @@
 
 - This is a template for most self-hosted apps without its own charts
 - with substitute support, non-sensitive environments are set in configMap:cluster-settings;
-- substitute can be disabled with `label: override.substitution.flux.home.arpa/disabled=true`;
+- substitute can be disabled with `label: substitution.flux.home.arpa/disabled=true`;
 - `kustomizeconfig.yaml` still needed for official helm charts with `values.yaml` during boostrap;
 - "{{ .Release.Name }}" and "{{ .Release.Namespace }}" not always rendered, use yaml anchors instead;
 
+### ks.yaml
+
 ```yaml
-# ks.yaml
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.noirprime.com/kustomize.toolkit.fluxcd.io/kustomization_v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
@@ -26,8 +27,11 @@ spec:
   dependsOn:
     - name: example-app-2
       namespace: example-ns-2
+```
 
-# helmrelease.yaml, since app-template-4.1.1
+### helmrelease.yaml
+
+```yaml
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.noirprime.com/helm.toolkit.fluxcd.io/helmrelease_v2.json
 apiVersion: helm.toolkit.fluxcd.io/v2
@@ -50,6 +54,8 @@ spec:
       #   runAsNonRoot: true
       #   fsGroup: 2000                       # optional
       #   fsGroupChangePolicy: OnRootMismatch # optional
+      # supplementalGroups:                   # optional
+      #   - 65534 # qnap:guest                # optional
     controllers:
       example-app:
         annotations:
@@ -167,4 +173,30 @@ spec:
               - path: /data
                 subPath: data
 
+```
+
+### renovate for helmrepository
+
+```yaml
+# helmrelease.yaml patch
+
+spec:
+  chart:
+    spec:
+      chart: example-chart
+      version: 0.0.1
+      sourceRef:
+        kind: HelmRepository
+        name: example-chart
+        namespace: selfhosted-apps # renovate required
+
+# helmrepository.yaml patch
+
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: example-chart
+  namespace: selfhosted-apps # renovate required
+spec:
+  url: example-url
 ```

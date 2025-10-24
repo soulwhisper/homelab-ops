@@ -8,10 +8,11 @@ components:
 replacements:
   - path: ../../replacements/ks.yaml
 resources:
+  - ./convertx/ks.yaml
   - ./dify/ks.yaml
   - ./freshrss/ks.yaml
+  - ./homepage/ks.yaml
   - ./karakeep/ks.yaml
   - ./n8n/ks.yaml
   - ./netbox/ks.yaml
-  - ./open-webui/ks.yaml
   - ./sillytavern/ks.yaml
