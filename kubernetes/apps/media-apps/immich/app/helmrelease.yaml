@@ -135,5 +135,5 @@ spec:
             machine-learning:
               - path: /cache
                 subPath: cache
-              - path: /.config
-                subPath: config
+              - path: /tmp
+                subPath: tmp
