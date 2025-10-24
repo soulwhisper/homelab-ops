@@ -17,6 +17,10 @@ spec:
     spec:
       securityContext:
         runAsUser: 1000
+      volumes:
+        - name: config
+          secret:
+            secretName: emqx-exporter
       containers:
         - name: exporter
           image: emqx-exporter:0.2.11
@@ -27,10 +31,6 @@ spec:
           volumeMounts:
             - name: config
               mountPath: /etc/emqx-exporter
-          volumes:
-            - name: config
-              secret:
-                secretName: emqx-exporter
           securityContext:
             allowPrivilegeEscalation: false
             runAsNonRoot: true
@@ -38,10 +38,19 @@ spec:
             - containerPort: 8085
               name: metrics
               protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /metrics
+              port: metrics
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /metrics
+              port: metrics
+            initialDelaySeconds: 5
+            periodSeconds: 5
           resources:
             limits:
               cpu: 100m
-              memory: 100Mi
-            requests:
-              cpu: 100m
-              memory: 20Mi
+              memory: 128Mi
