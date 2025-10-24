@@ -70,7 +70,7 @@ spec:
       media:
         existingClaim: media
         advancedMounts:
-          opencloud:
+          orcaslicer:
             app:
               - path: /config/models
                 subPath: 3D-Models
