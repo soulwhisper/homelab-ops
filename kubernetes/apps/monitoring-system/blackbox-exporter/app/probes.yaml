@@ -11,6 +11,7 @@ spec:
   targets:
     staticConfig:
       static: [] # use hostname
+      # TODO: add IOT devices here
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.noirprime.com/monitoring.coreos.com/probe_v1.json
 apiVersion: monitoring.coreos.com/v1

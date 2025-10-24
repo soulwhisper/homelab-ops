@@ -17,8 +17,3 @@ resources:
   # :: companion
   - ./autobrr/ks.yaml
   - ./prowlarr/ks.yaml
-
-  # todo
-  # maintainerr?
-  # tautulli?
-  # tdarr?

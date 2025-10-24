@@ -34,11 +34,10 @@ spec:
               EXECUTIONS_DATA_MAX_AGE: 7
               EXECUTIONS_DATA_PRUNE_MAX_COUNT: 50000
               GENERIC_TIMEZONE: "Asia/Shanghai"
-              N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS: true
+              N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS: false
               N8N_HOST: n8n.noirprime.com
               N8N_PROTOCOL: "https"
               N8N_PORT: &port 8080
-              N8N_RUNNERS_ENABLED: true
               N8N_LOG_LEVEL: info
               N8N_LOG_OUTPUT: console
               N8N_ENCRYPTION_KEY:
@@ -46,6 +45,8 @@ spec:
                   secretKeyRef:
                     name: n8n
                     key: N8N_ENCRYPTION_KEY
+              N8N_PROXY_HOPS: 1
+              WEBHOOK_URL: https://n8n.noirprime.com/
             resources:
               requests:
                 cpu: 5m
@@ -54,7 +55,7 @@ spec:
             securityContext:
               allowPrivilegeEscalation: false
               capabilities: { drop: ["ALL"] }
-              readOnlyRootFilesystem: false # required for 'chown'
+              readOnlyRootFilesystem: true
 
     service:
       app:
@@ -83,9 +84,9 @@ spec:
           - matches:
               - path:
                   value: /webhook
-            backendRefs:
-              - name: *name
-                port: *port
+              - path:
+                  value: /webhook-test
+            backendRefs: [{}]
 
     persistence:
       app:

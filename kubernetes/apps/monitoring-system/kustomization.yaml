@@ -12,6 +12,7 @@ resources:
   - ./blackbox-exporter/ks.yaml
   - ./node-exporter/ks.yaml
   - ./smartctl-exporter/ks.yaml
+  - ./unpoller/ks.yaml
   # monitoring stack
   - ./grafana/ks.yaml
   - ./kube-state-metrics/ks.yaml
