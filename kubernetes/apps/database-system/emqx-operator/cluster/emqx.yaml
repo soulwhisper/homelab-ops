@@ -6,7 +6,7 @@ metadata:
   name: emqx
 spec:
   image: mirror.gcr.io/emqx/emqx:6.0.0
-  BootstrapAPIKey:
+  BootstrapAPIKeys:
     - secretRef:
       key:
         secretName: emqx-init
