@@ -126,7 +126,7 @@ spec:
         advancedMounts:
           immich:
             app:
-              - path: /usr/src/app/upload
+              - path: /data
                 subPath: Photo
       tmpfs:
         type: emptyDir
@@ -135,5 +135,5 @@ spec:
             machine-learning:
               - path: /cache
                 subPath: cache
-              - path: /tmp
-                subPath: tmp
+              - path: /.config
+                subPath: config

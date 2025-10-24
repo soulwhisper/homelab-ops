@@ -12,4 +12,4 @@ data:
   REDIS_PORT: "6379"
   REDIS_DBINDEX: "0"
   IMMICH_MACHINE_LEARNING_URL: http://localhost:3003
-  UPLOAD_LOCATION: /usr/src/app/upload
+  UPLOAD_LOCATION: /data
