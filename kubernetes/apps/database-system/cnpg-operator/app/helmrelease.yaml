@@ -15,5 +15,3 @@ spec:
     replicaCount: 1
     crds:
       create: true
-    monitoring:
-      podMonitorEnabled: true

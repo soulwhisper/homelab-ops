@@ -33,8 +33,6 @@ spec:
       cpu: 500m
     limits:
       memory: 6Gi
-  monitoring:
-    enablePodMonitor: true
 
   bootstrap:
     initdb:
