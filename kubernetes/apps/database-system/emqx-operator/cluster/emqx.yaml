@@ -8,12 +8,12 @@ spec:
   image: mirror.gcr.io/emqx/emqx:6.0.0
   bootstrapAPIKeys:
     - secretRef:
-      key:
-        secretName: emqx-init
-        secretKey: API_KEY
-      secret:
-        secretName: emqx-init
-        secretKey: API_SECRET
+        key:
+          secretName: emqx-init
+          secretKey: API_KEY
+        secret:
+          secretName: emqx-init
+          secretKey: API_SECRET
   config:
     data: |
       authentication {
