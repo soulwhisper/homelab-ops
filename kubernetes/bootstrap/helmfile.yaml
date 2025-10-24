@@ -22,11 +22,7 @@ releases:
     chart: oci://ghcr.io/home-operations/charts-mirror/cilium
     version: 1.18.3
     values: ["./values.yaml.gotmpl"]
-    needs:
-      [
-        "monitoring-system/prometheus-operator-crds",
-        "kube-system/gateway-api-crds",
-      ]
+    needs: ["monitoring-system/prometheus-crds", "kube-system/gateway-api-crds"]
 
   - name: coredns
     namespace: kube-system

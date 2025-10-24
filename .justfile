@@ -31,6 +31,7 @@ reconcile:
 
 [doc('Bootstrap Cluster')]
 bootstrap:
+  @echo "Make sure you disable all proxies."
   @echo "Bootstrapping Talos..."
   just talos _bootstrap_talos
   @echo "completed."
