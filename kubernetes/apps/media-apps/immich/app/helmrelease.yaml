@@ -135,3 +135,5 @@ spec:
             machine-learning:
               - path: /cache
                 subPath: cache
+              - path: /tmp
+                subPath: tmp
