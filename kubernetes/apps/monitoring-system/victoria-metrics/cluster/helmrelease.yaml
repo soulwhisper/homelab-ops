@@ -45,9 +45,6 @@ spec:
     # : alertmanager
     # : http://vmalertmanager-victoria-metrics-cluster.monitoring-system.svc.cluster.local:9093
     alertmanager:
-      # spec:
-      #   externalURL: https://vmalert.noirprime.com
-      #   port: "9093"
       useManagedConfig: true
       config:
         route:
