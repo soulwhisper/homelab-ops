@@ -31,7 +31,7 @@ spec:
               repository: emby/embyserver
               tag: 4.9.2.6
             env:
-              GIDLIST: 2000,0
+              GIDLIST: 2000,65534,0
               DOTNET_SYSTEM_IO_DISABLEFILELOCKING: "true"
             ports:
               - name: http

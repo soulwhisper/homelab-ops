@@ -43,7 +43,7 @@ spec:
       annotations:
         reloader.stakater.com/auto: "true"
     spec:
-      replicas: 3
+      replicas: 1
       volumeClaimTemplates:
         storageClassName: ceph-block
         resources:
