@@ -11,14 +11,13 @@ spec:
     name: victoria-logs-collector
 
   values:
-    server:
-      fullnameOverride: *name
-      remoteWrite:
-        - url: http://victoria-logs-server.monitoring-system.svc.cluster.local:9428
-      resources:
-        limits:
-          cpu: 100m
-          memory: 128Mi
-        requests:
-          cpu: 100m
-          memory: 128Mi
+    fullnameOverride: *name
+    remoteWrite:
+      - url: "http://victoria-logs-server.monitoring-system.svc.cluster.local:9428"
+    resources:
+      limits:
+        cpu: 100m
+        memory: 128Mi
+      requests:
+        cpu: 100m
+        memory: 128Mi
