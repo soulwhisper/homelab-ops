@@ -3,7 +3,7 @@
 apiVersion: monitoring.coreos.com/v1alpha1
 kind: ScrapeConfig
 metadata:
-  name: &name node-exporter
+  name: &name nas-node-exporter
 spec:
   staticConfigs:
     - targets:
@@ -18,11 +18,26 @@ spec:
 apiVersion: monitoring.coreos.com/v1alpha1
 kind: ScrapeConfig
 metadata:
-  name: &name smartctl-exporter
+  name: &name nas-smartctl-exporter
 spec:
   staticConfigs:
     - targets:
         - nas.homelab.internal:9104 # remap from 9633
+  metricsPath: /metrics
+  relabelings:
+    - action: replace
+      targetLabel: job
+      replacement: *name
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.noirprime.com/monitoring.coreos.com/scrapeconfig_v1alpha1.json
+apiVersion: monitoring.coreos.com/v1alpha1
+kind: ScrapeConfig
+metadata:
+  name: &name router-node-exporter
+spec:
+  staticConfigs:
+    - targets:
+        - 10.10.0.1:9101 # remap from 9100
   metricsPath: /metrics
   relabelings:
     - action: replace
