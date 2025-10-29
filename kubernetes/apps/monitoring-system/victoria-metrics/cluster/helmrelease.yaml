@@ -35,16 +35,69 @@ spec:
           resources:
             requests:
               storage: 50Gi
+        route:
+          enabled: true
+          annotations:
+            gethomepage.dev/enabled: "true"
+            gethomepage.dev/icon: victoriametrics.png
+            gethomepage.dev/name: VictoriaMetrics
+            gethomepage.dev/group: Observability
+          hostnames: ["metrics.noirprime.com"]
+          parentRefs:
+            - name: internal
+              namespace: kube-system
+              sectionName: https
+          matches:
+            - path:
+                type: Exact
+                value: /
+          filters:
+            - type: URLRewrite
+              urlRewrite:
+                path:
+                  type: ReplaceFullPath
+                  replaceFullPath: /vmui/
 
     # : vmalert
     # : http://vmalert-victoria-metrics-cluster.monitoring-system.svc.cluster.local:8080
+    vmalert:
+      spec:
+        datasource:
+          url: "http://vmauth-victoria-metrics-cluster.monitoring-system.svc.cluster.local:8427"
 
     # : vmagent
     # : http://vmagent-victoria-metrics-cluster.monitoring-system.svc.cluster.local:8428
 
+    # : vmauth
+    # : http://vmauth-victoria-metrics-cluster.monitoring-system.svc.cluster.local:8427
+    # processing vlogs and vmetrics alerts at same altertmanager instance
+    vmauth:
+      enabled: true
+      spec:
+        unauthorizedUserAccessSpec:
+          url_map:
+            - src_paths:
+                - "/api/v1/query.*"
+              url_prefix: "http://vmagent-victoria-metrics-cluster.monitoring-system.svc.cluster.local:8428"
+            - src_paths:
+                - "/select/logsql/.*"
+              url_prefix: "http://victoria-logs-server.monitoring-system.svc.cluster.local:9428"
+
     # : alertmanager
     # : http://vmalertmanager-victoria-metrics-cluster.monitoring-system.svc.cluster.local:9093
     alertmanager:
+      route:
+        enabled: true
+        annotations:
+          gethomepage.dev/enabled: "true"
+          gethomepage.dev/icon: alertmanager.png
+          gethomepage.dev/name: AlertManager
+          gethomepage.dev/group: Observability
+        hostnames: ["alert.noirprime.com"]
+        parentRefs:
+          - name: internal
+            namespace: kube-system
+            sectionName: https
       useManagedConfig: true
       config:
         route:
@@ -174,35 +227,56 @@ spec:
 
     # vmalertmanager rules
     additionalVictoriaMetricsMap:
+      vlogs-rules:
+        groups:
+          - name: vlogs.rules
+            type: vlogs
+            interval: 5m
+            rules:
+              - alert: HasErrorLog
+                expr: 'env: "prod" AND status:~"error|warn" | stats by (service, kubernetes.pod) count() as errorLog | filter errorLog:>0'
+                annotations:
+                  description: 'Service {{$labels.service}} (pod {{ index $labels "kubernetes.pod" }}) generated {{$labels.errorLog}} error logs in the last 5 minutes'
+                labels:
+                  severity: critical
+          - name: ServiceRequest
+            type: vlogs
+            interval: 5m
+            rules:
+              - alert: TooManyFailedRequest
+                expr: '* | extract "ip=<ip> " | extract "status_code=<code>;" | stats by (ip) count() if (code:~4.*) as failed, count() as total| math failed / total as failed_percentage| filter failed_percentage :> 0.01 | fields ip,failed_percentage'
+                annotations:
+                  description: "Connection from address {{$labels.ip}} has {{$value}}% failed requests in last 5 minutes"
+                labels:
+                  severity: critical
       dockerhub-rules:
         groups:
           - name: dockerhub.rules
             rules:
               - alert: DockerhubRateLimitRisk
+                expr: count(time() - container_last_seen{image=~"(docker.io).*",container!=""} < 30) > 100
                 annotations:
                   summary: Kubernetes cluster Dockerhub rate limit risk
-                expr: count(time() - container_last_seen{image=~"(docker.io).*",container!=""} < 30) > 100
                 labels:
                   severity: critical
       oom-rules:
         groups:
           - name: oom.rules
             rules:
-              - alert: OomKilled
+              - alert: OOMKilled
+                expr: (kube_pod_container_status_restarts_total - kube_pod_container_status_restarts_total offset 10m >= 1) and ignoring (reason) min_over_time(kube_pod_container_status_last_terminated_reason{reason="OOMKilled"}[10m]) == 1
                 annotations:
                   summary: Container {{ $labels.container }} in pod {{ $labels.namespace }}/{{ $labels.pod }} has been OOMKilled {{ $value }} times in the last 10 minutes.
-                expr: (kube_pod_container_status_restarts_total - kube_pod_container_status_restarts_total offset 10m >= 1) and ignoring (reason) min_over_time(kube_pod_container_status_last_terminated_reason{reason="OOMKilled"}[10m]) == 1
                 labels:
                   severity: critical
       zfs-rules:
         groups:
           - name: zfs.rules
             rules:
-              - alert: ZfsUnexpectedPoolState
-                annotations:
-                  summary: ZFS pool {{$labels.zpool}} on {{$labels.instance}}
-                    is in a unexpected state {{$labels.state}}
+              - alert: ZFSUnexpectedPoolState
                 expr: node_zfs_zpool_state{state!="online"} > 0
                 for: 15m
+                annotations:
+                  summary: ZFS pool {{$labels.zpool}} on {{$labels.instance}} is in a unexpected state {{$labels.state}}
                 labels:
                   severity: critical

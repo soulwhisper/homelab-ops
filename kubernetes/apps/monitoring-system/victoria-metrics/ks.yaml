@@ -50,6 +50,8 @@ spec:
     namespace: gitops-system
   wait: false
   dependsOn:
+    - name: victoria-logs
+      namespace: monitoring-system
     - name: victoria-metrics-operator
       namespace: monitoring-system
     - name: onepassword-connect
