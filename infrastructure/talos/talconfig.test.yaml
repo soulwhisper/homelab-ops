@@ -106,7 +106,7 @@ controlPlane:
     - name: nut-client
       configFiles:
         - content: |-
-            MONITOR santak-box@172.19.82.10 1 monuser monuser secondary
+            MONITOR santak-box@172.19.82.10 1 upsmon upsmon secondary
             SHUTDOWNCMD "/sbin/poweroff"
           mountPath: /usr/local/etc/nut/upsmon.conf
   # volumes:
