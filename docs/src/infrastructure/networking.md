@@ -14,34 +14,17 @@ While one could theoretically resolve the first two issues by hosting a Kubernet
 | [Pushover](https://pushover.net/)         | Notify app                                                     | One-time $5   |
 |                                           |                                                                | Total: ~$3/mo |
 
-This Kubernetes cluster do not utilizes `Multus` for multi-network support with VLAN-based segmentation. The default cluster network operates on `VLAN1` for private address communication. Two specialized networks are provided:
-
-`LAB (VLAN100)`: Directs all public internet traffic through gateway `10.10.0.1`, which serves as a transparent proxy node while preserving direct access to private IP ranges.
-
-`IOT (VLAN210)`: for IoT device communication in `10.20.10.0/24`, supporting multicast and direct IoT connectivity.
-
-```mermaid
-graph TD
-    A[Pod] --> B[Management Network<br/>VLAN1]
-    A --> C[LAB<br/>VLAN100]
-    A --> D[IOT<br/>VLAN210]
-    D --> E[IoT Devices<br/>10.20.10.0/24]
-    C --> G[Transparent Proxy<br/>10.10.0.1]
-    G --> H[Public Internet]
-    B --> I[Private Network<br/>VLAN1]
-```
+This Kubernetes cluster do not utilizes `Multus` for multi-network support with VLAN-based segmentation. The default cluster network operates on `VLAN 100 - 10.10.0.0/24`. IoT device operates on `VLAN 210 - 10.20.10.0/24`. Multicast is supported by the switch.
 
 ```shell
 # switch example
-interface GigabitEthernet1/0/1
- port link-type access
- port access vlan 100
- description k8s-node-01
-
-interface Vlan-interface 100
- ip address 10.10.0.1 24
-
 multicast routing
-multicast-vlan 1000
- subvlan 1 100 200 210
+
+interface vlan-interface 100
+ ip address 10.10.0.1 24
+ igmp enable
+
+interface vlan-interface 210
+ ip address 10.20.10.1 24
+ pim dm
 ```
