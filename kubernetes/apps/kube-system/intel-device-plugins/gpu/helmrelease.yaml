@@ -5,7 +5,7 @@ kind: HelmRelease
 metadata:
   name: intel-device-plugins-gpu
 spec:
-  interval: 1h
+  interval: 30m
   chartRef:
     kind: OCIRepository
     name: intel-device-plugins-gpu

@@ -3,15 +3,20 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: grafana
+  name: &name grafana
 spec:
-  interval: 1h
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *name
+  targetNamespace: monitoring-system
   path: "./kubernetes/apps/monitoring-system/grafana/app"
-  prune: true
   sourceRef:
     kind: GitRepository
     name: gitops-system
     namespace: gitops-system
+  interval: 1h
+  timeout: 5m
+  prune: true
   wait: false
   dependsOn:
     - name: cnpg-cluster
@@ -22,4 +27,4 @@ spec:
     - ../../../../components/cnpg
   postBuild:
     substitute:
-      APP: grafana
+      APP: *name

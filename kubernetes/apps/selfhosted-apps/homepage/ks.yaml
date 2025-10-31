@@ -3,15 +3,20 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: homepage
+  name: &name homepage
 spec:
-  interval: 1h
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *name
+  targetNamespace: selfhosted-apps
   path: "./kubernetes/apps/selfhosted-apps/homepage/app"
-  prune: true
   sourceRef:
     kind: GitRepository
     name: gitops-system
     namespace: gitops-system
+  interval: 1h
+  timeout: 5m
+  prune: true
   wait: false
   dependsOn:
     - name: onepassword-connect

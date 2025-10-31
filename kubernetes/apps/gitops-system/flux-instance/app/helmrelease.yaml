@@ -5,7 +5,7 @@ kind: HelmRelease
 metadata:
   name: &name flux-instance
 spec:
-  interval: 1h
+  interval: 30m
   chartRef:
     kind: OCIRepository
     name: flux-instance
@@ -26,7 +26,7 @@ spec:
         url: https://github.com/soulwhisper/homelab-ops.git
         ref: refs/heads/main
         path: kubernetes/flux/cluster
-        interval: 1h
+        interval: 30m
       commonMetadata:
         labels:
           app.kubernetes.io/name: flux

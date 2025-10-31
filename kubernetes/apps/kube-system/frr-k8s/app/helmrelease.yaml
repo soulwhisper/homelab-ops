@@ -5,7 +5,7 @@ kind: HelmRelease
 metadata:
   name: frr-k8s
 spec:
-  interval: 1h
+  interval: 30m
   chart:
     spec:
       chart: frr-k8s

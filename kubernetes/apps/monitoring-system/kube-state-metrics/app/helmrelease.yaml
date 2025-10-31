@@ -5,7 +5,7 @@ kind: HelmRelease
 metadata:
   name: &name kube-state-metrics
 spec:
-  interval: 1h
+  interval: 30m
   chartRef:
     kind: OCIRepository
     name: kube-state-metrics

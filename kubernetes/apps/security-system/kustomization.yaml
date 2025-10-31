@@ -5,8 +5,6 @@ kind: Kustomization
 namespace: security-system
 components:
   - ../../components/namespace
-replacements:
-  - path: ../../replacements/ks.yaml
 resources:
   - ./cert-manager/ks.yaml
   - ./external-secrets/ks.yaml

@@ -5,7 +5,7 @@ kind: HelmRelease
 metadata:
   name: &name cnpg-barman
 spec:
-  interval: 1h
+  interval: 30m
   chartRef:
     kind: OCIRepository
     name: plugin-barman-cloud

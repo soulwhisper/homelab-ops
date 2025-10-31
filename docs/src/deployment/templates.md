@@ -14,19 +14,23 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: example-app-1
+  name: &name example-app-1
 spec:
-  interval: 1h
-  path: "./kubernetes/apps/example-ns-1/example-app-1/app"
-  prune: true
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *name
+  targetNamespace: example-system-1
+  path: "./kubernetes/apps/example-system-1/example-app-1/app"
   sourceRef:
     kind: GitRepository
     name: gitops-system
     namespace: gitops-system
+  interval: 1h
+  prune: true
   wait: false
   dependsOn:
     - name: example-app-2
-      namespace: example-ns-2
+      namespace: example-system-2
 ```
 
 ### helmrelease.yaml

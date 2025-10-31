@@ -3,30 +3,40 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: dify-proxy
+  name: &name dify-proxy
 spec:
-  interval: 1h
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *name
+  targetNamespace: selfhosted-apps
   path: "./kubernetes/apps/selfhosted-apps/dify/proxy"
-  prune: true
   sourceRef:
     kind: GitRepository
     name: gitops-system
     namespace: gitops-system
+  interval: 1h
+  timeout: 5m
+  prune: true
   wait: true
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.noirprime.com/kustomize.toolkit.fluxcd.io/kustomization_v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: dify-database
+  name: &name dify-database
 spec:
-  interval: 1h
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *name
+  targetNamespace: selfhosted-apps
   path: "./kubernetes/apps/selfhosted-apps/dify/database"
-  prune: true
   sourceRef:
     kind: GitRepository
     name: gitops-system
     namespace: gitops-system
+  interval: 1h
+  timeout: 5m
+  prune: true
   wait: true
   dependsOn:
     - name: dify-proxy
@@ -47,21 +57,26 @@ spec:
     - ../../../../components/volsync
   postBuild:
     substitute:
-      APP: dify-database
+      APP: *name
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.noirprime.com/kustomize.toolkit.fluxcd.io/kustomization_v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: dify-sandbox
+  name: &name dify-sandbox
 spec:
-  interval: 1h
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *name
+  targetNamespace: selfhosted-apps
   path: "./kubernetes/apps/selfhosted-apps/dify/sandbox"
-  prune: true
   sourceRef:
     kind: GitRepository
     name: gitops-system
     namespace: gitops-system
+  interval: 1h
+  timeout: 5m
+  prune: true
   wait: false
   dependsOn:
     - name: dify-database
@@ -71,15 +86,20 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: dify-app
+  name: &name dify-app
 spec:
-  interval: 1h
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *name
+  targetNamespace: selfhosted-apps
   path: "./kubernetes/apps/selfhosted-apps/dify/app"
-  prune: true
   sourceRef:
     kind: GitRepository
     name: gitops-system
     namespace: gitops-system
+  interval: 1h
+  timeout: 5m
+  prune: true
   wait: false
   dependsOn:
     - name: dify-database
@@ -95,21 +115,26 @@ spec:
     - ../../../../components/volsync
   postBuild:
     substitute:
-      APP: dify-app
+      APP: *name
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.noirprime.com/kustomize.toolkit.fluxcd.io/kustomization_v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: dify-web
+  name: &name dify-web
 spec:
-  interval: 1h
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *name
+  targetNamespace: selfhosted-apps
   path: "./kubernetes/apps/selfhosted-apps/dify/web"
-  prune: true
   sourceRef:
     kind: GitRepository
     name: gitops-system
     namespace: gitops-system
+  interval: 1h
+  timeout: 5m
+  prune: true
   wait: false
   dependsOn:
     - name: dify-app

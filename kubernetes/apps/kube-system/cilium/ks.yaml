@@ -3,30 +3,40 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: cilium
+  name: &name cilium
 spec:
-  interval: 1h
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *name
+  targetNamespace: kube-system
   path: "./kubernetes/apps/kube-system/cilium/app"
-  prune: true
   sourceRef:
     kind: GitRepository
     name: gitops-system
     namespace: gitops-system
+  interval: 1h
+  timeout: 5m
+  prune: true
   wait: true
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.noirprime.com/kustomize.toolkit.fluxcd.io/kustomization_v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: cilium-config
+  name: &name cilium-config
 spec:
-  interval: 1h
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *name
+  targetNamespace: kube-system
   path: "./kubernetes/apps/kube-system/cilium/config"
-  prune: true
   sourceRef:
     kind: GitRepository
     name: gitops-system
     namespace: gitops-system
+  interval: 1h
+  timeout: 5m
+  prune: true
   wait: false
   dependsOn:
     - name: cilium
@@ -36,15 +46,20 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: cilium-gateway
+  name: &name cilium-gateway
 spec:
-  interval: 1h
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *name
+  targetNamespace: kube-system
   path: "./kubernetes/apps/kube-system/cilium/gateway"
-  prune: true
   sourceRef:
     kind: GitRepository
     name: gitops-system
     namespace: gitops-system
+  interval: 1h
+  timeout: 5m
+  prune: true
   wait: false
   dependsOn:
     - name: cilium

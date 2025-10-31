@@ -3,15 +3,20 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: cnpg-operator
+  name: &name cnpg-operator
 spec:
-  interval: 1h
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *name
+  targetNamespace: database-system
   path: ./kubernetes/apps/database-system/cnpg-operator/app
-  prune: true
   sourceRef:
     kind: GitRepository
     name: gitops-system
     namespace: gitops-system
+  interval: 1h
+  timeout: 5m
+  prune: true
   wait: true
   dependsOn:
     - name: onepassword-connect
@@ -21,15 +26,20 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: cnpg-barman
+  name: &name cnpg-barman
 spec:
-  interval: 1h
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *name
+  targetNamespace: database-system
   path: ./kubernetes/apps/database-system/cnpg-operator/barman
-  prune: true
   sourceRef:
     kind: GitRepository
     name: gitops-system
     namespace: gitops-system
+  interval: 1h
+  timeout: 5m
+  prune: true
   wait: true
   dependsOn:
     - name: cnpg-operator
@@ -41,15 +51,20 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: cnpg-cluster
+  name: &name cnpg-cluster
 spec:
-  interval: 1h
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *name
+  targetNamespace: database-system
   path: ./kubernetes/apps/database-system/cnpg-operator/cluster
-  prune: true
   sourceRef:
     kind: GitRepository
     name: gitops-system
     namespace: gitops-system
+  interval: 1h
+  timeout: 5m
+  prune: true
   wait: true
   dependsOn:
     - name: cnpg-barman

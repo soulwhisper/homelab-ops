@@ -3,15 +3,20 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: moviepilot
+  name: &name moviepilot
 spec:
-  interval: 1h
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *name
+  targetNamespace: media-apps
   path: "./kubernetes/apps/media-apps/moviepilot/app"
-  prune: true
   sourceRef:
     kind: GitRepository
     name: gitops-system
     namespace: gitops-system
+  interval: 1h
+  timeout: 5m
+  prune: true
   wait: false
   dependsOn:
     - name: cnpg-cluster
@@ -32,5 +37,5 @@ spec:
     - ../../../../components/volsync
   postBuild:
     substitute:
-      APP: moviepilot
+      APP: *name
       REDIS_MEM: 1024Mi
