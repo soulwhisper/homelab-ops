@@ -1,30 +1,27 @@
 ## Service Topology
 
 ```mermaid
-graph LR
-  Internet[Internet] -->|WAN| OPNsense
-  OPNsense -->|Trunk VLANs 10,100,200,300,310| H3C[H3C Core Switch]
-
-  subgraph H3C_Switch
-	H3C -->|Access VLAN10| MGMT[Management Switch]
-    H3C -->|Access VLAN100| LAB[K8S Nodes]
-    H3C -->|Access VLAN200| LAN[Office PC]
-    H3C -->|Trunk VLAN300,310| AP[Wireless AP]
+graph TD
+  Router -->|WAN| PPPoE
+  Switch -->|LAN Trunk VLAN 100,200,210| Router
+  Switch -->|MGMT Access VLAN 1| Router
+  subgraph Internal Network
+	MGMT -->|Access Port VLAN 1| Switch
+	LAB -->|Access Port VLAN 100| Switch
+	WIFI -->|Trunk Port VLAN 200| Switch
+	IOT -->|Trunk Port VLAN 210| Switch
+	K8S -->|iBGP 65510| LAB
   end
-
-  AP -->|SSID: WIFI-VLAN300| Laptop
-  AP -->|SSID: IOT-VLAN310| SmartDevice
-  MGMT --> BMC
-  BMC -->|DNS| OPNsense
-  LAN -->|DNS| OPNsense
-  LAB -->|iBGP| H3C
-  H3C -->|eBGP| OPNsense
 ```
 
 ### Components
 
-- Router / Firewall / VLAN / External-DNS / eBGP : `OPNsense`;
-- TProxy / Internal-DNS / LAB-Management : `Nix-Ops`;
-- Gateway / DHCP / iBGP : `H3C Core Switch`;
-- Shared-Storage : `NAS`;
-- Computing / Service : `K8S`;
+- Router / Firewall / DHCP / DNS / NTP / TProxy : `OpenWRT`;
+- NAS / Infrastructure Services : `QNAP Qu805`;
+- Gateway / DHCP Relay / iBGP / OSPF: `H3C L3 Core Switch`;
+- Computing / Other Services : `Talos MS-01`;
+
+### Notes
+
+- All LACP devices using `layer 3+4` for better compatibility;
+- Enable jumbo frame for `K8S`, `NAS`, `Router`;

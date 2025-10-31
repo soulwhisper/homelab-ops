@@ -42,9 +42,6 @@ nodes:
           mode: 802.3ad
           lacpRate: fast
           xmitHashPolicy: layer3+4
-          miimon: 100
-          updelay: 200
-          downdelay: 200
         mtu: 9000
         dhcp: false
         addresses:
