@@ -10,12 +10,12 @@ spec:
     routers:
       - asn: 65510
         neighbors:
-          - address: "10.10.0.254" # Switch
+          - address: "10.10.0.1" # Switch
             asn: 65510
             port: 179
-            bfdProfile: fast
+            bfdProfile: default
             ebgpMultiHop: false
-            enableGracefulRestart: true
+            enableGracefulRestart: false # bfd instead
             toAdvertise:
               allowed:
                 mode: all
@@ -24,10 +24,10 @@ spec:
           - "10.100.128.0/17" # Service
           - "10.10.0.192/27" # LoadBalancer
     bfdProfiles:
-      - name: fast
-        receiveInterval: 100
-        transmitInterval: 100
-        detectMultiplier: 3
+      - name: default
+        receiveInterval: 400
+        transmitInterval: 400
+        detectMultiplier: 5
         echoInterval: 50
         echoMode: false
         passiveMode: false
