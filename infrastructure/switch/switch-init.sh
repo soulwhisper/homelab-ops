@@ -15,7 +15,6 @@ ssh server enable
 
 dhcp enable
 multicast routing
-link-aggregation global load-sharing mode source-ip source-port destination-ip destination-port
 
 # : Vlan configuration
 vlan 100

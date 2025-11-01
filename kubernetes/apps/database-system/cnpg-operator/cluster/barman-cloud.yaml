@@ -8,7 +8,7 @@ spec:
   retentionPolicy: "30d"
   configuration:
     destinationPath: s3://postgres/
-    endpointURL: http://nas.homelab.internal:7070
+    endpointURL: http://nas.homelab.internal:9000
     s3Credentials:
       accessKeyId:
         name: cloudnative-pg
