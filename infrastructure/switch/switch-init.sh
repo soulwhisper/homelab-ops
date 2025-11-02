@@ -5,13 +5,7 @@
 
 # : System basics
 system-view
-sysname H3C-Core-Switch
-clock timezone beijing add 08:00:00
 router-id 10.0.0.1
-
-undo ip http enable
-undo ip https enable
-ssh server enable
 
 dhcp enable
 multicast routing
