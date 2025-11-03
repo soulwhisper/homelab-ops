@@ -48,10 +48,6 @@ spec:
                 cpu: 10m
               limits:
                 memory: 1Gi
-            securityContext: &securityContext
-              allowPrivilegeEscalation: false
-              capabilities: { drop: ["ALL"] }
-              readOnlyRootFilesystem: true
 
           chrome:
             image:
@@ -75,7 +71,6 @@ spec:
               - name: http
                 containerPort: 9222
             resources: *resources
-            securityContext: *securityContext
 
           meilisearch:
             image:
@@ -96,7 +91,6 @@ spec:
               - name: http
                 containerPort: 7700
             resources: *resources
-            securityContext: *securityContext
 
     service:
       app:
@@ -124,10 +118,3 @@ spec:
             subPath: karakeep
           - path: /meili_data
             subPath: meilisearch
-      tmpfs:
-        type: emptyDir
-        globalMounts:
-          - path: /run
-            subPath: run
-          - path: /tmp
-            subPath: tmp
