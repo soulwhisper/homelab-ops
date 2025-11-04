@@ -30,6 +30,12 @@ spec:
       envFrom:
         - secretRef:
             name: *name
+      extraVolumes:
+        - name: netdata-etc
+          emptyDir: {}
+      extraVolumeMounts:
+        - name: netdata-etc
+          mountPath: /etc/netdata
     child:
       env:
         DO_NOT_TRACK: 1

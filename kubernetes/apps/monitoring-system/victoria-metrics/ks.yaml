@@ -65,7 +65,7 @@ spec:
   prune: true
   wait: false
   dependsOn:
-    - name: victoria-logs
+    - name: victoria-logs-collector
       namespace: monitoring-system
     - name: victoria-metrics-operator
       namespace: monitoring-system
