@@ -1,5 +1,5 @@
 ---
-# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+# yaml-language-server: $schema=https://kubernetes-schemas.noirprime.com/helm.toolkit.fluxcd.io/helmrelease_v2.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
@@ -22,7 +22,7 @@ spec:
             matchLabels:
               app.kubernetes.io/name: kromgo
     controllers:
-      kromgo:
+      *name :
         annotations:
           reloader.stakater.com/auto: "true"
         containers:

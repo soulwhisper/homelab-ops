@@ -19,6 +19,8 @@ spec:
   prune: true
   wait: false
   dependsOn:
+    - name: keda
+      namespace: kube-system
     - name: nfs-shared
       namespace: media-apps
     - name: onepassword-connect
@@ -28,7 +30,9 @@ spec:
     - name: volsync
       namespace: storage-system
   components:
-    - ../../../../components/volsync
+    components:
+      - ../../../../components/keda-nfs-scaler
+      - ../../../../components/volsync
   postBuild:
     substitute:
       APP: *name

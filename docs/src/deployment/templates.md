@@ -61,7 +61,7 @@ spec:
       # supplementalGroups:                   # optional
       #   - 65534 # qnap:guest                # optional
     controllers:
-      example-app:
+      *name :
         annotations:
           reloader.stakater.com/auto: "true"
         serviceAccount: # can be ignored if only one serviceaccount
@@ -155,7 +155,7 @@ spec:
                 port: *port
 
     serviceAccount:
-      example-app: {}
+      *name : {}
     persistence:
       app:
         existingClaim: *name
@@ -167,12 +167,12 @@ spec:
         globalMounts:
           - path: /tmp
             subPath: tmp      # can be ignored if only one path
-      media:
+      shared:
         type: nfs
         server: nas.homelab.internal
         path: /mnt/Arcanum/Media
         advancedMounts:
-          example-app:
+          *name :
             app:
               - path: /data
                 subPath: data

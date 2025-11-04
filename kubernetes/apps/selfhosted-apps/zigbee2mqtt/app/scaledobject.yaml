@@ -3,7 +3,7 @@
 apiVersion: keda.sh/v1alpha1
 kind: ScaledObject
 metadata:
-  name: ${APP}-nas-nfs-scaler
+  name: zigbee2mqtt-adapter-scaler
 spec:
   advanced:
     restoreToOriginalReplicaCount: true
@@ -13,12 +13,11 @@ spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: ${APP}
+    name: zigbee2mqtt
   triggers:
     - type: prometheus
       metadata:
         serverAddress: http://vmsingle-victoria-metrics-cluster.monitoring-system.svc.cluster.local:8429
-        query: probe_success{instance=~"nas.homelab.internal:2049"}
-        activationThreshold: "0.5"
+        query: probe_success{instance="zigbee.homelab.internal"}
         threshold: "1"
         ignoreNullValues: "0"

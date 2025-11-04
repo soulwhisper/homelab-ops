@@ -23,6 +23,8 @@ spec:
       namespace: database-system
     - name: dragonfly-operator
       namespace: database-system
+    - name: keda
+      namespace: kube-system
     - name: ollama
       namespace: media-apps
     - name: nfs-shared
@@ -32,6 +34,7 @@ spec:
   components:
     - ../../../../components/cnpg
     - ../../../../components/dragonfly
+    - ../../../../components/keda-nfs-scaler
   postBuild:
     substitute:
       APP: *name

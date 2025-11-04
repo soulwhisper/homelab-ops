@@ -1,5 +1,5 @@
 ---
-# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+# yaml-language-server: $schema=https://kubernetes-schemas.noirprime.com/helm.toolkit.fluxcd.io/helmrelease_v2.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
@@ -13,7 +13,7 @@ spec:
 
   values:
     controllers:
-      talos-backup:
+      *name :
         type: cronjob
         cronjob:
           schedule: "0 2 * * *"
@@ -47,7 +47,7 @@ spec:
               readOnlyRootFilesystem: true
 
     serviceAccount:
-      talos-backup: {}
+      *name : {}
     rawResources:
       talosServiceAccount:
         apiVersion: talos.dev/v1alpha1

@@ -80,8 +80,8 @@ popeye -A -s statefulsets
 kubectl resource-capacity --available
 kubectl resource-capacity -p -c -u -n database-system
 
-## trigger healthcheck
-kubectl create job --from=cronjob/talos-healthcheck talos-hc -n gitops-system
+## trigger k8s-schemas
+kubectl create job --from=cronjob/cronjob-k8s-schemas k8s-schemas-test -n gitops-system
 ```
 
 #### VM test issues

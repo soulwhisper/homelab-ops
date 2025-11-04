@@ -53,8 +53,6 @@ spec:
   dependsOn:
     - name: home-assistant
       namespace: selfhosted-apps
-    - name: onepassword-connect
-      namespace: security-system
     - name: rook-ceph-cluster
       namespace: storage-system
     - name: volsync

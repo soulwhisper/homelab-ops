@@ -3,6 +3,7 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-  - ./ceph.yaml
-  - ./keda.yaml
-  - ./nas.yaml
+  # app
+  - ./helmrelease.yaml
+  # utils
+  - ./externalsecret.yaml
