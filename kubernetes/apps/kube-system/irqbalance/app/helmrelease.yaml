@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: irqbalance
+  name: &name irqbalance
 spec:
   interval: 30m
   chartRef:
