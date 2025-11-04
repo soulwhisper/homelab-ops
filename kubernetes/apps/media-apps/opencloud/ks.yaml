@@ -30,9 +30,8 @@ spec:
     - name: volsync
       namespace: storage-system
   components:
-    components:
-      - ../../../../components/keda-nfs-scaler
-      - ../../../../components/volsync
+    - ../../../../components/keda-nfs-scaler
+    - ../../../../components/volsync
   postBuild:
     substitute:
       APP: *name
