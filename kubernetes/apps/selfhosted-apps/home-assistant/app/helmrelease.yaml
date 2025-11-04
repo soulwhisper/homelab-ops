@@ -12,6 +12,8 @@ spec:
     namespace: gitops-system
 
   values:
+    defaultPodOptions:
+      hostUsers: false
     controllers:
       *name :
         annotations:
@@ -110,8 +112,6 @@ spec:
             app:
               - path: /config
                 subPath: config
-              - path: /config/.venv
-                subPath: venv
             code-server:
               - path: /config
                 subPath: config
