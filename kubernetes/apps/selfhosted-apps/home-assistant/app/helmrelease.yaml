@@ -30,6 +30,10 @@ spec:
             image:
               repository: ghcr.io/home-operations/home-assistant
               tag: 2025.10.4
+            env:
+              HTTP_PROXY: "${HTTP_PROXY}"
+              HTTPS_PROXY: "${HTTPS_PROXY}"
+              NO_PROXY: "${NO_PROXY}"
             resources:
               requests:
                 cpu: 40m
