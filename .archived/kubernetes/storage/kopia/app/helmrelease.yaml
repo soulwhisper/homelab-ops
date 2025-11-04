@@ -1,5 +1,5 @@
 ---
-# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+# yaml-language-server: $schema=https://kubernetes-schemas.noirprime.com/helm.toolkit.fluxcd.io/helmrelease_v2.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
@@ -29,7 +29,7 @@ spec:
               "enableActions": false
             }
     controllers:
-      kopia:
+      *name :
         pod:
           securityContext:
             runAsNonRoot: true
@@ -108,7 +108,7 @@ spec:
       tmpfs:
         type: emptyDir
         advancedMounts:
-          kopia:
+          *name :
             app:
               - path: /config/cache
                 subPath: cache

@@ -45,20 +45,9 @@ patches:
             noatime=True
             nconnect=16
 
-# component:keda, media-apps
-spec:
-  dependsOn:
-    - name: keda
-      namespace: kube-system
-  components:
-    - ../../../../components/keda/nas-nfs-scaler
-  postBuild:
-    substitute:
-      APP: appname
-
-    # helmrelease.yaml, example persistence
+# helmrelease.yaml, example persistence
     persistence:
-      media:
+      shared:
         type: nfs
         server: nas.homelab.internal
         path: /mnt/Arcanum/Media

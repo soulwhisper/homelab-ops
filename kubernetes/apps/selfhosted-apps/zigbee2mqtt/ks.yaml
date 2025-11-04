@@ -3,13 +3,13 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &name keda
+  name: &name zigbee2mqtt
 spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *name
-  targetNamespace: kube-system
-  path: "./kubernetes/apps/kube-system/keda/app"
+  targetNamespace: selfhosted-apps
+  path: "./kubernetes/apps/selfhosted-apps/zigbee2mqtt/app"
   sourceRef:
     kind: GitRepository
     name: gitops-system
@@ -18,3 +18,15 @@ spec:
   timeout: 5m
   prune: true
   wait: false
+  dependsOn:
+    - name: onepassword-connect
+      namespace: security-system
+    - name: rook-ceph-cluster
+      namespace: storage-system
+    - name: volsync
+      namespace: storage-system
+  components:
+    - ../../../../components/volsync
+  postBuild:
+    substitute:
+      APP: *name

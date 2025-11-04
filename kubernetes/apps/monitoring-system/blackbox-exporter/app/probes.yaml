@@ -10,8 +10,10 @@ spec:
     url: blackbox-exporter.monitoring-system.svc.cluster.local:9115
   targets:
     staticConfig:
-      static: [] # use hostname
-      # TODO: add IOT devices here
+      static:
+        - pve.homelab.internal
+        - nas.homelab.internal
+        - zigbee.homelab.internal
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.noirprime.com/monitoring.coreos.com/probe_v1.json
 apiVersion: monitoring.coreos.com/v1

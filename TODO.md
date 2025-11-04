@@ -17,4 +17,9 @@
 - [x] fix cloudflared connectivity, via proxies
 - [x] optimize ceph-bucket stability
 - [x] migrate to volsync-kopia for higher performance
-- [ ] bring back home-assistant stack if needed
+- [x] bring back home-assistant stack if needed
+
+### Production
+
+- [ ] setup zigbee adapter, config zigbee2mqtt
+- [ ] enable cilium BIGTCP

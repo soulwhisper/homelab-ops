@@ -1,5 +1,5 @@
 ---
-# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+# yaml-language-server: $schema=https://kubernetes-schemas.noirprime.com/helm.toolkit.fluxcd.io/helmrelease_v2.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
@@ -15,7 +15,7 @@ spec:
     defaultPodOptions:
       hostUsers: false
     controllers:
-      homepage:
+      *name :
         annotations:
           reloader.stakater.com/auto: "true"
         containers:
@@ -45,10 +45,10 @@ spec:
               readOnlyRootFilesystem: true
 
     serviceAccount:
-      homepage: {}
+      *name : {}
     rbac:
       roles:
-        homepage:
+        *name :
           type: ClusterRole
           rules:
             - apiGroups: [""]
@@ -64,13 +64,13 @@ spec:
               resources: ["customresourcedefinitions/status"]
               verbs: ["get"]
       bindings:
-        homepage:
+        *name :
           type: ClusterRoleBinding
           roleRef:
             kind: ClusterRole
-            identifier: homepage
+            identifier: *name
           subjects:
-            - identifier: homepage
+            - identifier: *name
 
     service:
       app:

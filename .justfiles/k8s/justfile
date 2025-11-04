@@ -73,3 +73,9 @@ snapshot-all:
   kubectl get replicationsources --no-headers -A | while read -r ns name _; do \
     just snapshot "$ns" "$name"; \
   done
+
+[doc('Suspend or Resume Keda ScaledObjects')]
+keda state:
+  kubectl get scaledobjects --no-headers -A | while read -r ns name _; do \
+    kubectl -n "$ns" annotate --field-manager flux-client-side-apply --overwrite so "$name" autoscaling.keda.sh/paused{{ if state != "suspend" { "-" } else { "=true" } }}; \
+  done

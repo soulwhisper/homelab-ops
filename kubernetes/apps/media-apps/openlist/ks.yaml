@@ -19,10 +19,14 @@ spec:
   prune: true
   wait: false
   dependsOn:
+    - name: keda
+      namespace: kube-system
     - name: nfs-shared
       namespace: media-apps
     - name: onepassword-connect
       namespace: security-system
+  components:
+    - ../../../../components/keda-nfs-scaler
   postBuild:
     substitute:
       APP: *name
