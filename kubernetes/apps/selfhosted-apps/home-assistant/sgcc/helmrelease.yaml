@@ -12,6 +12,7 @@ spec:
     namespace: gitops-system
 
   values:
+    controllers:
       *name :
         annotations:
           reloader.stakater.com/auto: "true"
