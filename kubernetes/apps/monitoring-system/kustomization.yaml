@@ -21,5 +21,4 @@ resources:
   - ./victoria-metrics/ks.yaml # replace kube-prometheus-stack
   # others
   - ./kromgo/ks.yaml
-  - ./netdata/ks.yaml
   - ./robusta/ks.yaml
