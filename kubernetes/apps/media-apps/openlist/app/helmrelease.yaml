@@ -64,11 +64,18 @@ spec:
             sectionName: https
 
     persistence:
+      app:
+        existingClaim: *name
+        globalMounts:
+          - path: /opt/openlist/data
       shared:
         existingClaim: storage
         globalMounts:
-          - path: /opt/openlist/data
+          - path: /data
       tmpfs:
         type: emptyDir
         globalMounts:
           - path: /tmp
+            subPath: tmp
+          - path: /opt/openlist/data/temp
+            subPath: cache

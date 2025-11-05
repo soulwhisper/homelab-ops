@@ -39,7 +39,7 @@ spec:
               OC_ENABLE_OCM: false
               OC_INSECURE: false
               OC_LOG_LEVEL: info
-              OC_URL: https://oc.noirprime.com
+              OC_URL: https://cloud.noirprime.com
               PROXY_TLS: false
             envFrom:
               - secretRef:
@@ -88,12 +88,26 @@ spec:
             subPath: data
           - path: /etc/opencloud
             subPath: config
-      shared:
+      shared1:
         existingClaim: media
         advancedMounts:
-          *name :
-            app:
-              - path: /media
+          globalMounts:
+            - path: /mnt/media
+      shared2:
+        existingClaim: models
+        advancedMounts:
+          globalMounts:
+            - path: /mnt/models
+      shared3:
+        existingClaim: trpg
+        advancedMounts:
+          globalMounts:
+            - path: /mnt/trpg
+      shared4:
+        existingClaim: storage
+        advancedMounts:
+          globalMounts:
+            - path: /mnt/storage
       tmpfs:
         type: emptyDir
         globalMounts:

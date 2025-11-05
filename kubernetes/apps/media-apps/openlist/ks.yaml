@@ -25,8 +25,13 @@ spec:
       namespace: media-apps
     - name: onepassword-connect
       namespace: security-system
+    - name: rook-ceph-cluster
+      namespace: storage-system
+    - name: volsync
+      namespace: storage-system
   components:
     - ../../../../components/keda-nfs-scaler
+    - ../../../../components/volsync
   postBuild:
     substitute:
       APP: *name
