@@ -78,30 +78,32 @@ spec:
         annotations:
           gethomepage.dev/enabled: "true"
           gethomepage.dev/icon: home-assistant.png
-          gethomepage.dev/name: Home-assistant
-          gethomepage.dev/group: Automation
+          gethomepage.dev/name: Home-Assistant
+          gethomepage.dev/group: SmartHome
+          gethomepage.dev/pod-selector: "app.kubernetes.io/name=home-assistant"
         parentRefs:
           - name: internal
             namespace: kube-system
             sectionName: https
         rules:
           - backendRefs:
-              - identifier: app
+              - name: *name
                 port: 8123
       code-server:
         hostnames: ["hass-code.noirprime.com"]
         annotations:
           gethomepage.dev/enabled: "true"
           gethomepage.dev/icon: code-server.png
-          gethomepage.dev/name: Hass-Code
-          gethomepage.dev/group: Automation
+          gethomepage.dev/name: Home-Assistant-Code
+          gethomepage.dev/group: SmartHome
+          gethomepage.dev/pod-selector: "app.kubernetes.io/name=home-assistant"
         parentRefs:
           - name: internal
             namespace: kube-system
             sectionName: https
         rules:
           - backendRefs:
-              - identifier: code-server
+              - name: *name
                 port: 1337
 
     persistence:

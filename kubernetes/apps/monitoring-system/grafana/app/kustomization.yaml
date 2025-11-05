@@ -9,3 +9,4 @@ resources:
   # utils
   - ./dashboard
   - ./externalsecret.yaml
+  - ./httproute.yaml

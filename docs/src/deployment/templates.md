@@ -151,7 +151,7 @@ spec:
             sectionName: https
         rules:                 # can be ignored if only one service
           - backendRefs:
-              - identifier: app
+              - name: *name
                 port: *port
 
     serviceAccount:

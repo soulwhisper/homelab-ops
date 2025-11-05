@@ -7,4 +7,5 @@ resources:
   - ./helmrelease.yaml
   - ./ocirepository.yaml
   # utils
-  - ./httproute.yaml
+  # hubble disabled
+  # - ./httproute.yaml

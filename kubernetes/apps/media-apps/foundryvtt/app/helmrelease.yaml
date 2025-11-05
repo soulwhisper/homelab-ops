@@ -62,7 +62,7 @@ spec:
           gethomepage.dev/enabled: "true"
           gethomepage.dev/icon: foundry-vtt.png
           gethomepage.dev/name: FoundryVTT
-          gethomepage.dev/group: Games
+          gethomepage.dev/group: Service
         parentRefs:
           - name: internal
             namespace: kube-system

@@ -69,7 +69,7 @@ spec:
             port: *port
     route:
       app:
-        hostnames: ["oc.noirprime.com"]
+        hostnames: ["cloud.noirprime.com"]
         annotations:
           gethomepage.dev/enabled: "true"
           gethomepage.dev/icon: open-cloud.png
