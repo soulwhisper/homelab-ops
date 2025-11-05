@@ -90,24 +90,20 @@ spec:
             subPath: config
       shared1:
         existingClaim: media
-        advancedMounts:
-          globalMounts:
-            - path: /mnt/media
+        globalMounts:
+          - path: /mnt/media
       shared2:
         existingClaim: models
-        advancedMounts:
-          globalMounts:
-            - path: /mnt/models
+        globalMounts:
+          - path: /mnt/models
       shared3:
         existingClaim: trpg
-        advancedMounts:
-          globalMounts:
-            - path: /mnt/trpg
+        globalMounts:
+          - path: /mnt/trpg
       shared4:
         existingClaim: storage
-        advancedMounts:
-          globalMounts:
-            - path: /mnt/storage
+        globalMounts:
+          - path: /mnt/storage
       tmpfs:
         type: emptyDir
         globalMounts:
