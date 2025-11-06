@@ -51,10 +51,6 @@ spec:
               limits:
                 memory: 1Gi
                 gpu.intel.com/i915: 1
-            securityContext: &securityContext
-              allowPrivilegeEscalation: false
-              capabilities: { drop: ["ALL"] }
-              readOnlyRootFilesystem: true
           celery:
             image:
               repository: ghcr.io/dispatcharr/dispatcharr
@@ -70,7 +66,6 @@ spec:
                 cpu: 20m
               limits:
                 memory: 1Gi
-            securityContext: *securityContext
 
     service:
       app:
@@ -105,13 +100,3 @@ spec:
         globalMounts:
           - path: /media
             subPath: TVShows
-      tmpfs:
-        type: emptyDir
-        advancedMounts:
-          *name :
-            app:
-              - path: /tmp
-                subPath: tmp/app
-            celery:
-              - path: /tmp
-                subPath: tmp/celery
