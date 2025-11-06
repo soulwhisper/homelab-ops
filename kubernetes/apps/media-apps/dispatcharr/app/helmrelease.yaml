@@ -64,9 +64,7 @@ spec:
               - "-c"
               - "cd /app &&"
               - "nice -n 5 celery -A dispatcharr worker -l info"
-            envFrom: &envFrom
-              - configMapRef:
-                  name: *name
+            envFrom: *envFrom
             resources:
               requests:
                 cpu: 20m
