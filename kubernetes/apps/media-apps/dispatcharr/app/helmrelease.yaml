@@ -51,6 +51,10 @@ spec:
               limits:
                 memory: 1Gi
                 gpu.intel.com/i915: 1
+            securityContext: &securityContext
+              allowPrivilegeEscalation: false
+              capabilities: { drop: ["ALL"] }
+              readOnlyRootFilesystem: false
           celery:
             image:
               repository: ghcr.io/dispatcharr/dispatcharr
@@ -66,6 +70,7 @@ spec:
                 cpu: 20m
               limits:
                 memory: 1Gi
+            securityContext: *securityContext
 
     service:
       app:

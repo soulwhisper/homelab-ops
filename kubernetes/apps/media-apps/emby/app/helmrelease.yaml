@@ -56,6 +56,10 @@ spec:
               limits:
                 gpu.intel.com/i915: 1
                 memory: 4Gi
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities: { drop: ["ALL"] }
+              readOnlyRootFilesystem: false
 
     service:
       app:
