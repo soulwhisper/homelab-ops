@@ -12,7 +12,5 @@ spec:
 
   values:
     alertmanagerAddress: http://vmalertmanager-victoria-metrics-cluster.monitoring-system.svc.cluster.local:9093
-    image:
-      registry: quay.io
     networkPolicy:
       enabled: false

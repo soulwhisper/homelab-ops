@@ -99,7 +99,7 @@ spec:
             port: *port
     route:
       app:
-        hostnames: ["karakeep.noirprime.com"]
+        hostnames: ["bookmarks.noirprime.com"]
         annotations:
           gethomepage.dev/enabled: "true"
           gethomepage.dev/icon: karakeep.png

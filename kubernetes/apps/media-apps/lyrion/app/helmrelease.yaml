@@ -30,8 +30,6 @@ spec:
 
     service:
       app:
-        annotations:
-          lbipam.cilium.io/ips: "${SUBNET}.150"
         ports:
           http:
             primary: true

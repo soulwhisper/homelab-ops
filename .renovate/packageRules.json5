@@ -17,6 +17,12 @@
       allowedVersions: "<17",
     },
     {
+      description: "Configure Emby versioning",
+      matchDatasources: ["docker"],
+      matchPackageNames: ["ghcr.io/home-operations/emby"],
+      versioning: "loose",
+    },
+    {
       description: "Pin talos version if something breaks",
       matchDatasources: ["docker"],
       matchPackageNames: ["ghcr.io/siderolabs/installer"],

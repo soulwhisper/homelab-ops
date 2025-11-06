@@ -22,25 +22,3 @@ spec:
         size: 50Gi
       serviceMonitor:
         enabled: true
-      route:
-        enabled: true
-        annotations:
-          gethomepage.dev/enabled: "true"
-          gethomepage.dev/icon: victoriametrics.png
-          gethomepage.dev/name: VictoriaLogs
-          gethomepage.dev/group: Observability
-        hostnames: ["logs.noirprime.com"]
-        parentRefs:
-          - name: internal
-            namespace: kube-system
-            sectionName: https
-        matches:
-          - path:
-              type: Exact
-              value: /
-        filters:
-          - type: URLRewrite
-            urlRewrite:
-              path:
-                type: ReplaceFullPath
-                replaceFullPath: /select/vmui/

@@ -28,27 +28,10 @@ spec:
         containers:
           app:
             image:
-              repository: emby/embyserver
-              tag: 4.9.2.6
+              repository: ghcr.io/home-operations/emby
+              tag: 4.9.1.80
             env:
-              GIDLIST: 2000,65534,0
               DOTNET_SYSTEM_IO_DISABLEFILELOCKING: "true"
-            ports:
-              - name: http
-                containerPort: &port 8096
-            probes:
-              liveness: &probes
-                enabled: true
-                custom: true
-                spec:
-                  httpGet:
-                    path: /web/index.html
-                    port: http
-                  initialDelaySeconds: 10
-                  periodSeconds: 60
-                  timeoutSeconds: 10
-                  failureThreshold: 5
-              readiness: *probes
             resources:
               requests:
                 cpu: 100m
@@ -65,7 +48,7 @@ spec:
       app:
         ports:
           http:
-            port: *port
+            port: 8096
     route:
       app:
         hostnames: ["movie.noirprime.com"]
@@ -84,12 +67,6 @@ spec:
           - name: internal
             namespace: kube-system
             sectionName: https
-        rules:
-          - backendRefs:
-              - identifier: app
-            timeouts:
-              request: 0s
-              backendRequest: 0s
 
     persistence:
       app:

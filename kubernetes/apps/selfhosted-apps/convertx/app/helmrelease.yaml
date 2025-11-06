@@ -31,10 +31,8 @@ spec:
             resources:
               requests:
                 cpu: 10m
-                gpu.intel.com/i915: 1
               limits:
-                memory: 256Mi
-                gpu.intel.com/i915: 1
+                memory: 512Mi
             securityContext:
               allowPrivilegeEscalation: false
               capabilities: { drop: ["ALL"] }
@@ -50,7 +48,7 @@ spec:
         hostnames: ["convert.noirprime.com"]
         annotations:
           gethomepage.dev/enabled: "true"
-          gethomepage.dev/icon: "https://raw.githubusercontent.com/C4illin/ConvertX/refs/heads/main/images/logo.png"
+          gethomepage.dev/icon: "mdi-file-document-refresh-outline"
           gethomepage.dev/name: ConvertX
           gethomepage.dev/group: Service
         parentRefs:

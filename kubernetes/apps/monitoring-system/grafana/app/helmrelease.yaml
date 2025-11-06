@@ -87,7 +87,7 @@ spec:
 
     # images
     image:
-      repository: grafana/grafana
+      repository: mirror.gcr.io/grafana/grafana
       tag: 12.2.1@sha256:35c41e0fd0295f5d0ee5db7e780cf33506abfaf47686196f825364889dee878b
     extraInitContainers:
       - name: init-db
@@ -96,20 +96,6 @@ spec:
         envFrom:
           - secretRef:
               name: grafana-initdb
-
-    # route
-    route:
-      main:
-        hostnames: ["grafana.noirprime.com"]
-        annotations:
-          gethomepage.dev/enabled: "true"
-          gethomepage.dev/icon: grafana.png
-          gethomepage.dev/name: Grafana
-          gethomepage.dev/group: Observability
-        parentRefs:
-          - name: internal
-            namespace: kube-system
-            sectionName: https
 
     # sources
     datasources:

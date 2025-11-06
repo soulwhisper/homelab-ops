@@ -21,7 +21,7 @@ spec:
         containers:
           app:
             image:
-              repository: freshrss/freshrss
+              repository: mirror.gcr.io/freshrss/freshrss
               tag: 1.27.1-alpine
             env:
               CRON_MIN: "*"

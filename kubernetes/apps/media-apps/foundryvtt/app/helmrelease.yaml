@@ -62,7 +62,7 @@ spec:
           gethomepage.dev/enabled: "true"
           gethomepage.dev/icon: foundry-vtt.png
           gethomepage.dev/name: FoundryVTT
-          gethomepage.dev/group: Games
+          gethomepage.dev/group: Service
         parentRefs:
           - name: internal
             namespace: kube-system
@@ -74,7 +74,7 @@ spec:
         globalMounts:
           - path: /home/node/resources/app
       shared:
-        existingClaim: media
+        existingClaim: trpg
         globalMounts:
           - path: /data
             subPath: FoundryVTT

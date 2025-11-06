@@ -69,7 +69,8 @@ spec:
           gethomepage.dev/enabled: "true"
           gethomepage.dev/icon: n8n.png
           gethomepage.dev/name: N8N
-          gethomepage.dev/group: Automation
+          gethomepage.dev/group: Service
+          gethomepage.dev/pod-selector: "app.kubernetes.io/name=n8n"
         parentRefs:
           - name: internal
             namespace: kube-system

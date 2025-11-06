@@ -18,47 +18,40 @@ data:
     title: Dashboard
     favicon: https://github.com/homarr-labs/dashboard-icons/tree/main/png/heimdall.png
     theme: dark
-    headerStyle: clean
+    headerStyle: boxed
     hideVersion: true
+    useEqualHeights: true
+    hideErrors: true
     quicklaunch:
       searchDescriptions: true
       hideInternetSearch: true
     layout:
       Calendar:
-        style: row
         header: false
-      AI:
         style: row
-        columns: 2
-        icon: si-openapiinitiative
-      Games:
+      Download:
+        icon: progress-download
         style: row
-        columns: 2
-        icon: mdi-gamepad-variant-outline
       Media:
-        style: row
-        columns: 2
         icon: mdi-play-circle-outline
-      Service:
-        style: row
-        columns: 3
-        icon: si-local
-      Automation:
-        style: column
-        icon: mdi-home-automation
-      Observability:
-        style: column
-        icon: mdi-monitor-eye
-      Infrastructure:
-        style: column
-        icon: mdi-server-network-outline
-      Storage:
-        style: column
-        icon: si-databricks
-      System:
         style: row
         columns: 4
-        icon: mdi-application-brackets-outline
+      Service:
+        icon: si-local
+        style: row
+        columns: 4
+      SmartHome:
+        icon: mdi-home-automation
+        style: row
+        columns: 4
+      Infrastructure:
+        style: columns
+      Networking:
+        style: columns
+      Storage:
+        style: columns
+      Observability:
+        style: columns
   custom.css: ""
   custom.js: ""
   bookmarks.yaml: |
@@ -66,31 +59,18 @@ data:
         - Discord:
             - icon: discord.png
               href: https://discord.com/app
-        - Gmail:
-            - icon: gmail.png
-              href: http://gmail.com
-        - Reddit:
-            - icon: reddit.png
-              href: https://reddit.com
-        - Twitch:
-            - icon: twitch.png
-              href: https://twitch.tv
-        - YouTube:
-            - icon: youtube.png
-              href: https://youtube.com/feed/subscriptions
+        - Outlook:
+            - icon: microsoft-outlook.png
+              href: https://outlook.live.com/mail/0/
     - Cloud:
-        - CloudFlare:
+        - Cloudflare:
             - icon: cloudflare.png
               href: https://dash.cloudflare.com
         - Pushover:
             - icon: pushover.png
               href: https://client.pushover.net/
-    - Git:
-        - home-cluster:
-            - icon: github.png
-              description: Main
-              href: https://github.com/soulwhisper/homelab-ops
-        - Homepage Icons:
+    - Icons:
+        - Homepage Dashboard:
             - icon: si-jpeg
               href: https://dashboardicons.com/
         - Homepage MDI:
@@ -100,28 +80,38 @@ data:
             - icon: si-simpleicons
               href: https://simpleicons.org/
   services.yaml: |
+    - Calendar:
+        - Calendar:
+            widget:
+              type: calendar
+              firstDayInWeek: monday
+              view: agenda
+              maxEvents: 10
+              showTime: true
+              timezone: Asia/Shanghai
+              integrations:
+                - type: ical
+                  name: Ticktick
+                  url: {{HOMEPAGE_VAR_TICKTICK_ICAL}}
     - Infrastructure:
-        - Cloudflare:
-            href: https://dash.cloudflare.com/
-            icon: cloudflare.png
-            description: Cloudflare
+        - Proxmox:
+            href: https://10.0.0.100:8006
+            icon: proxmox.png
             widget:
-              type: cloudflared
-              accountid: {{HOMEPAGE_VAR_CLOUDFLARE_ACCOUNTID}}
-              tunnelid: {{HOMEPAGE_VAR_CLOUDFLARE_TUNNELID}}
-              key: {{HOMEPAGE_VAR_CLOUDFLARE_API_TOKEN}}
-        - ESXi:
-            href: https://10.0.0.100
-            icon: vmware-esxi.png
-    - System:
-        - OPNsense:
+              type: proxmox
+              url: https://10.0.0.100:8006
+              username: {{HOMEPAGE_VAR_PROXMOX_USERNAME}}
+              password: {{HOMEPAGE_VAR_PROXMOX_PASSWORD}}
+        - OpenWRT:
             href: https://10.0.0.1
-            icon: opnsense.png
+            icon: openwrt.png
             widget:
-              type: opnsense
+              type: openwrt
               url: https://10.0.0.1
-              username: {{HOMEPAGE_VAR_OPNSENSE_USERNAME}}
-              password: {{HOMEPAGE_VAR_OPNSENSE_PASSWORD}}
+              username: {{HOMEPAGE_VAR_OPENWRT_USERNAME}}
+              password: {{HOMEPAGE_VAR_OPENWRT_PASSWORD}}
+              interfaceName: wan
+    - Networking:
         - Unifi:
             href: https://10.0.0.10:8443
             icon: unifi.png
@@ -130,24 +120,24 @@ data:
               url: https://10.0.0.10:8443
               username: {{HOMEPAGE_VAR_UNIFI_USERNAME}}
               password: {{HOMEPAGE_VAR_UNIFI_PASSWORD}}
+        - Cloudflare:
+            href: https://dash.cloudflare.com/
+            icon: cloudflare.png
+            widget:
+              type: cloudflared
+              accountid: {{HOMEPAGE_VAR_CLOUDFLARE_ACCOUNTID}}
+              tunnelid: {{HOMEPAGE_VAR_CLOUDFLARE_TUNNELID}}
+              key: {{HOMEPAGE_VAR_CLOUDFLARE_API_TOKEN}}
     - Storage:
         - NAS:
-            href: https://10.0.0.20
-            icon: synology-dsm.png
+            href: https://10.0.0.10
+            icon: qnap.png
             widget:
-              type: diskstation
-              url: https://10.0.0.20:5001
-              username: {{HOMEPAGE_VAR_DSM_USERNAME}}
-              password: {{HOMEPAGE_VAR_DSM_PASSWORD}}
-    - Calendar:
-        - Calendar:
-            widget:
-              type: calendar
-              firstDayInWeek: monday
-              view: monthly
-              maxEvents: 10
-              showTime: true
-              timezone: Asia/Shanghai
+              type: qnap
+              url: https://10.0.0.10
+              username: {{HOMEPAGE_VAR_QNAP_USERNAME}}
+              password: {{HOMEPAGE_VAR_QNAP_PASSWORD}}
+              volume: HDD
   widgets.yaml: |
     - search:
         provider: [google]
@@ -155,15 +145,15 @@ data:
         target: _blank
     - kubernetes:
         cluster:
-          cpu: true
-          label: cluster
-          memory: true
           show: true
+          cpu: true
+          memory: true
           showLabel: true
+          label: Talos
         nodes:
+          show: true
           cpu: true
           memory: true
-          show: true
           showLabel: true
     - datetime:
         text_size: l

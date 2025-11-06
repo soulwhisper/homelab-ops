@@ -8,8 +8,8 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *name
-  targetNamespace: media-apps
-  path: "./kubernetes/apps/media-apps/dispatcharr/app"
+  targetNamespace: selfhosted-apps
+  path: "./kubernetes/apps/selfhosted-apps/dispatcharr/app"
   sourceRef:
     kind: GitRepository
     name: gitops-system
@@ -19,24 +19,11 @@ spec:
   prune: true
   wait: false
   dependsOn:
-    - name: cnpg-cluster
-      namespace: database-system
-    - name: dragonfly-operator
-      namespace: database-system
-    - name: keda
-      namespace: kube-system
-    - name: nfs-shared
-      namespace: media-apps
-    - name: onepassword-connect
-      namespace: security-system
     - name: rook-ceph-cluster
       namespace: storage-system
     - name: volsync
       namespace: storage-system
   components:
-    - ../../../../components/cnpg
-    - ../../../../components/dragonfly
-    - ../../../../components/keda-nfs-scaler
     - ../../../../components/volsync
   postBuild:
     substitute:

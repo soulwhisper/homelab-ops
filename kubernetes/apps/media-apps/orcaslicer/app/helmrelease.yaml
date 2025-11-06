@@ -48,7 +48,7 @@ spec:
         annotations:
           gethomepage.dev/enabled: "true"
           gethomepage.dev/icon: orcaslicer.png
-          gethomepage.dev/name: Orca-Slicer
+          gethomepage.dev/name: Orcaslicer
           gethomepage.dev/group: Service
         parentRefs:
           - name: internal
@@ -66,7 +66,7 @@ spec:
           *name :
             app:
               - path: /config/models
-                subPath: 3D-Models
+                subPath: Models/3D
       tmpfs:
         type: emptyDir
         globalMounts:

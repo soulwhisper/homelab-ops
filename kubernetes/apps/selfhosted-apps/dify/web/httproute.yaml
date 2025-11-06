@@ -8,7 +8,8 @@ metadata:
     gethomepage.dev/enabled: "true"
     gethomepage.dev/icon: "https://avatars.githubusercontent.com/u/127165244?s=200&v=4"
     gethomepage.dev/name: Dify
-    gethomepage.dev/group: AI
+    gethomepage.dev/group: Service
+    gethomepage.dev/pod-selector: "app.kubernetes.io/name=dify-web"
 spec:
   hostnames: ["dify.noirprime.com"]
   parentRefs:

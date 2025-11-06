@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &name sillytavern
+  name: &name dispatcharr
 spec:
   interval: 30m
   chartRef:
@@ -21,31 +21,38 @@ spec:
         containers:
           app:
             image:
-              repository: ghcr.io/sillytavern/sillytavern
-              tag: 1.13.5
+              repository: ghcr.io/dispatcharr/dispatcharr
+              tag: 0.11.2
+            env:
+              # Modular deployment bugged until upstream fixed
+              # Not support any kind of proxies
+              DISPATCHARR_ENV: aio
+              DISPATCHARR_LOG_LEVEL: info
+              DISPATCHARR_PORT: &port 9191
+              REDIS_HOST: localhost
+              CELERY_BROKER_URL: redis://localhost:6379/0
             resources:
               requests:
-                cpu: 10m
+                cpu: 20m
+                gpu.intel.com/i915: 1
               limits:
                 memory: 1Gi
-            securityContext:
-              allowPrivilegeEscalation: false
-              capabilities: { drop: ["ALL"] }
-              readOnlyRootFilesystem: true
+                gpu.intel.com/i915: 1
 
     service:
       app:
         ports:
           http:
-            port: 8000
+            appProtocol: kubernetes.io/wss
+            port: *port
     route:
       app:
-        hostnames: ["tavern.noirprime.com"]
+        hostnames: ["iptv.noirprime.com"]
         annotations:
           gethomepage.dev/enabled: "true"
-          gethomepage.dev/icon: "https://avatars.githubusercontent.com/u/134869877?s=200&v=4"
-          gethomepage.dev/name: SillyTavern
-          gethomepage.dev/group: Service
+          gethomepage.dev/icon: "dispatcharr.png"
+          gethomepage.dev/name: DispatchArr
+          gethomepage.dev/group: Media
         parentRefs:
           - name: internal
             namespace: kube-system
@@ -55,13 +62,4 @@ spec:
       app:
         existingClaim: *name
         globalMounts:
-          - path: /home/node/app/backups
-            subPath: backups
-          - path: /home/node/app/config
-            subPath: config
-          - path: /home/node/app/data
-            subPath: data
-          - path: /home/node/app/public/scripts/extensions/third-party
-            subPath: extensions
-          - path: /home/node/app/plugins
-            subPath: plugins
+          - path: /data

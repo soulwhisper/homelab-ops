@@ -36,12 +36,6 @@
 - internal-gateway = ".131"
 - external-gateway = ".132"
 - postgres = ".133"
-- s3bucket = ".134"
-- home-assistant = ".140"
-- mqtt-server = ".141"
-- matter-server = ".142"
-- lyrion = ".150"
-- bittorrent = ".151"
 
 ### Bootstrap
 

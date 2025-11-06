@@ -116,29 +116,31 @@ spec:
           gethomepage.dev/enabled: "true"
           gethomepage.dev/icon: zigbee2mqtt.png
           gethomepage.dev/name: Zigbee2MQTT
-          gethomepage.dev/group: Automation
+          gethomepage.dev/group: SmartHome
+          gethomepage.dev/pod-selector: "app.kubernetes.io/name=zigbee2mqtt"
         parentRefs:
           - name: internal
             namespace: kube-system
             sectionName: https
         rules:
           - backendRefs:
-              - identifier: app
+              - name: *name
                 port: *httpPort
       code-server:
         hostnames: ["z2m-code.noirprime.com"]
         annotations:
           gethomepage.dev/enabled: "true"
           gethomepage.dev/icon: code-server.png
-          gethomepage.dev/name: Zigbee-Code
-          gethomepage.dev/group: Automation
+          gethomepage.dev/name: Zigbee2MQTT-Code
+          gethomepage.dev/group: SmartHome
+          gethomepage.dev/pod-selector: "app.kubernetes.io/name=zigbee2mqtt"
         parentRefs:
           - name: internal
             namespace: kube-system
             sectionName: https
         rules:
           - backendRefs:
-              - identifier: code-server
+              - name: *name
                 port: 1337
 
     persistence:
