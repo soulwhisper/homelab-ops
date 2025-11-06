@@ -15,9 +15,6 @@ spec:
     timeZone: "Asia/Shanghai"
     superuser:
       existingSecret: *name
-    housekeeping:
-      successfulJobsHistoryLimit: 1
-      failedJobsHistoryLimit: 1
     postgresql:
       enabled: false
     externalDatabase:
