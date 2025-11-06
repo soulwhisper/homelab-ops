@@ -43,6 +43,9 @@ spec:
       enabled: true
       serviceMonitor:
         enabled: true
+    # cronjob is deprecated
+    housekeeping:
+      enabled: false
     # below is the reason using official chart
     image:
       repository: ghcr.io/soulwhisper/netbox-custom
