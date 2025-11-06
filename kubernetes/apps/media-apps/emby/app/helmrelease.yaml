@@ -31,7 +31,7 @@ spec:
               repository: emby/embyserver
               tag: 4.9.2.6
             env:
-              GIDLIST: 2000,65534,0
+              GIDLIST: 2000,65534
               DOTNET_SYSTEM_IO_DISABLEFILELOCKING: "true"
             ports:
               - name: http
@@ -56,10 +56,6 @@ spec:
               limits:
                 gpu.intel.com/i915: 1
                 memory: 4Gi
-            securityContext:
-              allowPrivilegeEscalation: false
-              capabilities: { drop: ["ALL"] }
-              readOnlyRootFilesystem: true
 
     service:
       app:
@@ -94,12 +90,3 @@ spec:
         existingClaim: media
         globalMounts:
           - path: /media
-      tmpfs:
-        type: emptyDir
-        globalMounts:
-          - path: /config/logs
-            subPath: logs
-          - path: /tmp
-            subPath: tmp
-          - path: /transcode
-            subPath: transcode
