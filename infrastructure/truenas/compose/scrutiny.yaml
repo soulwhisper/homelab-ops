@@ -1,0 +1,22 @@
+# Apps:dockge
+# Storage = '/mnt/Arcanum/Apps'
+
+services:
+  # influxdb user = `admin`, password = `password12345`
+  scrutiny:
+    image: "ghcr.io/analogj/scrutiny:master-omnibus"
+    container_name: "scrutiny"
+    restart: "unless-stopped"
+    ports:
+      - "9801:8080"
+      - "9802:8086"
+    volumes:
+      - "/mnt/Arcanum/Apps/scrutiny/config:/opt/scrutiny/config"
+      - "/mnt/Arcanum/Apps/scrutiny/influxdb:/opt/scrutiny/influxdb"
+      - "/run/udev:/run/udev:ro"
+    cap_add:
+      - "SYS_ADMIN"
+      - "SYS_RAWIO"
+    devices:
+      - "/dev/sda"
+      - "/dev/sdb"

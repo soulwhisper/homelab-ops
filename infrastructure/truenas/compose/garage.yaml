@@ -1,0 +1,32 @@
+# Apps:dockge
+# Storage = '/mnt/Arcanum/Apps'
+
+configs:
+  garage.toml:
+    content: |
+      metadata_dir = "/tmp/meta"
+      data_dir = "/tmp/data"
+      db_engine = "sqlite"
+      metadata_auto_snapshot_interval = "6h"
+      replication_factor = 1
+      rpc_bind_addr = "[::]:9001"
+      rpc_secret = "adbc7a0edaa7e35de527d45762002ee6efa57c07cd870b3dc454c242e4ee99a3"
+      [s3_api]
+      s3_region = "us-east-1"
+      api_bind_addr = "[::]:9000"
+      root_domain = ".nas.homelab.internal"
+
+services:
+  garage:
+    image: "mirror.gcr.io/dxflrs/garage:v2.1.0"
+    container_name: "garage"
+    restart: "unless-stopped"
+    ports:
+      - "9000:9000/tcp"
+      - "9001:9001/tcp"
+    configs:
+      - source: "garage.toml"
+        target: "/etc/garage.toml"
+    volumes:
+      - "/mnt/Arcanum/Apps/garage/data:/tmp/data"
+      - "/mnt/Arcanum/Apps/garage/meta:/tmp/meta"

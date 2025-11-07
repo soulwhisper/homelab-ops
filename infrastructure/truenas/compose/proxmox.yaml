@@ -1,0 +1,20 @@
+# Apps:dockge
+# Storage = '/mnt/Arcanum/Apps'
+
+services:
+  pbs:
+    image: "mirror.gcr.io/ayufan/proxmox-backup-server:latest"
+    container_name: "pbs"
+    restart: "unless-stopped"
+    ports:
+      - "8007:8007"
+    mem_limit: "2G"
+    environment:
+      - "TZ=Asia/Shanghai"
+    volumes:
+      - "/mnt/Arcanum/Apps/pbs/config:/etc/proxmox-backup"
+      - "/mnt/Arcanum/Apps/pbs/log:/var/log/proxmox-backup"
+      - "/mnt/Arcanum/Apps/pbs/data:/var/lib/proxmox-backup"
+      - "/mnt/Arcanum/Apps/pbs/backup:/backup"
+    tmpfs:
+      - "/run"
