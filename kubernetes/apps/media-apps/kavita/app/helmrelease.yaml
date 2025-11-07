@@ -64,7 +64,6 @@ spec:
         globalMounts:
           - path: /kavita/config
       shared:
-        existingClaim: media
+        existingClaim: Documents
         globalMounts:
           - path: /data
-            subPath: Documents

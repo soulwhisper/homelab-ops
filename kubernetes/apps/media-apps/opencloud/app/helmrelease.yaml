@@ -89,11 +89,15 @@ spec:
           - path: /etc/opencloud
             subPath: config
       shared1:
-        existingClaim: media
+        existingClaim: Documents
+        globalMounts:
+          - path: /mnt/documents
+      shared2:
+        existingClaim: Media
         globalMounts:
           - path: /mnt/media
-      shared2:
-        existingClaim: trpg
+      shared3:
+        existingClaim: TRPG
         globalMounts:
           - path: /mnt/trpg
       tmpfs:

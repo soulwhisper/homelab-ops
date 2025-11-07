@@ -2,13 +2,13 @@
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: Media
+  name: Documents
   namespace: media-apps
-  # nfs-path: /mnt/Mundorum/Media
+  # nfs-path: /mnt/Mundorum/Documents
 spec:
   accessModes:
     - ReadWriteMany
   resources:
     requests:
-      storage: 300Gi
+      storage: 100Gi
   storageClassName: nfs-shared

@@ -2,13 +2,13 @@
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: Media
+  name: TRPG
   namespace: media-apps
-  # nfs-path: /mnt/Mundorum/Media
+  # nfs-path: /mnt/Mundorum/TRPG
 spec:
   accessModes:
     - ReadWriteMany
   resources:
     requests:
-      storage: 300Gi
+      storage: 100Gi
   storageClassName: nfs-shared

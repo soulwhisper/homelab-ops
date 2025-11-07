@@ -124,7 +124,7 @@ spec:
 
     persistence:
       shared:
-        existingClaim: media
+        existingClaim: Media
         advancedMounts:
           *name :
             app:

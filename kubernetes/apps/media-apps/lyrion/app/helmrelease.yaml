@@ -63,7 +63,7 @@ spec:
         globalMounts:
           - path: /config
       shared:
-        existingClaim: media
+        existingClaim: Media
         globalMounts:
           - path: /music
             subPath: Music

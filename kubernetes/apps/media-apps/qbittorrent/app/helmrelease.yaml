@@ -11,6 +11,9 @@ spec:
     name: app-template
     namespace: gitops-system
 
+  # qbrr usage
+  # : re-announce, 'Run on torrent added', `/qbrr/qbrr --hash %I`
+
   values:
     controllers:
       *name :
@@ -85,13 +88,11 @@ spec:
         type: image
         image: ghcr.io/buroa/qbrr:0.1.1
       shared:
-        existingClaim: media
+        existingClaim: Media
         globalMounts:
-          - path: /data/nas-media/Downloads/qbittorrent
-            subPath: Downloads/qbittorrent
+          - path: /data
+            subPath: Downloads
       tmpfs:
         type: emptyDir
         globalMounts:
           - path: /tmp
-# qbrr usage
-# : re-announce, 'Run on torrent added', `/qbrr/qbrr --hash %I`

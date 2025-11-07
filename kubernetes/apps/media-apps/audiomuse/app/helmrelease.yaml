@@ -85,7 +85,7 @@ spec:
 
     persistence:
       shared:
-        existingClaim: media
+        existingClaim: Media
         globalMounts:
           - path: /music
             subPath: Music
