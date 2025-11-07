@@ -22,7 +22,7 @@ spec:
           app:
             image:
               repository: ghcr.io/home-assistant/home-assistant
-              tag: 2025.11.0
+              tag: 2025.11.1
             env:
               HTTP_PROXY: "${HTTP_PROXY}"
               HTTPS_PROXY: "${HTTPS_PROXY}"
