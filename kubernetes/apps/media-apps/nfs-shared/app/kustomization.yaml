@@ -5,6 +5,4 @@ kind: Kustomization
 resources:
   - ./storageclass.yaml
   - ./pvc-media.yaml
-  - ./pvc-models.yaml
-  - ./pvc-storage.yaml
   - ./pvc-trpg.yaml

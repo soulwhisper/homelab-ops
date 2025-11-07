@@ -93,17 +93,9 @@ spec:
         globalMounts:
           - path: /mnt/media
       shared2:
-        existingClaim: models
-        globalMounts:
-          - path: /mnt/models
-      shared3:
         existingClaim: trpg
         globalMounts:
           - path: /mnt/trpg
-      shared4:
-        existingClaim: storage
-        globalMounts:
-          - path: /mnt/storage
       tmpfs:
         type: emptyDir
         globalMounts:
