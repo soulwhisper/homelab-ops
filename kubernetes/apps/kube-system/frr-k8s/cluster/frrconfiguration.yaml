@@ -10,7 +10,7 @@ spec:
     routers:
       - asn: 65510
         neighbors:
-          - address: "10.0.0.1" # Switch
+          - address: "10.10.0.1" # Switch
             asn: 65510
             port: 179
             bfdProfile: default
