@@ -29,7 +29,7 @@ spec:
           app:
             image:
               repository: ghcr.io/home-operations/emby
-              tag: 4.9.1.80
+              tag: 4.9.1.90
             env:
               DOTNET_SYSTEM_IO_DISABLEFILELOCKING: "true"
             resources:
