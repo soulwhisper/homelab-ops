@@ -26,8 +26,6 @@ spec:
             runAsGroup: 2000
             fsGroup: 2000
             fsGroupChangePolicy: OnRootMismatch
-            supplementalGroups:
-              - 65534 # qnap:guest
         containers:
           app:
             image:
@@ -88,7 +86,7 @@ spec:
         type: image
         image: ghcr.io/buroa/qbrr:0.1.1
       shared:
-        existingClaim: Media
+        existingClaim: nfs-shared-media
         globalMounts:
           - path: /data
             subPath: Downloads

@@ -3,12 +3,12 @@
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
-  name: nfs-shared
+  name: nfs-shared-media
 provisioner: nfs.csi.k8s.io
 parameters:
   server: nas.homelab.internal
   share: /mnt/Mundorum
-  subDir: "${pvc.metadata.name}"
+  subDir: "Media"
   onDelete: retain
 reclaimPolicy: Delete
 volumeBindingMode: Immediate
@@ -18,3 +18,16 @@ mountOptions:
   - hard
   - noatime
   - nconnect=16
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: nfs-shared-media
+  namespace: media-apps
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 300Gi
+  storageClassName: nfs-shared-media

@@ -8,8 +8,8 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *name
-  targetNamespace: media-apps
-  path: "./kubernetes/apps/media-apps/opencloud/app"
+  targetNamespace: selfhosted-apps
+  path: "./kubernetes/apps/selfhosted-apps/opencloud/app"
   sourceRef:
     kind: GitRepository
     name: gitops-system
@@ -19,10 +19,6 @@ spec:
   prune: true
   wait: false
   dependsOn:
-    - name: keda
-      namespace: kube-system
-    - name: nfs-shared
-      namespace: media-apps
     - name: onepassword-connect
       namespace: security-system
     - name: rook-ceph-cluster
@@ -30,7 +26,6 @@ spec:
     - name: volsync
       namespace: storage-system
   components:
-    - ../../../../components/keda-nfs-scaler
     - ../../../../components/volsync
   postBuild:
     substitute:

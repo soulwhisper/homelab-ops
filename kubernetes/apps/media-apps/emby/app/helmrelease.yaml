@@ -23,8 +23,6 @@ spec:
             runAsGroup: 2000
             fsGroup: 2000
             fsGroupChangePolicy: OnRootMismatch
-            supplementalGroups:
-              - 65534 # qnap:guest
         containers:
           app:
             image:
@@ -74,7 +72,7 @@ spec:
         globalMounts:
           - path: /config
       shared:
-        existingClaim: Media
+        existingClaim: nfs-shared-media
         globalMounts:
           - path: /media
       tmpfs:

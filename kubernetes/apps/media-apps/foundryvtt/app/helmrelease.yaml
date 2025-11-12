@@ -20,11 +20,9 @@ spec:
           securityContext:
             runAsNonRoot: true
             runAsUser: 1000 # node
-            runAsGroup: 2000 # nfs
-            fsGroup: 2000 # nfs
+            runAsGroup: 2000
+            fsGroup: 2000
             fsGroupChangePolicy: OnRootMismatch
-            supplementalGroups:
-              - 65534 # qnap:guest
         containers:
           app:
             image:
@@ -74,7 +72,7 @@ spec:
         globalMounts:
           - path: /home/node/resources/app
       shared:
-        existingClaim: TRPG
+        existingClaim: nfs-shared-trpg
         globalMounts:
           - path: /data
             subPath: FoundryVTT

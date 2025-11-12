@@ -23,8 +23,6 @@ spec:
             runAsGroup: 2000
             fsGroup: 2000
             fsGroupChangePolicy: OnRootMismatch
-            supplementalGroups:
-              - 65534 # qnap:guest
         initContainers:
           init-db:
             image:
@@ -85,7 +83,7 @@ spec:
 
     persistence:
       shared:
-        existingClaim: Media
+        existingClaim: nfs-shared-media
         globalMounts:
           - path: /music
             subPath: Music

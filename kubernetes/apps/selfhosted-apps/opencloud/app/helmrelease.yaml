@@ -23,13 +23,11 @@ spec:
             runAsNonRoot: true
             fsGroup: 2000
             fsGroupChangePolicy: OnRootMismatch
-            supplementalGroups:
-              - 65534 # qnap:guest
         containers:
           app:
             image:
               repository: mirror.gcr.io/opencloudeu/opencloud-rolling
-              tag: 3.5.0
+              tag: 3.7.0
             command:
               - "/bin/sh"
               - "-c"
@@ -88,18 +86,6 @@ spec:
             subPath: data
           - path: /etc/opencloud
             subPath: config
-      shared1:
-        existingClaim: Documents
-        globalMounts:
-          - path: /mnt/documents
-      shared2:
-        existingClaim: Media
-        globalMounts:
-          - path: /mnt/media
-      shared3:
-        existingClaim: TRPG
-        globalMounts:
-          - path: /mnt/trpg
       tmpfs:
         type: emptyDir
         globalMounts:

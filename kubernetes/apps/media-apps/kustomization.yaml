@@ -18,4 +18,3 @@ resources:
   - ./qbittorrent/ks.yaml
   # others
   - ./foundryvtt/ks.yaml
-  - ./opencloud/ks.yaml

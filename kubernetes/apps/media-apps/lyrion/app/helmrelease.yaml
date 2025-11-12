@@ -63,7 +63,7 @@ spec:
         globalMounts:
           - path: /config
       shared:
-        existingClaim: Media
+        existingClaim: nfs-shared-media
         globalMounts:
           - path: /music
             subPath: Music

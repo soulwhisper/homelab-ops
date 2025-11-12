@@ -1,0 +1,33 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.noirprime.com/storage.k8s.io/storageclass_v1.json
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: nfs-shared-documents
+provisioner: nfs.csi.k8s.io
+parameters:
+  server: nas.homelab.internal
+  share: /mnt/Mundorum
+  subDir: "Documents"
+  onDelete: retain
+reclaimPolicy: Delete
+volumeBindingMode: Immediate
+allowVolumeExpansion: true
+mountOptions:
+  - nfsvers=4.2
+  - hard
+  - noatime
+  - nconnect=16
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: nfs-shared-documents
+  namespace: media-apps
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 100Gi
+  storageClassName: nfs-shared-documents
