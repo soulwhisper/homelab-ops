@@ -4,6 +4,29 @@ set shell := ['bash', '-euo', 'pipefail', '-c']
 BUCKETS := 'postgres volsync'
 AWS_ENDPOINT_URL := env_var_or_default('AWS_ENDPOINT_URL', 'http://localhost:9000')
 
+[private]
+default:
+  @just --list
+
+[doc('Init Archlinux workstation')]
+workstation:
+  @echo "Install pacman packages"
+  pacman -Syuq --needed --noconfirm --noprogressbar $(cat Archfile | xargs)
+  @echo "Install yay packages"
+  yay -Syuq --needed --noconfirm --noprogressbar $(cat Yayfile | xargs)
+  @echo "Install krew packages"
+  kubectl krew index add netshoot https://github.com/nilic/kubectl-netshoot.git
+  kubectl krew install $(cat Krewfile | xargs)
+  go install github.com/mirceanton/kubectl-switch/v2@latest
+  @echo "Set fish aliases"
+  fish -i -c "fish alias --save k=kubectl"
+  fish -i -c "fish alias --save kc=kubectl-switch context"
+  fish -i -c "fish alias --save kns=kubectl-switch ns"
+  fish -i -c "fish alias --save ks=kubescape"
+  fish -i -c "fish alias --save kubectl=kubecolor"
+  fish -i -c "fish alias --save flux-local='uvx flux-local'"
+  @echo "Workstation setup complete"
+
 [doc('Init/Reset Garage'), no-exit-message]
 garage mode:
   for BUCKET in {{BUCKETS}}; do \
