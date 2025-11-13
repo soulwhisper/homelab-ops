@@ -16,9 +16,9 @@
 
 ### Garage
 
-```shell
-# alias garage = "sudo docker exec -it garage /garage"
+- set alias `garage` = `sudo docker exec -it garage /garage`;
 
+```shell
 garage status
 garage layout assign -z main -c 200G "node-id"
 garage layout apply --version 1
