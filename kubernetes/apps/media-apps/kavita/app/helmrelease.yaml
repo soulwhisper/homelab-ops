@@ -62,6 +62,6 @@ spec:
         globalMounts:
           - path: /kavita/config
       shared:
-        existingClaim: nfs-shared-documents
+        existingClaim: nfs-shared-document
         globalMounts:
           - path: /data

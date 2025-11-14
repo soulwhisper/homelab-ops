@@ -3,12 +3,12 @@
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
-  name: nfs-shared-documents
+  name: nfs-shared-document
 provisioner: nfs.csi.k8s.io
 parameters:
   server: nas.homelab.internal
   share: /mnt/Mundorum
-  subDir: "Documents"
+  subDir: "Document"
   onDelete: retain
 reclaimPolicy: Delete
 volumeBindingMode: Immediate
@@ -22,7 +22,7 @@ mountOptions:
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: nfs-shared-documents
+  name: nfs-shared-document
   namespace: media-apps
 spec:
   accessModes:
@@ -30,4 +30,4 @@ spec:
   resources:
     requests:
       storage: 100Gi
-  storageClassName: nfs-shared-documents
+  storageClassName: nfs-shared-document

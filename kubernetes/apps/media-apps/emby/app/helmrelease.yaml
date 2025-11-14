@@ -72,7 +72,7 @@ spec:
         globalMounts:
           - path: /config
       shared:
-        existingClaim: nfs-shared-media
+        existingClaim: nfs-shared-movie
         globalMounts:
           - path: /media
       tmpfs:

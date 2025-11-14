@@ -122,12 +122,11 @@ spec:
 
     persistence:
       shared:
-        existingClaim: nfs-shared-media
+        existingClaim: nfs-shared-photo
         advancedMounts:
           *name :
             app:
               - path: /data
-                subPath: Photos
       tmpfs:
         type: emptyDir
         advancedMounts:

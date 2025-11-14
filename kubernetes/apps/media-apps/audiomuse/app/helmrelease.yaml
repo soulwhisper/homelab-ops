@@ -83,10 +83,9 @@ spec:
 
     persistence:
       shared:
-        existingClaim: nfs-shared-media
+        existingClaim: nfs-shared-music
         globalMounts:
           - path: /music
-            subPath: Music
       tmpfs:
         type: emptyDir
         globalMounts:
