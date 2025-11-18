@@ -84,7 +84,7 @@ spec:
           - path: /config
       qbrr:
         type: image
-        image: ghcr.io/buroa/qbrr:0.1.1
+        image: ghcr.io/buroa/qbrr:0.1.2
       shared:
         existingClaim: nfs-shared-download
         globalMounts:
