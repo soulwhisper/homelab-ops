@@ -16,7 +16,7 @@ spec:
       *name :
         type: cronjob
         cronjob:
-          schedule: "0 * * * *"
+          schedule: "0 1 * * *"
           concurrencyPolicy: "Replace"
           backoffLimit: 0
           failedJobsHistory: 1
