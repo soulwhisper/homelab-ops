@@ -20,6 +20,14 @@ prune-pods:
     kubectl delete pods -A --field-selector status.phase="$phase" --ignore-not-found=true; \
   done
 
+[doc('Prune revision history')]
+prune-rs:
+  kubectl get rs --no-headers -A | while read -r ns name desired _; do \
+    if [ "$desired" = "0" ]; then \
+      kubectl delete rs -n "$ns" "$name"; \
+    fi; \
+  done
+
 [doc('Render local Flux Kustomization')]
 render-ks ns ks:
   uvx flux-local build ks --namespace "{{ ns }}" --path "$K8S_DIR/flux/cluster" "{{ ks }}"
@@ -66,7 +74,7 @@ sync-all-es:
 
 [doc('Snapshot VolSync ReplicationSource')]
 snapshot ns name:
-  kubectl -n "{{ ns }}" patch replicationsources "{{ name }}" --type merge -p '{"spec":{"trigger":{"manual":"$(date +%s)"}}}'; \
+  kubectl -n "{{ ns }}" patch replicationsources "{{ name }}" --type merge -p '{"spec":{"trigger":{"manual":"$(date +%s)"}}}'
 
 [doc('Snapshot all VolSync ReplicationSources')]
 snapshot-all:

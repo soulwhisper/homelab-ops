@@ -76,6 +76,10 @@ kubectl resource-capacity -p -c -u -n database-system
 
 ## trigger k8s-schemas
 kubectl create job --from=cronjob/cronjob-k8s-schemas k8s-schemas-test -n gitops-system
+
+## ceph check
+kubectl rook_ceph --namespace=storage-system --operator-namespace=storage-system health
+kubectl rook_ceph --namespace=storage-system --operator-namespace=storage-system ceph status
 ```
 
 #### VM test issues
