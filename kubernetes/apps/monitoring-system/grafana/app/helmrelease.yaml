@@ -87,7 +87,8 @@ spec:
 
     # images
     image:
-      repository: mirror.gcr.io/grafana/grafana
+      registry: mirror.gcr.io
+      repository: grafana/grafana
       tag: 12.3.0@sha256:70d9599b186ce287be0d2c5ba9a78acb2e86c1a68c9c41449454d0fc3eeb84e8
     extraInitContainers:
       - name: init-db
