@@ -28,7 +28,7 @@ kind: ExternalSecret
 metadata:
   name: example-app
 spec:
-  refreshInterval: 30m
+  refreshInterval: 12h
   secretStoreRef:
     kind: ClusterSecretStore
     name: onepassword
