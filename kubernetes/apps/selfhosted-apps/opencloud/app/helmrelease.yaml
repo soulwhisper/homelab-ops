@@ -37,19 +37,12 @@ spec:
               OC_ENABLE_OCM: false
               OC_INSECURE: false
               OC_LOG_LEVEL: info
+              PROXY_HTTP_ADDR: 0.0.0.0:9200
               OC_URL: https://cloud.noirprime.com
               PROXY_TLS: false
             envFrom:
               - secretRef:
                   name: *name
-            ports:
-              - name: http
-                containerPort: &port 9200
-            probes:
-              liveness:
-                enabled: true
-              readiness:
-                enabled: true
             resources:
               requests:
                 cpu: 50m
@@ -64,7 +57,7 @@ spec:
       app:
         ports:
           http:
-            port: *port
+            port: 9200
     route:
       app:
         hostnames: ["cloud.noirprime.com"]

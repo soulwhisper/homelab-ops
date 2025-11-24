@@ -65,8 +65,8 @@ spec:
               ZIGBEE2MQTT_CONFIG_MQTT_SERVER: "mqtt://mosquitto.database-system.svc.cluster.local:1883"
               ZIGBEE2MQTT_CONFIG_MQTT_VERSION: 5
               ZIGBEE2MQTT_CONFIG_PERMIT_JOIN: false
-              ZIGBEE2MQTT_CONFIG_SERIAL_ADAPTER: ember # todo
-              ZIGBEE2MQTT_CONFIG_SERIAL_PORT: tcp://10.10.0.100:6638 # todo
+              ZIGBEE2MQTT_CONFIG_SERIAL_ADAPTER: zstack # SLZB-06P10
+              ZIGBEE2MQTT_CONFIG_SERIAL_PORT: tcp://10.10.0.100:6638
               ZIGBEE2MQTT_CONFIG_SERIAL_BAUDRATE: 115200
               ZIGBEE2MQTT_CONFIG_SERIAL_DISABLE_LED: false
             resources: &resources

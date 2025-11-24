@@ -27,11 +27,6 @@ spec:
               CRON_MIN: "*"
               DOMAIN: rss.noirprime.com
               LISTEN: &port 8080
-            probes:
-              liveness:
-                enabled: true
-              readiness:
-                enabled: true
             resources:
               requests:
                 cpu: 12m

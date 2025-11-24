@@ -11,9 +11,6 @@ spec:
     name: app-template
     namespace: gitops-system
 
-  # qbrr usage
-  # : re-announce, 'Run on torrent added', `/qbrr/qbrr --hash %I`
-
   values:
     controllers:
       *name :
@@ -34,16 +31,6 @@ spec:
             env:
               QBT_WEBUI_PORT: &port 8080
               QBT_TORRENTING_PORT: &torrentPort 50413
-            probes:
-              liveness:
-                enabled: true
-              readiness:
-                enabled: true
-              startup:
-                enabled: true
-                spec:
-                  failureThreshold: 30
-                  periodSeconds: 5
             resources:
               requests:
                 cpu: 200m
@@ -82,9 +69,11 @@ spec:
         existingClaim: *name
         globalMounts:
           - path: /config
-      qbrr:
-        type: image
-        image: ghcr.io/buroa/qbrr:0.1.2
+      # qbrr re-announce
+      # 'Run on torrent added', `/qbrr/qbrr --hash %I`
+      # qbrr:
+      #   type: image
+      #   image: ghcr.io/buroa/qbrr:0.1.2
       shared:
         existingClaim: nfs-shared-download
         globalMounts:

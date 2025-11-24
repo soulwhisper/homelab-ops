@@ -21,6 +21,8 @@ workstation:
   kubectl krew install $(cat Krewfile | xargs)
   go install github.com/mirceanton/kubectl-switch/v2@latest
   fish_add_path $HOME/go/bin
+  @echo "Import configs"
+  [ -f .config.zip ] && unzip -oq .config.zip -d "$HOME"
   @echo "Set fish aliases"
   fish -i -c "alias --save k=kubectl"
   fish -i -c "alias --save kc='kubectl switch context'"

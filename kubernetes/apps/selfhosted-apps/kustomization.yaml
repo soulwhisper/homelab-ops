@@ -15,5 +15,6 @@ resources:
   - ./n8n/ks.yaml
   - ./netbox/ks.yaml
   - ./opencloud/ks.yaml
+  - ./qui/ks.yaml
   - ./sillytavern/ks.yaml
   - ./zigbee2mqtt/ks.yaml

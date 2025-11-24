@@ -3,13 +3,13 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &name netdata
+  name: &name qui
 spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *name
-  targetNamespace: monitoring-system
-  path: "./kubernetes/apps/monitoring-system/netdata/app"
+  targetNamespace: selfhosted-apps
+  path: "./kubernetes/apps/selfhosted-apps/qui/app"
   sourceRef:
     kind: GitRepository
     name: gitops-system
@@ -19,5 +19,12 @@ spec:
   prune: true
   wait: false
   dependsOn:
-    - name: onepassword-connect
-      namespace: security-system
+    - name: rook-ceph-cluster
+      namespace: storage-system
+    - name: volsync
+      namespace: storage-system
+  components:
+    - ../../../../components/volsync
+  postBuild:
+    substitute:
+      APP: *name
