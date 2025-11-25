@@ -33,6 +33,9 @@ nodes:
       intel.feature.node.kubernetes.io/gpu: "true"
     installDisk: /dev/sda
     networkInterfaces:
+      - interface: lo # fix forwardKubeDNSToHost, check below
+        addresses: &loAddress
+          - 169.254.116.108/32
       - interface: bond0
         bond: &bond
           mode: active-backup
@@ -55,6 +58,8 @@ nodes:
       intel.feature.node.kubernetes.io/gpu: "true"
     installDisk: /dev/sda
     networkInterfaces:
+      - interface: lo
+        addresses: *loAddress
       - interface: bond0
         bond: *bond
         dhcp: false
@@ -71,6 +76,8 @@ nodes:
       intel.feature.node.kubernetes.io/gpu: "true"
     installDisk: /dev/sda
     networkInterfaces:
+      - interface: lo
+        addresses: *loAddress
       - interface: bond0
         bond: *bond
         dhcp: false
@@ -236,13 +243,14 @@ patches:
   # : Enable features
   # :: https://github.com/siderolabs/talos/issues/10002#issuecomment-2557069620;
   # :: hostLegacyRouting=true conflict with BIGTCP and BBR
+  # :: workaround: https://github.com/cilium/cilium/issues/36761#issuecomment-3493689525;
   - |-
     machine:
       features:
         nodeAddressSortAlgorithm: v2
         hostDNS:
           enabled: true
-          forwardKubeDNSToHost: false
+          forwardKubeDNSToHost: true
           resolveMemberNames: true
         kubernetesTalosAPIAccess:
           enabled: true
