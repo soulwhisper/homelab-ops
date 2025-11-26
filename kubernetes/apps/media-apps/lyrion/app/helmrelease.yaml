@@ -62,12 +62,7 @@ spec:
         existingClaim: *name
         globalMounts:
           - path: /config
-      shared1:
+      shared:
         existingClaim: nfs-shared-music
         globalMounts:
           - path: /music
-      shared2:
-        existingClaim: nfs-shared-music
-        globalMounts:
-          - path: /playlist
-            subPath: Playlists
