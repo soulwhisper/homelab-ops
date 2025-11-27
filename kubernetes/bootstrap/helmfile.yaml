@@ -49,7 +49,7 @@ releases:
   - name: flux-operator
     namespace: gitops-system
     chart: oci://ghcr.io/controlplaneio-fluxcd/charts/flux-operator
-    version: 0.34.0
+    version: 0.35.0
     values: ["./values.yaml.gotmpl"]
     needs: ["security-system/external-secrets"]
     hooks:
@@ -65,6 +65,6 @@ releases:
   - name: flux-instance
     namespace: gitops-system
     chart: oci://ghcr.io/controlplaneio-fluxcd/charts/flux-instance
-    version: 0.34.0
+    version: 0.35.0
     values: ["./values.yaml.gotmpl"]
     needs: ["gitops-system/flux-operator"]
