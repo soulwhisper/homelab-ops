@@ -12,6 +12,7 @@ spec:
 
   values:
     fullnameOverride: *name
+    replicaCount: 1
     initContainers:
       # Generate kubeconfig file, ref:https://github.com/kubernetes-sigs/headlamp/issues/1826
       - name: create-kubeconfig
@@ -38,8 +39,8 @@ spec:
           capabilities: { drop: ["ALL"] }
           readOnlyRootFilesystem: true
           runAsNonRoot: true
-          runAsUser: 1000
-          runAsGroup: 1000
+          runAsUser: 100
+          runAsGroup: 101
         volumeMounts:
           - name: app
             mountPath: /home/headlamp/.config/Headlamp/kubeconfigs
