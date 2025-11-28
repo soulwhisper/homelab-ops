@@ -34,13 +34,13 @@ spec:
             value: "6443"
           - name: KUBECONFIG
             value: /home/headlamp/.config/Headlamp/kubeconfigs/config
-        securityContext:
+        securityContext: &securityContext
           allowPrivilegeEscalation: false
           capabilities: { drop: ["ALL"] }
           readOnlyRootFilesystem: true
           runAsNonRoot: true
-          runAsUser: 100
-          runAsGroup: 101
+          runAsUser: 2000
+          runAsGroup: 2000
         volumeMounts:
           - name: app
             mountPath: /home/headlamp/.config/Headlamp/kubeconfigs
@@ -55,6 +55,7 @@ spec:
           - /bin/sh
           - -c
           - mkdir -p /build/plugins && cp -r /plugins/* /build/plugins/
+        securityContext: *securityContext
         volumeMounts:
           - name: app
             mountPath: /build/plugins
