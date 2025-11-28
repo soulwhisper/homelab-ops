@@ -1,0 +1,87 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.noirprime.com/helm.toolkit.fluxcd.io/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &name headlamp
+spec:
+  interval: 30m
+  chartRef:
+    kind: OCIRepository
+    name: headlamp
+
+  values:
+    fullnameOverride: *name
+    initContainers:
+      # Generate kubeconfig file, ref:https://github.com/kubernetes-sigs/headlamp/issues/1826
+      - name: create-kubeconfig
+        image: rancher/shell:v0.6.0
+        command:
+          - /bin/sh
+          - "-c"
+          - |
+            kubectl config set-cluster main --server=https://kubernetes.default.svc --certificate-authority=/var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+            kubectl config set-credentials main --token=$(cat /tmp/sa-token/token)
+            kubectl config set-context main --cluster=main --user=main
+            kubectl config use-context main
+        env:
+          - name: KUBERNETES_SERVICE_HOST
+            valueFrom:
+              fieldRef:
+                fieldPath: status.hostIP
+          - name: KUBERNETES_SERVICE_PORT
+            value: "6443"
+          - name: KUBECONFIG
+            value: /home/headlamp/.config/Headlamp/kubeconfigs/config
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities: { drop: ["ALL"] }
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+          runAsUser: 1000
+          runAsGroup: 1000
+        volumeMounts:
+          - name: app
+            mountPath: /home/headlamp/.config/Headlamp/kubeconfigs
+            subPath: config
+          - name: sa-token
+            mountPath: /tmp/sa-token
+            readOnly: true
+      # Install Flux plugin
+      - name: headlamp-plugins
+        image: ghcr.io/headlamp-k8s/headlamp-plugin-flux:v0.5.0
+        command:
+          - /bin/sh
+          - -c
+          - mkdir -p /build/plugins && cp -r /plugins/* /build/plugins/
+        volumeMounts:
+          - name: app
+            mountPath: /build/plugins
+            subPath: plugins
+    podAnnotations:
+      reloader.stakater.com/auto: "true"
+    config:
+      pluginsDir: /build/plugins
+    service:
+      port: 4466
+    clusterRoleBinding:
+      create: false
+    serviceAccount:
+      create: false
+      name: headlamp-admin
+    volumes:
+      - name: app
+        persistentVolumeClaim:
+          claimName: *name
+      - name: sa-token
+        secret:
+          secretName: headlamp-admin
+          defaultMode: 420
+    volumeMounts:
+      - name: app
+        mountPath: /build/plugins
+        subPath: plugins
+      - name: app
+        mountPath: /home/headlamp/.config/Headlamp/kubeconfigs/config
+        subPath: config
+        readOnly: true
