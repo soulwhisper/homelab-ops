@@ -35,7 +35,7 @@ render-ks ns ks:
 [doc('Apply local Flux Kustomization')]
 apply-ks ns ks:
   just render-ks "{{ ns }}" "{{ ks }}" \
-  | kubectl apply --server-side --field-manager=kustomize-controller -f -
+  | kubectl apply --force-conflicts --server-side --field-manager=kustomize-controller -f -
 
 [doc('Delete local Flux Kustomization')]
 delete-ks ns ks:
