@@ -39,12 +39,11 @@ spec:
           capabilities: { drop: ["ALL"] }
           readOnlyRootFilesystem: true
           runAsNonRoot: true
-          runAsUser: 2000
-          runAsGroup: 2000
+          runAsUser: 100
+          runAsGroup: 101
         volumeMounts:
-          - name: app
+          - name: kubeconfig
             mountPath: /home/headlamp/.config/Headlamp/kubeconfigs
-            subPath: config
           - name: sa-token
             mountPath: /tmp/sa-token
             readOnly: true
@@ -57,9 +56,8 @@ spec:
           - mkdir -p /build/plugins && cp -r /plugins/* /build/plugins/
         securityContext: *securityContext
         volumeMounts:
-          - name: app
+          - name: headlamp-plugins
             mountPath: /build/plugins
-            subPath: plugins
     podAnnotations:
       reloader.stakater.com/auto: "true"
     config:
@@ -72,18 +70,17 @@ spec:
       create: false
       name: headlamp-admin
     volumes:
-      - name: app
-        persistentVolumeClaim:
-          claimName: *name
+      - name: headlamp-plugins
+        emptyDir: {}
+      - name: kubeconfig
+        emptyDir: {}
       - name: sa-token
         secret:
           secretName: headlamp-admin
           defaultMode: 420
     volumeMounts:
-      - name: app
+      - name: headlamp-plugins
         mountPath: /build/plugins
-        subPath: plugins
-      - name: app
+      - name: kubeconfig
         mountPath: /home/headlamp/.config/Headlamp/kubeconfigs/config
-        subPath: config
         readOnly: true
