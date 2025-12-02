@@ -10,7 +10,7 @@ spec:
     routers:
       - asn: 65510
         neighbors:
-          - address: "172.19.82.30" # for test, Switch 10.10.0.1
+          - address: "10.10.0.1" # Switch
             asn: 65510
             port: 179
             bfdProfile: default
@@ -20,8 +20,8 @@ spec:
               allowed:
                 mode: all
         prefixes:
+          # bgp cant advertise service cidr, use loadbalancer instead
           - "10.100.0.0/17" # Pod
-          - "10.100.128.0/17" # Service
           - "10.10.0.192/27" # LoadBalancer
     bfdProfiles:
       - name: default
