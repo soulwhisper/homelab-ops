@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &name recyclarr
+  name: &name mumc
 spec:
   interval: 30m
   chartRef:
@@ -16,12 +16,11 @@ spec:
       *name :
         type: cronjob
         cronjob:
-          schedule: "0 1 * * *"
+          schedule: "10 1 * * *"
           backoffLimit: 0
           concurrencyPolicy: Forbid
-          successfulJobsHistory: 1
           failedJobsHistory: 1
-          ttlSecondsAfterFinished: 86400
+          successfulJobsHistory: 1
         pod:
           securityContext:
             runAsNonRoot: true
@@ -32,47 +31,27 @@ spec:
         containers:
           app:
             image:
-              repository: ghcr.io/recyclarr/recyclarr
-              tag: 7.4.1
-            args:
-              - sync
-            env:
-              HTTP_PROXY: "${HTTP_PROXY}"
-              HTTPS_PROXY: "${HTTPS_PROXY}"
-              NO_PROXY: "${NO_PROXY}"
-            envFrom:
-              - secretRef:
-                  name: *name
+              repository: ghcr.io/terrelsa13/mumc
+              tag: v5.11.36
             resources:
               requests:
-                cpu: 10m
+                cpu: 100m
               limits:
-                memory: 128Mi
+                memory: 512Mi
             securityContext:
               allowPrivilegeEscalation: false
               capabilities: { drop: ["ALL"] }
-              readOnlyRootFilesystem: true
+              # readOnlyRootFilesystem: true
 
     persistence:
       app:
-        existingClaim: *name
-        globalMounts:
-          - path: /config
-      config:
-        type: configMap
+        type: secret
         name: *name
         globalMounts:
-          - path: /config/recyclarr.yml
-            subPath: recyclarr.yml
-            readOnly: true
+          - path: /usr/src/app/config/mumc_config.yaml
+            subPath: mumc_config.yaml
       tmpfs:
         type: emptyDir
         globalMounts:
-          - path: /config/cache
-            subPath: cache
-          - path: /config/logs
+          - path: /usr/src/app/logs
             subPath: logs
-          - path: /config/repositories
-            subPath: repositories
-          - path: /tmp
-            subPath: tmp

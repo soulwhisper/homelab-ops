@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &name recyclarr
+  name: &name audiobookshelf
 spec:
   interval: 30m
   chartRef:
@@ -14,14 +14,8 @@ spec:
   values:
     controllers:
       *name :
-        type: cronjob
-        cronjob:
-          schedule: "0 1 * * *"
-          backoffLimit: 0
-          concurrencyPolicy: Forbid
-          successfulJobsHistory: 1
-          failedJobsHistory: 1
-          ttlSecondsAfterFinished: 86400
+        annotations:
+          reloader.stakater.com/auto: "true"
         pod:
           securityContext:
             runAsNonRoot: true
@@ -32,14 +26,13 @@ spec:
         containers:
           app:
             image:
-              repository: ghcr.io/recyclarr/recyclarr
-              tag: 7.4.1
-            args:
-              - sync
+              repository: ghcr.io/advplyr/audiobookshelf
+              tag: 2.31.0
             env:
-              HTTP_PROXY: "${HTTP_PROXY}"
-              HTTPS_PROXY: "${HTTPS_PROXY}"
-              NO_PROXY: "${NO_PROXY}"
+              AUDIOBOOKSHELF_UID: 2000
+              AUDIOBOOKSHELF_GID: 2000
+              CONFIG_PATH: /config
+              METADATA_PATH: /config/metadata
             envFrom:
               - secretRef:
                   name: *name
@@ -47,32 +40,46 @@ spec:
               requests:
                 cpu: 10m
               limits:
-                memory: 128Mi
+                memory: 2Gi
             securityContext:
               allowPrivilegeEscalation: false
               capabilities: { drop: ["ALL"] }
               readOnlyRootFilesystem: true
+
+    service:
+      app:
+        ports:
+          http:
+            port: 80
+    route:
+      app:
+        hostnames: ["audiobookshelf.noirprime.com"]
+        annotations:
+          gethomepage.dev/enabled: "true"
+          gethomepage.dev/icon: audiobookshelf.png
+          gethomepage.dev/name: AudioBookShelf
+          gethomepage.dev/group: Service
+        parentRefs:
+          - name: internal
+            namespace: kube-system
+            sectionName: https
 
     persistence:
       app:
         existingClaim: *name
         globalMounts:
           - path: /config
-      config:
-        type: configMap
-        name: *name
+      shared:
+        existingClaim: nfs-shared-document
         globalMounts:
-          - path: /config/recyclarr.yml
-            subPath: recyclarr.yml
-            readOnly: true
+          - path: /data/nas-media/Library
+            subPath: AudioBooks
       tmpfs:
         type: emptyDir
         globalMounts:
-          - path: /config/cache
+          - path: /.npm
             subPath: cache
-          - path: /config/logs
+          - path: /metadata/logs
             subPath: logs
-          - path: /config/repositories
-            subPath: repositories
           - path: /tmp
             subPath: tmp

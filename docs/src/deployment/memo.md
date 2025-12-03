@@ -36,6 +36,9 @@
 - internal-gateway = ".131"
 - external-gateway = ".132"
 - postgres = ".133"
+- ceph-objectstore = ".134"
+- mosquitto = ".141"
+- frigate = ".142"
 
 ### Bootstrap
 

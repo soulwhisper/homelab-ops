@@ -17,4 +17,5 @@ resources:
   - ./opencloud/ks.yaml
   - ./qui/ks.yaml
   - ./sillytavern/ks.yaml
+  - ./spoolman/ks.yaml
   - ./zigbee2mqtt/ks.yaml
