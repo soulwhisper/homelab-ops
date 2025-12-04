@@ -6,7 +6,6 @@
 
 - Pool = `Arcanum`;
 - Address Pools = `192.168.0.0/16`, `Size 24`;
-- Registry Mirrors = `https://mirror.gcr.io`;
 
 #### Dockge
 

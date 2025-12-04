@@ -15,6 +15,7 @@ resources:
   - ./immich/ks.yaml
   - ./kavita/ks.yaml
   - ./lyrion/ks.yaml
+  - ./metube/ks.yaml
   - ./moviepilot/ks.yaml
   # - ./mumc/ks.yaml
   - ./qbittorrent/ks.yaml

@@ -1,5 +1,6 @@
-# Apps:dockge
-# Storage = '/mnt/Arcanum/Apps'
+# Apps: Dockge
+# Storage: '/mnt/Arcanum/Apps'
+# RegistryMirror: 'm.daocloud.io'
 
 # Bootstrap via ssh, check README.md for more details
 
@@ -20,7 +21,7 @@ configs:
 
 services:
   garage:
-    image: "mirror.gcr.io/dxflrs/garage:v2.1.0"
+    image: "docker.m.daocloud.io/dxflrs/garage:v2.1.0"
     container_name: "garage"
     restart: "unless-stopped"
     ports:

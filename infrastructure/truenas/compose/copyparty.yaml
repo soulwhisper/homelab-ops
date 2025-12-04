@@ -1,5 +1,6 @@
-# Apps:dockge
-# Storage = '/mnt/Arcanum/Apps'
+# Apps: Dockge
+# Storage: '/mnt/Arcanum/Apps'
+# RegistryMirror: 'm.daocloud.io'
 
 # https://github.com/9001/copyparty/blob/hovudstraum/docs/examples/docker/basic-docker-compose/copyparty.conf
 # https://github.com/9001/copyparty/blob/hovudstraum/docs/example.conf
@@ -38,7 +39,7 @@ configs:
 
 services:
   copyparty:
-    image: "ghcr.io/9001/copyparty-ac:latest"
+    image: "ghcr.m.daocloud.io/9001/copyparty-ac:latest"
     container_name: "copyparty"
     restart: "unless-stopped"
     ports:

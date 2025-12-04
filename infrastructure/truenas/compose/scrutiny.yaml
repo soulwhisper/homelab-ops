@@ -1,15 +1,19 @@
-# Apps:dockge
-# Storage = '/mnt/Arcanum/Apps'
+# Apps: Dockge
+# Storage: '/mnt/Arcanum/Apps'
+# RegistryMirror: 'm.daocloud.io'
+
+# only for hdd
+# short test weekly, long test monthly
+# influxdb user = `admin`, password = `password12345`
 
 services:
-  # influxdb user = `admin`, password = `password12345`
   scrutiny:
-    image: "ghcr.io/analogj/scrutiny:master-omnibus"
+    image: "ghcr.m.daocloud.io/analogj/scrutiny:master-omnibus"
     container_name: "scrutiny"
     restart: "unless-stopped"
     ports:
-      - "9801:8080"
-      # - "9802:8086"
+      - "9204:8080"
+      # - "9205:8086"
     volumes:
       - "/mnt/Arcanum/Apps/scrutiny/config:/opt/scrutiny/config"
       - "/mnt/Arcanum/Apps/scrutiny/influxdb:/opt/scrutiny/influxdb"
@@ -18,5 +22,5 @@ services:
       - "SYS_ADMIN"
       - "SYS_RAWIO"
     devices:
-      - "/dev/sda"
-      - "/dev/sdb"
+      - "/dev/sdc"
+      - "/dev/sdd"

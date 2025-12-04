@@ -1,0 +1,36 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: metube
+data:
+  # ref:https://github.com/alexta69/metube
+  # : Basic
+  UID: "2000"
+  GID: "2000"
+  UMASK: "022"
+  DEFAULT_THEME: "auto"
+  LOGLEVEL: "info"
+  ENABLE_ACCESSLOG: "false"
+  # : Download Behavior
+  DOWNLOAD_MODE: "limited"
+  MAX_CONCURRENT_DOWNLOADS: "3"
+  DELETE_FILE_ON_TRASHCAN: "false"
+  DEFAULT_OPTION_PLAYLIST_STRICT_MODE: "false"
+  DEFAULT_OPTION_PLAYLIST_ITEM_LIMIT: "0"
+  # : Storage & Directories
+  DOWNLOAD_DIR: "/data/movie"
+  AUDIO_DOWNLOAD_DIR: "/data/audio"
+  CUSTOM_DIRS: "true"
+  CREATE_CUSTOM_DIRS: "true"
+  CUSTOM_DIRS_EXCLUDE_REGEX: "(^|/)[.@].*$"
+  DOWNLOAD_DIRS_INDEXABLE: "false"
+  STATE_DIR: "/data/.metube"
+  TEMP_DIR: "/tmp"
+  # : File Naming & yt-dlp
+  OUTPUT_TEMPLATE: "%(title)s.%(ext)s"
+  OUTPUT_TEMPLATE_CHAPTER: "%(title)s - %(section_number)s %(section_title)s.%(ext)s"
+  OUTPUT_TEMPLATE_PLAYLIST: "%(playlist_title)s/%(title)s.%(ext)s"
+  # : Web Server & URLs
+  URL_PREFIX: "/"
+  HTTPS: "false"

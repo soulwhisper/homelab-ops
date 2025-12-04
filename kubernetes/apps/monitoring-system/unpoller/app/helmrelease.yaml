@@ -24,20 +24,12 @@ spec:
               repository: ghcr.io/unpoller/unpoller
               tag: v2.16.0
             env:
-              UP_UNIFI_DEFAULT_URL: https://nas.homelab.internal:8443
+              UP_UNIFI_DEFAULT_URL: https://unifi.homelab.internal:8443
               UP_UNIFI_DEFAULT_VERIFY_SSL: false
-              # use a local 'reader' can only 'read'
-              UP_UNIFI_DEFAULT_USER:
-                valueFrom:
-                  secretKeyRef:
-                    name: *name
-                    key: reader_username
-              UP_UNIFI_DEFAULT_PASS:
-                valueFrom:
-                  secretKeyRef:
-                    name: *name
-                    key: reader_password
               UP_INFLUXDB_DISABLE: true
+            envFrom:
+              - secretRef:
+                  name: *name
             probes:
               liveness: &probes
                 enabled: true

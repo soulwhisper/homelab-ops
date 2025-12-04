@@ -18,4 +18,5 @@ resources:
   - ./qui/ks.yaml
   - ./sillytavern/ks.yaml
   - ./spoolman/ks.yaml
+  - ./stirling-pdf/ks.yaml
   - ./zigbee2mqtt/ks.yaml

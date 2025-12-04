@@ -1,11 +1,12 @@
-# Apps:dockge
-# Storage = '/mnt/Arcanum/Apps'
+# Apps: Dockge
+# Storage: '/mnt/Arcanum/Apps'
+# RegistryMirror: 'm.daocloud.io'
 
 # switch to a well-maintained watchtower repo
 
 services:
   watchtower:
-    image: "ghcr.io/nicholas-fedor/watchtower:latest"
+    image: "ghcr.m.daocloud.io/nicholas-fedor/watchtower:latest"
     container_name: "watchtower"
     restart: "unless-stopped"
     volumes:

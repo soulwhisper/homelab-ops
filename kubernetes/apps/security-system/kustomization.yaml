@@ -6,6 +6,8 @@ namespace: security-system
 components:
   - ../../components/namespace
 resources:
+  # - ./authelia/ks.yaml
   - ./cert-manager/ks.yaml
   - ./external-secrets/ks.yaml
+  # - ./lldap/ks.yaml
   - ./onepassword-connect/ks.yaml

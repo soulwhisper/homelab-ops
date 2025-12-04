@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &name audiomuse
+  name: &name metube
 spec:
   interval: 30m
   chartRef:
@@ -23,59 +23,37 @@ spec:
             runAsGroup: 2000
             fsGroup: 2000
             fsGroupChangePolicy: OnRootMismatch
-        initContainers:
-          init-db:
-            image:
-              repository: ghcr.io/home-operations/postgres-init
-              tag: "17"
-            envFrom:
-              - secretRef:
-                  name: audiomuse-initdb
         containers:
           app:
             image:
-              repository: ghcr.io/neptunehub/audiomuse-ai
-              tag: 0.7.12-beta
-            env:
-              SERVICE_TYPE: "flask"
-            envFrom: &envFrom
+              repository: ghcr.io/alexta69/metube
+              tag: 2025.11.29
+            envFrom:
               - configMapRef:
                   name: *name
-            ports:
-              - name: http
-                containerPort: &port 8000
-            resources: &resources
+            resources:
               requests:
-                cpu: 40m
+                cpu: 20m
               limits:
-                memory: 1Gi
+                memory: 2Gi
             securityContext: &securityContext
               allowPrivilegeEscalation: false
               capabilities: { drop: ["ALL"] }
               readOnlyRootFilesystem: true
-          worker:
-            image:
-              repository: ghcr.io/neptunehub/audiomuse-ai
-              tag: 0.7.12-beta
-            env:
-              SERVICE_TYPE: "worker"
-            envFrom: *envFrom
-            resources: *resources
-            securityContext: *securityContext
 
     service:
       app:
         ports:
           http:
-            port: *port
+            port: 8081
     route:
       app:
-        hostnames: ["muse.noirprime.com"]
+        hostnames: ["metube.noirprime.com"]
         annotations:
           gethomepage.dev/enabled: "true"
-          gethomepage.dev/icon: hl-audiomuse-ai.png
-          gethomepage.dev/name: AudioMuse
-          gethomepage.dev/group: Media
+          gethomepage.dev/icon: metube.png
+          gethomepage.dev/name: Metube
+          gethomepage.dev/group: Download
         parentRefs:
           - name: internal
             namespace: kube-system
@@ -83,11 +61,10 @@ spec:
 
     persistence:
       shared:
-        existingClaim: nfs-shared-music
+        existingClaim: nfs-shared-movie
         globalMounts:
-          - path: /music
+          - path: /data
       tmpfs:
         type: emptyDir
         globalMounts:
-          - path: /app/temp_audio
           - path: /tmp

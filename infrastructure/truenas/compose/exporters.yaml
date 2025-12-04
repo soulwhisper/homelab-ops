@@ -1,9 +1,10 @@
-# Apps:dockge
-# Storage = '/mnt/Arcanum/Apps'
+# Apps: Dockge
+# Storage: '/mnt/Arcanum/Apps'
+# RegistryMirror: 'm.daocloud.io'
 
 services:
   node-exporter:
-    image: "quay.io/prometheus/node-exporter:latest"
+    image: "quay.m.daocloud.io/prometheus/node-exporter:latest"
     container_name: "node-exporter"
     restart: "unless-stopped"
     command:
@@ -19,7 +20,7 @@ services:
       - "/:/host:ro,rslave"
 
   smartctl-exporter:
-    image: "mirror.gcr.io/prometheuscommunity/smartctl-exporter:latest"
+    image: "docker.m.daocloud.io/prometheuscommunity/smartctl-exporter:latest"
     container_name: "smartctl-exporter"
     restart: "unless-stopped"
     privileged: "true"

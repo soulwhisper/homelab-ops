@@ -1,0 +1,35 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.noirprime.com/kustomize.toolkit.fluxcd.io/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: &name authelia
+spec:
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *name
+  targetNamespace: security-system
+  path: "./kubernetes/apps/security-system/authelia/app"
+  sourceRef:
+    kind: GitRepository
+    name: gitops-system
+    namespace: gitops-system
+  interval: 1h
+  timeout: 5m
+  prune: true
+  wait: false
+  dependsOn:
+    - name: cnpg-cluster
+      namespace: database-system
+    - name: dragonfly-operator
+      namespace: database-system
+    - name: lldap
+      namespace: security-system
+    - name: onepassword-connect
+      namespace: security-system
+  components:
+    - ../../../../components/cnpg
+    - ../../../../components/dragonfly
+  postBuild:
+    substitute:
+      APP: *name

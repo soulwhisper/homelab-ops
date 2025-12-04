@@ -1,5 +1,8 @@
-# Apps:dockge
-# Storage = '/mnt/Arcanum/Apps'
+# Apps: Dockge
+# Storage: '/mnt/Arcanum/Apps'
+# RegistryMirror: 'm.daocloud.io'
+
+# meshcentral listens on port 4433 (AMT) and 9202 (https)
 
 configs:
   config.json:
@@ -8,15 +11,14 @@ configs:
 
 services:
   talos-api:
-    image: "ghcr.io/siderolabs/discovery-service:latest"
+    image: "ghcr.m.daocloud.io/siderolabs/discovery-service:latest"
     container_name: "talos-api"
     restart: "unless-stopped"
     ports:
       - "9300:3000/tcp"
 
-  # meshcentral listens on port 4433 (AMT) and 9202 (https)
   meshcentral:
-    image: "ghcr.io/ylianst/meshcentral:latest"
+    image: "ghcr.m.daocloud.io/ylianst/meshcentral:latest"
     container_name: "meshcentral"
     restart: "unless-stopped"
     network_mode: "host"

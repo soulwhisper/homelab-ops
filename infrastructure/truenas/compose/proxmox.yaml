@@ -1,10 +1,11 @@
-# Apps:dockge
-# Storage = '/mnt/Arcanum/Apps'
+# Apps: Dockge
+# Storage: '/mnt/Arcanum/Apps'
+# RegistryMirror: 'm.daocloud.io'
 
 services:
-  pbs:
-    image: "mirror.gcr.io/ayufan/proxmox-backup-server:latest"
-    container_name: "pbs"
+  proxmox-backup-server:
+    image: "docker.m.daocloud.io/ayufan/proxmox-backup-server:latest"
+    container_name: "proxmox-backup-server"
     restart: "unless-stopped"
     ports:
       - "8007:8007"
