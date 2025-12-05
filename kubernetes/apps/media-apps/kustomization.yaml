@@ -11,6 +11,7 @@ resources:
   # media
   # - ./audiobookshelf/ks.yaml
   - ./audiomuse/ks.yaml
+  - ./crafty-controller/ks.yaml
   - ./emby/ks.yaml
   - ./immich/ks.yaml
   - ./kavita/ks.yaml

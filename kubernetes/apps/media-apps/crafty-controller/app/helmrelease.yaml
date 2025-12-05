@@ -1,0 +1,97 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.noirprime.com/helm.toolkit.fluxcd.io/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &name crafty-controller
+spec:
+  interval: 30m
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+    namespace: gitops-system
+
+  # check init password: kubectl -n media-apps exec crafty-controller-xxxx -- cat /crafty/app/config/default-creds.txt
+
+  values:
+    controllers:
+      *name :
+        annotations:
+          reloader.stakater.com/auto: "true"
+        pod:
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 2000
+            runAsGroup: 2000
+            fsGroup: 2000
+            fsGroupChangePolicy: OnRootMismatch
+        containers:
+          app:
+            image:
+              repository: registry.gitlab.com/crafty-controller/crafty-4
+              tag: 4.6.1
+            resources:
+              requests:
+                cpu: 40m
+              limits:
+                memory: 4Gi
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities: { drop: ["ALL"] }
+              readOnlyRootFilesystem: true
+
+    service:
+      app:
+        type: LoadBalancer
+        annotations:
+          lbipam.cilium.io/ips: "${SUBNET}.143"
+        ports:
+          app:
+            appProtocol: kubernetes.io/wss
+            primary: true
+            port: 8443
+          server:
+            port: 25565
+
+    route:
+      app:
+        hostnames: ["crafty.noirprime.com"]
+        annotations:
+          gethomepage.dev/enabled: "true"
+          gethomepage.dev/icon: crafty-controller.png
+          gethomepage.dev/name: Crafty
+          gethomepage.dev/group: Service
+          gethomepage.dev/widget.type: minecraft
+          gethomepage.dev/widget.url: "udp://${SUBNET}.143:25565"
+        parentRefs:
+          - name: internal
+            namespace: kube-system
+            sectionName: https
+        rules:
+          - backendRefs:
+              - name: *name
+                namespace: media-apps
+                port: 8443
+
+    persistence:
+      app:
+        existingClaim: *name
+        globalMounts:
+          - path: /crafty/app/config
+            subPath: config
+          - path: /crafty/servers
+            subPath: servers
+      shared:
+        existingClaim: nfs-shared-minecraft
+        globalMounts:
+          - path: /crafty/backups
+            subPath: backups
+          - path: /crafty/import
+            subPath: import
+      tmpfs:
+        type: emptyDir
+        globalMounts:
+          - path: /crafty/logs
+            subPath: logs
+          - path: /crafty/temp
+            subPath: temp

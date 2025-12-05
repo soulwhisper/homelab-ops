@@ -60,10 +60,16 @@ spec:
             sectionName: https
 
     persistence:
-      shared:
+      movie:
         existingClaim: nfs-shared-movie
         globalMounts:
-          - path: /data
+          - path: /data/movie
+            subPath: youtube
+      music:
+        existingClaim: nfs-shared-music
+        globalMounts:
+          - path: /data/audio
+            subPath: youtube
       tmpfs:
         type: emptyDir
         globalMounts:

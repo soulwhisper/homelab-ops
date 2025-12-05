@@ -39,6 +39,7 @@
 - ceph-objectstore = ".134"
 - mosquitto = ".141"
 - frigate = ".142"
+- crafty = ".143"
 
 ### Bootstrap
 
