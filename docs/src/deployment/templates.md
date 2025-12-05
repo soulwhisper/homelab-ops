@@ -2,7 +2,7 @@
 
 - This is a template for most self-hosted apps without its own charts
 - with substitute support, non-sensitive environments are set in configMap:cluster-settings;
-- substitute can be disabled with `label: substitution.flux.home.arpa/disabled=true`;
+- substitute can be disabled with `label: config.homelab.ops/substitution=false`;
 - `kustomizeconfig.yaml` still needed for official helm charts with `values.yaml` during boostrap;
 - "{{ .Release.Name }}" and "{{ .Release.Namespace }}" not always rendered, use yaml anchors instead;
 

@@ -23,7 +23,7 @@ spec:
           successfulJobsHistory: 1
         annotations:
           reloader.stakater.com/auto: "true"
-          config.homelab.ops/proxy: "enabled" # Enable https_proxy
+          config.homelab.ops/proxy: "https" # https_proxy needed
         pod:
           securityContext:
             runAsUser: 65534

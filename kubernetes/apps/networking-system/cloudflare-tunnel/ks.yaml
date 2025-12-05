@@ -5,7 +5,7 @@ kind: Kustomization
 metadata:
   name: &name cloudflare-tunnel
   labels:
-    substitution.flux.home.arpa/disabled: "true"
+    config.homelab.ops/substitution: "false"
 spec:
   commonMetadata:
     labels:

@@ -5,7 +5,7 @@ kind: Kustomization
 metadata:
   name: &name nfs-shared
   labels:
-    substitution.flux.home.arpa/disabled: "true"
+    config.homelab.ops/substitution: "false"
     # conflict with pvc subdir generator
 spec:
   commonMetadata:
