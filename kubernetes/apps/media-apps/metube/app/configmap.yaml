@@ -25,7 +25,7 @@ data:
   CREATE_CUSTOM_DIRS: "true"
   CUSTOM_DIRS_EXCLUDE_REGEX: "(^|/)[.@].*$"
   DOWNLOAD_DIRS_INDEXABLE: "false"
-  STATE_DIR: "/data/.metube"
+  STATE_DIR: "/data/movie/.metube"
   TEMP_DIR: "/tmp"
   # : File Naming & yt-dlp
   OUTPUT_TEMPLATE: "%(title)s.%(ext)s"
