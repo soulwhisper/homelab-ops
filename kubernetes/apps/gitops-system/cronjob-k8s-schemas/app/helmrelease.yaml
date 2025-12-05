@@ -21,6 +21,9 @@ spec:
           concurrencyPolicy: Forbid
           failedJobsHistory: 1
           successfulJobsHistory: 1
+        annotations:
+          reloader.stakater.com/auto: "true"
+          config.homelab.ops/proxy: "enabled" # Enable https_proxy
         pod:
           securityContext:
             runAsUser: 65534

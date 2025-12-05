@@ -16,6 +16,7 @@ spec:
     # defaults
     annotations:
       reloader.stakater.com/auto: "true"
+      config.homelab.ops/proxy: "enabled" # Enable https_proxy
     imageRenderer:
       enabled: true
     persistence:
