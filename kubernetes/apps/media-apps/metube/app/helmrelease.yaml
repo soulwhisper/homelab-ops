@@ -28,6 +28,10 @@ spec:
             image:
               repository: ghcr.io/alexta69/metube
               tag: 2025.11.29
+            env:
+              HTTP_PROXY: "${HTTP_PROXY}"
+              HTTPS_PROXY: "${HTTPS_PROXY}"
+              NO_PROXY: "${NO_PROXY}"
             envFrom:
               - configMapRef:
                   name: *name
