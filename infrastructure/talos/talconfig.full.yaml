@@ -7,7 +7,7 @@ endpoint: "https://k8s.homelab.internal:6443"
 # enabled features:
 # secureboot,nut,vip; bond,disk-encryption;
 # disabled features:
-# cni,coredns,forwardKubeDNSToHost,kube-proxy;
+# cni,coredns,forwardKubeDNSToHost,kube-proxy,l2vip;
 # k8s features 1.33:
 # userNamespace:default;
 # talhelper breaking changes:
@@ -20,7 +20,7 @@ kubernetesVersion: v1.34.2
 
 additionalApiServerCertSans:
   - k8s.homelab.internal
-  - &talosControlplaneVip 10.10.0.100
+  # - &talosControlplaneVip 10.10.0.100
   - 127.0.0.1
 
 cniConfig:
@@ -53,8 +53,8 @@ nodes:
         routes: &gateway
           - network: 0.0.0.0/0
             gateway: 10.10.0.1
-        vip:
-          ip: *talosControlplaneVip
+        # vip:
+        #   ip: *talosControlplaneVip
 
   - hostname: exarch-02
     ipAddress: 10.10.0.102
@@ -72,8 +72,8 @@ nodes:
         addresses:
           - 10.10.0.102/24
         routes: *gateway
-        vip:
-          ip: *talosControlplaneVip
+        # vip:
+        #   ip: *talosControlplaneVip
 
   - hostname: exarch-03
     ipAddress: 10.10.0.103
@@ -91,8 +91,8 @@ nodes:
         addresses:
           - 10.10.0.103/24
         routes: *gateway
-        vip:
-          ip: *talosControlplaneVip
+        # vip:
+        #   ip: *talosControlplaneVip
 
 controlPlane:
   machineSpec:
@@ -225,10 +225,10 @@ patches:
     machine:
       network:
         disableSearchDomain: true
-        extraHostEntries:
-          - ip: 10.10.0.100
-            aliases:
-              - k8s.homelab.internal
+        # extraHostEntries:
+        #   - ip: 10.10.0.100
+        #     aliases:
+        #       - k8s.homelab.internal
         nameservers:
           - 10.10.0.10
 
