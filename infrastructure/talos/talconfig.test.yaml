@@ -15,7 +15,7 @@ endpoint: "https://k8s.homelab.internal:6443"
 # renovate: depName=ghcr.io/siderolabs/installer datasource=docker
 talosVersion: v1.11.5
 # renovate: depName=ghcr.io/siderolabs/kubelet datasource=docker
-kubernetesVersion: v1.34.2
+kubernetesVersion: v1.34.3
 
 additionalApiServerCertSans:
   - k8s.homelab.internal
