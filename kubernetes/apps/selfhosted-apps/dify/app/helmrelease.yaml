@@ -30,7 +30,7 @@ spec:
           api:
             image:
               repository: mirror.gcr.io/langgenius/dify-api
-              tag: 1.11.0
+              tag: 1.11.1
             env:
               MODE: "api"
               PLUGIN_REMOTE_INSTALL_HOST: "dify-database.selfhosted-apps.svc.cluster.local"
@@ -53,7 +53,7 @@ spec:
           worker:
             image:
               repository: mirror.gcr.io/langgenius/dify-api
-              tag: 1.11.0
+              tag: 1.11.1
             env:
               MODE: "worker"
             envFrom:
@@ -69,7 +69,7 @@ spec:
           worker-beat:
             image:
               repository: mirror.gcr.io/langgenius/dify-api
-              tag: 1.11.0
+              tag: 1.11.1
             env:
               MODE: "beat"
             envFrom:
