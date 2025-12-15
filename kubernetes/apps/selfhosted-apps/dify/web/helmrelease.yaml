@@ -57,4 +57,4 @@ spec:
       tmpfs:
         type: emptyDir
         globalMounts:
-          - path: /.pm2
+          - path: /home/dify/.pm2
