@@ -31,6 +31,8 @@ nodes:
     nodeLabels:
       intel.feature.node.kubernetes.io/gpu: "true"
     installDisk: /dev/sda
+    patches: &patches
+      - "@./patches/bird2config.yaml"
     networkInterfaces:
       - interface: lo # fix forwardKubeDNSToHost, check below
         addresses: &loAddress
@@ -54,6 +56,7 @@ nodes:
     nodeLabels:
       intel.feature.node.kubernetes.io/gpu: "true"
     installDisk: /dev/sda
+    patches: *patches
     networkInterfaces:
       - interface: lo
         addresses: *loAddress
@@ -70,6 +73,7 @@ nodes:
     nodeLabels:
       intel.feature.node.kubernetes.io/gpu: "true"
     installDisk: /dev/sda
+    patches: *patches
     networkInterfaces:
       - interface: lo
         addresses: *loAddress
@@ -97,6 +101,7 @@ controlPlane:
         - console=ttyS0 # hci only
       systemExtensions:
         officialExtensions:
+          - siderolabs/bird2
           - siderolabs/i915
           - siderolabs/intel-ucode
           - siderolabs/mei

@@ -33,6 +33,8 @@ nodes:
       intel.feature.node.kubernetes.io/gpu: "true"
     installDiskSelector: &installDisk
       model: SQF-C3AV1-256GDEDM
+    patches: &patches
+      - "@./patches/bird2config.yaml"
     networkInterfaces:
       - interface: lo # fix forwardKubeDNSToHost, check below
         addresses: &loAddress
@@ -59,6 +61,7 @@ nodes:
     nodeLabels:
       intel.feature.node.kubernetes.io/gpu: "true"
     installDiskSelector: *installDisk
+    patches: *patches
     networkInterfaces:
       - interface: lo
         addresses: *loAddress
@@ -76,6 +79,7 @@ nodes:
     nodeLabels:
       intel.feature.node.kubernetes.io/gpu: "true"
     installDiskSelector: *installDisk
+    patches: *patches
     networkInterfaces:
       - interface: lo
         addresses: *loAddress
@@ -104,6 +108,7 @@ controlPlane:
         - talos.network.interface.ignore=enp88s0 # block i226-lm in ms-01
       systemExtensions:
         officialExtensions:
+          - siderolabs/bird2
           - siderolabs/i915
           - siderolabs/intel-ucode
           - siderolabs/mei

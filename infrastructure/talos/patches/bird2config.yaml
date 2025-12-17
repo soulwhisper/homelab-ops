@@ -1,0 +1,72 @@
+---
+apiVersion: v1alpha1
+kind: ExtensionServiceConfig
+name: bird2
+configFiles:
+  - mountPath: /usr/local/etc/bird.conf
+    content: |
+      define FABRIC_AS = 65000;
+      define NODE_AS = 65100;
+      define CILIUM_AS = 65110;
+
+      log stderr all;
+      debug protocols all;
+
+      router id from "dummy0";
+
+      protocol device {
+        scan time 10;
+      }
+
+      protocol direct loopback {
+        interface "dummy0";
+        ipv4 {
+          import all;
+          export none;
+        };
+      }
+
+      protocol bfd {
+        interface "bond0" {
+          interval 400 ms;
+          multiplier 5;
+        };
+      }
+
+      protocol kernel {
+        merge paths on;
+        learn off;
+        ipv4 {
+          export filter {
+            if proto = "cilium" then reject;
+            if proto = "loopback" then reject;
+            accept;
+          };
+          import none;
+        };
+      }
+
+      protocol bgp fabric_bond0 {
+        local as NODE_AS;
+        neighbor 10.10.0.1 as FABRIC_AS; # switch
+        interface "bond0";
+        bfd on;
+        hold time 180;
+        keepalive time 60;
+        ipv4 {
+          import all;
+          export all;
+          next hop self;
+        };
+      };
+
+      protocol bgp cilium {
+        passive on;
+        multihop 2;  # bypass bird statup check for localhost IP address
+        local as NODE_AS;
+        neighbor 127.0.0.1 as CILIUM_AS;
+        ipv4 {
+          import all;
+          export none;
+        };
+      };

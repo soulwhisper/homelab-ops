@@ -47,17 +47,17 @@ dhcp snooping binding record
 ipv6 dhcp snooping binding record
 ipv6 nd detection enable
 
-# BGP with BFD & OSPF
-bgp 65510
+# eBGP with BFD & OSPF
+bgp 65000
  router-id 10.0.0.1
  timer keepalive 60 hold 180
- group k8s
+ group k8s external
+  peer k8s bfd
+  peer k8s as-number 65100
+  peer k8s connect-interface vlan-interface 100
  peer 10.10.0.101 group k8s
  peer 10.10.0.102 group k8s
  peer 10.10.0.103 group k8s
- peer k8s bfd
- peer k8s connect-interface vlan-interface 100
- peer k8s next-hop-local
  address-family ipv4
   peer k8s enable
   import-route ospf 1

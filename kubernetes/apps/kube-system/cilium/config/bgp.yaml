@@ -3,58 +3,50 @@
 apiVersion: cilium.io/v2
 kind: CiliumBGPAdvertisement
 metadata:
-  name: cilium-bgp-advertisement
+  name: cilium-bird2-nodelocal
   labels:
-    advertise: bgp
+    bgp: cilium-bird2-nodelocal
 spec:
   advertisements:
+    # - advertisementType: PodCIDR
     - advertisementType: Service
       service:
         addresses:
           - LoadBalancerIP
       selector:
         matchExpressions:
-          - { key: somekey, operator: NotIn, values: ["never-used-value"] }
----
-# yaml-language-server: $schema=https://kubernetes-schemas.noirprime.com/cilium.io/ciliumbgppeerconfig_v2.json
-apiVersion: cilium.io/v2
-kind: CiliumBGPPeerConfig
-metadata:
-  name: cilium-bgp-peer-config
-spec:
-  timers:
-    connectRetryTimeSeconds: 5
-    holdTimeSeconds: 9
-    keepAliveTimeSeconds: 3
-  gracefulRestart:
-    enabled: true
-  families:
-    - afi: ipv4
-      safi: unicast
-      advertisements:
-        matchLabels:
-          advertise: bgp
-    - afi: ipv6
-      safi: unicast
-      advertisements:
-        matchLabels:
-          advertise: bgp
+          - {
+              key: config.noirprime.com/bgp,
+              operator: NotIn,
+              values: ["disabled"],
+            }
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.noirprime.com/cilium.io/ciliumbgpclusterconfig_v2.json
 apiVersion: cilium.io/v2
 kind: CiliumBGPClusterConfig
 metadata:
-  name: cilium-bgp-cluster-config
+  name: cilium-bird2-nodelocal
 spec:
-  nodeSelector:
-    matchLabels:
-      kubernetes.io/os: linux
+  nodeSelector: {}
   bgpInstances:
-    - name: instance-65510
-      localASN: 65510
+    - name: cilium-bird2-nodelocal-65110
+      localASN: 65110
       peers:
-        - name: peer-65510
-          peerASN: 65510
-          peerAddress: "10.10.0.254"
+        - name: cilium-bird2-nodelocal
+          peerASN: 65100
+          peerAddress: 127.0.0.1
           peerConfigRef:
-            name: cilium-bgp-peer-config
+            name: cilium-bird2-nodelocal
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.noirprime.com/cilium.io/ciliumbgppeerconfig_v2.json
+apiVersion: cilium.io/v2
+kind: CiliumBGPPeerConfig
+metadata:
+  name: cilium-bird2-nodelocal
+spec:
+  families:
+    - afi: ipv4
+      safi: unicast
+      advertisements:
+        matchLabels:
+          bgp: cilium-bird2-nodelocal

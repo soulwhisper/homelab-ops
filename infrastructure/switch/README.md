@@ -3,14 +3,23 @@
 ```mermaid
 graph TD
   Router -->|WAN| PPPoE
-  Switch -->|LAN Trunk VLAN 100,200,210| Router
-  Switch -->|MGMT Access VLAN 1| Router
-  subgraph Internal Network
-	MGMT -->|Access Port VLAN 1| Switch
-	LAB -->|Access Port VLAN 100| Switch
-	WIFI -->|Trunk Port VLAN 200| Switch
-	IOT -->|Trunk Port VLAN 210| Switch
-	K8S -->|iBGP 65510| LAB
+  K8S -->|iBGP 65510| LAB
+  NAS --> LAB
+  subgraph Physical Network
+	Workstation -->|Access Port VLAN 1| AccessSwitch
+	LAN -->|Access Port VLAN 10| AccessSwitch
+	WIFI -->|Trunk Port VLAN 200| AccessSwitch
+	IOT -->|Trunk Port VLAN 210| AccessSwitch
+    WAN -->|Access Port VLAN 1000| AccessSwitch
+	LAB -->|Access Port VLAN 100| CoreSwitch
+	AccessSwitch -->|Trunk Port VLAN 1,10,200,210,1000| CoreSwitch
+	CoreSwitch -->|Trunk Port VLAN 10,100,200,210,1000| Router
+  end
+  subgraph Management Network
+	CoreSwitch -->|Access Port VLAN 1| MgmtSwitch
+	Router -->|VLAN 1| MgmtSwitch
+	K8S -->|VLAN 1| MgmtSwitch
+	NAS -->|VLAN 1| MgmtSwitch
   end
 ```
 
