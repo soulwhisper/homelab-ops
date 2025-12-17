@@ -25,6 +25,7 @@ multicast routing
 stp global enable
 stp mode rstp
 stp instance 0 root primary
+stp bpdu-filter
 
 # vlan
 vlan 10
@@ -221,22 +222,21 @@ interface ten-gigabitethernet 1/0/23
 interface ten-gigabitethernet 1/0/24
  port link-aggregation group 1000
 
-# VIF & DHCP & IPv6 & Multicast
+# VIF & DHCP & IPv6 & Multicast & mDNS
+# DHCP Server at x.x.x.254
 interface vlan-interface 1
  ip address 10.0.0.1 24
- dhcp select relay
- dhcp relay server-address 10.0.0.254
+ ipv6 address auto
  ipv6 dhcp client pd 1 rapid-commit option-group 1
- ipv6 address 1
+ ipv6 dhcp client stateless enable
  local-proxy-nd enable
  ospfv3 1 area 0
 
 interface vlan-interface 10
  ip address 10.0.10.1 24
- dhcp select relay
- dhcp relay server-address 10.0.10.254
+ ipv6 address auto
  ipv6 dhcp client pd 10 rapid-commit option-group 10
- ipv6 address 10
+ ipv6 dhcp client stateless enable
  local-proxy-nd enable
  ospfv3 1 area 0
 
@@ -245,20 +245,18 @@ interface vlan-interface 100
  bfd min-transmit-interval 400
  bfd min-receive-interval 400
  bfd detect-multiplier 5
- dhcp select relay
- dhcp relay server-address 10.10.0.254
+ ipv6 address auto
  ipv6 dhcp client pd 100 rapid-commit option-group 100
- ipv6 address 100
+ ipv6 dhcp client stateless enable
  local-proxy-nd enable
  ospfv3 1 area 0
  igmp enable
 
 interface vlan-interface 200
  ip address 10.20.0.1 24
- dhcp select relay
- dhcp relay server-address 10.20.0.254
+ ipv6 address auto
  ipv6 dhcp client pd 200 rapid-commit option-group 200
- ipv6 address 200
+ ipv6 dhcp client stateless enable
  local-proxy-nd enable
  ospfv3 1 area 0
  igmp enable
@@ -266,10 +264,9 @@ interface vlan-interface 200
 
 interface vlan-interface 210
  ip address 10.20.10.1 24
- dhcp select relay
- dhcp relay server-address 10.20.10.254
+ ipv6 address auto
  ipv6 dhcp client pd 210 rapid-commit option-group 210
- ipv6 address 210
+ ipv6 dhcp client stateless enable
  local-proxy-nd enable
  ospfv3 1 area 0
  igmp enable
