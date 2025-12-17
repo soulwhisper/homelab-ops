@@ -6,7 +6,7 @@ metadata:
   name: postgres
 spec:
   instances: 3
-  imageName: ghcr.io/tensorchord/cloudnative-vectorchord:17
+  imageName: ghcr.io/tensorchord/cloudnative-vectorchord:18
   primaryUpdateStrategy: unsupervised
   primaryUpdateMethod: switchover
   plugins:

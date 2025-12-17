@@ -22,7 +22,7 @@ spec:
               - 65534 # qnap:guest
           containers:
             - name: *name
-              image: mirror.gcr.io/prodrigestivill/postgres-backup-local:17
+              image: mirror.gcr.io/prodrigestivill/postgres-backup-local:18
               imagePullPolicy: IfNotPresent
               command:
                 - /backup.sh

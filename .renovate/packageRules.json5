@@ -12,15 +12,20 @@
       overrideDepName: "{{packageName}}",
     },
     {
-      matchDatasources: ["docker"],
-      matchPackagePatterns: ["postgresql", "postgres-backup-local"],
-      allowedVersions: "<17",
-    },
-    {
       description: "Configure Emby versioning",
       matchDatasources: ["docker"],
       matchPackageNames: ["ghcr.io/home-operations/emby"],
       versioning: "loose",
+    },
+    {
+      description: "Pin Postgres version to 18",
+      matchDatasources: ["docker"],
+      matchPackagePatterns: [
+        "ghcr.io/home-operations/postgres-init",
+        "ghcr.io/tensorchord/cloudnative-vectorchord",
+        "prodrigestivill/postgres-backup-local",
+      ],
+      allowedVersions: "18",
     },
     {
       description: "Pin talos version if something breaks",
