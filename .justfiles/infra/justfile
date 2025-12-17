@@ -13,7 +13,7 @@ workstation:
   @echo "Install pacman packages"
   sudo pacman -Syuq --needed --noconfirm --noprogressbar $(cat Archfile | xargs)
   @echo "Install yay packages"
-  sudo yay -Syuq --needed --noconfirm --noprogressbar $(cat Yayfile | xargs)
+  yay -Syuq --needed --noconfirm --noprogressbar $(cat Yayfile | xargs)
   @echo "Install krew packages"
   fish_add_path $HOME/.krew/bin
   kubectl krew index add default https://github.com/kubernetes-sigs/krew-index.git
