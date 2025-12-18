@@ -227,16 +227,12 @@ interface ten-gigabitethernet 1/0/24
 interface vlan-interface 1
  ip address 10.0.0.1 24
  ipv6 address auto
- ipv6 dhcp client pd 1 rapid-commit option-group 1
- ipv6 dhcp client stateless enable
  local-proxy-nd enable
  ospfv3 1 area 0
 
 interface vlan-interface 10
  ip address 10.0.10.1 24
  ipv6 address auto
- ipv6 dhcp client pd 10 rapid-commit option-group 10
- ipv6 dhcp client stateless enable
  local-proxy-nd enable
  ospfv3 1 area 0
 
@@ -246,8 +242,6 @@ interface vlan-interface 100
  bfd min-receive-interval 400
  bfd detect-multiplier 5
  ipv6 address auto
- ipv6 dhcp client pd 100 rapid-commit option-group 100
- ipv6 dhcp client stateless enable
  local-proxy-nd enable
  ospfv3 1 area 0
  igmp enable
@@ -255,8 +249,6 @@ interface vlan-interface 100
 interface vlan-interface 200
  ip address 10.20.0.1 24
  ipv6 address auto
- ipv6 dhcp client pd 200 rapid-commit option-group 200
- ipv6 dhcp client stateless enable
  local-proxy-nd enable
  ospfv3 1 area 0
  igmp enable
@@ -265,8 +257,6 @@ interface vlan-interface 200
 interface vlan-interface 210
  ip address 10.20.10.1 24
  ipv6 address auto
- ipv6 dhcp client pd 210 rapid-commit option-group 210
- ipv6 dhcp client stateless enable
  local-proxy-nd enable
  ospfv3 1 area 0
  igmp enable

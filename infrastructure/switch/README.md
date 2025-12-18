@@ -3,7 +3,7 @@
 ```mermaid
 graph TD
   Router -->|WAN| PPPoE
-  K8S -->|iBGP 65510| LAB
+  K8S -->|eBGP| LAB
   NAS --> LAB
   subgraph Physical Network
 	Workstation -->|Access Port VLAN 1| AccessSwitch
@@ -26,7 +26,7 @@ graph TD
 ### Components
 
 - Router / Firewall / DHCP / DNS / NTP / TProxy : `OpenWRT`;
-- NAS / Infrastructure Services : `QNAP Qu805`;
+- NAS / Infrastructure Services : `TrueNAS Scale`;
 - Gateway / DHCP Relay / iBGP / OSPF: `H3C L3 Core Switch`;
 - Computing / Other Services : `Talos MS-01`;
 
