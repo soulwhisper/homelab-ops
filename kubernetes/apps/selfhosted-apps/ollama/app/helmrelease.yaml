@@ -49,17 +49,17 @@ spec:
               - "/bin/sh"
               - "-c"
               - |
-                mkdir -p /root/.ollama/models/manifests/registry.ollama.ai/library/qwen2.5/
-                if [ ! -f /root/.ollama/models/manifests/registry.ollama.ai/library/qwen2.5/7b ]; then
-                  echo "Model tag '7b' not found. Starting server to pull..."
+                mkdir -p /root/.ollama/models/manifests/registry.ollama.ai/library/qwen3/
+                if [ ! -f /root/.ollama/models/manifests/registry.ollama.ai/library/qwen3/8b-q4_K_M ]; then
+                  echo "Model tag '8b-q4_K_M' not found. Starting server to pull..."
                   ollama serve &
                   PID=$!
                   while ! ollama list > /dev/null 2>&1; do sleep 1; done
-                  echo "Pulling Qwen2.5 7B..."
-                  ollama pull qwen2.5:7b;
+                  echo "Pulling Qwen3 8B (Q4_K_M)..."
+                  ollama pull qwen3:8b-q4_K_M;
                   kill $PID;
                 else
-                  echo "Model qwen2.5:7b already exists. Skipping."
+                  echo "Model qwen3:8b-q4_K_M already exists. Skipping."
                 fi
             env:
               OLLAMA_MODELS: "/root/.ollama/models"
@@ -79,7 +79,8 @@ spec:
               OLLAMA_MAX_LOADED_MODELS: "1"
               OLLAMA_KV_CACHE_TYPE: "q8_0"
               OLLAMA_KEEP_ALIVE: "-1"
-              OLLAMA_NUM_PARALLEL: "2"
+              OLLAMA_NUM_PARALLEL: "1"
+              OLLAMA_CONTEXT_LENGTH: "8192"
             volumeMounts:
               - name: *name
                 mountPath: /root/.ollama
@@ -99,7 +100,7 @@ spec:
               requests:
                 cpu: 2000m
               limits:
-                memory: 12Gi
+                memory: 10Gi
             securityContext:
               allowPrivilegeEscalation: false
               capabilities: { drop: ["ALL"] }
