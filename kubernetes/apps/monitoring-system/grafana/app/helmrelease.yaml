@@ -266,7 +266,7 @@ spec:
 
       kubernetes:
         k8s-system-api-server:
-          url: https://grafana.com/api/dashboards/15761/revisions/19/download
+          url: https://grafana.com/api/dashboards/15761/revisions/20/download
           datasource: Prometheus
         k8s-views-global:
           url: https://grafana.com/api/dashboards/15757/revisions/43/download
