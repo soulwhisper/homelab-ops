@@ -111,10 +111,6 @@ spec:
             - name: default
               replicated:
                 size: 3
-            - name: erasurecoded
-              erasureCoded:
-                dataChunks: 2
-                codingChunks: 1
               parameters:
                 compression_mode: passive
           preserveFilesystemOnDelete: true
@@ -123,7 +119,7 @@ spec:
             activeStandby: true
         storageClass:
           name: ceph-filesystem
-          pool: erasurecoded
+          pool: default
           allowVolumeExpansion: true
           parameters:
             csi.storage.k8s.io/provisioner-secret-name: rook-csi-cephfs-provisioner

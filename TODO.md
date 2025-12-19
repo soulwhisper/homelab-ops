@@ -23,3 +23,4 @@
 
 - [ ] setup zigbee adapter, config zigbee2mqtt
 - [ ] enable cilium BIGTCP
+- [ ] enable SSO for all apps
