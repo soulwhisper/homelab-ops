@@ -20,7 +20,6 @@ spec:
               allowed:
                 mode: all
         prefixes:
-          # bgp cant advertise service cidr, use loadbalancer instead
           - "10.100.0.0/17" # Pod
           - "10.10.0.192/27" # LoadBalancer
     bfdProfiles:

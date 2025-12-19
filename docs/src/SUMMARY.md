@@ -12,6 +12,7 @@
   - [Storage](./infrastructure/storage.md)
   - [Templates](./deployment/templates.md)
 - [Networking](./infrastructure/networking.md)
+  - [BGP](./decisions/bgp.md)
   - [Cloudflare](./infrastructure/cloudflare.md)
   - [Domains](./infrastructure/domains.md)
   - [Proxies](./infrastructure/proxies.md)
