@@ -16,7 +16,7 @@ spec:
       hostUsers: false
     controllers:
       *name :
-        replicas: 3
+        replicas: 2
         annotations:
           reloader.stakater.com/auto: "true"
         initContainers:

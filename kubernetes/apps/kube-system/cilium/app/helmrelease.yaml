@@ -15,14 +15,12 @@ spec:
     # BIGTCP, xdp, for Intel-x710(ice);
     # Recommendation:netkit, host-routing, bbr, ebpf-backend-memory, ebpf-clock-probe, preallocate-maps, maglev-hashing;
     # :: features
-    # hubble:disabled, hostLegacyRouting:disabled, ipam:kubernetes;
+    # bgpControlPlane:disabled, hubble:disabled, hostLegacyRouting:disabled, ipam:kubernetes;
     # ::
     autoDirectNodeRoutes: true
     bandwidthManager:
       enabled: true
       bbr: true
-    bgpControlPlane:
-      enabled: true
     bpf:
       datapathMode: netkit
       distributedLRU.enabled: true # cost more memory
