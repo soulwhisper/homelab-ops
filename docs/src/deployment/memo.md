@@ -11,7 +11,7 @@
 ### Infra
 
 - vlan is managed by switch as ACCESS mode;
-- openebs-hostpath, deprecated due to MS-01 using 256G system disk;
+- openebs-hostpath, disabled until MS-01 using pcie3x2 as system disk;
 - ceph-block, for database and apps;
 - nfs, for shared media;
 - s3 for volsync backup;

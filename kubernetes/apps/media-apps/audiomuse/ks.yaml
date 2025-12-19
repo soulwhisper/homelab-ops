@@ -27,6 +27,8 @@ spec:
       namespace: kube-system
     - name: nfs-shared
       namespace: media-apps
+    - name: ollama
+      namespace: selfhosted-apps
     - name: onepassword-connect
       namespace: security-system
   components:

@@ -163,7 +163,7 @@ spec:
       selector:
         matchExpressions:
           - {
-              key: config.noirprime.com/bgp,
+              key: config.homelab.ops/bgp,
               operator: NotIn,
               values: ["disabled"],
             }

@@ -7,7 +7,7 @@ data:
   # : general
   TEMP_DIR: "/app/temp_audio"
   AI_MODEL_PROVIDER: "OLLAMA"
-  OLLAMA_SERVER_URL: "http://nas.homelab.internal:11434/api/generate"
+  OLLAMA_SERVER_URL: "http://ollama.selfhosted-apps.svc.cluster.local:11434/api/generate"
   OLLAMA_MODEL_NAME: "mistral:7b"
   # : backend
   MEDIASERVER_TYPE: "lyrion"

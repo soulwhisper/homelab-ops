@@ -13,7 +13,6 @@ spec:
   values:
     localpv-provisioner:
       hostpathClass:
-        # disabled for ms-01 256G system disk, enabled for volsync cache
         enabled: true
         name: openebs-hostpath
         isDefaultClass: false

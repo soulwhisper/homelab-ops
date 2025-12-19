@@ -3,13 +3,13 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &name stirling-pdf
+  name: &name ollama
 spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *name
   targetNamespace: selfhosted-apps
-  path: "./kubernetes/apps/selfhosted-apps/stirling-pdf/app"
+  path: "./kubernetes/apps/selfhosted-apps/ollama/app"
   sourceRef:
     kind: GitRepository
     name: gitops-system
@@ -19,14 +19,5 @@ spec:
   prune: true
   wait: false
   dependsOn:
-    - name: onepassword-connect
-      namespace: security-system
     - name: rook-ceph-cluster
       namespace: storage-system
-    - name: volsync
-      namespace: storage-system
-  components:
-    - ../../../../components/volsync
-  postBuild:
-    substitute:
-      APP: *name
