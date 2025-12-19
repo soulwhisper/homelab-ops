@@ -62,8 +62,6 @@ spec:
                   echo "Model qwen3:8b-q4_K_M already exists. Skipping."
                 fi
             env:
-              OLLAMA_MODELS: "/root/.ollama/models"
-              OLLAMA_HOST: "127.0.0.1:11434"
               HTTP_PROXY: "${HTTP_PROXY}"
               HTTPS_PROXY: "${HTTPS_PROXY}"
               NO_PROXY: "${NO_PROXY}"
@@ -73,14 +71,12 @@ spec:
               repository: mirror.gcr.io/ollama/ollama
               tag: 0.13.5
             env:
-              OLLAMA_MODELS: "/root/.ollama/models"
-              OLLAMA_HOST: "0.0.0.0:11434"
+              OLLAMA_CONTEXT_LENGTH: "8192"
               OLLAMA_FLASH_ATTENTION: "0"
               OLLAMA_MAX_LOADED_MODELS: "1"
-              OLLAMA_KV_CACHE_TYPE: "q8_0"
-              OLLAMA_KEEP_ALIVE: "-1"
               OLLAMA_NUM_PARALLEL: "1"
-              OLLAMA_CONTEXT_LENGTH: "8192"
+              OLLAMA_KEEP_ALIVE: "-1"
+              OLLAMA_KV_CACHE_TYPE: "q8_0"
             volumeMounts:
               - name: *name
                 mountPath: /root/.ollama
