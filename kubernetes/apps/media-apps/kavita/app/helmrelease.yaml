@@ -52,8 +52,8 @@ spec:
           gethomepage.dev/name: Kavita
           gethomepage.dev/group: Media
         parentRefs:
-          - name: internal
-            namespace: kube-system
+          - name: envoy-internal
+            namespace: networking-system
             sectionName: https
 
     persistence:

@@ -16,8 +16,8 @@ metadata:
 spec:
   hostnames: ["rook.noirprime.com"]
   parentRefs:
-    - name: internal
-      namespace: kube-system
+    - name: envoy-internal
+      namespace: networking-system
       sectionName: https
   rules:
     - backendRefs:

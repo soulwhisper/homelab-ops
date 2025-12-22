@@ -13,8 +13,8 @@ metadata:
 spec:
   hostnames: ["dify.noirprime.com"]
   parentRefs:
-    - name: internal
-      namespace: kube-system
+    - name: envoy-internal
+      namespace: networking-system
       sectionName: https
   rules:
     # /console/api

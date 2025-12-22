@@ -74,8 +74,8 @@ spec:
             conditions: ["[STATUS] == 404"]
         hostnames: ["kromgo.noirprime.com"]
         parentRefs:
-          - name: external
-            namespace: kube-system
+          - name: envoy-external
+            namespace: networking-system
             sectionName: https
 
     persistence:

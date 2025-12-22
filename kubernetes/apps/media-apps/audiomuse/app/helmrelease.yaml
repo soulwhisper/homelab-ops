@@ -77,8 +77,8 @@ spec:
           gethomepage.dev/name: AudioMuse
           gethomepage.dev/group: Media
         parentRefs:
-          - name: internal
-            namespace: kube-system
+          - name: envoy-internal
+            namespace: networking-system
             sectionName: https
 
     persistence:

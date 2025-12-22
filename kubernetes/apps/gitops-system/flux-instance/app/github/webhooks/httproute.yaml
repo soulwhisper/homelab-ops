@@ -10,8 +10,8 @@ metadata:
 spec:
   hostnames: ["flux-webhook.noirprime.com"]
   parentRefs:
-    - name: external
-      namespace: kube-system
+    - name: envoy-external
+      namespace: networking-system
       sectionName: https
   rules:
     - backendRefs:

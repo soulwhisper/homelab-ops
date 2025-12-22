@@ -3,13 +3,13 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &name cilium
+  name: &name envoy-gateway
 spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *name
-  targetNamespace: kube-system
-  path: "./kubernetes/apps/kube-system/cilium/app"
+  targetNamespace: networking-system
+  path: "./kubernetes/apps/networking-system/envoy-gateway/app"
   sourceRef:
     kind: GitRepository
     name: gitops-system
@@ -23,13 +23,13 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &name cilium-config
+  name: &name envoy-gateway-config
 spec:
   commonMetadata:
     labels:
-      app.kubernetes.io/name: cilium
-  targetNamespace: kube-system
-  path: "./kubernetes/apps/kube-system/cilium/config"
+      app.kubernetes.io/name: envoy-gateway
+  targetNamespace: networking-system
+  path: "./kubernetes/apps/networking-system/envoy-gateway/config"
   sourceRef:
     kind: GitRepository
     name: gitops-system
@@ -37,7 +37,9 @@ spec:
   interval: 1h
   timeout: 5m
   prune: true
-  wait: false
+  wait: true
   dependsOn:
-    - name: cilium
-      namespace: kube-system
+    - name: envoy-gateway
+      namespace: networking-system
+    - name: cert-manager-issuer
+      namespace: security-system

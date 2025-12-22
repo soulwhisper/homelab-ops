@@ -12,17 +12,12 @@ releases:
     chart: oci://ghcr.io/prometheus-community/charts/prometheus-operator-crds
     version: 25.0.1
 
-  - name: gateway-api-crds
-    namespace: kube-system
-    chart: oci://ghcr.io/wiremind/wiremind-helm-charts/gateway-api-crds
-    version: 1.4.0
-
   - name: cilium
     namespace: kube-system
     chart: oci://ghcr.io/home-operations/charts-mirror/cilium
     version: 1.18.5
     values: ["./values.yaml.gotmpl"]
-    needs: ["monitoring-system/prometheus-crds", "kube-system/gateway-api-crds"]
+    needs: ["monitoring-system/prometheus-crds"]
 
   - name: coredns
     namespace: kube-system
@@ -38,13 +33,21 @@ releases:
     values: ["./values.yaml.gotmpl"]
     needs: ["kube-system/coredns"]
 
-  # to render component crds
+  # for gateway-api crds
+  - name: envoy-gateway
+    namespace: networking-system
+    chart: oci://mirror.gcr.io/envoyproxy/gateway-helm
+    version: 1.6.1
+    values: ["./values.yaml.gotmpl"]
+    needs: ["kube-system/spegel"]
+
+  # for component crds
   - name: external-secrets
     namespace: security-system
     chart: oci://ghcr.io/external-secrets/charts/external-secrets
     version: 1.2.0
     values: ["./values.yaml.gotmpl"]
-    needs: ["kube-system/spegel"]
+    needs: ["networking-system/envoy-gateway"]
 
   - name: flux-operator
     namespace: gitops-system

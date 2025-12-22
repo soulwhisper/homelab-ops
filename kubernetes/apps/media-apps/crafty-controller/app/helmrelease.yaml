@@ -70,8 +70,8 @@ spec:
           gethomepage.dev/widget.type: minecraft
           gethomepage.dev/widget.url: "udp://${SUBNET}.143:25565"
         parentRefs:
-          - name: internal
-            namespace: kube-system
+          - name: envoy-internal
+            namespace: networking-system
             sectionName: https
         rules:
           - backendRefs:

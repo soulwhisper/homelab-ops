@@ -13,8 +13,8 @@ metadata:
 spec:
   hostnames: ["metrics.noirprime.com"]
   parentRefs:
-    - name: internal
-      namespace: kube-system
+    - name: envoy-internal
+      namespace: networking-system
       sectionName: https
   rules:
     - matches:
@@ -46,8 +46,8 @@ metadata:
 spec:
   hostnames: ["alert.noirprime.com"]
   parentRefs:
-    - name: internal
-      namespace: kube-system
+    - name: envoy-internal
+      namespace: networking-system
       sectionName: https
   rules:
     - backendRefs:

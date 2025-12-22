@@ -13,5 +13,5 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: frr-k8s
-        namespace: kube-system
+        namespace: networking-system
 # ref:https://github.com/metallb/frr-k8s/tree/main/charts/frr-k8s

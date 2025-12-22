@@ -11,7 +11,7 @@ spec:
     name: k8tz
 
   values:
-    namespace: kube-system
+    namespace: networking-system
     replicaCount: 2
     timezone: Asia/Shanghai
     cronJobTimeZone: true

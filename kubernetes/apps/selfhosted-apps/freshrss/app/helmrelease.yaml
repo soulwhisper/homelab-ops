@@ -47,8 +47,8 @@ spec:
           gethomepage.dev/name: FreshRSS
           gethomepage.dev/group: Service
         parentRefs:
-          - name: internal
-            namespace: kube-system
+          - name: envoy-internal
+            namespace: networking-system
             sectionName: https
 
     persistence:
