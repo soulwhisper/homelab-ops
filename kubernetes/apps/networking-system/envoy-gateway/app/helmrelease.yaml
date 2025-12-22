@@ -20,5 +20,7 @@ spec:
           kubernetes:
             deploy:
               type: GatewayNamespace
+    deployment:
+      replicas: 2
     global:
       imageRegistry: mirror.gcr.io

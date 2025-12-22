@@ -11,7 +11,6 @@ resources:
   - ./descheduler/ks.yaml
   - ./frr-k8s/ks.yaml
   - ./intel-device-plugins/ks.yaml
-  - ./irqbalance/ks.yaml
   - ./k8tz/ks.yaml
   - ./keda/ks.yaml
   - ./metrics-server/ks.yaml

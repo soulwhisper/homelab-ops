@@ -1,7 +1,7 @@
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/budimanjojo/talhelper/master/pkg/config/schemas/talconfig.json
 clusterName: &clusterName main
-endpoint: "https://k8s.homelab.internal:6443"
+endpoint: "https://k8s.homelab.internal:6443" # to node-ip
 
 # enabled features:
 # secureboot,nut,vip; bond,disk-encryption;
@@ -101,7 +101,6 @@ controlPlane:
           - siderolabs/intel-ucode
           - siderolabs/mei
           - siderolabs/nut-client
-          - siderolabs/thunderbolt
   extensionServices:
     - name: nut-client
       configFiles:
@@ -192,14 +191,6 @@ patches:
         nodeIP:
           validSubnets:
             - 172.19.82.0/24
-        extraMounts:
-          - destination: /var/local/openebs
-            type: bind
-            source: /var/local/openebs
-            options:
-              - rbind
-              - rshared
-              - rw
 
   # : Cluster Proxy, has negative impact on https-post/quic, use with caution
   - |-
@@ -208,14 +199,6 @@ patches:
         http_proxy: http://172.19.82.10:1080
         https_proxy: http://172.19.82.10:1080
         no_proxy: .noirprime.com,.homelab.internal,localhost,127.0.0.1,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16
-
-  # : Kernel modules, Enable thunderbolt/USB4 networking support
-  - |-
-    machine:
-      kernel:
-        modules:
-          - name: thunderbolt
-          - name: thunderbolt_net
 
   # : Enable features
   # :: https://github.com/siderolabs/talos/issues/10002#issuecomment-2557069620;
@@ -257,15 +240,20 @@ patches:
   - |-
     machine:
       sysctls:
-        fs.inotify.max_user_watches: 524288       # moviepilot
-        fs.inotify.max_user_instances: 524288     # moviepilot
+        fs.inotify.max_user_watches: 1048576      # moviepilot
+        fs.inotify.max_user_instances: 1048576    # moviepilot
         net.ipv4.neigh.default.gc_thresh1: 32768  # ARP cache, tunning
         net.ipv4.neigh.default.gc_thresh2: 65536  # ARP cache, tunning
         net.ipv4.neigh.default.gc_thresh3: 131072 # ARP cache, tunning
+        net.core.netdev_max_backlog: 30000        # 10G NIC, tunning
+        net.core.somaxconn: 32768                 # 10G NIC, tunning
+        net.ipv4.tcp_max_syn_backlog: 8192        # 10G NIC, tunning
         net.core.rmem_max: 134217728              # 10G NIC, tunning
         net.core.wmem_max: 134217728              # 10G NIC, tunning
-        net.ipv4.tcp_rmem: 4096 87380 67108864    # 10G NIC, tunning
-        net.ipv4.tcp_wmem: 4096 65536 67108864    # 10G NIC, tunning
+        net.ipv4.tcp_rmem: 4096 87380 134217728   # 10G NIC, tunning
+        net.ipv4.tcp_wmem: 4096 65536 134217728   # 10G NIC, tunning
         sunrpc.tcp_slot_table_entries: 128        # 10G NIC, tunning
         sunrpc.tcp_max_slot_table_entries: 1024   # 10G NIC, tunning
         user.max_user_namespaces: 11255           # UserNamespaces
+        vm.dirty_background_ratio: 5              # 96GB RAM tunning
+        vm.dirty_ratio: 10                        # 96GB RAM tunning

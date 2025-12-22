@@ -10,7 +10,6 @@ spec:
   args:
     - --maxmemory=$(MAX_MEMORY)Mi
     - --proactor_threads=2
-    - --cluster_mode=emulated
   env:
     - name: MAX_MEMORY
       valueFrom:
@@ -21,4 +20,4 @@ spec:
     requests:
       cpu: 100m
     limits:
-      memory: "${REDIS_MEM:=512Mi}"
+      memory: "${REDIS_MEM:=1024Mi}"

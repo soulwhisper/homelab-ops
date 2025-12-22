@@ -6,7 +6,6 @@ namespace: gitops-system
 components:
   - ../../components/namespace
 resources:
-  - ./actions-runner-controller/ks.yaml
   - ./cronjob-k8s-schemas/ks.yaml
   - ./flux-operator/ks.yaml
   - ./flux-instance/ks.yaml

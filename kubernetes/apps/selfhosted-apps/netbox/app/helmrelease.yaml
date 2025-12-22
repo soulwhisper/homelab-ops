@@ -43,6 +43,10 @@ spec:
     # cronjob is deprecated
     housekeeping:
       enabled: false
+    # fix worker stuck at 'init'
+    worker:
+      updateStrategy:
+        type: Recreate
     # below is the reason using official chart
     image:
       repository: ghcr.io/soulwhisper/netbox-custom

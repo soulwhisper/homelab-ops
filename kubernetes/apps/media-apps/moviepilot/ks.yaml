@@ -41,4 +41,3 @@ spec:
   postBuild:
     substitute:
       APP: *name
-      REDIS_MEM: 1024Mi
