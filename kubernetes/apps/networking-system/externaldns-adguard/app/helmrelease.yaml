@@ -15,7 +15,7 @@ spec:
     domainFilters: ["noirprime.com"]
     extraArgs:
       - --webhook-provider-url=http://localhost:8888
-      - --gateway-name=internal
+      - --gateway-name=envoy-internal
     podAnnotations:
       reloader.stakater.com/auto: "true"
     podSecurityContext:
