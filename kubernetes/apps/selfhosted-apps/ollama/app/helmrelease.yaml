@@ -49,8 +49,8 @@ spec:
               - |
                 MODEL_DIR="/root/.ollama/models/manifests/registry.ollama.ai/library/qwen3"
                 mkdir -p $MODEL_DIR
-                if [ ! -f "$MODEL_DIR/8b-q4_K_M" ]; then
-                  echo "Model tag '8b-q4_K_M' not found. Starting local server..."
+                if [ ! -f "$MODEL_DIR/8b" ]; then
+                  echo "Model tag '8b' not found. Starting local server..."
                   ollama serve > /tmp/ollama-serve.log 2>&1 &
                   PID=$!
                   echo "Waiting for Ollama API to become available..."
@@ -65,11 +65,11 @@ spec:
                     fi
                   done
                   echo "Ollama server is up. Pulling Qwen3 8B (Q4_K_M)..."
-                  ollama pull qwen3:8b-q4_K_M
+                  ollama pull qwen3:8b
                   echo "Pull complete. Stopping local server..."
                   kill $PID
                 else
-                  echo "Model qwen3:8b-q4_K_M already exists. Skipping."
+                  echo "Model qwen3:8b already exists. Skipping."
                 fi
             env:
               OLLAMA_HOST: "127.0.0.1:11434"

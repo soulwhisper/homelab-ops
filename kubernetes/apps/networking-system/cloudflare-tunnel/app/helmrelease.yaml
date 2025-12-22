@@ -92,5 +92,5 @@ spec:
                 originRequest:
                   http2Origin: true
                   originServerName: gateway-ext.noirprime.com
-                service: https://cilium-gateway-external.kube-system.svc.cluster.local:443
+                service: https://envoy-external.networking-system.svc.cluster.local:443
               - service: http_status:404
