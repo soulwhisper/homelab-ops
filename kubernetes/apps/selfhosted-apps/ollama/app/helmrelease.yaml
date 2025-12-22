@@ -51,27 +51,42 @@ spec:
                 mkdir -p $MODEL_DIR
                 if [ ! -f "$MODEL_DIR/8b-q4_K_M" ]; then
                   echo "Model tag '8b-q4_K_M' not found. Starting local server..."
-                  OLLAMA_HOST=127.0.0.1:11434 ollama serve > /tmp/ollama-serve.log 2>&1 &
+                  ollama serve > /tmp/ollama-serve.log 2>&1 &
                   PID=$!
                   echo "Waiting for Ollama API to become available..."
                   tries=0
-                  while ! ollama list > /dev/null 2>&1; do
-                    sleep 2
-                    tries=$((tries+1))
-                    if [ $tries -gt 30 ]; then
-                      echo "Error: Timeout waiting for ollama serve. dumping logs:"
+                  while true; do
+                    if curl -s http://127.0.0.1:11434/api/tags > /dev/null 2>&1; then
+                      echo "Ollama API is ready."
+                      break
+                    fi
+                    if [ $tries -gt 45 ]; then
+                      echo "Error: Timeout waiting for ollama serve."
+                      echo "=== Server Logs ==="
                       cat /tmp/ollama-serve.log
+                      echo "==================="
+                      kill $PID 2>/dev/null
                       exit 1
                     fi
+                    sleep 2
+                    tries=$((tries+1))
                   done
                   echo "Ollama server is up. Pulling Qwen3 8B (Q4_K_M)..."
-                  ollama pull qwen3:8b-q4_K_M
+                  ollama pull qwen3:8b-q4_K_M 2>&1 | tee /tmp/ollama-pull.log
+                  if [ $? -eq 0 ]; then
+                    echo "Pull complete."
+                  else
+                    echo "Pull failed. Logs:"
+                    cat /tmp/ollama-pull.log
+                  fi
                   echo "Pull complete. Stopping local server..."
-                  kill $PID
+                  kill $PID 2>/dev/null
+                  wait $PID 2>/dev/nul
                 else
                   echo "Model qwen3:8b-q4_K_M already exists. Skipping."
                 fi
             env:
+              OLLAMA_HOST: "127.0.0.1:11434"
               HTTP_PROXY: "${HTTP_PROXY}"
               HTTPS_PROXY: "${HTTPS_PROXY}"
               NO_PROXY: "${NO_PROXY}"
