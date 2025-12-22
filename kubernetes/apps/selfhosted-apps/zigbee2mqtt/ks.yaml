@@ -30,3 +30,6 @@ spec:
   postBuild:
     substitute:
       APP: *name
+      VOLSYNC_ACCESSMODES: ReadWriteMany
+      VOLSYNC_STORAGECLASS: ceph-filesystem
+      VOLSYNC_SNAPSHOTCLASS: ceph-filesystem-snapshot

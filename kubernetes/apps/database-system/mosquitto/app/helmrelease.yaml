@@ -66,8 +66,6 @@ spec:
       config-file:
         type: configMap
         identifier: config
-        advancedMounts:
-          *name :
-            app:
-              - path: /mosquitto/config/mosquitto.conf
-                subPath: mosquitto.conf
+        globalMounts:
+          - path: /mosquitto/config/mosquitto.conf
+            subPath: mosquitto.conf

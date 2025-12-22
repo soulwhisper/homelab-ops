@@ -30,14 +30,6 @@ spec:
         annotations:
           reloader.stakater.com/auto: "true"
           config.homelab.ops/proxy: "https" # https_proxy needed
-        statefulset:
-          volumeClaimTemplates:
-            - name: *name
-              globalMounts:
-                - path: /root/.ollama
-              accessMode: "ReadWriteOnce"
-              storageClass: ceph-block
-              size: 50Gi
         initContainers:
           model-puller:
             image:
@@ -124,6 +116,10 @@ spec:
             port: *port
 
     persistence:
+      app:
+        existingClaim: *name
+        globalMounts:
+          - path: /root/.ollama
       tmpfs:
         type: emptyDir
         globalMounts:

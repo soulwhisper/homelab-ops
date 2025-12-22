@@ -54,25 +54,42 @@ spec:
         provider: host
         connections:
           requireMsgr2: true
+      resources:
+        mgr:
+          limits:
+            memory: 2Gi
+        osd:
+          limits:
+            memory: 8Gi # estimate 48Gi with 6 OSDs
       storage:
-        useAllNodes: true
+        useAllNodes: false
         useAllDevices: false
-        deviceFilter: ^sd[b-z] # test only; ref:https://rook.io/docs/rook/v1.14/CRDs/Cluster/ceph-cluster-crd/?h=usealldevices#storage-selection-settings
-        config:
-          osdsPerDevice: "1"
+        nodes:
+          # P41 2TB OSD = 2
+          # WD Black SN850X 8TB OSD = 4
+          - name: "exarch-01"
+            devices: &nodeDevices
+              - name: "sdb"
+                config:
+                  osdsPerDevice: "1"
+                  # deviceClass: "nvme"
+          - name: "exarch-02"
+            devices: *nodeDevices
+          - name: "exarch-03"
+            devices: *nodeDevices
     cephBlockPools:
       - name: ceph-blockpool
         spec:
           failureDomain: host
           replicated:
             size: 3
-          parameters:
-            compression_mode: passive
         storageClass:
           enabled: true
           name: ceph-block
           isDefault: true
+          reclaimPolicy: Delete
           allowVolumeExpansion: true
+          volumeBindingMode: WaitForFirstConsumer
           mountOptions:
             - discard
           parameters:
@@ -84,10 +101,53 @@ spec:
             csi.storage.k8s.io/controller-expand-secret-namespace: *cluster_namespace
             csi.storage.k8s.io/node-stage-secret-name: rook-csi-rbd-node
             csi.storage.k8s.io/node-stage-secret-namespace: *cluster_namespace
+            csi.storage.k8s.io/fstype: ext4
     cephBlockPoolsVolumeSnapshotClass:
       enabled: true
       name: ceph-block-snapshot
       isDefault: true
       deletionPolicy: Delete
-    cephFileSystems: []
+    cephFileSystems:
+      - name: &cephFileSystemName ceph-filesystem
+        spec:
+          metadataPool:
+            replicated:
+              size: 3
+          dataPools:
+            - name: default
+              failureDomain: host
+              replicated:
+                size: 3
+          metadataServer:
+            activeCount: 1
+            activeStandby: true
+            priorityClassName: system-cluster-critical
+            placement:
+              topologySpreadConstraints:
+                - maxSkew: 1
+                  topologyKey: kubernetes.io/hostname
+                  whenUnsatisfiable: DoNotSchedule
+                  labelSelector:
+                    matchLabels:
+                      app.kubernetes.io/name: ceph-mds
+                      app.kubernetes.io/part-of: *cephFileSystemName
+        storageClass:
+          name: ceph-filesystem
+          pool: default
+          reclaimPolicy: Delete
+          allowVolumeExpansion: true
+          volumeBindingMode: WaitForFirstConsumer
+          parameters:
+            csi.storage.k8s.io/provisioner-secret-name: rook-csi-cephfs-provisioner
+            csi.storage.k8s.io/provisioner-secret-namespace: *cluster_namespace
+            csi.storage.k8s.io/controller-expand-secret-name: rook-csi-cephfs-provisioner
+            csi.storage.k8s.io/controller-expand-secret-namespace: *cluster_namespace
+            csi.storage.k8s.io/node-stage-secret-name: rook-csi-cephfs-node
+            csi.storage.k8s.io/node-stage-secret-namespace: *cluster_namespace
+            csi.storage.k8s.io/fstype: ext4
+    cephFileSystemVolumeSnapshotClass:
+      enabled: true
+      name: ceph-filesystem-snapshot
+      isDefault: false
+      deletionPolicy: Delete
     cephObjectStores: []
