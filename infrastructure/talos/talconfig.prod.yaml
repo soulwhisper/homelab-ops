@@ -13,7 +13,7 @@ endpoint: "https://k8s.homelab.internal:6443" # point to L2VIP
 # JSON6902 patches is deprecated for 'patches';
 
 # renovate: depName=ghcr.io/siderolabs/installer datasource=docker
-talosVersion: v1.11.6
+talosVersion: v1.12.0
 # renovate: depName=ghcr.io/siderolabs/kubelet datasource=docker
 kubernetesVersion: v1.35.0
 # schematic: e0fc0b8c37e4f74529137181ec7efc8bd1bfb4318a2b6bc1b18f43a55b23f342
