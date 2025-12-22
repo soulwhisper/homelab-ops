@@ -10,6 +10,16 @@
   customManagers: [
     {
       customType: "regex",
+      description: "Process Helmfile oci charts",
+      fileMatch: ["(^|/)helmfile\\.yaml$"],
+      matchStrings: [
+        "chart: oci://(?<depName>[^\\s]+?)\\s+version: (?<currentValue>[^\\s]+)",
+      ],
+      datasourceTemplate: "docker",
+      versioningTemplate: "helm",
+    },
+    {
+      customType: "regex",
       description: "Process Grafana dashboards",
       managerFilePatterns: ["/(^|/)kubernetes/.+\\.ya?ml$/"],
       matchStrings: [

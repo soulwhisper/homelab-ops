@@ -21,5 +21,6 @@ spec:
   dependsOn:
     - name: snapshot-controller
       namespace: storage-system
-    - name: openebs
-      namespace: storage-system
+    # openebs-hostpath disabled until system on pcie3x2
+    # - name: openebs
+    #   namespace: storage-system
