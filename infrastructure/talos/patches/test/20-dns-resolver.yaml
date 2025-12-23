@@ -1,0 +1,9 @@
+---
+apiVersion: v1alpha1
+kind: ResolverConfig
+nameservers:
+  - address: 172.19.82.10
+searchDomains:
+  disableDefault: true
+  # domains:
+  #   - homelab.internal

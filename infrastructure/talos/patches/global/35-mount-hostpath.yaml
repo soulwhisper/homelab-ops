@@ -1,0 +1,10 @@
+---
+apiVersion: v1alpha1
+kind: UserVolumeConfig
+name: cache-disk
+volumeType: disk
+provisioning:
+  diskSelector:
+    model: to-be-done
+filesystem:
+  type: xfs

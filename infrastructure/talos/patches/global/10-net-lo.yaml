@@ -1,0 +1,7 @@
+---
+apiVersion: v1alpha1
+kind: LinkConfig
+name: lo # fix forwardKubeDNSToHost
+up: true
+addresses:
+  - address: 169.254.116.108/32

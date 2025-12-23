@@ -1,0 +1,22 @@
+---
+apiVersion: v1alpha1
+kind: LinkAliasConfig
+name: net0
+selector:
+  # match VMware (00:), or Proxmox (bc:); must be exactly one link
+  match: glob("00:*", mac(link.permanent_addr)) || glob("bc:*", mac(link.permanent_addr))
+---
+apiVersion: v1alpha1
+kind: BondConfig
+name: bond0
+links:
+  - net0
+bondMode: active-backup
+miimon: 100
+updelay: 200
+downdelay: 200
+addresses:
+  - address: 172.19.82.101/24
+routes:
+  - destination: 0.0.0.0/0
+    gateway: 172.19.82.1

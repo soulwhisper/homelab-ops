@@ -1,12 +1,10 @@
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/budimanjojo/talhelper/master/pkg/config/schemas/talconfig.json
 clusterName: &clusterName main
-endpoint: "https://k8s.homelab.internal:6443" # to node-ip
+endpoint: "https://k8s.homelab.internal:6443" # to CP node-ip
 
-# enabled features:
-# secureboot,nut,vip; bond,disk-encryption;
 # disabled features:
-# cni,coredns,forwardKubeDNSToHost,kube-proxy,l2vip;
+# cni,coredns,kube-proxy,l2vip,secureboot,system-disk-encryption;
 # k8s features 1.33:
 # userNamespace:default;
 # talhelper breaking changes:
@@ -31,22 +29,9 @@ nodes:
     nodeLabels:
       intel.feature.node.kubernetes.io/gpu: "true"
     installDisk: /dev/sda
-    networkInterfaces:
-      - interface: lo # fix forwardKubeDNSToHost, check below
-        addresses: &loAddress
-          - 169.254.116.108/32
-      - interface: bond0
-        bond: &bond
-          mode: active-backup
-          deviceSelectors:
-            - permanentAddr: "00:*" # vmware
-            - permanentAddr: "bc:*" # proxmox
-        dhcp: false
-        addresses:
-          - 172.19.82.101/24
-        routes: &gateway
-          - network: 0.0.0.0/0
-            gateway: 172.19.82.1
+    patches:
+      - "@./patches/nodes/exarch-01/00-hostname.yaml"
+      - "@./patches/test/exarch-01-net.yaml"
 
   - hostname: exarch-02
     ipAddress: 172.19.82.102
@@ -54,15 +39,9 @@ nodes:
     nodeLabels:
       intel.feature.node.kubernetes.io/gpu: "true"
     installDisk: /dev/sda
-    networkInterfaces:
-      - interface: lo
-        addresses: *loAddress
-      - interface: bond0
-        bond: *bond
-        dhcp: false
-        addresses:
-          - 172.19.82.102/24
-        routes: *gateway
+    patches:
+      - "@./patches/nodes/exarch-02/00-hostname.yaml"
+      - "@./patches/test/exarch-02-net.yaml"
 
   - hostname: exarch-03
     ipAddress: 172.19.82.103
@@ -70,22 +49,14 @@ nodes:
     nodeLabels:
       intel.feature.node.kubernetes.io/gpu: "true"
     installDisk: /dev/sda
-    networkInterfaces:
-      - interface: lo
-        addresses: *loAddress
-      - interface: bond0
-        bond: *bond
-        dhcp: false
-        addresses:
-          - 172.19.82.103/24
-        routes: *gateway
+    patches:
+      - "@./patches/nodes/exarch-03/00-hostname.yaml"
+      - "@./patches/test/exarch-03-net.yaml"
 
 controlPlane:
   machineSpec:
     mode: metal
     arch: amd64
-    secureboot: true
-    useUKI: true
   nodeLabels:
     topology.kubernetes.io/region: *clusterName
     topology.kubernetes.io/zone: homelab
@@ -101,13 +72,6 @@ controlPlane:
           - siderolabs/intel-ucode
           - siderolabs/mei
           - siderolabs/nut-client
-  extensionServices:
-    - name: nut-client
-      configFiles:
-        - content: |-
-            MONITOR ups@172.19.82.10 1 upsmon upsmon secondary
-            SHUTDOWNCMD "/sbin/poweroff"
-          mountPath: /usr/local/etc/nut/upsmon.conf
 
   # : controlPlane only patches
   patches:
@@ -129,6 +93,11 @@ controlPlane:
 
 # general patches
 patches:
+  # : Multi-doc configuration
+  - "@./patches/global/10-net-lo.yaml"
+  - "@./patches/test/05-time-sync.yaml"
+  - "@./patches/test/20-dns-resolver.yaml"
+
   # : Cluster configuration
   - |-
     cluster:
@@ -167,22 +136,6 @@ patches:
                       - maxSkew: 1
                         topologyKey: kubernetes.io/hostname
                         whenUnsatisfiable: ScheduleAnyway
-
-  # : NTP configuration, ip for baremetal, '/dev/ptp0' for proxmox
-  - |-
-    machine:
-      time:
-        disabled: false
-        servers:
-          - 172.19.82.10
-
-  # : Network configuration
-  - |-
-    machine:
-      network:
-        disableSearchDomain: true
-        nameservers:
-          - 172.19.82.10
 
   # : Kubelet configuration
   - |-

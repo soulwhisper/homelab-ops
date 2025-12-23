@@ -1,0 +1,9 @@
+---
+apiVersion: v1alpha1
+kind: ResolverConfig
+nameservers:
+  - address: 10.10.0.1
+searchDomains:
+  disableDefault: true
+  # domains:
+  #   - homelab.internal
