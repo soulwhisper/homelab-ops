@@ -12,17 +12,17 @@ spec:
 
   values:
     localpv-provisioner:
+      analytics:
+        enabled: false
+      global:
+        imageRegistry: "mirror.gcr.io"
       hostpathClass:
         enabled: true
         name: openebs-hostpath
         isDefaultClass: false
-        basePath: /var/local/openebs
       localpv:
-        image:
-          registry: quay.io
-      helperPod:
-        image:
-          registry: quay.io
+        replicas: 2
+        basePath: /var/local/openebs
 
     alloy:
       enabled: false
@@ -36,6 +36,8 @@ spec:
         lvm:
           enabled: false
         zfs:
+          enabled: false
+        rawfile:
           enabled: false
 
     mayastor:

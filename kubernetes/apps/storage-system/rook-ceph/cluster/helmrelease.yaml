@@ -65,14 +65,19 @@ spec:
         useAllNodes: false
         useAllDevices: false
         nodes:
-          # P41 2TB OSD = 2
-          # WD Black SN850X 8TB OSD = 4
           - name: "exarch-01"
             devices: &nodeDevices
               - name: "sdb"
                 config:
                   osdsPerDevice: "1"
-                  # deviceClass: "nvme"
+              # P41 2TB
+              # - devicePathFilter: "/dev/disk/by-path/pci-0000:58:00.0-nvme-1"
+              #   config:
+              #     osdsPerDevice: "2"
+              # WD Black SN850X 8TB
+              # - devicePathFilter: "/dev/disk/by-path/pci-0000:01:00.0-nvme-1"
+              #   config:
+              #     osdsPerDevice: "4"
           - name: "exarch-02"
             devices: *nodeDevices
           - name: "exarch-03"

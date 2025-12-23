@@ -1,10 +1,10 @@
 ---
 apiVersion: v1alpha1
 kind: UserVolumeConfig
-name: cache-disk
+name: local-cache
 volumeType: disk
 provisioning:
   diskSelector:
-    model: to-be-done
+    match: '/dev/disk/by-path/pci-0000:59:00.0-nvme-1' in disk.symlinks
 filesystem:
   type: xfs

@@ -1,0 +1,26 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.noirprime.com/helm.toolkit.fluxcd.io/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &name openebs-localpv
+spec:
+  interval: 30m
+  chartRef:
+    kind: OCIRepository
+    name: openebs-localpv
+
+  values:
+    analytics:
+      enabled: false
+    fullnameOverride: *name
+    global:
+      imageRegistry: "mirror.gcr.io"
+    hostpathClass:
+      enabled: true
+      name: openebs-hostpath
+      isDefaultClass: false
+    localpv:
+      replicas: 2
+      # with '35-mount-hostpath.yaml'
+      basePath: /var/mnt/local-cache

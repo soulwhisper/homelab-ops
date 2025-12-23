@@ -3,7 +3,7 @@
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: OCIRepository
 metadata:
-  name: openebs
+  name: openebs-localpv
 spec:
   interval: 15m
   layerSelector:
@@ -11,4 +11,4 @@ spec:
     operation: copy
   ref:
     tag: 4.4.0
-  url: oci://ghcr.io/openebs/charts/openebs
+  url: oci://ghcr.io/openebs/charts/localpv-provisioner
