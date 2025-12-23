@@ -41,5 +41,5 @@ spec:
   dependsOn:
     - name: envoy-gateway
       namespace: networking-system
-    - name: cert-manager-issuer
+    - name: cert-manager
       namespace: security-system

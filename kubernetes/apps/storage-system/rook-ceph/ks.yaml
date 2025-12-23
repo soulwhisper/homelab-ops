@@ -30,8 +30,8 @@ metadata:
 spec:
   commonMetadata:
     labels:
-      app.kubernetes.io/name: *name
-  targetNamespace: storage-system
+      app.kubernetes.io/name: rook-ceph
+  targetNamespace: *name
   path: "./kubernetes/apps/storage-system/rook-ceph/cluster"
   sourceRef:
     kind: GitRepository
@@ -44,12 +44,16 @@ spec:
   healthChecks:
     - apiVersion: ceph.rook.io/v1
       kind: CephCluster
-      name: storage-system
-      namespace: storage-system
+      name: *namespace
+      namespace: *namespace
     - apiVersion: ceph.rook.io/v1
       kind: CephBlockPool
       name: ceph-blockpool
-      namespace: storage-system
+      namespace: *namespace
+    - apiVersion: ceph.rook.io/v1
+      kind: CephFilesystem
+      name: ceph-filesystem
+      namespace: *namespace
   healthCheckExprs:
     # status checks is case-sensitive
     - apiVersion: ceph.rook.io/v1
@@ -60,6 +64,10 @@ spec:
       kind: CephBlockPool
       failed: status.phase != 'Ready'
       current: status.phase == 'Ready'
+    - apiVersion: ceph.rook.io/v1
+      kind: CephFilesystem
+      failed: status.phase != 'Ready'
+      current: status.phase == 'Ready'
   dependsOn:
     - name: rook-ceph
-      namespace: storage-system
+      namespace: *namespace

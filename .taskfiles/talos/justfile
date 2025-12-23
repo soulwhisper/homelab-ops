@@ -40,18 +40,69 @@ apply node *args:
 
 [doc('Bootstrap talos cluster, INSECURE')]
 _bootstrap_talos:
+  #!/usr/bin/env bash
   for FILE in $(ls ${TALOS_DIR}/clusterconfig/*.yaml); do \
-    just apply $(basename "$FILE" .yaml | sed 's/^main-//') --insecure; \
+    NODE_IP=$(basename "$FILE" .yaml | sed 's/^main-//')
+    echo "🚀 Bootstrapping Talos Node: $NODE_IP"
+    count=0
+    until talosctl apply-config --nodes "$NODE_IP" --file "$FILE" --insecure 2>/dev/null; do
+      exit_code=$?
+      count=$((count + 1))
+      if [ $count -ge 5 ]; then
+          echo "⚠️ Failed to apply config to $NODE_IP after 5 attempts. Assuming node might be rebooting or already ready. Continuing..."
+          break
+      fi
+      echo "⏳ Waiting for $NODE_IP to accept config (Attempt $count/5)..."
+      sleep 3
+    done
   done
 
 [doc('Bootstrap K8S')]
 _bootstrap_k8s:
-  until $(talosctl -n "{{TALOS_ENDPOINT}}" bootstrap); do \
-    sleep 5; \
-  done
+  #!/usr/bin/env bash
+  echo "🔍 Checking if cluster is already bootstrapped..."
+  ETCD_STATUS=$(talosctl -n "{{TALOS_ENDPOINT}}" get service etcd -o json 2>/dev/null | jq -r '.spec.running' || echo "false")
+  if [ "$ETCD_STATUS" == "true" ]; then
+    echo "✅ Etcd is Running. Cluster implies bootstrapped. Skipping."
+    exit 0
+  fi
+  echo "🚀 Etcd running status is '${ETCD_RUNNING}'. Attempting bootstrap..."
+  count=0
+  until talosctl -n "{{TALOS_ENDPOINT}}" bootstrap 2>&1 | grep -E "AlreadyExists|No error"|| [ "$count" -ge 12 ]; do
+    echo "⏳ Sending bootstrap command (Attempt $((++count))/12)..."
+        sleep 5
+    done
+    FINAL_RUNNING=$(talosctl -n "{{TALOS_ENDPOINT}}" get service etcd -o json 2>/dev/null | jq -r '.spec.running' || echo "false")
+    if [ "$FINAL_RUNNING" == "true" ]; then
+       echo "✅ Bootstrap successful (Etcd is running)."
+       exit 0
+    else
+       if [ "$count" -ge 12 ]; then
+           echo "❌ Failed to bootstrap cluster. Etcd is not running."
+           exit 1
+       fi
+    fi
 
 [doc('Fetch kubeconfig')]
 kubeconfig:
+  #!/usr/bin/env bash
+  function retry {
+    local retries=$1
+    shift
+    local count=0
+    until "$@"; do
+        exit_code=$?
+        count=$((count + 1))
+        if [ $count -ge $retries ]; then
+            echo "❌ Command failed after $retries attempts: $*"
+            return $exit_code
+        fi
+        echo "⚠️  Connection failed. Retrying in 5s... ($count/$retries)"
+        sleep 5
+    done
+    return 0
+  }
+  retry 20 timeout 5 bash -c "</dev/tcp/{{ TALOS_ENDPOINT }}/6443" 2>/dev/null
   talosctl kubeconfig --nodes {{ TALOS_ENDPOINT }} --force "${KUBECONFIG}"
   mkdir -p ~/.kube && cp "${KUBECONFIG}" ~/.kube/config
 

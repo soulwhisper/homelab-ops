@@ -7,4 +7,6 @@ resources:
   - ./helmrelease.yaml
   - ./ocirepository.yaml
   # utils
+  - ./clusterissuer.yaml
+  - ./externalsecret.yaml
   - ./prometheusrules.yaml

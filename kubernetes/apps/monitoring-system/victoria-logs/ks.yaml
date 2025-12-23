@@ -17,7 +17,7 @@ spec:
   interval: 1h
   timeout: 5m
   prune: true
-  wait: false
+  wait: true
   dependsOn:
     - name: rook-ceph-cluster
       namespace: storage-system
@@ -40,7 +40,7 @@ spec:
   interval: 1h
   timeout: 5m
   prune: true
-  wait: false
+  wait: true
   dependsOn:
     - name: victoria-logs-server
       namespace: monitoring-system
