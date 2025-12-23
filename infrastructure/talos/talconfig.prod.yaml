@@ -101,6 +101,12 @@ patches:
   - "@./patches/global/20-dns-resolver.yaml"
   - "@./patches/global/80-extension-nut.yaml"
 
+  # : UKI configuration, until talhelper catchup
+  - |-
+    machine:
+      install:
+        grubUseUKICmdline: false
+
   # : Cluster configuration
   - |-
     cluster:

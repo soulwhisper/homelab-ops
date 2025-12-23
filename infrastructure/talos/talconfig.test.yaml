@@ -98,6 +98,12 @@ patches:
   - "@./patches/test/05-time-sync.yaml"
   - "@./patches/test/20-dns-resolver.yaml"
 
+  # : UKI configuration, until talhelper catchup
+  - |-
+    machine:
+      install:
+        grubUseUKICmdline: false
+
   # : Cluster configuration
   - |-
     cluster:

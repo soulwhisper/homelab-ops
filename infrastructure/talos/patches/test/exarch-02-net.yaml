@@ -18,5 +18,4 @@ downdelay: 200
 addresses:
   - address: 172.19.82.102/24
 routes:
-  - destination: 0.0.0.0/0
-    gateway: 172.19.82.1
+  - gateway: 172.19.82.1
