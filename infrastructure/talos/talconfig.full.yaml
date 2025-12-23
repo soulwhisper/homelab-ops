@@ -117,6 +117,7 @@ patches:
   - "@./patches/global/05-time-sync.yaml"
   - "@./patches/global/10-net-lo.yaml"
   - "@./patches/global/20-dns-resolver.yaml"
+  - "@./patches/global/45-watchdog.yaml"
   - "@./patches/global/80-extension-nut.yaml"
 
   # : UKI configuration, until talhelper catchup
