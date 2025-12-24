@@ -64,6 +64,7 @@ controlPlane:
     topology.kubernetes.io/zone: homelab
   schematic:
     customization:
+      # bootloader: sd-boot
       extraKernelArgs:
         - -lockdown # secureboot
         - lockdown=integrity # secureboot

@@ -63,6 +63,7 @@ controlPlane:
     topology.kubernetes.io/region: *clusterName
     topology.kubernetes.io/zone: homelab
   schematic:
+    # bootloader: sd-boot
     customization:
       extraKernelArgs:
         - -lockdown # secureboot
