@@ -61,14 +61,13 @@ controlPlane:
     topology.kubernetes.io/region: *clusterName
     topology.kubernetes.io/zone: homelab
   schematic:
-    # bootloader: sd-boot
+    # bootloader: sd-boot, until talhelper catchup
     customization:
       extraKernelArgs:
-        - -lockdown # secureboot
-        - lockdown=integrity # secureboot
         - console=ttyS0 # hci only
       systemExtensions:
         officialExtensions:
+          - siderolabs/bird2
           - siderolabs/i915
           - siderolabs/intel-ucode
           - siderolabs/mei

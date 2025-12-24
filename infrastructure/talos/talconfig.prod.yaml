@@ -64,13 +64,10 @@ controlPlane:
     topology.kubernetes.io/zone: homelab
   schematic:
     customization:
-      # bootloader: sd-boot
-      extraKernelArgs:
-        - -lockdown # secureboot
-        - lockdown=integrity # secureboot
-        - talos.network.interface.ignore=enp88s0 # block i226-lm in ms-01
+      # bootloader: sd-boot, until talhelper catchup
       systemExtensions:
         officialExtensions:
+          - siderolabs/bird2
           - siderolabs/i915
           - siderolabs/intel-ucode
           - siderolabs/mei
