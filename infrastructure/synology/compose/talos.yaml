@@ -1,7 +1,4 @@
-# Apps: Dockge
-# Storage: '/mnt/Arcanum/Apps'
-# RegistryMirror: 'm.daocloud.io'
-
+---
 # meshcentral listens on port 4433 (AMT) and 9202 (https)
 
 configs:
@@ -26,4 +23,4 @@ services:
       - source: "config.json"
         target: "/opt/meshcentral/meshcentral-data/config.json"
     volumes:
-      - "/mnt/Arcanum/Apps/meshcentral/data:/opt/meshcentral/meshcentral-data"
+      - "./meshcentral/data:/opt/meshcentral/meshcentral-data"

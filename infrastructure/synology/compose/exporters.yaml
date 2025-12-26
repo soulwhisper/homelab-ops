@@ -1,0 +1,13 @@
+---
+services:
+  snmp-exporter:
+    image: "docker.m.daocloud.io/prometheuscommunity/snmp-exporter:latest"
+    container_name: "smartctl-exporter"
+    restart: "unless-stopped"
+    command: ["--config.file=/etc/snmp_exporter/snmp.yml"]
+    ports:
+      - "9116:9116"
+    volumes:
+      # https://grafana.com/grafana/dashboards/14284-synology-nas-details/
+      # https://github.com/tumak66/grafana-prometheus-synology/blob/main/snmp-exporter/snmp.yml
+      - "./snmp-exporter/snmp.yml:/etc/snmp_exporter/snmp.yml:ro"

@@ -1,11 +1,6 @@
-## TrueNAS Scale
+## Synology DS1825+
 
-- Docker compose supported by `Apps:Dockge`;
-
-### Apps
-
-- Pool = `Arcanum`;
-- Address Pools = `192.168.0.0/16`, `Size 24`;
+- Docker compose supported by `Dockge`;
 
 #### Dockge
 

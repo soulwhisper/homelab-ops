@@ -1,7 +1,4 @@
-# Apps: Dockge
-# Storage: '/mnt/Arcanum/Apps'
-# RegistryMirror: 'm.daocloud.io'
-
+---
 # switch to a well-maintained watchtower repo
 
 services:

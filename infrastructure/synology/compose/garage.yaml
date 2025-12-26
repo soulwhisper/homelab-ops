@@ -1,7 +1,4 @@
-# Apps: Dockge
-# Storage: '/mnt/Arcanum/Apps'
-# RegistryMirror: 'm.daocloud.io'
-
+---
 # Bootstrap via ssh, check README.md for more details
 
 configs:
@@ -30,5 +27,5 @@ services:
       - source: "garage.toml"
         target: "/etc/garage.toml"
     volumes:
-      - "/mnt/Arcanum/Apps/garage/data:/tmp/data"
-      - "/mnt/Arcanum/Apps/garage/meta:/tmp/meta"
+      - "./garage/data:/tmp/data"
+      - "./garage/meta:/tmp/meta"

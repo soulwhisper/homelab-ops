@@ -217,6 +217,9 @@ spec:
             - { name: DS_PROMETHEUS, value: Prometheus }
             - { name: VAR_REPLICATIONDESTNAME, value: .*-bootstrap }
 
+        synology:
+          url: https://grafana.com/api/dashboards/14284/revisions/10/download
+          datasource: Prometheus
         openwrt:
           url: https://grafana.com/api/dashboards/18153/revisions/4/download
           datasource:

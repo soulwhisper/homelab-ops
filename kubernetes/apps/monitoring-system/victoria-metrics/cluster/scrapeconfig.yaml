@@ -3,43 +3,21 @@
 apiVersion: monitoring.coreos.com/v1alpha1
 kind: ScrapeConfig
 metadata:
-  name: &name nas-node-exporter
+  name: &name synology-snmp
+  # Synology use SNMPv2c, Community string is "public" by default
 spec:
   staticConfigs:
-    - targets:
-        - nas.homelab.internal:9101 # remap from 9100
-  metricsPath: /metrics
+    - targets: ["nas.homelab.internal"]
+  metricsPath: /snmp
+  params:
+    module: [synology]
   relabelings:
     - action: replace
       targetLabel: job
       replacement: *name
----
-# yaml-language-server: $schema=https://kubernetes-schemas.noirprime.com/monitoring.coreos.com/scrapeconfig_v1alpha1.json
-apiVersion: monitoring.coreos.com/v1alpha1
-kind: ScrapeConfig
-metadata:
-  name: &name nas-smartctl-exporter
-spec:
-  staticConfigs:
-    - targets:
-        - nas.homelab.internal:9104 # remap from 9633
-  metricsPath: /metrics
-  relabelings:
-    - action: replace
-      targetLabel: job
-      replacement: *name
----
-# yaml-language-server: $schema=https://kubernetes-schemas.noirprime.com/monitoring.coreos.com/scrapeconfig_v1alpha1.json
-apiVersion: monitoring.coreos.com/v1alpha1
-kind: ScrapeConfig
-metadata:
-  name: &name router-node-exporter
-spec:
-  staticConfigs:
-    - targets:
-        - 10.10.0.1:9101 # remap from 9100
-  metricsPath: /metrics
-  relabelings:
-    - action: replace
-      targetLabel: job
-      replacement: *name
+    - source_labels: [__address__]
+      target_label: __param_target
+    - source_labels: [__param_target]
+      target_label: instance
+    - target_label: __address__
+      replacement: nas.homelab.internal:9116
