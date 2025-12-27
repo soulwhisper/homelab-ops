@@ -44,12 +44,7 @@ spec:
         value: "quay.io/victoriametrics/vmauth"
       - name: "VM_VMALERTMANAGER_ALERTMANAGERDEFAULTBASEIMAGE"
         value: "quay.io/prometheus/alertmanager"
-      - name: HTTP_PROXY
-        value: "${HTTP_PROXY}"
-      - name: HTTPS_PROXY
-        value: "${HTTPS_PROXY}"
-      - name: NO_PROXY
-        value: "${NO_PROXY}"
+      # https_proxy is needed for image downloading
     image:
       registry: "quay.io"
     operator:

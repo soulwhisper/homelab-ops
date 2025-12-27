@@ -18,6 +18,7 @@ spec:
       *name :
         annotations:
           reloader.stakater.com/auto: "true"
+          config.homelab.ops/proxy: "all" # all_proxy needed
         pod:
           securityContext:
             runAsNonRoot: true
@@ -46,8 +47,6 @@ spec:
               repository: ghcr.io/twin/gatus
               tag: v5.26.0@sha256:3c0314bd1b1e9d7c34d8f2efee16b380770a9639ec5386cc305e8df104e097dc
             env:
-              ALL_PROXY: "${ALL_PROXY}"
-              NO_PROXY: "${NO_PROXY}"
               GATUS_CONFIG_PATH: /config
               GATUS_DELAY_START_SECONDS: 5
               GATUS_WEB_PORT: &port 80

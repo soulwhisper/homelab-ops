@@ -32,10 +32,6 @@ spec:
             image:
               repository: registry.gitlab.com/crafty-controller/crafty-4
               tag: 4.6.2
-            env:
-              HTTP_PROXY: "${HTTP_PROXY}"
-              HTTPS_PROXY: "${HTTPS_PROXY}"
-              NO_PROXY: "${NO_PROXY}"
             resources:
               requests:
                 cpu: 40m
@@ -50,7 +46,7 @@ spec:
       app:
         type: LoadBalancer
         annotations:
-          lbipam.cilium.io/ips: "${SUBNET}.143"
+          lbipam.cilium.io/ips: "10.10.0.143"
         ports:
           app:
             appProtocol: kubernetes.io/wss
@@ -68,7 +64,7 @@ spec:
           gethomepage.dev/name: Crafty
           gethomepage.dev/group: Service
           gethomepage.dev/widget.type: minecraft
-          gethomepage.dev/widget.url: "udp://${SUBNET}.143:25565"
+          gethomepage.dev/widget.url: "udp://10.10.0.143:25565"
         parentRefs:
           - name: envoy-internal
             namespace: networking-system

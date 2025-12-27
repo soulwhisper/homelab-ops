@@ -31,10 +31,6 @@ spec:
             image:
               repository: ghcr.io/home-operations/bazarr
               tag: 1.5.2
-            env:
-              HTTP_PROXY: "${HTTP_PROXY}"
-              HTTPS_PROXY: "${HTTPS_PROXY}"
-              NO_PROXY: "${NO_PROXY}"
             probes:
               liveness: &probes
                 enabled: true

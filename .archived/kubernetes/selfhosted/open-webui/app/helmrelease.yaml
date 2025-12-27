@@ -24,10 +24,6 @@ spec:
             image:
               repository: ghcr.io/open-webui/open-webui
               tag: main
-            env:
-              HTTP_PROXY: "${HTTP_PROXY}"
-              HTTPS_PROXY: "${HTTPS_PROXY}"
-              NO_PROXY: "${NO_PROXY}"
             envFrom:
               - secretRef:
                   name: *name

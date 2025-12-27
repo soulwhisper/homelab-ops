@@ -67,9 +67,6 @@ spec:
       GF_DATABASE_HOST: postgres-rw.database-system.svc.cluster.local:5432
       GF_DATABASE_SSL_MODE: disable
       GF_DATABASE_TYPE: postgres
-      HTTP_PROXY: "${HTTP_PROXY}"
-      HTTPS_PROXY: "${HTTPS_PROXY}"
-      NO_PROXY: "${NO_PROXY}"
     envValueFrom:
       GF_DATABASE_USER:
         secretKeyRef:
@@ -80,11 +77,7 @@ spec:
           name: grafana-pguser
           key: password
 
-    downloadDashboards:
-      env:
-        HTTP_PROXY: "${HTTP_PROXY}"
-        HTTPS_PROXY: "${HTTPS_PROXY}"
-        NO_PROXY: "${NO_PROXY}"
+    # grafana and downloadDashboards needs https_proxy
 
     # images
     image:

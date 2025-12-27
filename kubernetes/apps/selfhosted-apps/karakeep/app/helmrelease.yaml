@@ -35,9 +35,6 @@ spec:
               NEXTAUTH_URL: https://karakeep.noirprime.com
               DISABLE_NEW_RELEASE_CHECK: true
               COREPACK_INTEGRITY_KEYS: 0
-              HTTP_PROXY: "${HTTP_PROXY}"
-              HTTPS_PROXY: "${HTTPS_PROXY}"
-              NO_PROXY: "${NO_PROXY}"
             envFrom:
               - secretRef:
                   name: *name
@@ -64,10 +61,6 @@ spec:
               - --remote-debugging-address=0.0.0.0
               - --remote-debugging-port=9222
               - --hide-scrollbars
-            env:
-              HTTP_PROXY: "${HTTP_PROXY}"
-              HTTPS_PROXY: "${HTTPS_PROXY}"
-              NO_PROXY: "${NO_PROXY}"
             ports:
               - name: http
                 containerPort: 9222
@@ -82,9 +75,6 @@ spec:
               - --experimental-dumpless-upgrade
             env:
               MEILI_NO_ANALYTICS: true
-              HTTP_PROXY: "${HTTP_PROXY}"
-              HTTPS_PROXY: "${HTTPS_PROXY}"
-              NO_PROXY: "${NO_PROXY}"
             envFrom:
               - secretRef:
                   name: *name

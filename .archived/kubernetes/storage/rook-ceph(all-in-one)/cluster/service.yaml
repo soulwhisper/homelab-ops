@@ -5,7 +5,7 @@ metadata:
   name: rook-ceph-rgw-ceph-objectstore-external
   annotations:
     external-dns.alpha.kubernetes.io/hostname: "s3.noirprime.com"
-    lbipam.cilium.io/ips: "${SUBNET}.134"
+    lbipam.cilium.io/ips: "10.10.0.134"
 spec:
   type: LoadBalancer
   selector:

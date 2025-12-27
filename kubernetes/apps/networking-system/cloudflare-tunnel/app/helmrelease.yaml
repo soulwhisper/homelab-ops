@@ -24,16 +24,16 @@ spec:
       *name :
         annotations:
           reloader.stakater.com/auto: "true"
+          config.homelab.ops/proxy: "all" # all_proxy needed
         containers:
           app:
             image:
               # cloudflared fork with socks5 support
-              repository: ghcr.io/alliottech/cloudflared_proxy
-              tag: 2025.8.0
+              # repository: ghcr.io/alliottech/cloudflared_proxy
+              repository: cloudflare/cloudflared
+              tag: 2025.11.1
             args: ["tunnel", "run"]
             env:
-              ALL_PROXY: "${ALL_PROXY}"
-              NO_PROXY: "${NO_PROXY}"
               NO_AUTOUPDATE: "true"
               TUNNEL_LOGLEVEL: "debug"
               TUNNEL_TRANSPORT_PROTOCOL: "http2"

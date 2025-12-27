@@ -29,8 +29,6 @@ spec:
               tag: 2.8.2
             env:
               WEBHOOK__PORT: &port 9000
-              HTTPS_PROXY: "${HTTPS_PROXY}"
-              NO_PROXY: "${NO_PROXY}"
             envFrom:
               - secretRef:
                   name: *name

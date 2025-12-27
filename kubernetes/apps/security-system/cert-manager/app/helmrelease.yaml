@@ -15,13 +15,7 @@ spec:
       enabled: true
     dns01RecursiveNameservers: https://1.1.1.1:443/dns-query,https://1.0.0.1:443/dns-query
     dns01RecursiveNameserversOnly: true
-    extraEnv:
-      - name: HTTP_PROXY
-        value: "${HTTP_PROXY}"
-      - name: HTTPS_PROXY
-        value: "${HTTPS_PROXY}"
-      - name: NO_PROXY
-        value: "${NO_PROXY}"
+    # HTTPS_PROXY is needed, under 'extraEnv'
     prometheus:
       enabled: true
       servicemonitor:

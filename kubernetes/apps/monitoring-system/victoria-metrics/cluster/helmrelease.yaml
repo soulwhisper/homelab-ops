@@ -130,9 +130,10 @@ spec:
                   name: *name
                   key: PUSHOVER_USER_KEY
                 urlTitle: View in Alertmanager
-                httpConfig:
-                  proxyURL: "${HTTPS_PROXY}"
-                  noProxy: "${NO_PROXY}"
+                # https_proxy is needed for stablity
+                # httpConfig:
+                #   proxyURL: "${HTTPS_PROXY}"
+                #   noProxy: "${NO_PROXY}"
 
     kubeApiServer:
       vmScrape:

@@ -10,7 +10,7 @@ data:
     endpoints:
       - name: vmagent-victoria-metrics-cluster
         group: internal
-        url: "${SUBNET}.10" # until doh or dot
+        url: "10.10.0.10" # until doh or dot
         interval: 1m
         ui:
           hide-hostname: true
@@ -23,7 +23,7 @@ data:
           - "[DNS_RCODE] == NOERROR"
       - name: vmalertmanager-victoria-metrics-cluster
         group: internal
-        url: "${SUBNET}.10" # until doh or dot
+        url: "10.10.0.10" # until doh or dot
         interval: 1m
         ui:
           hide-hostname: true

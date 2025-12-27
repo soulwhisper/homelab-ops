@@ -75,9 +75,6 @@ spec:
                   secretKeyRef:
                     name: *name
                     key: 1password-credentials.json
-              HTTP_PROXY: "${HTTP_PROXY}"
-              HTTPS_PROXY: "${HTTPS_PROXY}"
-              NO_PROXY: "${NO_PROXY}"
             probes: *probes
             resources: *resources
             securityContext: *securityContext

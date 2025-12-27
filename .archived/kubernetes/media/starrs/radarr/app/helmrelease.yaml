@@ -32,9 +32,6 @@ spec:
               repository: ghcr.io/home-operations/radarr
               tag: 5.27.1.10122
             env:
-              HTTP_PROXY: "${HTTP_PROXY}"
-              HTTPS_PROXY: "${HTTPS_PROXY}"
-              NO_PROXY: "${NO_PROXY}"
               RADARR__APP__INSTANCENAME: Radarr
               RADARR__AUTH__APIKEY:
                 valueFrom:

@@ -49,13 +49,6 @@ spec:
             image:
               repository: ghcr.io/bjw-s-labs/wrangler
               tag: 4.55.0@sha256:82ec92bc22f1e9500b65509372828f96175735a51617b6c99a3a09bf4a8880e9
-            env:
-              - name: HTTP_PROXY
-                value: "${HTTP_PROXY}"
-              - name: HTTPS_PROXY
-                value: "${HTTPS_PROXY}"
-              - name: NO_PROXY
-                value: "${NO_PROXY}"
             envFrom:
               - secretRef:
                   name: *name
