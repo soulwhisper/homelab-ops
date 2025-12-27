@@ -31,7 +31,7 @@ spec:
           app:
             image:
               repository: registry.gitlab.com/crafty-controller/crafty-4
-              tag: 4.6.2
+              tag: 4.7.0
             resources:
               requests:
                 cpu: 40m
