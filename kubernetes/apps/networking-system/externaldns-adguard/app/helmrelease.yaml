@@ -47,7 +47,7 @@ spec:
           - name: SERVER_HOST
             value: 0.0.0.0
           - name: ADGUARD_URL
-            value: "http://10.10.0.10:9200"
+            value: "http://10.10.0.254:9200"
           - name: ADGUARD_USER
             valueFrom:
               secretKeyRef:

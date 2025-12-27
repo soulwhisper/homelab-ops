@@ -110,12 +110,12 @@ apiVersion: v1alpha1
 kind: TimeSyncConfig
 ntp:
   servers:
-    - 10.10.0.1
+    - 10.10.0.254
 ---
 apiVersion: v1alpha1
 kind: ResolverConfig
 nameservers:
-  - address: 10.10.0.1
+  - address: 10.10.0.254
 searchDomains:
   disableDefault: true
 ---

@@ -39,7 +39,7 @@ spec:
     cni:
       exclusive: false
     devices: bond+
-    # enableIPv4BIGTCP: true  # disable for test only
+    enableIPv4BIGTCP: true
     endpointRoutes:
       enabled: true
     envoy:

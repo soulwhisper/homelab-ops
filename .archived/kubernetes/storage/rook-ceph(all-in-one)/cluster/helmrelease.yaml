@@ -67,7 +67,7 @@ spec:
       storage:
         useAllNodes: true
         useAllDevices: false
-        deviceFilter: ^sd[b-z] # test only; ref:https://rook.io/docs/rook/v1.14/CRDs/Cluster/ceph-cluster-crd/?h=usealldevices#storage-selection-settings
+        deviceFilter: ^sd[b-d]
         config:
           osdsPerDevice: "1"
     cephBlockPools:
