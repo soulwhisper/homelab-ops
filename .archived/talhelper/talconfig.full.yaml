@@ -1,8 +1,9 @@
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/budimanjojo/talhelper/master/pkg/config/schemas/talconfig.json
 clusterName: &clusterName main
-endpoint: "https://k8s.homelab.internal:6443" # to CP node-ip
+endpoint: "https://k8s.homelab.internal:6443" # point to CP node-ip
 
+# This is a "full" config template
 # disabled features:
 # cni,coredns,kube-proxy,l2vip,secureboot,system-disk-encryption;
 # k8s features 1.33:
@@ -24,34 +25,35 @@ cniConfig:
 
 nodes:
   - hostname: exarch-01
-    ipAddress: 172.19.82.101
+    ipAddress: 10.10.0.101
     controlPlane: true
     nodeLabels:
       intel.feature.node.kubernetes.io/gpu: "true"
-    installDisk: /dev/sda
+    installDiskSelector: &installDisk
+      model: SQF-C3AV1-256GDEDM
     patches:
       - "@./patches/nodes/exarch-01/00-hostname.yaml"
-      - "@./patches/test/exarch-01-net.yaml"
+      - "@./patches/nodes/exarch-01/12-bond0-lacp.yaml"
 
   - hostname: exarch-02
-    ipAddress: 172.19.82.102
+    ipAddress: 10.10.0.102
     controlPlane: true
     nodeLabels:
       intel.feature.node.kubernetes.io/gpu: "true"
-    installDisk: /dev/sda
+    installDiskSelector: *installDisk
     patches:
       - "@./patches/nodes/exarch-02/00-hostname.yaml"
-      - "@./patches/test/exarch-02-net.yaml"
+      - "@./patches/nodes/exarch-02/12-bond0-lacp.yaml"
 
   - hostname: exarch-03
-    ipAddress: 172.19.82.103
+    ipAddress: 10.10.0.103
     controlPlane: true
     nodeLabels:
       intel.feature.node.kubernetes.io/gpu: "true"
-    installDisk: /dev/sda
+    installDiskSelector: *installDisk
     patches:
       - "@./patches/nodes/exarch-03/00-hostname.yaml"
-      - "@./patches/test/exarch-03-net.yaml"
+      - "@./patches/nodes/exarch-03/12-bond0-lacp.yaml"
 
 controlPlane:
   machineSpec:
@@ -61,8 +63,8 @@ controlPlane:
     topology.kubernetes.io/region: *clusterName
     topology.kubernetes.io/zone: homelab
   schematic:
-    # bootloader: sd-boot, until talhelper catchup
     customization:
+      # bootloader: sd-boot, until talhelper catchup
       extraKernelArgs:
         - console=ttyS0 # hci only
       systemExtensions:
@@ -82,6 +84,22 @@ controlPlane:
           admissionControl:
             $$patch: delete
 
+    # :: ApiServer configuration, MutatingAdmissionPolicy enabled for nfs snapshots
+    # - |-
+    #   cluster:
+    #     apiServer:
+    #       admissionControl:
+    #         - name: PodSecurity
+    #           configuration:
+    #             exemptions:
+    #               namespaces:
+    #                 - gitops-system
+    #                 - monitoring-system
+    #                 - storage-system
+    #       extraArgs:
+    #         runtime-config: admissionregistration.k8s.io/v1alpha1=true
+    #         feature-gates: MutatingAdmissionPolicy=true
+
     # : ETCD configuration, increase etcd quota to 8G, keep advertisedSubnets if using tailscale / kubespan
     - |-
       cluster:
@@ -89,14 +107,16 @@ controlPlane:
           extraArgs:
             quota-backend-bytes: 8589934592
           advertisedSubnets:
-            - 172.19.82.0/24
+            - 10.10.0.0/24
 
 # general patches
 patches:
   # : Multi-doc configuration
+  - "@./patches/global/05-time-sync.yaml"
   - "@./patches/global/10-net-lo.yaml"
-  - "@./patches/test/05-time-sync.yaml"
-  - "@./patches/test/20-dns-resolver.yaml"
+  - "@./patches/global/20-dns-resolver.yaml"
+  - "@./patches/global/45-watchdog.yaml"
+  - "@./patches/global/80-extension-nut.yaml"
 
   # : UKI configuration, until talhelper catchup
   - |-
@@ -118,7 +138,7 @@ patches:
           kubernetes:
             disabled: true
           service:
-            endpoint: http://172.19.82.10:9300
+            endpoint: http://10.10.0.10:9300
       network:
         podSubnets:
           - 10.100.0.0/17
@@ -149,15 +169,7 @@ patches:
       kubelet:
         nodeIP:
           validSubnets:
-            - 172.19.82.0/24
-
-  # : Cluster Proxy, has negative impact on https-post/quic, use with caution
-  - |-
-    machine:
-      env:
-        http_proxy: http://172.19.82.10:1080
-        https_proxy: http://172.19.82.10:1080
-        no_proxy: .noirprime.com,.homelab.internal,localhost,127.0.0.1,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16
+            - 10.10.0.0/24
 
   # : Enable features
   # :: https://github.com/siderolabs/talos/issues/10002#issuecomment-2557069620;
@@ -216,3 +228,24 @@ patches:
         user.max_user_namespaces: 11255           # UserNamespaces
         vm.dirty_background_ratio: 5              # 96GB RAM tunning
         vm.dirty_ratio: 10                        # 96GB RAM tunning
+
+  # : Cluster Proxy, has negative impact on https-post/quic, use tproxy instead
+  # - |-
+  #   machine:
+  #     env:
+  #       http_proxy: http://10.10.0.10:1080
+  #       https_proxy: http://10.10.0.10:1080
+  #       no_proxy: .noirprime.com,.homelab.internal,localhost,127.0.0.1,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16
+
+  # : Enable OpenEBS Storage
+  # - |-
+  #   machine:
+  #     kubelet:
+  #       extraMounts:
+  #         - destination: /var/local/openebs
+  #           type: bind
+  #           source: /var/local/openebs
+  #           options:
+  #             - rbind
+  #             - rshared
+  #             - rw

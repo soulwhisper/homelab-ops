@@ -1,0 +1,13 @@
+---
+# schematic for test environment
+customization:
+  bootloader: sd-boot
+  extraKernelArgs:
+    - console=ttyS0 # hci only
+  systemExtensions:
+    officialExtensions:
+      - siderolabs/bird2
+      - siderolabs/i915
+      - siderolabs/intel-ucode
+      - siderolabs/mei
+      - siderolabs/nut-client

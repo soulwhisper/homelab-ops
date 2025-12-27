@@ -7,7 +7,7 @@ TALOS_ENDPOINT := `talosctl config info --output json | jq --raw-output '.endpoi
 default:
   @just --list
 
-[doc('Get latest secureboot ISO for talos, with https_proxy support')]
+[doc('Get latest ISO for talos, with https_proxy support')]
 image mode:
   #!/usr/bin/env bash
   IMAGE_VERSION=$(curl --silent --noproxy '*' https://factory.talos.dev/versions \
@@ -15,22 +15,30 @@ image mode:
     | tail -n1)
   IMAGE_SCHEMA=$(just _schema {{mode}})
   echo "Latest version: ${IMAGE_VERSION}"
-  echo "Image Downloading: talos-{{mode}}-${IMAGE_VERSION}-metal-amd64-secureboot.iso"
-  curl -x "${https_proxy}" --progress-bar -L "https://factory.talos.dev/image/${IMAGE_SCHEMA}/${IMAGE_VERSION}/metal-amd64-secureboot.iso" \
-    -o "/tmp/talos-{{mode}}-${IMAGE_VERSION}-metal-amd64-secureboot.iso"
-  mv "/tmp/talos-{{mode}}-${IMAGE_VERSION}-metal-amd64-secureboot.iso" "${OPS_DIR}"
+  echo "Image Downloading: talos-{{mode}}-${IMAGE_VERSION}-metal-amd64.iso"
+  curl -x "${https_proxy}" --progress-bar -L "https://factory.talos.dev/image/${IMAGE_SCHEMA}/${IMAGE_VERSION}/metal-amd64.iso" \
+    -o "/tmp/talos-{{mode}}-${IMAGE_VERSION}-metal-amd64.iso"
+  mv "/tmp/talos-{{mode}}-${IMAGE_VERSION}-metal-amd64.iso" "${OPS_DIR}"
 
 [doc('Get schema ID for specific environment')]
 _schema mode:
-  yq '.controlPlane.schematic' "${TALOS_DIR}/talconfig.{{mode}}.yaml" > /tmp/schematic.yaml
-  curl --silent --noproxy '*' -X POST --data-binary @/tmp/schematic.yaml https://factory.talos.dev/schematics | jq --raw-output '.id'
+  curl --silent --noproxy '*' -X POST --data-binary @"${TALOS_DIR}/{{mode}}/00-schematic.yaml" https://factory.talos.dev/schematics | jq --raw-output '.id'
 
 [doc('Generate talos configuration')]
 generate mode:
-  op run --env-file "${TALOS_DIR}/talhelper.env" --no-masking -- talhelper genconfig \
-      --config-file "${TALOS_DIR}/talconfig.{{mode}}.yaml" \
-      --secret-file "${TALOS_DIR}/talsecret.yaml" \
-      --out-dir "${TALOS_DIR}/clusterconfig"
+  #!/usr/bin/env bash
+  op inject -i "${TALOS_DIR}/secret.yaml" | talosctl gen config \
+    main https://k8s.homelab.internal:6443 \
+    --with-docs=false --with-examples=false --force \
+    --with-secrets /dev/stdin \
+    --output "${TALOS_DIR}/clusterconfig"
+  for FILE in $(ls ${TALOS_DIR}/{{mode}}/nodes/*.yaml); do
+    NODE=$(basename "$FILE" .yaml)
+    talosctl machineconfig patch "${TALOS_DIR}/clusterconfig/controlplane.yaml" \
+      --output "${TALOS_DIR}/clusterconfig/main-$NODE.yaml" \
+      --patch "${TALOS_DIR}/{{mode}}/10-general.yaml" \
+      --patch "${TALOS_DIR}/{{mode}}/nodes/$NODE.yaml"
+  done
   mkdir -p ~/.talos && cp "${TALOSCONFIG}" ~/.talos/config
 
 [doc('Apply talos configuration to node')]
@@ -41,18 +49,18 @@ apply node *args:
 [doc('Bootstrap talos cluster, INSECURE')]
 _bootstrap_talos:
   #!/usr/bin/env bash
-  for FILE in $(ls ${TALOS_DIR}/clusterconfig/*.yaml); do \
-    NODE_IP=$(basename "$FILE" .yaml | sed 's/^main-//')
-    echo "🚀 Bootstrapping Talos Node: $NODE_IP"
+  for FILE in $(ls ${TALOS_DIR}/clusterconfig/*.yaml); do
+    NODE=$(basename "$FILE" .yaml | sed 's/^main-//')
+    echo "🚀 Bootstrapping Talos Node: $NODE"
     count=0
-    until talosctl apply-config --nodes "$NODE_IP" --file "$FILE" --insecure 2>/dev/null; do
+    until talosctl apply-config --nodes "$NODE" --file "$FILE" --insecure 2>/dev/null; do
       exit_code=$?
       count=$((count + 1))
       if [ $count -ge 5 ]; then
-          echo "⚠️ Failed to apply config to $NODE_IP after 5 attempts. Assuming node might be rebooting or already ready. Continuing..."
+          echo "⚠️ Failed to apply config to $NODE after 5 attempts. Assuming node might be rebooting or already ready. Continuing..."
           break
       fi
-      echo "⏳ Waiting for $NODE_IP to accept config (Attempt $count/5)..."
+      echo "⏳ Waiting for $NODE to accept config (Attempt $count/5)..."
       sleep 3
     done
   done

@@ -1,5 +1,10 @@
 ---
 apiVersion: v1alpha1
+kind: HostnameConfig
+auto: off
+hostname: exarch-01
+---
+apiVersion: v1alpha1
 kind: LinkAliasConfig
 name: net0
 selector:

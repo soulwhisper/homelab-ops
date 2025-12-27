@@ -15,6 +15,5 @@ kustomize
 mise
 popeye
 sops
-talhelper
 talosctl
 uv

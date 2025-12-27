@@ -1,0 +1,157 @@
+---
+cluster:
+  allowSchedulingOnControlPlanes: true
+  apiServer:
+    admissionControl:
+      $patch: delete
+  coreDNS:
+    disabled: true
+  etcd:
+    extraArgs:
+      quota-backend-bytes: 8589934592
+    advertisedSubnets:
+      - 172.19.82.0/24
+  discovery:
+    enabled: true
+    registries:
+      kubernetes:
+        disabled: true
+      service:
+        endpoint: http://172.19.82.10:9300
+  network:
+    cni:
+      name: none
+    podSubnets:
+      - 10.100.0.0/17
+    serviceSubnets:
+      - 10.100.128.0/17
+  proxy:
+    disabled: true
+  scheduler:
+    config:
+      apiVersion: kubescheduler.config.k8s.io/v1
+      kind: KubeSchedulerConfiguration
+      profiles:
+        - schedulerName: default-scheduler
+          plugins:
+            score:
+              disabled:
+                - name: ImageLocality
+          pluginConfig:
+            - name: PodTopologySpread
+              args:
+                defaultingType: List
+                defaultConstraints:
+                  - maxSkew: 1
+                    topologyKey: kubernetes.io/hostname
+                    whenUnsatisfiable: ScheduleAnyway
+machine:
+  env:
+    http_proxy: http://172.19.82.10:1080
+    https_proxy: http://172.19.82.10:1080
+    no_proxy: .noirprime.com,.homelab.internal,localhost,127.0.0.1,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16
+  features:
+    nodeAddressSortAlgorithm: v2
+    hostDNS:
+      enabled: true
+      forwardKubeDNSToHost: true
+      resolveMemberNames: true
+    kubernetesTalosAPIAccess:
+      enabled: true
+      allowedRoles:
+        - os:admin
+        - os:etcd:backup
+      allowedKubernetesNamespaces:
+        - gitops-system
+  files:
+    - op: create
+      path: /etc/cri/conf.d/20-customization.part
+      content: |
+        [plugins]
+          [plugins."io.containerd.cri.v1.images"]
+            discard_unpacked_layers = false
+          [plugins."io.containerd.cri.v1.runtime"]
+            device_ownership_from_security_context = true
+          [plugins."io.containerd.grpc.v1.cri"]
+            enable_unprivileged_ports = true
+            enable_unprivileged_icmp = true
+  install:
+    # renovate: depName=ghcr.io/siderolabs/installer datasource=docker
+    image: factory.talos.dev/metal-installer/581fa250999874d472153c8c65a7008e1bbf0742864fab8b4668438c983df5a6:v1.12.0
+    grubUseUKICmdline: true
+    disk: /dev/sda
+  kubelet:
+    # renovate: depName=ghcr.io/siderolabs/kubelet datasource=docker
+    image: ghcr.io/siderolabs/kubelet:v1.35.0
+    nodeIP:
+      validSubnets:
+        - 172.19.82.0/24
+  nodeLabels:
+    topology.kubernetes.io/region: main
+    topology.kubernetes.io/zone: homelab
+    intel.feature.node.kubernetes.io/gpu: "true"
+  sysctls:
+    fs.inotify.max_user_watches: 1048576 # moviepilot
+    fs.inotify.max_user_instances: 1048576 # moviepilot
+    net.ipv4.neigh.default.gc_thresh1: 32768 # ARP cache, tunning
+    net.ipv4.neigh.default.gc_thresh2: 65536 # ARP cache, tunning
+    net.ipv4.neigh.default.gc_thresh3: 131072 # ARP cache, tunning
+    net.core.netdev_max_backlog: 30000 # 10G NIC, tunning
+    net.core.somaxconn: 32768 # 10G NIC, tunning
+    net.ipv4.tcp_max_syn_backlog: 8192 # 10G NIC, tunning
+    net.core.rmem_max: 134217728 # 10G NIC, tunning
+    net.core.wmem_max: 134217728 # 10G NIC, tunning
+    net.ipv4.tcp_rmem: 4096 87380 134217728 # 10G NIC, tunning
+    net.ipv4.tcp_wmem: 4096 65536 134217728 # 10G NIC, tunning
+    sunrpc.tcp_slot_table_entries: 128 # 10G NIC, tunning
+    sunrpc.tcp_max_slot_table_entries: 1024 # 10G NIC, tunning
+    user.max_user_namespaces: 11255 # UserNamespaces
+    vm.dirty_background_ratio: 5 # 96GB RAM tunning
+    vm.dirty_ratio: 10 # 96GB RAM tunning
+---
+apiVersion: v1alpha1
+kind: TimeSyncConfig
+ntp:
+  # default: time.cloudflare.com
+  servers:
+    - 172.19.82.10
+# for proxmox only
+# ptp:
+#   devices:
+#     - /dev/ptp0
+---
+apiVersion: v1alpha1
+kind: ResolverConfig
+nameservers:
+  - address: 172.19.82.10
+searchDomains:
+  disableDefault: true
+  # domains:
+  #   - homelab.internal
+---
+apiVersion: v1alpha1
+kind: LinkConfig
+name: lo # fix forwardKubeDNSToHost
+up: true
+addresses:
+  - address: 169.254.116.108/32
+---
+apiVersion: v1alpha1
+kind: LinkAliasConfig
+name: amt0
+selector:
+  match: link.bus_path == "0000:59:00.0" # to do
+---
+apiVersion: v1alpha1
+kind: LinkConfig
+name: amt0
+up: false
+---
+apiVersion: v1alpha1
+kind: ExtensionServiceConfig
+name: nut-client
+configFiles:
+  - content: |-
+      MONITOR ups@10.10.0.10 1 upsmon upsmon secondary
+      SHUTDOWNCMD "/sbin/poweroff"
+    mountPath: /usr/local/etc/nut/upsmon.conf
