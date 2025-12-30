@@ -58,7 +58,8 @@ spec:
   targetSelectors:
     - group: gateway.networking.k8s.io
       kind: Gateway
-  tcpKeepalive: {}
+  tcpKeepalive:
+    idleTime: 300s
   timeout:
     http:
       idleTimeout: 600s
@@ -76,7 +77,6 @@ spec:
         - 10.100.0.0/17
   connection:
     bufferLimit: 8Mi
-    maxAcceptPerSocketEvent: 0
   http2:
     onInvalidMessage: TerminateStream
   targetSelectors:
@@ -84,8 +84,6 @@ spec:
       kind: Gateway
   tcpKeepalive:
     idleTime: 300s
-    interval: 75s
-    probes: 9
   timeout:
     http:
       idleTimeout: 600s
