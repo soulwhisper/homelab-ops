@@ -1,21 +1,21 @@
 ---
-# meshcentral listens on port 4433 (AMT) and 9202 (https)
+# meshcentral listens on port 4433 (AMT) and 444 (https)
 
 configs:
   config.json:
     content: |
-      { "settings": { "port": 9202, "agentTimeStampServer": false } }
+      { "settings": { "agentTimeStampServer": false }, "domains": { "": { "allowedOrigin": true } } }
 
 services:
   talos-api:
-    image: "ghcr.m.daocloud.io/siderolabs/discovery-service:latest"
+    image: "ghcr.io/siderolabs/discovery-service:latest"
     container_name: "talos-api"
     restart: "unless-stopped"
     ports:
       - "9300:3000/tcp"
 
   meshcentral:
-    image: "ghcr.m.daocloud.io/ylianst/meshcentral:latest"
+    image: "ghcr.io/ylianst/meshcentral:latest"
     container_name: "meshcentral"
     restart: "unless-stopped"
     network_mode: "host"
@@ -23,4 +23,4 @@ services:
       - source: "config.json"
         target: "/opt/meshcentral/meshcentral-data/config.json"
     volumes:
-      - "./meshcentral/data:/opt/meshcentral/meshcentral-data"
+      - "/volume1/docker/meshcentral/data:/opt/meshcentral/meshcentral-data"

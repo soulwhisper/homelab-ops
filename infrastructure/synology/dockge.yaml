@@ -1,0 +1,17 @@
+---
+services:
+  dockge:
+    image: louislam/dockge:latest
+    container_name: dockge
+    network_mode: bridge
+    environment:
+      - TZ=Asia/Shanghai
+      - HOST_HOSTNAME=DS1825
+      - HOST_CONTAINERNAME=dockge
+      - DOCKGE_STACKS_DIR=/opt/stacks
+    ports:
+      - 5002:5001/tcp
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:rw
+      - /volume1/docker/dockge/data:/app/data:rw
+      - /volume1/docker/dockge/stacks:/opt/stacks:rw

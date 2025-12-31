@@ -26,6 +26,8 @@ spec:
             runAsGroup: 2000
             fsGroup: 2000
             fsGroupChangePolicy: OnRootMismatch
+            supplementalGroups:
+              - 100 # synology:users
         initContainers:
           init-db:
             image:

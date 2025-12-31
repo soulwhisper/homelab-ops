@@ -26,7 +26,8 @@ spec:
             runAsGroup: 1000
             fsGroup: 1000
             fsGroupChangePolicy: OnRootMismatch
-            supplementalGroups: [2000] # fix nfs permission
+            supplementalGroups:
+              - 100 # synology:users
         containers:
           app:
             image:

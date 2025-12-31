@@ -3,7 +3,7 @@
 
 services:
   watchtower:
-    image: "ghcr.m.daocloud.io/nicholas-fedor/watchtower:latest"
+    image: "ghcr.io/nicholas-fedor/watchtower:latest"
     container_name: "watchtower"
     restart: "unless-stopped"
     volumes:

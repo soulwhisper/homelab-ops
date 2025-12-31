@@ -6,15 +6,15 @@ metadata:
   name: nfs-shared-music
 provisioner: nfs.csi.k8s.io
 parameters:
-  server: nas.homelab.internal
-  share: /mnt/Mundorum/Media
-  subDir: "Music"
+  server: "nas.homelab.internal"
+  share: "/volume1"
+  subDir: "music"
   onDelete: retain
 reclaimPolicy: Delete
-volumeBindingMode: Immediate
+volumeBindingMode: WaitForFirstConsumer
 allowVolumeExpansion: true
 mountOptions:
-  - nfsvers=4.2
+  - nfsvers=4.1
   - hard
   - noatime
   - nconnect=16

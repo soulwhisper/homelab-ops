@@ -14,7 +14,7 @@ parameters:
   allowVolumeExpansion: "true"
   stsAffinityGroup: "true"
 provisioner: io.openebs.csi-mayastor
-volumeBindingMode: Immediate
+volumeBindingMode: WaitForFirstConsumer
 reclaimPolicy: Delete
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.noirprime.com/storage.k8s.io/storageclass_v1.json

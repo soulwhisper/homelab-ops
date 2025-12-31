@@ -5,6 +5,7 @@ kind: Kustomization
 resources:
   - ./pvc-minecraft.yaml
   - ./pvc-document.yaml
+  - ./pvc-downloads.yaml
   - ./pvc-movie.yaml
   - ./pvc-music.yaml
   - ./pvc-photo.yaml

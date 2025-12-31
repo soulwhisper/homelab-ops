@@ -12,10 +12,10 @@ parameters:
   subDir: "${pvc.metadata.name}"
   onDelete: retain
 reclaimPolicy: Delete
-volumeBindingMode: Immediate
+volumeBindingMode: WaitForFirstConsumer
 allowVolumeExpansion: true
 mountOptions:
-  - nfsvers=4.2
+  - nfsvers=4.1
   - hard
   - noatime
   - nconnect=16

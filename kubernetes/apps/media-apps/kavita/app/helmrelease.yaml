@@ -23,6 +23,8 @@ spec:
             runAsGroup: 2000
             fsGroup: 2000
             fsGroupChangePolicy: OnRootMismatch
+            supplementalGroups:
+              - 100 # synology:users
         containers:
           app:
             image:

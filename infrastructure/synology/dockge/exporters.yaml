@@ -1,7 +1,7 @@
 ---
 services:
   snmp-exporter:
-    image: "docker.m.daocloud.io/prometheuscommunity/snmp-exporter:latest"
+    image: "prom/snmp-exporter:latest"
     container_name: "smartctl-exporter"
     restart: "unless-stopped"
     command: ["--config.file=/etc/snmp_exporter/snmp.yml"]
@@ -10,4 +10,4 @@ services:
     volumes:
       # https://grafana.com/grafana/dashboards/14284-synology-nas-details/
       # https://github.com/tumak66/grafana-prometheus-synology/blob/main/snmp-exporter/snmp.yml
-      - "./snmp-exporter/snmp.yml:/etc/snmp_exporter/snmp.yml:ro"
+      - "/volume1/docker/snmp-exporter/snmp.yml:/etc/snmp_exporter/snmp.yml:ro"

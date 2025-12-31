@@ -1,5 +1,11 @@
 ---
-# Bootstrap via ssh, check README.md for more details
+# Bootstrap via ssh
+# garage status
+# garage layout assign -z main -c 1TB <node-id>
+# garage layout apply --version 1
+# garage bucket create postgres
+# garage key import $access_key $secret_key -n postgres --yes
+# garage bucket allow --read --write postgres --key postgres
 
 configs:
   garage.toml:
@@ -18,7 +24,7 @@ configs:
 
 services:
   garage:
-    image: "docker.m.daocloud.io/dxflrs/garage:v2.1.0"
+    image: "dxflrs/garage:v2.1.0"
     container_name: "garage"
     restart: "unless-stopped"
     ports:
@@ -27,5 +33,5 @@ services:
       - source: "garage.toml"
         target: "/etc/garage.toml"
     volumes:
-      - "./garage/data:/tmp/data"
-      - "./garage/meta:/tmp/meta"
+      - "/volume1/docker/garage/data:/tmp/data"
+      - "/volume1/docker/garage/meta:/tmp/meta"

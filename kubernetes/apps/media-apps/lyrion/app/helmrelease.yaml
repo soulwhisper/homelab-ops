@@ -22,6 +22,9 @@ spec:
             image:
               repository: ghcr.io/lms-community/lyrionmusicserver
               tag: 9.1.0
+            env:
+              PUID: "2000"
+              PGID: "100" # synology:users
             resources:
               requests:
                 cpu: 40m

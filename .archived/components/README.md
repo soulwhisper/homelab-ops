@@ -40,7 +40,7 @@ patches:
           permissions: 0o644
           content: |
             [ NFSMount_Global_Options ]
-            nfsvers=4.2
+            nfsvers=4.1
             hard=True
             noatime=True
             nconnect=16

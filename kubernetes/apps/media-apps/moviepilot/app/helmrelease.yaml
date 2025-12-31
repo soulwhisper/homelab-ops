@@ -62,9 +62,8 @@ spec:
                   secretKeyRef:
                     name: *pguser
                     key: password
-              PROXY_HOST: "${HTTPS_PROXY}"
               PUID: "2000"
-              PGID: "2000"
+              PGID: "100" # synology:users
             envFrom:
               - configMapRef:
                   name: *name

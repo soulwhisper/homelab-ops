@@ -3,12 +3,12 @@
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
-  name: nfs-shared-movie
+  name: nfs-shared-downloads
 provisioner: nfs.csi.k8s.io
 parameters:
   server: "nas.homelab.internal"
-  share: "/volume1"
-  subDir: "video"
+  share: "/volume2"
+  subDir: "downloads"
   onDelete: retain
 reclaimPolicy: Delete
 volumeBindingMode: WaitForFirstConsumer
@@ -22,7 +22,7 @@ mountOptions:
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: nfs-shared-movie
+  name: nfs-shared-downloads
   namespace: media-apps
 spec:
   accessModes:
@@ -30,4 +30,4 @@ spec:
   resources:
     requests:
       storage: 300Gi
-  storageClassName: nfs-shared-movie
+  storageClassName: nfs-shared-downloads

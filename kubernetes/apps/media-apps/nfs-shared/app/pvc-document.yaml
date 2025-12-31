@@ -6,15 +6,15 @@ metadata:
   name: nfs-shared-document
 provisioner: nfs.csi.k8s.io
 parameters:
-  server: nas.homelab.internal
-  share: /mnt/Mundorum
-  subDir: "Document"
+  server: "nas.homelab.internal"
+  share: "/volume1"
+  subDir: "document"
   onDelete: retain
 reclaimPolicy: Delete
-volumeBindingMode: Immediate
+volumeBindingMode: WaitForFirstConsumer
 allowVolumeExpansion: true
 mountOptions:
-  - nfsvers=4.2
+  - nfsvers=4.1
   - hard
   - noatime
   - nconnect=16

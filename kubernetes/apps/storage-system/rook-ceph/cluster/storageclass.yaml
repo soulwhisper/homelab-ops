@@ -20,7 +20,7 @@ parameters:
   csi.storage.k8s.io/node-stage-secret-namespace: *cluster_namespace
   csi.storage.k8s.io/fstype: ext4
 allowVolumeExpansion: true
-volumeBindingMode: Immediate
+volumeBindingMode: WaitForFirstConsumer
 reclaimPolicy: Delete
 mountOptions:
   - discard
