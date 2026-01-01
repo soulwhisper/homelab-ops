@@ -61,6 +61,7 @@ spec:
       acceleration: best-effort
       algorithm: maglev
       mode: hybrid
+      serviceTopology: true
     operator:
       prometheus:
         enabled: true
