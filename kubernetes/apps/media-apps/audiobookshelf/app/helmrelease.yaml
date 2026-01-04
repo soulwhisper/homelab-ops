@@ -72,10 +72,10 @@ spec:
         globalMounts:
           - path: /config
       shared:
-        existingClaim: nfs-shared-document
+        existingClaim: music
         globalMounts:
-          - path: /data/nas-media/Library
-            subPath: AudioBooks
+          - path: /audiobooks
+            subPath: audiobooks
       tmpfs:
         type: emptyDir
         globalMounts:

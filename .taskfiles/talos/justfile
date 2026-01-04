@@ -34,7 +34,7 @@ generate mode:
     --output "${TALOS_DIR}/clusterconfig"
   for FILE in $(ls ${TALOS_DIR}/{{mode}}/nodes/*.yaml); do
     NODE=$(basename "$FILE" .yaml)
-    talosctl machineconfig patch "${TALOS_DIR}/clusterconfig/controlplane.yaml" \
+    talosctl patch machineconfig "${TALOS_DIR}/clusterconfig/controlplane.yaml" \
       --output "${TALOS_DIR}/clusterconfig/main-$NODE.yaml" \
       --patch "${TALOS_DIR}/{{mode}}/10-general.yaml" \
       --patch "${TALOS_DIR}/{{mode}}/nodes/$NODE.yaml"

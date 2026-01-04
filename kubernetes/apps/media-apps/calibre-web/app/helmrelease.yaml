@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &name metube
+  name: &name calibre-web
 spec:
   interval: 30m
   chartRef:
@@ -16,30 +16,20 @@ spec:
       *name :
         annotations:
           reloader.stakater.com/auto: "true"
-          config.homelab.ops/proxy: "https" # https_proxy needed
-        pod:
-          securityContext:
-            runAsNonRoot: true
-            runAsUser: 2000
-            runAsGroup: 2000
-            fsGroup: 2000
-            fsGroupChangePolicy: OnRootMismatch
-            supplementalGroups:
-              - 100 # synology:users
         containers:
           app:
             image:
-              repository: ghcr.io/alexta69/metube
-              tag: 2026.01.02
-            envFrom:
-              - configMapRef:
-                  name: *name
+              repository: ghcr.io/linuxserver/calibre-web
+              tag: 0.6.25
+            env:
+              PUID: "2000"
+              PGID: "100"
             resources:
               requests:
-                cpu: 20m
+                cpu: 50m
               limits:
-                memory: 2Gi
-            securityContext: &securityContext
+                memory: 1Gi
+            securityContext:
               allowPrivilegeEscalation: false
               capabilities: { drop: ["ALL"] }
               readOnlyRootFilesystem: true
@@ -48,32 +38,33 @@ spec:
       app:
         ports:
           http:
-            port: 8081
+            port: 8083
     route:
       app:
-        hostnames: ["metube.noirprime.com"]
+        hostnames: ["calibre.noirprime.com"]
         annotations:
           gethomepage.dev/enabled: "true"
-          gethomepage.dev/icon: metube.png
-          gethomepage.dev/name: Metube
-          gethomepage.dev/group: Download
+          gethomepage.dev/icon: calibre.png
+          gethomepage.dev/name: Calibre
+          gethomepage.dev/group: Service
         parentRefs:
           - name: envoy-internal
             namespace: networking-system
             sectionName: https
 
     persistence:
-      movie:
-        existingClaim: video
+      app:
+        existingClaim: *name
         globalMounts:
-          - path: /data/movie
-            subPath: youtube
-      music:
-        existingClaim: music
+          - path: /config
+      shared:
+        existingClaim: document
         globalMounts:
-          - path: /data/audio
-            subPath: youtube
+          - path: /books
       tmpfs:
         type: emptyDir
         globalMounts:
+          - path: /run
+            subPath: run
           - path: /tmp
+            subPath: tmp

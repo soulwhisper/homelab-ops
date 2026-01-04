@@ -11,6 +11,7 @@ resources:
   # media
   # - ./audiobookshelf/ks.yaml
   - ./audiomuse/ks.yaml
+  - ./calibre-web/ks.yaml
   - ./crafty-controller/ks.yaml
   - ./emby/ks.yaml
   - ./immich/ks.yaml
@@ -19,6 +20,7 @@ resources:
   - ./metube/ks.yaml
   - ./moviepilot/ks.yaml
   # - ./mumc/ks.yaml
+  - ./orcaslicer/ks.yaml
   - ./qbittorrent/ks.yaml
   # others
   # - ./frigate/ks.yaml

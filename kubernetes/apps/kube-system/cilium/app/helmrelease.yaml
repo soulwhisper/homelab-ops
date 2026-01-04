@@ -15,7 +15,7 @@ spec:
     # BIGTCP, xdp, for Intel-x710(ice);
     # Recommendation:netkit, host-routing, bbr, ebpf-backend-memory, ebpf-clock-probe, preallocate-maps, maglev-hashing;
     # :: features
-    # hubble:disabled, hostLegacyRouting:disabled, ipam:kubernetes;
+    # hubble:enabled, hostLegacyRouting:disabled, ipam:kubernetes;
     # envoy:disabled, gatewayAPI:disabled, bgpControlPlane:disabled, l2announcements:disabled;
     # ::
     autoDirectNodeRoutes: true
@@ -47,7 +47,27 @@ spec:
     gatewayAPI:
       enabled: false
     hubble:
-      enabled: false
+      enabled: true
+      metrics:
+        enabled:
+          - dns:query
+          - drop
+          - tcp
+          - flow
+          - port-distribution
+          - icmp
+          - http
+        serviceMonitor:
+          enabled: true
+      relay:
+        enabled: true
+        rollOutPods: true
+        prometheus:
+          serviceMonitor:
+            enabled: true
+      ui:
+        enabled: true
+        rollOutPods: true
     ipam:
       mode: "kubernetes"
     ipv4NativeRoutingCIDR: 10.100.0.0/17

@@ -155,3 +155,7 @@ configFiles:
       MONITOR ups@10.10.0.10 1 upsmon upsmon secondary
       SHUTDOWNCMD "/sbin/poweroff"
     mountPath: /usr/local/etc/nut/upsmon.conf
+---
+apiVersion: v1alpha1
+kind: OOMConfig
+triggerExpression: "false" # disable until 'MemAvailable' implemented

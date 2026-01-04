@@ -124,7 +124,7 @@ spec:
 
     persistence:
       shared:
-        existingClaim: nfs-shared-photo
+        existingClaim: photo
         advancedMounts:
           *name :
             app:

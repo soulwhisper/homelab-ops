@@ -77,7 +77,7 @@ spec:
       #   type: image
       #   image: ghcr.io/buroa/qbrr:0.1.2
       shared:
-        existingClaim: nfs-shared-downloads
+        existingClaim: downloads
         globalMounts:
           - path: /data
       tmpfs:

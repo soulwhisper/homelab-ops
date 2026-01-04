@@ -85,7 +85,7 @@ spec:
 
     persistence:
       shared:
-        existingClaim: nfs-shared-music
+        existingClaim: music
         globalMounts:
           - path: /music
       tmpfs:

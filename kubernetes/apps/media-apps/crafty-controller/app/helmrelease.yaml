@@ -85,12 +85,12 @@ spec:
           - path: /crafty/servers
             subPath: servers
       shared:
-        existingClaim: nfs-shared-minecraft
+        existingClaim: backup
         globalMounts:
           - path: /crafty/backups
-            subPath: backups
+            subPath: minecraft/backups
           - path: /crafty/import
-            subPath: import
+            subPath: minecraft/imports
       tmpfs:
         type: emptyDir
         globalMounts:

@@ -6,7 +6,7 @@
 - run below commands via `browse-pvc` or nfs-server ssh;
 
 ```shell
-kubectl browse-pvc nfs-shared-photo -u 2000
+kubectl browse-pvc photo -u 2000
 
 # if via nfs-server ssh, change folders first
 

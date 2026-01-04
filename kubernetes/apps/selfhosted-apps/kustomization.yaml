@@ -6,8 +6,10 @@ namespace: selfhosted-apps
 components:
   - ../../components/namespace
 resources:
+  # - ./comfyui/ks.yaml # gpu works better
   - ./convertx/ks.yaml
   - ./dify/ks.yaml
+  - ./dispatcharr/ks.yaml
   - ./freshrss/ks.yaml
   - ./homepage/ks.yaml
   - ./home-assistant/ks.yaml
@@ -18,4 +20,5 @@ resources:
   - ./opencloud/ks.yaml
   - ./qui/ks.yaml
   - ./sillytavern/ks.yaml
+  - ./stirling-pdf/ks.yaml
   - ./zigbee2mqtt/ks.yaml
