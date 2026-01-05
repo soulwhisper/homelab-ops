@@ -25,7 +25,7 @@ _... managed by Flux, Renovate and GitHub Actions_ <img src="https://fonts.gstat
 
 ## <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f4a1/512.gif" alt="💡" width="20" height="20"> Overview
 
-This repository serves as a monorepository for the comprehensive infrastructure and Kubernetes cluster powering my homelab. At its core, it orchestrates a high-performance **Talos Linux** cluster deeply integrated with an **Enterprise Layer 3** network fabric and a **TrueNAS** storage backbone.
+This repository serves as a monorepository for the comprehensive infrastructure and Kubernetes cluster powering my homelab. At its core, it orchestrates a high-performance **Talos Linux** cluster deeply integrated with an **Enterprise Layer 3** network fabric and a **Synology** storage backbone.
 
 The project strictly adheres to **Infrastructure as Code (IaC)** and **GitOps** principles to ensure declarative, repeatable, and version-controlled management across the entire stack—from bare-metal provisioning to application delivery.
 
@@ -33,7 +33,7 @@ The project strictly adheres to **Infrastructure as Code (IaC)** and **GitOps** 
 
 - **Kubernetes on Metal:** Built on [Talos Linux](https://www.talos.dev) using M.2 NVMe storage, optimizing for performance and immutability.
 - **Enterprise Networking:** Anchored by a managed Layer 3 core switch running **BGP/BFD/OSPF**, integrating seamlessly with [Cilium](https://github.com/cilium/cilium) for advanced pod networking and **OpenWrt** for edge services (NTP/DNS/Proxy).
-- **Hybrid Storage:** Leveraging [TrueNAS Scale](https://www.truenas.com/) for centralized NFS/S3 object storage alongside localized high-performance [Rook-Ceph](https://github.com/rook/rook) block storage.
+- **Hybrid Storage:** Leveraging Synology (Was [TrueNAS Scale](https://www.truenas.com/)) for centralized NFS/S3 object storage alongside localized high-performance [Rook-Ceph](https://github.com/rook/rook) block storage.
 - **Automated Operations:** Powered by [Flux](https://github.com/fluxcd/flux2) for continuous delivery, [GitHub Actions](https://github.com/features/actions) for CI pipelines, and [Renovate](https://github.com/renovatebot/renovate) for dependency management.
 
 All configurations are declared as code, promoting reproducibility and enabling seamless updates, scaling, and disaster recovery of the homelab environment.
