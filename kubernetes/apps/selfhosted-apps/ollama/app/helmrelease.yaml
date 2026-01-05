@@ -107,10 +107,10 @@ spec:
               readOnlyRootFilesystem: true
 
     service:
-      type: LoadBalancer
-      annotations:
-        lbipam.cilium.io/ips: "10.10.0.140"
       app:
+        type: LoadBalancer
+        annotations:
+          lbipam.cilium.io/ips: "10.10.0.140"
         ports:
           http:
             port: *port
