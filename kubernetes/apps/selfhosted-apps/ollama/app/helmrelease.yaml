@@ -108,8 +108,8 @@ spec:
 
     service:
       type: LoadBalancer
-        annotations:
-          lbipam.cilium.io/ips: "10.10.0.140"
+      annotations:
+        lbipam.cilium.io/ips: "10.10.0.140"
       app:
         ports:
           http:

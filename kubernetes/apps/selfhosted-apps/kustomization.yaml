@@ -18,7 +18,6 @@ resources:
   - ./netbox/ks.yaml
   - ./ollama/ks.yaml
   - ./opencloud/ks.yaml
-  - ./qui/ks.yaml
   - ./sillytavern/ks.yaml
   - ./stirling-pdf/ks.yaml
   - ./zigbee2mqtt/ks.yaml

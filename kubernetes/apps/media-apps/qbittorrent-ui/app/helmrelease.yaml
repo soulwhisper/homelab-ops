@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &name qui
+  name: &name qbittorrent-ui
 spec:
   interval: 30m
   chartRef:
@@ -65,3 +65,7 @@ spec:
         existingClaim: *name
         globalMounts:
           - path: /config
+      shared:
+        existingClaim: downloads
+        globalMounts:
+          - path: /downloads

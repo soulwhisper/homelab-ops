@@ -79,7 +79,7 @@ spec:
       shared:
         existingClaim: downloads
         globalMounts:
-          - path: /data
+          - path: /downloads
       tmpfs:
         type: emptyDir
         globalMounts:

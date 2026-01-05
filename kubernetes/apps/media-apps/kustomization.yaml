@@ -22,6 +22,7 @@ resources:
   # - ./mumc/ks.yaml
   - ./orcaslicer/ks.yaml
   - ./qbittorrent/ks.yaml
+  - ./qbittorrent-ui/ks.yaml
   # others
   # - ./frigate/ks.yaml
   # - ./foundryvtt/ks.yaml
