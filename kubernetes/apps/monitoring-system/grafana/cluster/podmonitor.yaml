@@ -3,12 +3,16 @@
 apiVersion: monitoring.coreos.com/v1
 kind: PodMonitor
 metadata:
-  name: &name cnpg-operator
+  name: &name grafana
 spec:
   jobLabel: *name
+  namespaceSelector:
+    matchNames:
+      - monitoring-system
   selector:
     matchLabels:
-      app.kubernetes.io/instance: cnpg-operator
-      app.kubernetes.io/name: cloudnative-pg
+      grafana.internal/instance: grafana
   podMetricsEndpoints:
-    - port: metrics
+    - port: grafana
+      path: /metrics
+      honorLabels: true

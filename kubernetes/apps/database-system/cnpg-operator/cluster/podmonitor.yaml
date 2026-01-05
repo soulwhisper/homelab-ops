@@ -3,10 +3,9 @@
 apiVersion: monitoring.coreos.com/v1
 kind: PodMonitor
 metadata:
-  name: postgres
-  labels:
-    cnpg.io/cluster: postgres
+  name: &name postgres
 spec:
+  jobLabel: *name
   selector:
     matchLabels:
       cnpg.io/cluster: postgres

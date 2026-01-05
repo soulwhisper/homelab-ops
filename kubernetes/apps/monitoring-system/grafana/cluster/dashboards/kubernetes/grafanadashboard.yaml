@@ -1,0 +1,102 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.noirprime.com/grafana.integreatly.org/grafanadashboard_v1beta1.json
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: k8s-system-api-server
+spec:
+  folderRef: kubernetes
+  resyncPeriod: 30m
+  allowCrossNamespaceImport: true
+  instanceSelector:
+    matchLabels:
+      grafana.internal/instance: grafana
+  datasources:
+    - inputName: "DS_PROMETHEUS"
+      datasourceName: "prometheus"
+  url: "https://grafana.com/api/dashboards/15761/revisions/20/download"
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.noirprime.com/grafana.integreatly.org/grafanadashboard_v1beta1.json
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: k8s-views-global
+spec:
+  folderRef: kubernetes
+  resyncPeriod: 30m
+  allowCrossNamespaceImport: true
+  instanceSelector:
+    matchLabels:
+      grafana.internal/instance: grafana
+  datasources:
+    - inputName: "DS_PROMETHEUS"
+      datasourceName: "prometheus"
+  url: "https://grafana.com/api/dashboards/15757/revisions/43/download"
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.noirprime.com/grafana.integreatly.org/grafanadashboard_v1beta1.json
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: k8s-views-nodes
+spec:
+  folderRef: kubernetes
+  resyncPeriod: 30m
+  allowCrossNamespaceImport: true
+  instanceSelector:
+    matchLabels:
+      grafana.internal/instance: grafana
+  datasources:
+    - inputName: "DS_PROMETHEUS"
+      datasourceName: "prometheus"
+  url: "https://grafana.com/api/dashboards/15759/revisions/40/download"
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.noirprime.com/grafana.integreatly.org/grafanadashboard_v1beta1.json
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: k8s-views-namespaces
+spec:
+  folderRef: kubernetes
+  resyncPeriod: 30m
+  allowCrossNamespaceImport: true
+  instanceSelector:
+    matchLabels:
+      grafana.internal/instance: grafana
+  datasources:
+    - inputName: "DS_PROMETHEUS"
+      datasourceName: "prometheus"
+  url: "https://grafana.com/api/dashboards/15758/revisions/44/download"
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.noirprime.com/grafana.integreatly.org/grafanadashboard_v1beta1.json
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: k8s-views-pods
+spec:
+  folderRef: kubernetes
+  resyncPeriod: 30m
+  allowCrossNamespaceImport: true
+  instanceSelector:
+    matchLabels:
+      grafana.internal/instance: grafana
+  datasources:
+    - inputName: "DS_PROMETHEUS"
+      datasourceName: "prometheus"
+  url: "https://grafana.com/api/dashboards/15760/revisions/37/download"
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.noirprime.com/grafana.integreatly.org/grafanadashboard_v1beta1.json
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: k8s-volumes
+spec:
+  folderRef: kubernetes
+  resyncPeriod: 30m
+  allowCrossNamespaceImport: true
+  instanceSelector:
+    matchLabels:
+      grafana.internal/instance: grafana
+  datasources:
+    - inputName: "DS_PROMETHEUS"
+      datasourceName: "prometheus"
+  url: "https://grafana.com/api/dashboards/11454/revisions/14/download"
