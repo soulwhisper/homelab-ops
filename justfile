@@ -1,9 +1,9 @@
 set quiet := true
 set shell := ['bash', '-euo', 'pipefail', '-c']
 
-mod infra ".taskfiles/infra"
-mod k8s ".taskfiles/k8s"
-mod talos ".taskfiles/talos"
+mod infra ".justfiles/infra.just"
+mod k8s ".justfiles/k8s.just"
+mod talos ".justfiles/talos.just"
 
 export OPS_DIR := invocation_directory()
 export K8S_DIR := OPS_DIR / "kubernetes"
