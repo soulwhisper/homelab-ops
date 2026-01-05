@@ -25,7 +25,7 @@ spec:
               repository: mirror.gcr.io/zeroclue/comfyui
               tag: base-torch2.8.0-cu126
             env:
-              COMFYUI_EXTRA_ARGS: "--fast --cpu --preview-method auto"
+              COMFYUI_EXTRA_ARGS: "--cpu --preview-method auto"
               ENABLE_CODE_SERVER: "true"
               ENABLE_PRESET_MANAGER: "true"
               IMAGE_PRESET_DOWNLOAD: "FLUX_DEV_BASIC,FLUX_SCHNELL_BASIC"

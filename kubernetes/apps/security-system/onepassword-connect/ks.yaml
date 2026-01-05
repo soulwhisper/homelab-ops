@@ -18,6 +18,9 @@ spec:
   timeout: 5m
   prune: true
   wait: true
+  dependsOn:
+    - name: external-secrets
+      namespace: security-system
   healthChecks:
     - apiVersion: external-secrets.io/v1
       kind: ClusterSecretStore

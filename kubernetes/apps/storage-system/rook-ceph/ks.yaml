@@ -41,6 +41,9 @@ spec:
   timeout: 5m
   prune: true
   wait: true
+  dependsOn:
+    - name: rook-ceph
+      namespace: *namespace
   healthChecks:
     - apiVersion: ceph.rook.io/v1
       kind: CephCluster
@@ -68,6 +71,3 @@ spec:
       kind: CephFilesystem
       failed: status.phase != 'Ready'
       current: status.phase == 'Ready'
-  dependsOn:
-    - name: rook-ceph
-      namespace: *namespace
