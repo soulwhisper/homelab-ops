@@ -69,8 +69,7 @@ directories:
           url: https://github.com/envoyproxy/gateway
           ref: v1.6.1
         includePaths:
-          - "charts/gateway-addons-helm/dashboards/envoy-*.json"
-          - "charts/gateway-addons-helm/dashboards/global-*.json"
+          - "charts/gateway-addons-helm/dashboards/*.json"
       # Envoy Mixin Dashboards
       - path: envoy-mixin-overview
         http:
