@@ -185,7 +185,7 @@ spec:
     matchLabels:
       grafana.internal/instance: grafana
   datasources:
-    - inputName: "DS_PROMETHEUS"
+    - inputName: "DS_SIGNCL-PROMETHEUS"
       datasourceName: "prometheus"
   configMapRef:
     name: dashboard-blackbox-exporter
