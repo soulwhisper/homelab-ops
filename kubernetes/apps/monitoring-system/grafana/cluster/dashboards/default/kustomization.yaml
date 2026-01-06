@@ -12,37 +12,37 @@ generatorOptions:
 configMapGenerator:
   - name: dashboard-cert-manager
     files:
-      - cert-manager.json=../_sources/default/cert-manager.json
+      - cert-manager.json=../_sources/default/cert-manager/dashboard.json
   - name: dashboard-cloudflared
     files:
-      - cloudflared.json=../_sources/default/cloudflared.json
+      - cloudflared.json=../_sources/default/cloudflared/dashboard.json
   - name: dashboard-external-dns
     files:
-      - external-dns.json=../_sources/default/external-dns.json
+      - external-dns.json=../_sources/default/external-dns/dashboard.json
   - name: dashboard-node-exporter-full
     files:
-      - node-exporter-full.json=../_sources/default/node-exporter-full.json
+      - node-exporter-full.json=../_sources/default/node-exporter-full/dashboard.json
   - name: dashboard-smartctl-exporter
     files:
-      - smartctl-exporter.json=../_sources/default/smartctl-exporter.json
+      - smartctl-exporter.json=../_sources/default/smartctl-exporter/dashboard.json
   - name: dashboard-volsync
     files:
-      - volsync.json=../_sources/default/volsync.json
+      - volsync.json=../_sources/default/volsync/dashboard.json
   - name: dashboard-synology
     files:
-      - synology.json=../_sources/default/infrastructure/synology.json
+      - synology.json=../_sources/default/infrastructure/synology/dashboard.json
   - name: dashboard-openwrt
     files:
-      - openwrt.json=../_sources/default/infrastructure/openwrt.json
+      - openwrt.json=../_sources/default/infrastructure/openwrt/dashboard.json
   - name: dashboard-blackbox-exporter
     files:
-      - blackbox-exporter.json=../_sources/default/devices/blackbox-exporter.json
+      - blackbox-exporter.json=../_sources/default/devices/blackbox-exporter/dashboard.json
   - name: dashboard-unifi-sites
     files:
-      - unifi-sites.json=../_sources/default/devices/unifi-sites.json
+      - unifi-sites.json=../_sources/default/devices/unifi-sites/dashboard.json
   - name: dashboard-unifi-uap
     files:
-      - unifi-uap.json=../_sources/default/devices/unifi-uap.json
+      - unifi-uap.json=../_sources/default/devices/unifi-uap/dashboard.json
   - name: dashboard-unifi-clients
     files:
-      - unifi-clients.json=../_sources/default/devices/unifi-clients.json
+      - unifi-clients.json=../_sources/default/devices/unifi-clients/dashboard.json

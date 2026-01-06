@@ -8,24 +8,24 @@ directories:
   # ---------------------------------------------------------
   - path: _sources/ceph
     contents:
-      - path: .
+      - path: ceph-cluster
         http:
           {
             url: "https://grafana.com/api/dashboards/2842/revisions/18/download",
           }
-        newRootPath: ceph-cluster.json
-      - path: .
+        newRootPath: dashboard.json
+      - path: ceph-osd
         http:
           {
             url: "https://grafana.com/api/dashboards/5336/revisions/9/download",
           }
-        newRootPath: ceph-osd.json
-      - path: .
+        newRootPath: dashboard.json
+      - path: ceph-pools
         http:
           {
             url: "https://grafana.com/api/dashboards/5342/revisions/9/download",
           }
-        newRootPath: ceph-pools.json
+        newRootPath: dashboard.json
 
   # ---------------------------------------------------------
   # Folder : cilium
@@ -72,66 +72,66 @@ directories:
           - "charts/gateway-addons-helm/dashboards/envoy-*.json"
           - "charts/gateway-addons-helm/dashboards/global-*.json"
       # Envoy Mixin Dashboards
-      - path: .
+      - path: envoy-mixin-overview
         http:
           {
             url: "https://grafana.com/api/dashboards/24459/revisions/1/download",
           }
-        newRootPath: envoy-mixin-overview.json
-      - path: .
+        newRootPath: dashboard.json
+      - path: envoy-mixin-upstream
         http:
           {
             url: "https://grafana.com/api/dashboards/24457/revisions/1/download",
           }
-        newRootPath: envoy-mixin-upstream.json
-      - path: .
+        newRootPath: dashboard.json
+      - path: envoy-mixin-downstream
         http:
           {
             url: "https://grafana.com/api/dashboards/24458/revisions/1/download",
           }
-        newRootPath: envoy-mixin-downstream.json
+        newRootPath: dashboard.json
 
   # ---------------------------------------------------------
   # Folder : kubernetes
   # ---------------------------------------------------------
   - path: _sources/kubernetes
     contents:
-      - path: .
+      - path: k8s-system-api-server
         http:
           {
             url: "https://grafana.com/api/dashboards/15761/revisions/20/download",
           }
-        newRootPath: k8s-system-api-server.json
-      - path: .
+        newRootPath: dashboard.json
+      - path: k8s-views-global
         http:
           {
             url: "https://grafana.com/api/dashboards/15757/revisions/43/download",
           }
-        newRootPath: k8s-views-global.json
-      - path: .
+        newRootPath: dashboard.json
+      - path: k8s-views-nodes
         http:
           {
             url: "https://grafana.com/api/dashboards/15759/revisions/40/download",
           }
-        newRootPath: k8s-views-nodes.json
-      - path: .
+        newRootPath: dashboard.json
+      - path: k8s-views-namespaces
         http:
           {
             url: "https://grafana.com/api/dashboards/15758/revisions/44/download",
           }
-        newRootPath: k8s-views-namespaces.json
-      - path: .
+        newRootPath: dashboard.json
+      - path: k8s-views-pods
         http:
           {
             url: "https://grafana.com/api/dashboards/15760/revisions/37/download",
           }
-        newRootPath: k8s-views-pods.json
-      - path: .
+        newRootPath: dashboard.json
+      - path: k8s-volumes
         http:
           {
             url: "https://grafana.com/api/dashboards/11454/revisions/14/download",
           }
-        newRootPath: k8s-volumes.json
+        newRootPath: dashboard.json
 
   # ---------------------------------------------------------
   # Folder : victoria-metrics
@@ -155,87 +155,87 @@ directories:
   # ---------------------------------------------------------
   - path: _sources/default
     contents:
-      - path: .
+      - path: cert-manager
         http:
           {
             url: "https://grafana.com/api/dashboards/20842/revisions/3/download",
           }
-        newRootPath: cert-manager.json
-      - path: .
+        newRootPath: dashboard.json
+      - path: cloudflared
         http:
           {
             url: "https://grafana.com/api/dashboards/17457/revisions/6/download",
           }
-        newRootPath: cloudflared.json
-      - path: .
+        newRootPath: dashboard.json
+      - path: external-dns
         http:
           {
             url: "https://grafana.com/api/dashboards/23969/revisions/1/download",
           }
-        newRootPath: external-dns.json
-      - path: .
+        newRootPath: dashboard.json
+      - path: node-exporter-full
         http:
           {
             url: "https://grafana.com/api/dashboards/1860/revisions/42/download",
           }
-        newRootPath: node-exporter-full.json
-      - path: .
+        newRootPath: dashboard.json
+      - path: smartctl-exporter
         http:
           {
             url: "https://grafana.com/api/dashboards/22604/revisions/2/download",
           }
-        newRootPath: smartctl-exporter.json
-      - path: .
+        newRootPath: dashboard.json
+      - path: volsync
         http:
           {
             url: "https://grafana.com/api/dashboards/21356/revisions/3/download",
           }
-        newRootPath: volsync.json
+        newRootPath: dashboard.json
 
   # ---------------------------------------------------------
   # Folder : default/infrastructure
   # ---------------------------------------------------------
   - path: _sources/default/infrastructure
     contents:
-      - path: .
+      - path: synology
         http:
           {
             url: "https://grafana.com/api/dashboards/14284/revisions/10/download",
           }
-        newRootPath: synology.json
-      - path: .
+        newRootPath: dashboard.json
+      - path: openwrt
         http:
           {
             url: "https://grafana.com/api/dashboards/18153/revisions/4/download",
           }
-        newRootPath: openwrt.json
+        newRootPath: dashboard.json
 
   # ---------------------------------------------------------
   # Folder : default/devices
   # ---------------------------------------------------------
   - path: _sources/default/devices
     contents:
-      - path: .
+      - path: blackbox-exporter
         http:
           {
             url: "https://grafana.com/api/dashboards/7587/revisions/3/download",
           }
-        newRootPath: blackbox-exporter.json
-      - path: .
+        newRootPath: dashboard.json
+      - path: unifi-sites
         http:
           {
             url: "https://grafana.com/api/dashboards/11311/revisions/5/download",
           }
-        newRootPath: unifi-sites.json
-      - path: .
+        newRootPath: dashboard.json
+      - path: unifi-uap
         http:
           {
             url: "https://grafana.com/api/dashboards/11314/revisions/10/download",
           }
-        newRootPath: unifi-uap.json
-      - path: .
+        newRootPath: dashboard.json
+      - path: unifi-clients
         http:
           {
             url: "https://grafana.com/api/dashboards/11315/revisions/9/download",
           }
-        newRootPath: unifi-clients.json
+        newRootPath: dashboard.json

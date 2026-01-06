@@ -24,10 +24,10 @@ configMapGenerator:
       - envoy-global-ratelimit.json=../_sources/envoy/charts/gateway-addons-helm/dashboards/global-ratelimit.json
   - name: dashboard-envoy-mixin-overview
     files:
-      - envoy-mixin-overview.json=../_sources/envoy/envoy-mixin-overview.json
+      - envoy-mixin-overview.json=../_sources/envoy/envoy-mixin-overview/dashboard.json
   - name: dashboard-envoy-mixin-upstream
     files:
-      - envoy-mixin-upstream.json=../_sources/envoy/envoy-mixin-upstream.json
+      - envoy-mixin-upstream.json=../_sources/envoy/envoy-mixin-upstream/dashboard.json
   - name: dashboard-envoy-mixin-downstream
     files:
-      - envoy-mixin-downstream.json=../_sources/envoy/envoy-mixin-downstream.json
+      - envoy-mixin-downstream.json=../_sources/envoy/envoy-mixin-downstream/dashboard.json
