@@ -14,7 +14,9 @@ spec:
   datasources:
     - inputName: "DS_PROMETHEUS"
       datasourceName: "prometheus"
-  url: "https://grafana.com/api/dashboards/2842/revisions/18/download"
+  configMapRef:
+    name: dashboard-ceph-cluster
+    key: ceph-cluster.json
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.noirprime.com/grafana.integreatly.org/grafanadashboard_v1beta1.json
 apiVersion: grafana.integreatly.org/v1beta1
@@ -31,7 +33,9 @@ spec:
   datasources:
     - inputName: "DS_PROMETHEUS"
       datasourceName: "prometheus"
-  url: "https://grafana.com/api/dashboards/5336/revisions/9/download"
+  configMapRef:
+    name: dashboard-ceph-osd
+    key: ceph-osd.json
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.noirprime.com/grafana.integreatly.org/grafanadashboard_v1beta1.json
 apiVersion: grafana.integreatly.org/v1beta1
@@ -48,4 +52,6 @@ spec:
   datasources:
     - inputName: "DS_PROMETHEUS"
       datasourceName: "prometheus"
-  url: "https://grafana.com/api/dashboards/5342/revisions/9/download"
+  configMapRef:
+    name: dashboard-ceph-pools
+    key: ceph-pools.json

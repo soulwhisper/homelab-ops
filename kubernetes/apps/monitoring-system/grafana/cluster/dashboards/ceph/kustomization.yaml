@@ -5,3 +5,17 @@ kind: Kustomization
 resources:
   - ./grafanafolder.yaml
   - ./grafanadashboard.yaml
+generatorOptions:
+  disableNameSuffixHash: false
+  labels:
+    app.kubernetes.io/managed-by: "grafana-operator"
+configMapGenerator:
+  - name: dashboard-ceph-cluster
+    files:
+      - ceph-cluster.json=../_sources/ceph/ceph-cluster.json
+  - name: dashboard-ceph-osd
+    files:
+      - ceph-osd.json=../_sources/ceph/ceph-osd.json
+  - name: dashboard-ceph-pools
+    files:
+      - ceph-pools.json=../_sources/ceph/ceph-pools.json

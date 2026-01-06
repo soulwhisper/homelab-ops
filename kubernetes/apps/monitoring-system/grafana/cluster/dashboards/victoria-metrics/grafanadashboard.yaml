@@ -3,7 +3,7 @@
 apiVersion: grafana.integreatly.org/v1beta1
 kind: GrafanaDashboard
 metadata:
-  name: victoria-metrics-backupmanager
+  name: victoria-logs
 spec:
   folderRef: victoria-metrics
   resyncPeriod: 30m
@@ -14,24 +14,9 @@ spec:
   datasources:
     - inputName: "DS_PROMETHEUS"
       datasourceName: "prometheus"
-  url: "https://raw.githubusercontent.com/VictoriaMetrics/VictoriaMetrics/refs/heads/master/dashboards/backupmanager.json"
----
-# yaml-language-server: $schema=https://kubernetes-schemas.noirprime.com/grafana.integreatly.org/grafanadashboard_v1beta1.json
-apiVersion: grafana.integreatly.org/v1beta1
-kind: GrafanaDashboard
-metadata:
-  name: victoria-metrics-clusterbytenant
-spec:
-  folderRef: victoria-metrics
-  resyncPeriod: 30m
-  allowCrossNamespaceImport: true
-  instanceSelector:
-    matchLabels:
-      grafana.internal/instance: grafana
-  datasources:
-    - inputName: "DS_PROMETHEUS"
-      datasourceName: "prometheus"
-  url: "https://raw.githubusercontent.com/VictoriaMetrics/VictoriaMetrics/refs/heads/master/dashboards/clusterbytenant.json"
+  configMapRef:
+    name: dashboard-victoria-logs
+    key: victoria-logs.json
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.noirprime.com/grafana.integreatly.org/grafanadashboard_v1beta1.json
 apiVersion: grafana.integreatly.org/v1beta1
@@ -48,13 +33,15 @@ spec:
   datasources:
     - inputName: "DS_PROMETHEUS"
       datasourceName: "prometheus"
-  url: "https://raw.githubusercontent.com/VictoriaMetrics/VictoriaMetrics/refs/heads/master/dashboards/operator.json"
+  configMapRef:
+    name: dashboard-victoria-metrics-operator
+    key: victoria-metrics-operator.json
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.noirprime.com/grafana.integreatly.org/grafanadashboard_v1beta1.json
 apiVersion: grafana.integreatly.org/v1beta1
 kind: GrafanaDashboard
 metadata:
-  name: victoria-metrics-victorialogs
+  name: victoria-metrics-dashboard
 spec:
   folderRef: victoria-metrics
   resyncPeriod: 30m
@@ -65,41 +52,9 @@ spec:
   datasources:
     - inputName: "DS_PROMETHEUS"
       datasourceName: "prometheus"
-  url: "https://raw.githubusercontent.com/VictoriaMetrics/VictoriaMetrics/refs/heads/master/dashboards/victorialogs.json"
----
-# yaml-language-server: $schema=https://kubernetes-schemas.noirprime.com/grafana.integreatly.org/grafanadashboard_v1beta1.json
-apiVersion: grafana.integreatly.org/v1beta1
-kind: GrafanaDashboard
-metadata:
-  name: victoria-metrics-cluster
-spec:
-  folderRef: victoria-metrics
-  resyncPeriod: 30m
-  allowCrossNamespaceImport: true
-  instanceSelector:
-    matchLabels:
-      grafana.internal/instance: grafana
-  datasources:
-    - inputName: "DS_PROMETHEUS"
-      datasourceName: "prometheus"
-  url: "https://raw.githubusercontent.com/VictoriaMetrics/VictoriaMetrics/refs/heads/master/dashboards/victoriametrics-cluster.json"
----
-# yaml-language-server: $schema=https://kubernetes-schemas.noirprime.com/grafana.integreatly.org/grafanadashboard_v1beta1.json
-apiVersion: grafana.integreatly.org/v1beta1
-kind: GrafanaDashboard
-metadata:
-  name: victoria-metrics-app
-spec:
-  folderRef: victoria-metrics
-  resyncPeriod: 30m
-  allowCrossNamespaceImport: true
-  instanceSelector:
-    matchLabels:
-      grafana.internal/instance: grafana
-  datasources:
-    - inputName: "DS_PROMETHEUS"
-      datasourceName: "prometheus"
-  url: "https://raw.githubusercontent.com/VictoriaMetrics/VictoriaMetrics/refs/heads/master/dashboards/victoriametrics.json"
+  configMapRef:
+    name: dashboard-victoria-metrics-dashboard
+    key: victoria-metrics-dashboard.json
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.noirprime.com/grafana.integreatly.org/grafanadashboard_v1beta1.json
 apiVersion: grafana.integreatly.org/v1beta1
@@ -116,7 +71,9 @@ spec:
   datasources:
     - inputName: "DS_PROMETHEUS"
       datasourceName: "prometheus"
-  url: "https://raw.githubusercontent.com/VictoriaMetrics/VictoriaMetrics/refs/heads/master/dashboards/vmagent.json"
+  configMapRef:
+    name: dashboard-victoria-metrics-vmagent
+    key: victoria-metrics-vmagent.json
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.noirprime.com/grafana.integreatly.org/grafanadashboard_v1beta1.json
 apiVersion: grafana.integreatly.org/v1beta1
@@ -133,7 +90,9 @@ spec:
   datasources:
     - inputName: "DS_PROMETHEUS"
       datasourceName: "prometheus"
-  url: "https://raw.githubusercontent.com/VictoriaMetrics/VictoriaMetrics/refs/heads/master/dashboards/vmalert.json"
+  configMapRef:
+    name: dashboard-victoria-metrics-vmalert
+    key: victoria-metrics-vmalert.json
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.noirprime.com/grafana.integreatly.org/grafanadashboard_v1beta1.json
 apiVersion: grafana.integreatly.org/v1beta1
@@ -150,4 +109,6 @@ spec:
   datasources:
     - inputName: "DS_PROMETHEUS"
       datasourceName: "prometheus"
-  url: "https://raw.githubusercontent.com/VictoriaMetrics/VictoriaMetrics/refs/heads/master/dashboards/vmauth.json"
+  configMapRef:
+    name: dashboard-victoria-metrics-vmauth
+    key: victoria-metrics-vmauth.json

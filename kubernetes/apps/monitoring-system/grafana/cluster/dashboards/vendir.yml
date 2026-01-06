@@ -1,0 +1,241 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.noirprime.com/vendir.k14s.io/config_v1alpha1.json
+apiVersion: vendir.k14s.io/v1alpha1
+kind: Config
+directories:
+  # ---------------------------------------------------------
+  # Folder : ceph
+  # ---------------------------------------------------------
+  - path: _sources/ceph
+    contents:
+      - path: .
+        http:
+          {
+            url: "https://grafana.com/api/dashboards/2842/revisions/18/download",
+          }
+        newRootPath: ceph-cluster.json
+      - path: .
+        http:
+          {
+            url: "https://grafana.com/api/dashboards/5336/revisions/9/download",
+          }
+        newRootPath: ceph-osd.json
+      - path: .
+        http:
+          {
+            url: "https://grafana.com/api/dashboards/5342/revisions/9/download",
+          }
+        newRootPath: ceph-pools.json
+
+  # ---------------------------------------------------------
+  # Folder : cilium
+  # ---------------------------------------------------------
+  - path: _sources/cilium
+    contents:
+      - path: .
+        git:
+          url: https://github.com/cilium/cilium
+          ref: v1.15.0
+        includePaths:
+          - install/kubernetes/cilium/files/cilium-agent/dashboards/*.json
+          - install/kubernetes/cilium/files/cilium-operator/dashboards/*.json
+          - install/kubernetes/cilium/files/hubble/dashboards/*.json
+
+  # ---------------------------------------------------------
+  # Folder : database
+  # ---------------------------------------------------------
+  - path: _sources/database
+    contents:
+      - path: cnpg
+        git:
+          url: https://github.com/cloudnative-pg/grafana-dashboards
+          ref: cluster-v0.0.5
+        includePaths: ["charts/cluster/grafana-dashboard.json"]
+
+      - path: dragonfly
+        git:
+          url: https://github.com/dragonflydb/dragonfly-operator
+          ref: v1.3.1
+        includePaths: ["monitoring/grafana-dashboard.json"]
+
+  # ---------------------------------------------------------
+  # Folder : envoy
+  # ---------------------------------------------------------
+  - path: _sources/envoy
+    contents:
+      # Envoy Gateway Official
+      - path: .
+        git:
+          url: https://github.com/envoyproxy/gateway
+          ref: v1.6.1
+        includePaths:
+          - "charts/gateway-addons-helm/dashboards/envoy-*.json"
+          - "charts/gateway-addons-helm/dashboards/global-*.json"
+      # Envoy Mixin Dashboards
+      - path: .
+        http:
+          {
+            url: "https://grafana.com/api/dashboards/24459/revisions/1/download",
+          }
+        newRootPath: envoy-mixin-overview.json
+      - path: .
+        http:
+          {
+            url: "https://grafana.com/api/dashboards/24457/revisions/1/download",
+          }
+        newRootPath: envoy-mixin-upstream.json
+      - path: .
+        http:
+          {
+            url: "https://grafana.com/api/dashboards/24458/revisions/1/download",
+          }
+        newRootPath: envoy-mixin-downstream.json
+
+  # ---------------------------------------------------------
+  # Folder : kubernetes
+  # ---------------------------------------------------------
+  - path: _sources/kubernetes
+    contents:
+      - path: .
+        http:
+          {
+            url: "https://grafana.com/api/dashboards/15761/revisions/20/download",
+          }
+        newRootPath: k8s-system-api-server.json
+      - path: .
+        http:
+          {
+            url: "https://grafana.com/api/dashboards/15757/revisions/43/download",
+          }
+        newRootPath: k8s-views-global.json
+      - path: .
+        http:
+          {
+            url: "https://grafana.com/api/dashboards/15759/revisions/40/download",
+          }
+        newRootPath: k8s-views-nodes.json
+      - path: .
+        http:
+          {
+            url: "https://grafana.com/api/dashboards/15758/revisions/44/download",
+          }
+        newRootPath: k8s-views-namespaces.json
+      - path: .
+        http:
+          {
+            url: "https://grafana.com/api/dashboards/15760/revisions/37/download",
+          }
+        newRootPath: k8s-views-pods.json
+      - path: .
+        http:
+          {
+            url: "https://grafana.com/api/dashboards/11454/revisions/14/download",
+          }
+        newRootPath: k8s-volumes.json
+
+  # ---------------------------------------------------------
+  # Folder : victoria-metrics
+  # ---------------------------------------------------------
+  - path: _sources/victoria
+    contents:
+      - path: metrics
+        git:
+          url: https://github.com/VictoriaMetrics/VictoriaMetrics
+          ref: v1.133.0
+        includePaths: ["dashboards/*.json"]
+
+      - path: logs
+        git:
+          url: https://github.com/VictoriaMetrics/VictoriaLogs
+          ref: v1.118.0
+        includePaths: ["dashboards/victorialogs*.json"]
+
+  # ---------------------------------------------------------
+  # Folder : default
+  # ---------------------------------------------------------
+  - path: _sources/default
+    contents:
+      - path: .
+        http:
+          {
+            url: "https://grafana.com/api/dashboards/20842/revisions/3/download",
+          }
+        newRootPath: cert-manager.json
+      - path: .
+        http:
+          {
+            url: "https://grafana.com/api/dashboards/17457/revisions/6/download",
+          }
+        newRootPath: cloudflared.json
+      - path: .
+        http:
+          {
+            url: "https://grafana.com/api/dashboards/23969/revisions/1/download",
+          }
+        newRootPath: external-dns.json
+      - path: .
+        http:
+          {
+            url: "https://grafana.com/api/dashboards/1860/revisions/42/download",
+          }
+        newRootPath: node-exporter-full.json
+      - path: .
+        http:
+          {
+            url: "https://grafana.com/api/dashboards/22604/revisions/2/download",
+          }
+        newRootPath: smartctl-exporter.json
+      - path: .
+        http:
+          {
+            url: "https://grafana.com/api/dashboards/21356/revisions/3/download",
+          }
+        newRootPath: volsync.json
+
+  # ---------------------------------------------------------
+  # Folder : default/infrastructure
+  # ---------------------------------------------------------
+  - path: _sources/default/infrastructure
+    contents:
+      - path: .
+        http:
+          {
+            url: "https://grafana.com/api/dashboards/14284/revisions/10/download",
+          }
+        newRootPath: synology.json
+      - path: .
+        http:
+          {
+            url: "https://grafana.com/api/dashboards/18153/revisions/4/download",
+          }
+        newRootPath: openwrt.json
+
+  # ---------------------------------------------------------
+  # Folder : default/devices
+  # ---------------------------------------------------------
+  - path: _sources/default/devices
+    contents:
+      - path: .
+        http:
+          {
+            url: "https://grafana.com/api/dashboards/7587/revisions/3/download",
+          }
+        newRootPath: blackbox-exporter.json
+      - path: .
+        http:
+          {
+            url: "https://grafana.com/api/dashboards/11311/revisions/5/download",
+          }
+        newRootPath: unifi-sites.json
+      - path: .
+        http:
+          {
+            url: "https://grafana.com/api/dashboards/11314/revisions/10/download",
+          }
+        newRootPath: unifi-uap.json
+      - path: .
+        http:
+          {
+            url: "https://grafana.com/api/dashboards/11315/revisions/9/download",
+          }
+        newRootPath: unifi-clients.json

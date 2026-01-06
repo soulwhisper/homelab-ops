@@ -5,3 +5,44 @@ kind: Kustomization
 resources:
   - ./grafanafolder.yaml
   - ./grafanadashboard.yaml
+generatorOptions:
+  disableNameSuffixHash: false
+  labels:
+    app.kubernetes.io/managed-by: "grafana-operator"
+configMapGenerator:
+  - name: dashboard-cert-manager
+    files:
+      - cert-manager.json=../_sources/default/cert-manager.json
+  - name: dashboard-cloudflared
+    files:
+      - cloudflared.json=../_sources/default/cloudflared.json
+  - name: dashboard-external-dns
+    files:
+      - external-dns.json=../_sources/default/external-dns.json
+  - name: dashboard-node-exporter-full
+    files:
+      - node-exporter-full.json=../_sources/default/node-exporter-full.json
+  - name: dashboard-smartctl-exporter
+    files:
+      - smartctl-exporter.json=../_sources/default/smartctl-exporter.json
+  - name: dashboard-volsync
+    files:
+      - volsync.json=../_sources/default/volsync.json
+  - name: dashboard-synology
+    files:
+      - synology.json=../_sources/default/infrastructure/synology.json
+  - name: dashboard-openwrt
+    files:
+      - openwrt.json=../_sources/default/infrastructure/openwrt.json
+  - name: dashboard-blackbox-exporter
+    files:
+      - blackbox-exporter.json=../_sources/default/devices/blackbox-exporter.json
+  - name: dashboard-unifi-sites
+    files:
+      - unifi-sites.json=../_sources/default/devices/unifi-sites.json
+  - name: dashboard-unifi-uap
+    files:
+      - unifi-uap.json=../_sources/default/devices/unifi-uap.json
+  - name: dashboard-unifi-clients
+    files:
+      - unifi-clients.json=../_sources/default/devices/unifi-clients.json

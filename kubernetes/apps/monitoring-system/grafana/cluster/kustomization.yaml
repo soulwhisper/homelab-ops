@@ -8,7 +8,7 @@ resources:
   - ./grafanadatasource.yaml
   # utils
   - ./httproute.yaml
-  - ./podmonitor.yaml
+  - ./servicemonitor.yaml
   # dashboards
   - ./dashboards/ceph
   - ./dashboards/cilium

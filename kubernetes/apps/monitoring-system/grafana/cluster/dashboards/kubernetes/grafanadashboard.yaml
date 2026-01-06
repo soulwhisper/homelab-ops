@@ -14,7 +14,9 @@ spec:
   datasources:
     - inputName: "DS_PROMETHEUS"
       datasourceName: "prometheus"
-  url: "https://grafana.com/api/dashboards/15761/revisions/20/download"
+  configMapRef:
+    name: dashboard-k8s-system-api-server
+    key: k8s-system-api-server.json
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.noirprime.com/grafana.integreatly.org/grafanadashboard_v1beta1.json
 apiVersion: grafana.integreatly.org/v1beta1
@@ -31,7 +33,9 @@ spec:
   datasources:
     - inputName: "DS_PROMETHEUS"
       datasourceName: "prometheus"
-  url: "https://grafana.com/api/dashboards/15757/revisions/43/download"
+  configMapRef:
+    name: dashboard-k8s-views-global
+    key: k8s-views-global.json
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.noirprime.com/grafana.integreatly.org/grafanadashboard_v1beta1.json
 apiVersion: grafana.integreatly.org/v1beta1
@@ -48,7 +52,9 @@ spec:
   datasources:
     - inputName: "DS_PROMETHEUS"
       datasourceName: "prometheus"
-  url: "https://grafana.com/api/dashboards/15759/revisions/40/download"
+  configMapRef:
+    name: dashboard-k8s-views-nodes
+    key: k8s-views-nodes.json
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.noirprime.com/grafana.integreatly.org/grafanadashboard_v1beta1.json
 apiVersion: grafana.integreatly.org/v1beta1
@@ -65,7 +71,9 @@ spec:
   datasources:
     - inputName: "DS_PROMETHEUS"
       datasourceName: "prometheus"
-  url: "https://grafana.com/api/dashboards/15758/revisions/44/download"
+  configMapRef:
+    name: dashboard-k8s-views-namespaces
+    key: k8s-views-namespaces.json
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.noirprime.com/grafana.integreatly.org/grafanadashboard_v1beta1.json
 apiVersion: grafana.integreatly.org/v1beta1
@@ -82,7 +90,9 @@ spec:
   datasources:
     - inputName: "DS_PROMETHEUS"
       datasourceName: "prometheus"
-  url: "https://grafana.com/api/dashboards/15760/revisions/37/download"
+  configMapRef:
+    name: dashboard-k8s-views-pods
+    key: k8s-views-pods.json
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.noirprime.com/grafana.integreatly.org/grafanadashboard_v1beta1.json
 apiVersion: grafana.integreatly.org/v1beta1
@@ -99,4 +109,6 @@ spec:
   datasources:
     - inputName: "DS_PROMETHEUS"
       datasourceName: "prometheus"
-  url: "https://grafana.com/api/dashboards/11454/revisions/14/download"
+  configMapRef:
+    name: dashboard-k8s-volumes
+    key: k8s-volumes.json

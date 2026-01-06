@@ -3,7 +3,7 @@
 apiVersion: grafana.integreatly.org/v1beta1
 kind: GrafanaDashboard
 metadata:
-  name: cloudnative-pg
+  name: database-cnpg
 spec:
   folderRef: database
   resyncPeriod: 30m
@@ -14,13 +14,15 @@ spec:
   datasources:
     - inputName: "DS_PROMETHEUS"
       datasourceName: "prometheus"
-  url: "https://raw.githubusercontent.com/cloudnative-pg/grafana-dashboards/refs/heads/main/charts/cluster/grafana-dashboard.json"
+  configMapRef:
+    name: dashboard-database-cnpg
+    key: database-cnpg.json
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.noirprime.com/grafana.integreatly.org/grafanadashboard_v1beta1.json
 apiVersion: grafana.integreatly.org/v1beta1
 kind: GrafanaDashboard
 metadata:
-  name: dragonflydb
+  name: database-dragonfly
 spec:
   folderRef: database
   resyncPeriod: 30m
@@ -31,4 +33,6 @@ spec:
   datasources:
     - inputName: "DS_PROMETHEUS"
       datasourceName: "prometheus"
-  url: "https://raw.githubusercontent.com/dragonflydb/dragonfly-operator/refs/heads/main/monitoring/grafana-dashboard.json"
+  configMapRef:
+    name: dashboard-database-dragonfly
+    key: database-dragonfly.json

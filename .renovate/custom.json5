@@ -22,8 +22,8 @@
     },
     {
       customType: "regex",
-      description: "Process Grafana dashboards",
-      managerFilePatterns: ["/grafanadashboard\\.yaml(?:\\.j2)?$/"],
+      description: "Update Grafana Dashboard IDs in vendir.yml",
+      managerFilePatterns: ["(^|/)vendir\\.yml$"],
       matchStrings: [
         "dashboards\\/(?<depName>\\d+)\\/revisions\\/(?<currentValue>\\d+)\\/download",
       ],
@@ -34,11 +34,17 @@
   ],
   packageRules: [
     {
+      matchManagers: ["vendir"],
+      matchDatasources: ["git-tags", "github-tags"],
+      addLabels: ["renovate/vendir-git"],
+      groupName: "vendir-git",
+    },
+    {
+      matchDatasources: ["custom.grafana-dashboards"],
       addLabels: ["renovate/grafana-dashboard"],
       automerge: true,
       automergeType: "branch",
       ignoreTests: true,
-      matchDatasources: ["custom.grafana-dashboards"],
       matchUpdateTypes: ["major"],
       semanticCommitScope: "grafana-dashboards",
       semanticCommitType: "chore",

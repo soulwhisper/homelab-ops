@@ -14,7 +14,9 @@ spec:
   datasources:
     - inputName: "DS_PROMETHEUS"
       datasourceName: "prometheus"
-  url: "https://grafana.com/api/dashboards/20842/revisions/3/download"
+  configMapRef:
+    name: dashboard-cert-manager
+    key: cert-manager.json
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.noirprime.com/grafana.integreatly.org/grafanadashboard_v1beta1.json
 apiVersion: grafana.integreatly.org/v1beta1
@@ -31,7 +33,9 @@ spec:
   datasources:
     - inputName: "DS_PROMETHEUS"
       datasourceName: "prometheus"
-  url: "https://grafana.com/api/dashboards/17457/revisions/6/download"
+  configMapRef:
+    name: dashboard-cloudflared
+    key: cloudflared.json
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.noirprime.com/grafana.integreatly.org/grafanadashboard_v1beta1.json
 apiVersion: grafana.integreatly.org/v1beta1
@@ -48,7 +52,9 @@ spec:
   datasources:
     - inputName: "DS_PROMETHEUS"
       datasourceName: "prometheus"
-  url: "https://grafana.com/api/dashboards/23969/revisions/1/download"
+  configMapRef:
+    name: dashboard-external-dns
+    key: external-dns.json
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.noirprime.com/grafana.integreatly.org/grafanadashboard_v1beta1.json
 apiVersion: grafana.integreatly.org/v1beta1
@@ -65,7 +71,9 @@ spec:
   datasources:
     - inputName: "DS_PROMETHEUS"
       datasourceName: "prometheus"
-  url: "https://grafana.com/api/dashboards/1860/revisions/42/download"
+  configMapRef:
+    name: dashboard-node-exporter-full
+    key: node-exporter-full.json
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.noirprime.com/grafana.integreatly.org/grafanadashboard_v1beta1.json
 apiVersion: grafana.integreatly.org/v1beta1
@@ -82,7 +90,9 @@ spec:
   datasources:
     - inputName: "DS_PROMETHEUS"
       datasourceName: "prometheus"
-  url: "https://grafana.com/api/dashboards/22604/revisions/2/download"
+  configMapRef:
+    name: dashboard-smartctl-exporter
+    key: smartctl-exporter.json
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.noirprime.com/grafana.integreatly.org/grafanadashboard_v1beta1.json
 apiVersion: grafana.integreatly.org/v1beta1
@@ -101,7 +111,9 @@ spec:
       datasourceName: "prometheus"
     - inputName: "VAR_REPLICATIONDESTNAME"
       datasourceName: ".*-bootstrap"
-  url: "https://grafana.com/api/dashboards/21356/revisions/3/download"
+  configMapRef:
+    name: dashboard-volsync
+    key: volsync.json
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.noirprime.com/grafana.integreatly.org/grafanadashboard_v1beta1.json
 apiVersion: grafana.integreatly.org/v1beta1
@@ -126,76 +138,6 @@ spec:
 apiVersion: grafana.integreatly.org/v1beta1
 kind: GrafanaDashboard
 metadata:
-  name: blackbox-exporter
-spec:
-  folderRef: devices
-  resyncPeriod: 30m
-  allowCrossNamespaceImport: true
-  instanceSelector:
-    matchLabels:
-      grafana.internal/instance: grafana
-  datasources:
-    - inputName: "DS_PROMETHEUS"
-      datasourceName: "prometheus"
-  url: "https://grafana.com/api/dashboards/7587/revisions/3/download"
----
-# yaml-language-server: $schema=https://kubernetes-schemas.noirprime.com/grafana.integreatly.org/grafanadashboard_v1beta1.json
-apiVersion: grafana.integreatly.org/v1beta1
-kind: GrafanaDashboard
-metadata:
-  name: unifi-sites
-spec:
-  folderRef: devices
-  resyncPeriod: 30m
-  allowCrossNamespaceImport: true
-  instanceSelector:
-    matchLabels:
-      grafana.internal/instance: grafana
-  datasources:
-    - inputName: "DS_PROMETHEUS"
-      datasourceName: "prometheus"
-  url: "https://grafana.com/api/dashboards/11311/revisions/5/download"
----
-# yaml-language-server: $schema=https://kubernetes-schemas.noirprime.com/grafana.integreatly.org/grafanadashboard_v1beta1.json
-apiVersion: grafana.integreatly.org/v1beta1
-kind: GrafanaDashboard
-metadata:
-  name: unifi-uap
-spec:
-  folderRef: devices
-  resyncPeriod: 30m
-  allowCrossNamespaceImport: true
-  instanceSelector:
-    matchLabels:
-      grafana.internal/instance: grafana
-  datasources:
-    - inputName: "DS_PROMETHEUS"
-      datasourceName: "prometheus"
-  url: "https://grafana.com/api/dashboards/11314/revisions/10/download"
-  plugins:
-    - name: grafana-clock-panel
----
-# yaml-language-server: $schema=https://kubernetes-schemas.noirprime.com/grafana.integreatly.org/grafanadashboard_v1beta1.json
-apiVersion: grafana.integreatly.org/v1beta1
-kind: GrafanaDashboard
-metadata:
-  name: unifi-clients
-spec:
-  folderRef: devices
-  resyncPeriod: 30m
-  allowCrossNamespaceImport: true
-  instanceSelector:
-    matchLabels:
-      grafana.internal/instance: grafana
-  datasources:
-    - inputName: "DS_PROMETHEUS"
-      datasourceName: "prometheus"
-  url: "https://grafana.com/api/dashboards/11315/revisions/9/download"
----
-# yaml-language-server: $schema=https://kubernetes-schemas.noirprime.com/grafana.integreatly.org/grafanadashboard_v1beta1.json
-apiVersion: grafana.integreatly.org/v1beta1
-kind: GrafanaDashboard
-metadata:
   name: synology
 spec:
   folderRef: infrastructure
@@ -207,7 +149,9 @@ spec:
   datasources:
     - inputName: "DS_PROMETHEUS"
       datasourceName: "prometheus"
-  url: "https://grafana.com/api/dashboards/14284/revisions/10/download"
+  configMapRef:
+    name: dashboard-synology
+    key: synology.json
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.noirprime.com/grafana.integreatly.org/grafanadashboard_v1beta1.json
 apiVersion: grafana.integreatly.org/v1beta1
@@ -224,4 +168,82 @@ spec:
   datasources:
     - inputName: "DS_PROMETHEUS"
       datasourceName: "prometheus"
-  url: "https://grafana.com/api/dashboards/18153/revisions/4/download"
+  configMapRef:
+    name: dashboard-openwrt
+    key: openwrt.json
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.noirprime.com/grafana.integreatly.org/grafanadashboard_v1beta1.json
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: blackbox-exporter
+spec:
+  folderRef: devices
+  resyncPeriod: 30m
+  allowCrossNamespaceImport: true
+  instanceSelector:
+    matchLabels:
+      grafana.internal/instance: grafana
+  datasources:
+    - inputName: "DS_PROMETHEUS"
+      datasourceName: "prometheus"
+  configMapRef:
+    name: dashboard-blackbox-exporter
+    key: blackbox-exporter.json
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.noirprime.com/grafana.integreatly.org/grafanadashboard_v1beta1.json
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: unifi-sites
+spec:
+  folderRef: devices
+  resyncPeriod: 30m
+  allowCrossNamespaceImport: true
+  instanceSelector:
+    matchLabels:
+      grafana.internal/instance: grafana
+  datasources:
+    - inputName: "DS_PROMETHEUS"
+      datasourceName: "prometheus"
+  configMapRef:
+    name: dashboard-unifi-sites
+    key: unifi-sites.json
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.noirprime.com/grafana.integreatly.org/grafanadashboard_v1beta1.json
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: unifi-uap
+spec:
+  folderRef: devices
+  resyncPeriod: 30m
+  allowCrossNamespaceImport: true
+  instanceSelector:
+    matchLabels:
+      grafana.internal/instance: grafana
+  datasources:
+    - inputName: "DS_PROMETHEUS"
+      datasourceName: "prometheus"
+  configMapRef:
+    name: dashboard-unifi-uap
+    key: unifi-uap.json
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.noirprime.com/grafana.integreatly.org/grafanadashboard_v1beta1.json
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: unifi-clients
+spec:
+  folderRef: devices
+  resyncPeriod: 30m
+  allowCrossNamespaceImport: true
+  instanceSelector:
+    matchLabels:
+      grafana.internal/instance: grafana
+  datasources:
+    - inputName: "DS_PROMETHEUS"
+      datasourceName: "prometheus"
+  configMapRef:
+    name: dashboard-unifi-clients
+    key: unifi-clients.json
