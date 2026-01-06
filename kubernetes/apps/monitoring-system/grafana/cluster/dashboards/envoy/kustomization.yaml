@@ -6,6 +6,8 @@ resources:
   - ./grafanafolder.yaml
   - ./grafanadashboard.yaml
 generatorOptions:
+  annotations:
+    kustomize.toolkit.fluxcd.io/substitute: "disabled"
   disableNameSuffixHash: false
   labels:
     app.kubernetes.io/managed-by: "grafana-operator"
