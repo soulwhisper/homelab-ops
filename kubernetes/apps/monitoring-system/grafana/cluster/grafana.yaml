@@ -73,4 +73,5 @@ spec:
                 limits:
                   memory: 512Mi
   disableDefaultAdminSecret: true
+  # renovate: depName=grafana/grafana datasource=docker
   version: mirror.gcr.io/grafana/grafana:12.3.1
