@@ -46,7 +46,7 @@ jobs:
           done
       - name: Commit changes to Renovate PR
         if: ${{ github.event_name == 'pull_request' }}
-        uses: stefanzweifel/git-auto-commit-action@v7
+        uses: stefanzweifel/git-auto-commit-action@04702edda442b2e678b25b537cec683a1493fcb9 # v7
         with:
           commit_message: "chore(deps): fix vendir filenames (renovate hook)"
           branch: ${{ github.head_ref }}
