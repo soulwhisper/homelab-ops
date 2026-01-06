@@ -1,11 +1,12 @@
 ---
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
 name: Schedule - Vendir Sync
-permissions:
-  contents: write
 
 on:
   workflow_dispatch:
   push:
+    branches:
+      - main
     paths: ["**/vendir.yml"]
 
 jobs:
