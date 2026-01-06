@@ -52,7 +52,7 @@ jobs:
           done
       - name: Commit changes to Renovate PR
         if: ${{ github.event_name == 'pull_request' }}
-        uses: stefanzweifel/git-auto-commit-action@v7
+        uses: stefanzweifel/git-auto-commit-action@04702edda442b2e678b25b537cec683a1493fcb9 # v7
         with:
           commit_user_name: ${{ steps.app-info.outputs.user_name }}
           commit_user_email: ${{ steps.app-info.outputs.user_email }}
