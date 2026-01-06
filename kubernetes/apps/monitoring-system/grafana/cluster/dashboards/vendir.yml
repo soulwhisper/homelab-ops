@@ -32,7 +32,7 @@ directories:
       - path: .
         git:
           url: https://github.com/cilium/cilium
-          ref: v1.15.0
+          ref: v1.18.5
         includePaths:
           - install/kubernetes/cilium/files/cilium-agent/dashboards/*.json
           - install/kubernetes/cilium/files/cilium-operator/dashboards/*.json

@@ -10,10 +10,10 @@ directories:
   path: _sources/ceph
 - contents:
   - git:
-      commitTitle: Prepare for release v1.15.0...
-      sha: 2db45c468981a863b230186ad37d44e5a7c08d61
+      commitTitle: Prepare for release v1.18.5...
+      sha: 7d4d89321e17ea5b75eceb6dcb2ace1d4a6cfc5e
       tags:
-      - v1.15.0
+      - v1.18.5
     path: .
   path: _sources/cilium
 - contents:
