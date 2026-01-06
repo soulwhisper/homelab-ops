@@ -12,16 +12,11 @@ jobs:
   sync:
     runs-on: ubuntu-latest
     steps:
-      - name: Generate Token
-        uses: actions/create-github-app-token@29824e69f54612133e76f7eaac726eef6c875baf # v2
-        id: app-token
-        with:
-          app-id: ${{ secrets.PRIVATE_APP_ID }}
-          private-key: ${{ secrets.PRIVATE_APP_KEY }}
       - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
       - name: Install vendir
         run: curl -L https://carvel.dev/install.sh | bash
-      - name: Sync dashboards
+      - name: Run vendir
+        id: run-vendir
         run: |
           BASE_DIR="kubernetes/apps/monitoring-system/grafana/cluster/dashboards"
           SOURCES_DIR="$BASE_DIR/_sources"
@@ -31,7 +26,20 @@ jobs:
             TARGET="$DIR/dashboard.json"
             mv "$FILE" "$TARGET"
           done
-      - name: Auto commit
-        uses: stefanzweifel/git-auto-commit-action@04702edda442b2e678b25b537cec683a1493fcb9 # v7
+      - name: Generate Token
+        uses: actions/create-github-app-token@29824e69f54612133e76f7eaac726eef6c875baf # v2
+        id: app-token
         with:
-          commit_message: "chore: sync dashboards json sources [skip ci]"
+          app-id: ${{ secrets.PRIVATE_APP_ID }}
+          private-key: ${{ secrets.PRIVATE_APP_KEY }}
+      - name: Create Pull Request
+        id: create-pull-request
+        uses: peter-evans/create-pull-request@v8
+        with:
+          token: ${{ steps.app-token.outputs.token }}
+          title: "chore(deps): sync resources managed by vendir"
+          commit-message: "chore(deps): sync resources managed by vendir"
+          body: |
+            Automated sync of Resources via Vendir.
+          branch: chore/sync-resources
+          delete-branch: true
