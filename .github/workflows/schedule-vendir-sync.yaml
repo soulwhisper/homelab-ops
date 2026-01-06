@@ -35,7 +35,7 @@ jobs:
           private-key: ${{ secrets.PRIVATE_APP_KEY }}
       - name: Create Pull Request
         id: create-pull-request
-        uses: peter-evans/create-pull-request@v8
+        uses: peter-evans/create-pull-request@98357b18bf14b5342f975ff684046ec3b2a07725 # v8
         with:
           token: ${{ steps.app-token.outputs.token }}
           title: "chore(deps): sync resources managed by vendir"
