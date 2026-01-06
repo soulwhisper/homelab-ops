@@ -1,0 +1,50 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/kustomization
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - ./grafanafolder.yaml
+  - ./grafanadashboard.yaml
+generatorOptions:
+  annotations:
+    kustomize.toolkit.fluxcd.io/substitute: "disabled"
+  disableNameSuffixHash: false
+  labels:
+    app.kubernetes.io/managed-by: "grafana-operator"
+configMapGenerator:
+  - name: dashboard-cert-manager
+    files:
+      - cert-manager.json=../_sources/default/cert-manager/dashboard.json
+  - name: dashboard-cloudflared
+    files:
+      - cloudflared.json=../_sources/default/cloudflared/dashboard.json
+  - name: dashboard-external-dns
+    files:
+      - external-dns.json=../_sources/default/external-dns/dashboard.json
+  - name: dashboard-node-exporter-full
+    files:
+      - node-exporter-full.json=../_sources/default/node-exporter-full/dashboard.json
+  - name: dashboard-smartctl-exporter
+    files:
+      - smartctl-exporter.json=../_sources/default/smartctl-exporter/dashboard.json
+  - name: dashboard-volsync
+    files:
+      - volsync.json=../_sources/default/volsync/dashboard.json
+  - name: dashboard-synology
+    files:
+      - synology.json=../_sources/infrastructure/synology/dashboard.json
+  - name: dashboard-openwrt
+    files:
+      - openwrt.json=../_sources/infrastructure/openwrt/dashboard.json
+  - name: dashboard-blackbox-exporter
+    files:
+      - blackbox-exporter.json=../_sources/devices/blackbox-exporter/dashboard.json
+  - name: dashboard-unifi-sites
+    files:
+      - unifi-sites.json=../_sources/devices/unifi-sites/dashboard.json
+  - name: dashboard-unifi-uap
+    files:
+      - unifi-uap.json=../_sources/devices/unifi-uap/dashboard.json
+  - name: dashboard-unifi-clients
+    files:
+      - unifi-clients.json=../_sources/devices/unifi-clients/dashboard.json

@@ -3,11 +3,9 @@
 apiVersion: monitoring.coreos.com/v1
 kind: PodMonitor
 metadata:
-  name: cnpg-operator
-  labels:
-    app.kubernetes.io/name: cloudnative-pg
-    app.kubernetes.io/instance: cnpg-operator
+  name: &name cnpg-operator
 spec:
+  jobLabel: *name
   selector:
     matchLabels:
       app.kubernetes.io/instance: cnpg-operator
