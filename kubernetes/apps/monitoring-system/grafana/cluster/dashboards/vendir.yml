@@ -195,7 +195,7 @@ directories:
   # ---------------------------------------------------------
   # Folder : default/infrastructure
   # ---------------------------------------------------------
-  - path: _sources/default/infrastructure
+  - path: _sources/infrastructure
     contents:
       - path: synology
         http:
@@ -213,7 +213,7 @@ directories:
   # ---------------------------------------------------------
   # Folder : default/devices
   # ---------------------------------------------------------
-  - path: _sources/default/devices
+  - path: _sources/devices
     contents:
       - path: blackbox-exporter
         http:
