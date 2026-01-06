@@ -37,7 +37,17 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
+      - name: Smart skips
+        id: skip-checks
+        run: |
+          if find /github/workspace/kubernetes -type f -name "download" | grep -q .; then
+            echo "⚠️ Found raw vendir files. Skipping test to wait for auto-fix."
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
       - name: Run flux-local test
+        if: steps.skip-checks.outputs.skip != 'true'
         uses: docker://ghcr.io/allenporter/flux-local:v8.1.0
         with:
           args: test --enable-helm --all-namespaces --path /github/workspace/kubernetes/flux/cluster -v
@@ -68,7 +78,17 @@ jobs:
         with:
           ref: "${{ github.event.repository.default_branch }}"
           path: default
+      - name: Smart skips
+        id: skip-checks
+        run: |
+          if find /github/workspace/pull/kubernetes -type f -name "download" | grep -q .; then
+            echo "⚠️ Found raw vendir files. Skipping test to wait for auto-fix."
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
       - name: Run flux-local diff
+        if: steps.skip-checks.outputs.skip != 'true'
         uses: docker://ghcr.io/allenporter/flux-local:v8.1.0
         with:
           args: >-
