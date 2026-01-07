@@ -41,10 +41,10 @@ configMapGenerator:
       - blackbox-exporter.json=../_sources/devices/blackbox-exporter/dashboard.json
   - name: dashboard-unifi-sites
     files:
-      - unifi-sites.json=../_sources/devices/unifi-sites/dashboard.json
+      - "unifi-sites.json=../_sources/devices/unifi/dashboards/v2.0.0/UniFi-Poller_ Network Sites - Prometheus.json"
   - name: dashboard-unifi-uap
     files:
-      - unifi-uap.json=../_sources/devices/unifi-uap/dashboard.json
+      - "unifi-uap.json=../_sources/devices/unifi/dashboards/v2.0.0/UniFi-Poller_ UAP Insights - Prometheus.json"
   - name: dashboard-unifi-clients
     files:
-      - unifi-clients.json=../_sources/devices/unifi-clients/dashboard.json
+      - "unifi-clients.json=../_sources/devices/unifi/dashboards/v2.0.0/UniFi-Poller_ Client Insights - Prometheus.json"
