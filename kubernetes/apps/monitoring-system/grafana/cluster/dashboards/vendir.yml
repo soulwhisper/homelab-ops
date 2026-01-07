@@ -228,8 +228,8 @@ directories:
             url: "https://grafana.com/api/dashboards/7587/revisions/3/download",
           }
       - path: unifi
-        # lazy: true
+        lazy: true
         git:
           url: https://github.com/unpoller/dashboards
           ref: origin/master
-        # includePaths: ["v2.0.0"]
+        includePaths: ["v2.0.0"]
