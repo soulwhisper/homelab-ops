@@ -3,10 +3,9 @@
 apiVersion: monitoring.coreos.com/v1
 kind: PodMonitor
 metadata:
-  name: emqx-metrics
-  labels:
-    app: emqx-metrics
+  name: &name emqx-metrics
 spec:
+  jobLabel: *name
   selector:
     matchLabels:
       apps.emqx.io/instance: emqx

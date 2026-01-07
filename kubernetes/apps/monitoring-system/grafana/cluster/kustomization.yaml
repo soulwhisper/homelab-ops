@@ -1,0 +1,19 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/kustomization
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  # app
+  - ./grafana.yaml
+  - ./grafanadatasource.yaml
+  # utils
+  - ./httproute.yaml
+  - ./servicemonitor.yaml
+  # dashboards
+  - ./dashboards/ceph
+  - ./dashboards/cilium
+  - ./dashboards/database
+  - ./dashboards/default
+  - ./dashboards/envoy
+  - ./dashboards/kubernetes
+  - ./dashboards/victoria-metrics

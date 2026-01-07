@@ -4,7 +4,9 @@
     "grafana-dashboards": {
       defaultRegistryUrlTemplate: "https://grafana.com/api/dashboards/{{packageName}}",
       format: "json",
-      transformTemplates: ['{"releases":[{"version": $string(revision)}]}'],
+      transformTemplates: [
+        '{"releases":[{"version": $string(revision)}], "sourceDirectory": name}',
+      ],
     },
   },
   customManagers: [
@@ -20,27 +22,39 @@
     },
     {
       customType: "regex",
-      description: "Process Grafana dashboards",
-      managerFilePatterns: ["/(^|/)kubernetes/.+\\.ya?ml$/"],
+      description: "Fix vendir git refs",
+      fileMatch: ["(^|/)vendir\\.yml$"],
+      matchStrings: [
+        "git:\\s+url: (?<depName>.*?)\\s+ref: (?<currentValue>.*?)\\n",
+        "git:\\s+ref: (?<currentValue>[^\\s]+)\\s+url: (?<depName>[^\\s]+)",
+      ],
+      datasourceTemplate: "git-refs",
+    },
+    {
+      customType: "regex",
+      description: "Update Grafana Dashboard IDs",
+      managerFilePatterns: ["(^|/)vendir\\.yml$"],
       matchStrings: [
         "dashboards\\/(?<depName>\\d+)\\/revisions\\/(?<currentValue>\\d+)\\/download",
       ],
-      autoReplaceStringTemplate: "dashboards/{{depName}}/revisions/{{newValue}}/download",
       datasourceTemplate: "custom.grafana-dashboards",
       versioningTemplate: "regex:^(?<major>\\d+)$",
+      autoReplaceStringTemplate: "dashboards/{{depName}}/revisions/{{newValue}}/download",
     },
   ],
   packageRules: [
     {
-      addLabels: ["renovate/grafana-dashboard"],
-      automerge: true,
-      automergeType: "branch",
-      ignoreTests: true,
+      matchManagers: ["vendir"],
+      matchDatasources: ["git-refs", "git-tags", "github-tags"],
+      addLabels: ["renovate/vendir-git"],
+      groupName: "vendir-git",
+    },
+    {
       matchDatasources: ["custom.grafana-dashboards"],
-      matchUpdateTypes: ["major"],
+      addLabels: ["renovate/grafana-dashboard"],
       semanticCommitScope: "grafana-dashboards",
       semanticCommitType: "chore",
-      commitMessageTopic: "dashboard {{depName}}",
+      commitMessageTopic: "dashboard {{sourceDirectory}}",
       commitMessageExtra: "( {{currentVersion}} → {{newVersion}} )",
     },
   ],
