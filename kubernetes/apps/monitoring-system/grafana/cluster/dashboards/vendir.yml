@@ -232,4 +232,4 @@ directories:
         git:
           url: https://github.com/unpoller/dashboards
           ref: origin/master
-        includePaths: ["v2.0.0"]
+        # includePaths: ["v2.0.0"]
