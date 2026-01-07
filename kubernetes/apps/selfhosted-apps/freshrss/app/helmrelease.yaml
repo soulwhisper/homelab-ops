@@ -22,7 +22,7 @@ spec:
           app:
             image:
               repository: mirror.gcr.io/freshrss/freshrss
-              tag: 1.27.1-alpine
+              tag: 1.28.0-alpine
             env:
               CRON_MIN: "*"
               DOMAIN: rss.noirprime.com
