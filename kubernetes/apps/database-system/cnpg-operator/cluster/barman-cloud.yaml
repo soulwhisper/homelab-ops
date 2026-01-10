@@ -22,4 +22,5 @@ spec:
     data:
       compression: snappy
       additionalCommandArgs:
-        - "--min-chunk-size=5MB"
+        - "--min-chunk-size=50MB"
+        - "--jobs=4"
