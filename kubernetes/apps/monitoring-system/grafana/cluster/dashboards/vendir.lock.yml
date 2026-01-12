@@ -12,12 +12,12 @@ directories:
     path: ceph-pools
   path: _sources/ceph
 - contents:
-  - configDigest: c0d9b08d7953aab8f10fb7d7e496851eab172940b854f1b27714f39067582aa1
+  - configDigest: a85841c14e511203c862caf4eb30fc9934d91bdc5d62a9119a32eb50510b7fd9
     git:
-      commitTitle: Prepare for release v1.18.5...
-      sha: 7d4d89321e17ea5b75eceb6dcb2ace1d4a6cfc5e
+      commitTitle: 'chore: comment job to use generated token instead of PAT (pull_request_target)...'
+      sha: 303b50aaf9ae28c423c9b6c608b8e07fcd662311
       tags:
-      - v1.18.5
+      - v1.19.0-pre.4-66-g303b50aaf9
     path: .
   path: _sources/cilium
 - contents:
@@ -37,13 +37,12 @@ directories:
     path: dragonfly
   path: _sources/database
 - contents:
-  - configDigest: b766c105d2d5b6a1c198574fa2accc2061b28a1aee56a5836730c40a49628e57
+  - configDigest: 4027206cef4b9acaa9e268f16e1f6ecb7315c74154d49f5f08544eb3c8b3f879
     git:
-      commitTitle: '[release/v1.6] Cherry-pick reclaim-storage step for release workflow
-        (#7683)'
-      sha: 19b3c67defb90ddf2ba9786fc13e43130816c6ea
+      commitTitle: '[release/v1.6] cherry-pick security patch for v1.6.2 (#7920)...'
+      sha: 27bf1cc2cde456449c995f360832b3cd2fd29c7c
       tags:
-      - v1.6.1
+      - v1.6.2
     path: gateway
   - configDigest: 2c2d52a9a6ad49c01930aed359636ab4d036c5735a863717a84fcc67c6d96e27
     http: {}
