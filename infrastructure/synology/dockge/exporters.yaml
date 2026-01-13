@@ -2,7 +2,7 @@
 services:
   snmp-exporter:
     image: "prom/snmp-exporter:latest"
-    container_name: "smartctl-exporter"
+    container_name: "snmp-exporter"
     restart: "unless-stopped"
     command: ["--config.file=/etc/snmp_exporter/snmp.yml"]
     ports:
