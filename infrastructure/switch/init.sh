@@ -1,13 +1,12 @@
 #!/bin/bash
 # This script configures H3C S6520-24S-SI as core switch for a homelab environment
-# It sets up VLAN, LACP, BGP, OSPF, DHCP Relay, Multicast, and other necessary configurations
 # If pasted into the switch console, make sure to paste by phases to avoid errors
 
 sysname core-switch
 ntp-service enable
 clock timezone Beijing add 08:00:00
 clock protocol ntp
-ntp-service unicast-server 10.10.0.1
+ntp-service unicast-server 10.10.0.254
 
 interface m-gigabitethernet 0/0/0
  ip address 10.0.0.2 24
@@ -43,6 +42,7 @@ multicast routing
 
 stp global enable
 stp mode rstp
+stp instance 0 root primary
 
 # vlan
 vlan 100
@@ -173,7 +173,6 @@ interface ten-gigabitethernet 1/0/24
  port link-type trunk
  port trunk permit vlan 1 10 100 200 210
  stp edged-port
- stp root-protection
  dhcp snooping trust
  ipv6 dhcp snooping trust
  ipv6 nd detection trust
