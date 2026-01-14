@@ -14,7 +14,7 @@ spec:
       envoyDeployment:
         replicas: 3
         container:
-          imageRepository: mirror.gcr.io/envoyproxy/envoy
+          image: mirror.gcr.io/envoyproxy/envoy
           resources:
             requests:
               cpu: 100m
@@ -49,10 +49,13 @@ kind: BackendTrafficPolicy
 metadata:
   name: envoy
 spec:
-  compression:
+  compressor:
     - type: Zstd
+      zstd: {}
     - type: Brotli
+      brotli: {}
     - type: Gzip
+      gzip: {}
   connection:
     bufferLimit: 16Mi
   targetSelectors:
@@ -63,7 +66,7 @@ spec:
   timeout:
     http:
       idleTimeout: 600s
-      requestTimeout: 0s
+      requestTimeout: 3600s
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.noirprime.com/gateway.envoyproxy.io/clienttrafficpolicy_v1alpha1.json
 apiVersion: gateway.envoyproxy.io/v1alpha1
