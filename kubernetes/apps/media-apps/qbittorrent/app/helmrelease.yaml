@@ -37,7 +37,7 @@ spec:
               requests:
                 cpu: 200m
               limits:
-                memory: 2Gi
+                memory: 8Gi
             securityContext:
               allowPrivilegeEscalation: false
               capabilities: { drop: ["ALL"] }
