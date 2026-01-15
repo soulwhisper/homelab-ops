@@ -11,6 +11,7 @@ spec:
     name: snapshot-controller
 
   values:
+    installCRDs: true
     controller:
       replicaCount: 1
       serviceMonitor:
