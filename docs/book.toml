@@ -9,7 +9,7 @@ preferred-dark-theme = "navy"
 git-repository-url = "https://github.com/soulwhisper/homelab-ops"
 git-repository-icon = "fa-github"
 no-section-label = true
-# additional-css = ["mdbook-admonish.css"]
+additional-css = ["mdbook-admonish.css"]
 git-branch = "main"
 
 [output.html.print]
