@@ -1,7 +1,6 @@
 [book]
 authors = ["Hekatos Noir"]
 language = "en"
-multilingual = false
 src = "src"
 
 [output.html]
