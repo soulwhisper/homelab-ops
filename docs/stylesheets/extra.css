@@ -1,0 +1,4 @@
+/* Hide H1 Header */
+.md-content__inner h1 {
+  display: none;
+}

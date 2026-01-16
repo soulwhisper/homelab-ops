@@ -1,4 +1,4 @@
-## <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f331/512.gif" alt="🌱" width="20" height="20"> Kubernetes
+## <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f331/512.gif" alt="🌱" style="width: 20px; height: 20px; vertical-align: middle;"> Kubernetes
 
 The Kubernetes cluster is deployed using [Talos](https://www.talos.dev), leveraging M.2 NVMe SSDs across all nodes for high-performance storage.
 
@@ -19,7 +19,7 @@ The Kubernetes cluster is deployed using [Talos](https://www.talos.dev), leverag
 
 ### GitOps
 
-[Flux](https://github.com/fluxcd/flux2) watches the clusters in my [kubernetes](./kubernetes/) folder (see Directories below) and ensures that my clusters are updated based on the state of the corresponding Git repository.
+[Flux](https://github.com/fluxcd/flux2) watches the clusters in my kubernetes folder (see Directories below) and ensures that my clusters are updated based on the state of the corresponding Git repository.
 
 In my setup, Flux operates by recursively scanning the `kubernetes/apps` folder until it identifies the top-level `kustomization.yaml` file within each directory. This file serves as the entry point for Flux, and it lists all the resources to be applied to the cluster. Typically, the `kustomization.yaml` contains a namespace resource and one or more Flux kustomizations (`ks.yaml`). These kustomizations govern the deployment of specific resources, including `HelmRelease` resources or other application-specific resources, which Flux subsequently applies to the cluster.
 

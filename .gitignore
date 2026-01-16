@@ -2,9 +2,9 @@
 .DS_Store
 Thumbs.db
 
-# Devenv
-.devenv*
-.pre-commit-config.yaml
+# Docs
+.venv/
+site/
 
 # Other files
 kubeconfig

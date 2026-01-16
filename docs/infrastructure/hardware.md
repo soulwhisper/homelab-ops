@@ -1,4 +1,4 @@
-## <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/2699_fe0f/512.gif" alt="⚙" width="20" height="20"> Hardware
+## <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/2699_fe0f/512.gif" alt="⚙" style="width: 20px; height: 20px; vertical-align: middle;"> Hardware
 
 | Device                 | Num | OS Disk Size | Data Disk Size      | Ram  | OS      | Function    |
 | ---------------------- | --- | ------------ | ------------------- | ---- | ------- | ----------- |
