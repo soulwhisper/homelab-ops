@@ -37,6 +37,7 @@ jobs:
       - uses: jontze/action-mdbook@v4
         with:
           token: "${{ steps.app-token.outputs.token }}"
+          mdbook-version: "~0.4.0"
           use-admonish: true
           use-mermaid: true
       - name: Build with mdBook
