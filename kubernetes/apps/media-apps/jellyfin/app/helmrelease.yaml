@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &name emby
+  name: &name jellyfin
 spec:
   interval: 30m
   chartRef:
@@ -16,22 +16,14 @@ spec:
       *name :
         annotations:
           reloader.stakater.com/auto: "true"
-        pod:
-          securityContext:
-            runAsNonRoot: true
-            runAsUser: 2000
-            runAsGroup: 2000
-            fsGroup: 2000
-            fsGroupChangePolicy: OnRootMismatch
-            supplementalGroups:
-              - 100 # synology:users
         containers:
           app:
             image:
-              repository: ghcr.io/home-operations/emby
-              tag: 4.9.3.0
+              repository: ghcr.io/jellyfin/jellyfin
+              tag: 10.11.5
             env:
-              DOTNET_SYSTEM_IO_DISABLEFILELOCKING: "true"
+              PUID: "2000"
+              PGID: "101" # synology:admin
             resources:
               requests:
                 cpu: 100m
@@ -54,15 +46,17 @@ spec:
         hostnames: ["movie.noirprime.com"]
         annotations:
           gethomepage.dev/enabled: "true"
-          gethomepage.dev/icon: emby.png
-          gethomepage.dev/name: Emby
+          gethomepage.dev/icon: jellyfin.png
+          gethomepage.dev/name: Jellyfin
           gethomepage.dev/group: Media
-          gethomepage.dev/widget.type: emby
-          gethomepage.dev/widget.url: http://emby.media-apps.svc.cluster.local:8096
-          gethomepage.dev/widget.key: '{{ "{{HOMEPAGE_VAR_EMBY_API_KEY}}" }}'
+          gethomepage.dev/widget.type: jellyfin
+          gethomepage.dev/widget.url: http://jellyfin.media-apps.svc.cluster.local:8096
+          gethomepage.dev/widget.key: '{{ "{{HOMEPAGE_VAR_JELLYFIN_API_KEY}}" }}'
           gethomepage.dev/widget.enableBlocks: "true"
+          gethomepage.dev/widget.enableNowPlaying: "true"
           gethomepage.dev/widget.enableMediaControl: "false"
           gethomepage.dev/widget.showEpisodeNumber: "true"
+          gethomepage.dev/widget.expandOneStreamToTwoRows: "true"
         parentRefs:
           - name: envoy-internal
             namespace: networking-system
@@ -80,9 +74,9 @@ spec:
       tmpfs:
         type: emptyDir
         globalMounts:
-          - path: /config/logs
-            subPath: logs
+          - path: /cache
+            subPath: cache
+          - path: /config/log
+            subPath: log
           - path: /tmp
             subPath: tmp
-          - path: /transcode
-            subPath: transcode

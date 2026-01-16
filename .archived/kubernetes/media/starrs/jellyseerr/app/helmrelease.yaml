@@ -26,12 +26,11 @@ spec:
         containers:
           app:
             image:
-              repository: ghcr.io/fallenbagel/jellyseerr
-              tag: 2.7.0
+              repository: ghcr.io/seerr-team/seerr
+              tag: develop # 2.7.3
             env:
               LOG_LEVEL: "info"
-              JELLYFIN_TYPE: emby
-              PORT: &port 80
+              PORT: &port 5055
             envFrom:
               - secretRef:
                   name: *name

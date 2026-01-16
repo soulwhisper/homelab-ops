@@ -1,0 +1,55 @@
+site_name: Homelab-ops Docs
+site_url: https://soulwhisper.github.io/homelab-ops/
+repo_url: https://github.com/soulwhisper/homelab-ops
+repo_name: homelab-ops
+
+theme:
+  name: material
+  language: en
+  palette:
+    - scheme: default
+      primary: teal
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      primary: teal
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - content.code.copy
+    - navigation.sections
+    - navigation.tabs
+    - navigation.top
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - md_in_html
+  - pymdownx.details
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.highlight:
+      anchor_linenums: true
+  # - pymdownx.emoji:
+  #     emoji_index: !!python/name:material.extensions.emoji.twemoji
+  #     emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+
+extra_css:
+  - stylesheets/extra.css
+
+nav:
+  # files under ./docs
+  - Home: index.md
+  - Infrastructure:
+      - Kubernetes: infrastructure/kubernetes.md
+      - Networking: infrastructure/networking.md
+      - Hardware: infrastructure/hardware.md
+  - Decisions: decisions/bgp.md
+  - Deployment: deployment/bootstrap.md

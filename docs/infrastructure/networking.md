@@ -1,4 +1,4 @@
-## <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f308/512.gif" alt="🌈" width="20" height="20"> Networking
+## <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f308/512.gif" alt="🌈" style="width: 20px; height: 20px; vertical-align: middle;"> Networking
 
 The homelab network is anchored by an enterprise-grade managed Layer 3 core switch, which orchestrates advanced routing protocols including BGP, BFD and OSPF. At the perimeter, an OpenWrt edge router handles boundary traffic and essential infrastructure services, specifically NTP, external-dns, and transparent proxying. Supporting the storage and service layer, TrueNAS Scale provides the backbone for NFS persistent volumes, S3-compatible object storage, and discovery services.
 

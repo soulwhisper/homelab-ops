@@ -113,11 +113,11 @@ data:
               interfaceName: wan
     - Networking:
         - Unifi:
-            href: https://10.0.0.200:8443
+            href: https://10.0.0.200:9801
             icon: unifi.png
             widget:
               type: unifi
-              url: https://10.0.0.200:8443
+              url: https://10.0.0.200:9801
               username: {{HOMEPAGE_VAR_UNIFI_USERNAME}}
               password: {{HOMEPAGE_VAR_UNIFI_PASSWORD}}
         - Cloudflare:
@@ -130,15 +130,14 @@ data:
               key: {{HOMEPAGE_VAR_CLOUDFLARE_API_TOKEN}}
     - Storage:
         - NAS:
-            href: https://10.0.0.10
-            icon: truenas.png
+            href: https://10.0.0.10:5001
+            icon: synology.png
             widget:
-              type: truenas
-              url: https://10.0.0.10
-              username: {{HOMEPAGE_VAR_TRUENAS_USERNAME}}
-              password: {{HOMEPAGE_VAR_TRUENAS_PASSWORD}}
-              enablePools: true
-              nasType: scale
+              type: diskstation
+              url: https://10.0.0.10:5001
+              username: {{HOMEPAGE_VAR_SYNOLOGY_USERNAME}}
+              password: {{HOMEPAGE_VAR_SYNOLOGY_PASSWORD}}
+              volume: volume_2
   widgets.yaml: |
     - search:
         provider: [google]
