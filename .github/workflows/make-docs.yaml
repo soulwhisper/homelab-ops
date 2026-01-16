@@ -34,9 +34,12 @@ jobs:
         with:
           token: "${{ steps.app-token.outputs.token }}"
           enablement: true
-      - uses: docker://ghcr.io/bjw-s/mdbook:0.4.44@sha256:82d38ed9bca2bbf0c3be62deef3ea1a27fdbffe3caf92fedf4a4b3c4c904ec48
+      - uses: jontze/action-mdbook@v4
         with:
-          args: mdbook build docs
+          token: "${{ steps.app-token.outputs.token }}"
+          use-mermaid: true
+      - name: Build with mdBook
+        run: mdbook build docs
       - uses: actions/upload-pages-artifact@7b1f4a764d45c48632c6b24a0339c27f5614fb0b # v4
         with:
           path: ./docs/book

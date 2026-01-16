@@ -24,7 +24,7 @@ spec:
               tag: 9.1.0
             env:
               PUID: "2000"
-              PGID: "100" # synology:users
+              PGID: "101" # synology:admin
             resources:
               requests:
                 cpu: 40m

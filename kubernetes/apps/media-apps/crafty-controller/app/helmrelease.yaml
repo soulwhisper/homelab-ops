@@ -24,10 +24,8 @@ spec:
             runAsNonRoot: true
             runAsUser: 1000 # crafty user
             runAsGroup: 1000
-            fsGroup: 1000
+            fsGroup: 101 # synology:admin
             fsGroupChangePolicy: OnRootMismatch
-            supplementalGroups:
-              - 100 # synology:users
         containers:
           app:
             image:

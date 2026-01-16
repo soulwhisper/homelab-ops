@@ -18,12 +18,6 @@
       versioning: "regex:^(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)-ls(?<build>\\d+)$",
     },
     {
-      description: "Configure Emby versioning",
-      matchDatasources: ["docker"],
-      matchPackageNames: ["ghcr.io/home-operations/emby"],
-      versioning: "loose",
-    },
-    {
       description: "Pin Postgres version to 18",
       matchDatasources: ["docker"],
       matchPackagePatterns: [
