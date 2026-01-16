@@ -28,6 +28,7 @@ limit-results = 20
 
 [preprocessor.admonish]
 command = "mdbook-admonish"
+assets_version = "3.0.0"
 
 [preprocessor.mermaid]
 command = "mdbook-mermaid"
