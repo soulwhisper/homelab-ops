@@ -1,11 +1,6 @@
 ---
 # yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
 name: "Docs"
-permissions:
-  actions: write
-  contents: read
-  id-token: write
-  pages: write
 
 on:
   workflow_dispatch:
@@ -32,5 +27,5 @@ jobs:
           python-version: "pypy-3.11"
       - name: Deploy docs
         uses: afritzler/mkdocs-gh-pages-action@v9
-        env:
+        with:
           GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
