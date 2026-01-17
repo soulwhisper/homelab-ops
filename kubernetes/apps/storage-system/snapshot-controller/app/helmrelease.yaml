@@ -16,3 +16,5 @@ spec:
       replicaCount: 1
       serviceMonitor:
         create: true
+    webhook:
+      enabled: false
