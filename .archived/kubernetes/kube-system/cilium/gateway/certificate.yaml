@@ -7,7 +7,7 @@ metadata:
 spec:
   secretName: noirprime-com-tls
   issuerRef:
-    name: letsencrypt-production
     kind: ClusterIssuer
+    name: letsencrypt-production
   commonName: noirprime.com
   dnsNames: ["noirprime.com", "*.noirprime.com"]
