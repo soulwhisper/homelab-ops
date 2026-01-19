@@ -1,5 +1,7 @@
 ## DNS
 
+- cloudflare action examples, check [ref](https://github.com/SukkaW/dnscontrol-gitops-template/tree/master);
+
 ```shell
 brew install dnscontrol
 dnscontrol [command]

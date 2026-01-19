@@ -4,10 +4,5 @@
     "username": "admin",
     "password": "$ADGUARD_PASSWORD",
     "host": "http://10.0.0.10:9200"
-  },
-  "cloudflare": {
-    "TYPE": "CLOUDFLAREAPI",
-    "accountid": "$CLOUDFLARE_ACCOUNT_ID",
-    "apitoken": "$CLOUDFLARE_API_TOKEN"
   }
 }
