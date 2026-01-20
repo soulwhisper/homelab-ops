@@ -130,7 +130,7 @@ apiVersion: v1alpha1
 kind: LinkAliasConfig
 name: amt0
 selector:
-  match: link.bus_path == "0000:59:00.0" # to do
+  match: link.bus_path == "0000:59:00.0"
 ---
 apiVersion: v1alpha1
 kind: LinkConfig

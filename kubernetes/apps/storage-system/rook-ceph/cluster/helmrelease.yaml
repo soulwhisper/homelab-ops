@@ -67,13 +67,14 @@ spec:
         nodes:
           - name: "exarch-01"
             devices: &nodeDevices
-              - name: "sdb"
-                config:
-                  osdsPerDevice: "1"
-              # P41 2TB
-              # - devicePathFilter: "/dev/disk/by-path/pci-0000:58:00.0-nvme-1"
+              # Test only
+              # - name: "sdb"
               #   config:
-              #     osdsPerDevice: "2"
+              #     osdsPerDevice: "1"
+              # P41 2TB
+              - devicePathFilter: "/dev/disk/by-path/pci-0000:58:00.0-nvme-1"
+                config:
+                  osdsPerDevice: "2"
               # WD Black SN850X 8TB
               # - devicePathFilter: "/dev/disk/by-path/pci-0000:01:00.0-nvme-1"
               #   config:
