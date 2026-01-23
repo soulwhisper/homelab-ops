@@ -71,14 +71,18 @@ spec:
               # - name: "sdb"
               #   config:
               #     osdsPerDevice: "1"
-              # P41 2TB
-              - devicePathFilter: "/dev/disk/by-path/pci-0000:58:00.0-nvme-1"
-                config:
-                  osdsPerDevice: "2"
               # WD Black SN850X 8TB
               # - devicePathFilter: "/dev/disk/by-path/pci-0000:01:00.0-nvme-1"
               #   config:
               #     osdsPerDevice: "4"
+              # P41 2TB
+              - devicePathFilter: "/dev/disk/by-path/pci-0000:58:00.0-nvme-1"
+                config:
+                  osdsPerDevice: "2"
+              # Koxia RC20 2TB
+              # - devicePathFilter: "/dev/disk/by-path/pci-0000:5d:00.0-nvme-1"
+              #   config:
+              #     osdsPerDevice: "1"
           - name: "exarch-02"
             devices: *nodeDevices
           - name: "exarch-03"
