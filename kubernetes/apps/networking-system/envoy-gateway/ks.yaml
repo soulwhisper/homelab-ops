@@ -43,3 +43,5 @@ spec:
       namespace: networking-system
     - name: cert-manager
       namespace: security-system
+    - name: onepassword-connect
+      namespace: security-system

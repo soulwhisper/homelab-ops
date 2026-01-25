@@ -12,3 +12,5 @@ resources:
   - ./podmonitor.yaml
   # until authelia enabled
   # -./security.yaml
+  # until sth. outside needs it
+  # - ./pushsecret.yaml
