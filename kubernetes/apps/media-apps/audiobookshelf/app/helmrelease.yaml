@@ -63,7 +63,7 @@ spec:
         globalMounts:
           - path: /config
       shared:
-        existingClaim: music
+        existingClaim: document
         globalMounts:
           - path: /audiobooks
             subPath: audiobooks
