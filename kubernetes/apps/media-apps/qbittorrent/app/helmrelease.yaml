@@ -31,6 +31,28 @@ spec:
             env:
               QBT_WEBUI_PORT: &port 8080
               QBT_TORRENTING_PORT: &torrentPort 50413
+            probes:
+              liveness:
+                enabled: true
+                spec:
+                  periodSeconds: 30
+                  timeoutSeconds: 5
+                  failureThreshold: 5
+              readiness:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /api/v2/app/version
+                    port: *port
+                  periodSeconds: 10
+                  timeoutSeconds: 5
+                  failureThreshold: 5
+              startup:
+                enabled: true
+                spec:
+                  failureThreshold: 30
+                  periodSeconds: 10
             resources:
               requests:
                 cpu: 200m
@@ -48,7 +70,12 @@ spec:
             port: *port
             primary: true
           bittorrent:
-            port: *torrentPort
+            type: LoadBalancer
+            annotations:
+              lbipam.cilium.io/ips: "10.10.0.141"
+            ports:
+              bittorrent-tcp:
+                port: *torrentPort
     route:
       app:
         hostnames: ["bt.noirprime.com"]
@@ -63,6 +90,11 @@ spec:
           - name: envoy-internal
             namespace: networking-system
             sectionName: https
+        rules:
+          - backendRefs:
+              - name: *name
+                namespace: media-apps
+                port: http
 
     persistence:
       app:

@@ -56,6 +56,9 @@ spec:
 
     service:
       *name :
+        type: LoadBalancer
+        annotations:
+          lbipam.cilium.io/ips: "10.10.0.135"
         ports:
           mqtt:
             port: 1883
