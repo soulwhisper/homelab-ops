@@ -31,7 +31,7 @@ spec:
               # cloudflared fork with socks5 support
               # repository: ghcr.io/alliottech/cloudflared_proxy
               repository: cloudflare/cloudflared
-              tag: 2025.11.1
+              tag: 2026.1.2
             args: ["tunnel", "run"]
             env:
               NO_AUTOUPDATE: "true"
