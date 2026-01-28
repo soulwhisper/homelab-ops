@@ -22,7 +22,7 @@ spec:
           app:
             image:
               repository: mirror.gcr.io/arcw/sgcc_electricity
-              tag: v1.6.8
+              tag: v1.6.9
             command:
               - python3
               - main.py
