@@ -22,7 +22,7 @@ spec:
           app:
             image:
               repository: mirror.gcr.io/c4illin/convertx
-              tag: v0.15.1
+              tag: v0.17.0
             env:
               ACCOUNT_REGISTRATION: false
               HTTP_ALLOWED: true
