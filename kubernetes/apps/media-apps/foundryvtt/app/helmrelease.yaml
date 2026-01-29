@@ -27,7 +27,7 @@ spec:
           app:
             image:
               repository: mirror.gcr.io/felddy/foundryvtt
-              tag: 13.350.0
+              tag: 13.351.0
             env:
               CONTAINER_CACHE: "/data" # platform=node, name like 'foundryvtt-13.350.zip'
               FOUNDRY_HOSTNAME: "fvtt.noirprime.com"
