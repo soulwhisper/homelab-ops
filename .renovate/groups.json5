@@ -35,16 +35,6 @@
       minimumGroupSize: 2,
     },
     {
-      description: ["Dragonflydb Group"],
-      groupName: "Dragonflydb",
-      matchDatasources: ["docker"],
-      matchPackageNames: ["/dragonfly-operator/", "/dragonfly/"],
-      group: {
-        commitMessageTopic: "{{{groupName}}} group",
-      },
-      minimumGroupSize: 2,
-    },
-    {
       description: "Flux Operator Group",
       groupName: "Flux Operator",
       matchDatasources: ["docker"],
