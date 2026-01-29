@@ -78,9 +78,8 @@ spec:
             sectionName: https
         rules:
           - backendRefs:
-              - name: *name
-                namespace: security-system
-                port: *port
+              - identifier: app
+                port: http
 
     persistence:
       tmpfs:

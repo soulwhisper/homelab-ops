@@ -70,9 +70,8 @@ spec:
             sectionName: https
         rules:
           - backendRefs:
-              - name: *name
-                namespace: media-apps
-                port: 8443
+              - identifier: app
+                port: http
 
     persistence:
       app:

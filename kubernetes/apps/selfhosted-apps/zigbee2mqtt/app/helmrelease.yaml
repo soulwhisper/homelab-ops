@@ -124,8 +124,8 @@ spec:
             sectionName: https
         rules:
           - backendRefs:
-              - name: *name
-                port: *httpPort
+              - identifier: app
+                port: http
       code-server:
         hostnames: ["z2m-code.noirprime.com"]
         annotations:
@@ -140,8 +140,8 @@ spec:
             sectionName: https
         rules:
           - backendRefs:
-              - name: *name
-                port: 1337
+              - identifier: code-server
+                port: http
 
     persistence:
       app:

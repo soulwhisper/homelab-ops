@@ -77,9 +77,8 @@ spec:
             sectionName: https
         rules:
           - backendRefs:
-              - name: *name
-                namespace: media-apps
-                port: 5000
+              - identifier: app
+                port: http
       go2rtc:
         hostnames: ["frigate-go2rtc.noirprime.com"]
         parentRefs:
@@ -88,9 +87,8 @@ spec:
             sectionName: https
         rules:
           - backendRefs:
-              - name: *name
-                namespace: media-apps
-                port: 1984
+              - identifier: app
+                port: go2rtc
 
     persistence:
       app:

@@ -92,8 +92,7 @@ spec:
             sectionName: https
         rules:
           - backendRefs:
-              - name: *name
-                namespace: media-apps
+              - identifier: app
                 port: http
 
     persistence:

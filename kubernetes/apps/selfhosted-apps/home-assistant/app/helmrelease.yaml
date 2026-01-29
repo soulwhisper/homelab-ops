@@ -84,8 +84,8 @@ spec:
             sectionName: https
         rules:
           - backendRefs:
-              - name: *name
-                port: 8123
+              - identifier: app
+                port: http
       code-server:
         hostnames: ["hass-code.noirprime.com"]
         annotations:
@@ -100,8 +100,8 @@ spec:
             sectionName: https
         rules:
           - backendRefs:
-              - name: *name
-                port: 1337
+              - identifier: code-server
+                port: http
 
     persistence:
       app:
