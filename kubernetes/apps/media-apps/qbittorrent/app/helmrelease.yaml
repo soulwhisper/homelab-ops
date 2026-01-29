@@ -65,17 +65,17 @@ spec:
 
     service:
       app:
+        primary: true
         ports:
           http:
             port: *port
-            primary: true
-          bittorrent:
-            type: LoadBalancer
-            annotations:
-              lbipam.cilium.io/ips: "10.10.0.141"
-            ports:
-              bittorrent-tcp:
-                port: *torrentPort
+      bittorrent:
+        type: LoadBalancer
+        annotations:
+          lbipam.cilium.io/ips: "10.10.0.141"
+        ports:
+          bittorrent-tcp:
+            port: *torrentPort
     route:
       app:
         hostnames: ["bt.noirprime.com"]
