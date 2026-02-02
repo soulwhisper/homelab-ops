@@ -75,12 +75,12 @@ directories:
     path: k8s-volumes
   path: _sources/kubernetes
 - contents:
-  - configDigest: 052d3c09c3c3fa949d7ecc80a06170c6ca686e7dfab82ab1ab133d16b77e5c8a
+  - configDigest: cf82fe1aaa1493c4c4ad9c67eddd3c29996bdb24173e341f81675d9751cf345c
     git:
-      commitTitle: 'CHANGELOG.md: cut v1.134.0 release'
-      sha: eaf7a68c92c8069a67ae02e601e81453a5e002de
+      commitTitle: 'lib/storage: reduce number of shards in metricIDCache (#10388)...'
+      sha: a8a99105b1873fa21f5c6dfdc020f9cc1de8cfc5
       tags:
-      - v1.134.0
+      - v1.135.0
     path: metrics
   - configDigest: b7560a176ec0ce46fee83732f9a353d93f1fdf062aa2671adc120c58808aa7ac
     git:
