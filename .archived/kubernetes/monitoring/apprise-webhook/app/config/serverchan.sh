@@ -22,7 +22,7 @@ function notify() {
     # ref:https://github.com/easychen/serverchan-demo/blob/master/shell/send.sh
     # ref:https://doc.sc3.ft07.com/zh/serverchan3
 
-    local title="Alert from Homelab-ops"
+    local title="Alert from Home-ops"
     local content="$(_jq '.body')"
     local key="$SC_KEY"
 

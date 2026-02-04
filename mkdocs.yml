@@ -1,7 +1,7 @@
-site_name: Homelab-ops Docs
-site_url: https://soulwhisper.github.io/homelab-ops/
-repo_url: https://github.com/soulwhisper/homelab-ops
-repo_name: homelab-ops
+site_name: Home-ops Docs
+site_url: https://soulwhisper.github.io/home-ops/
+repo_url: https://github.com/soulwhisper/home-ops
+repo_name: home-ops
 
 theme:
   name: material

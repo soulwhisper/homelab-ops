@@ -88,7 +88,7 @@ machine:
         - 172.19.82.0/24
   nodeLabels:
     topology.kubernetes.io/region: main
-    topology.kubernetes.io/zone: homelab
+    topology.kubernetes.io/zone: home
     intel.feature.node.kubernetes.io/gpu: "true"
   sysctls:
     fs.inotify.max_user_watches: 1048576 # moviepilot

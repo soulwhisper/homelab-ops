@@ -19,8 +19,8 @@ ui:
   buttons:
     - name: Github
       link: https://github.com/soulwhisper
-    - name: Homelab
-      link: https://github.com/soulwhisper/homelab-ops
+    - name: Home-Ops
+      link: https://github.com/soulwhisper/home-ops
 
 web:
   port: ${GATUS_WEB_PORT}

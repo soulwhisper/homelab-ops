@@ -1,7 +1,7 @@
 ## Bootstrap
 
 ```shell
-cd homelab-ops
+cd home-ops
 direnv allow
 
 eval $(op signin)

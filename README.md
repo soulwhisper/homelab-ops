@@ -1,12 +1,12 @@
 <div align="center">
 
-<img src="https://github.com/soulwhisper/homelab-ops/blob/main/docs/_assets/logo.png?raw=true" width="144px" height="144px"/>
+<img src="https://github.com/soulwhisper/home-ops/blob/main/docs/_assets/logo.png?raw=true" width="144px" height="144px"/>
 
-### <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f680/512.gif" alt="🚀" width="16" height="16"> My Homelab Operations repository <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f6a7/512.gif" alt="🚧" width="16" height="16">
+### <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f680/512.gif" alt="🚀" width="16" height="16"> My Home Operations repository <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f6a7/512.gif" alt="🚧" width="16" height="16">
 
 _... managed by Flux, Renovate and GitHub Actions_ <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f916/512.gif" alt="🤖" width="16" height="16">
 
-[![Discord](https://img.shields.io/discord/673534664354430999?style=for-the-badge&label&logo=discord&logoColor=white&color=blue)](https://discord.gg/homelab-operations)
+[![Discord](https://img.shields.io/discord/673534664354430999?style=for-the-badge&label&logo=discord&logoColor=white&color=blue)](https://discord.gg/home-operations)
 
 [![Talos](https://img.shields.io/endpoint?url=https%3A%2F%2Fkromgo.noirprime.com%2Ftalos_version&style=for-the-badge&logo=talos&logoColor=white&color=blue&label=talos)](https://talos.dev)&nbsp;
 [![Kubernetes](https://img.shields.io/endpoint?url=https%3A%2F%2Fkromgo.noirprime.com%2Fkubernetes_version&style=for-the-badge&logo=kubernetes&logoColor=white&color=blue&label=k8s)](https://kubernetes.io)&nbsp;
@@ -25,7 +25,7 @@ _... managed by Flux, Renovate and GitHub Actions_ <img src="https://fonts.gstat
 
 ## <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f4a1/512.gif" alt="💡" width="20" height="20"> Overview
 
-This repository serves as a monorepository for the comprehensive infrastructure and Kubernetes cluster powering my homelab. At its core, it orchestrates a high-performance **Talos Linux** cluster deeply integrated with an **Enterprise Layer 3** network fabric and a **Synology** storage backbone.
+This repository serves as a monorepository for the comprehensive infrastructure and Kubernetes cluster powering my home-ops. At its core, it orchestrates a high-performance **Talos Linux** cluster deeply integrated with an **Enterprise Layer 3** network fabric and a **Synology** storage backbone.
 
 The project strictly adheres to **Infrastructure as Code (IaC)** and **GitOps** principles to ensure declarative, repeatable, and version-controlled management across the entire stack—from bare-metal provisioning to application delivery.
 
@@ -36,7 +36,7 @@ The project strictly adheres to **Infrastructure as Code (IaC)** and **GitOps** 
 - **Hybrid Storage:** Leveraging **Synology** for centralized NFS/S3 object storage alongside localized high-performance [Rook-Ceph](https://github.com/rook/rook) block storage.
 - **Automated Operations:** Powered by [Flux](https://github.com/fluxcd/flux2) for continuous delivery, [GitHub Actions](https://github.com/features/actions) for CI pipelines, and [Renovate](https://github.com/renovatebot/renovate) for dependency management.
 
-All configurations are declared as code, promoting reproducibility and enabling seamless updates, scaling, and disaster recovery of the homelab environment.
+All configurations are declared as code, promoting reproducibility and enabling seamless updates, scaling, and disaster recovery of the home-ops environment.
 
 ---
 
@@ -55,4 +55,4 @@ I got help from some cool repo like:
 
 ### 🔏 License
 
-See [LICENSE](https://github.com/soulwhisper/homelab-ops/blob/main/LICENSE)
+See [LICENSE](https://github.com/soulwhisper/home-ops/blob/main/LICENSE)

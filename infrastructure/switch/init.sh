@@ -1,5 +1,5 @@
 #!/bin/bash
-# This script configures H3C S6520-24S-SI as core switch for a homelab environment
+# This script configures H3C S6520-24S-SI as core switch for the environment
 # If pasted into the switch console, make sure to paste by phases to avoid errors
 
 # reset

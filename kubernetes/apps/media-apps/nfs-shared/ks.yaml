@@ -5,7 +5,7 @@ kind: Kustomization
 metadata:
   name: &name nfs-shared
   labels:
-    config.homelab.ops/substitution: "false"
+    config.home.ops/substitution: "false"
     # conflict with pvc subdir generator
 spec:
   commonMetadata:

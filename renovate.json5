@@ -2,10 +2,10 @@
   $schema: "https://docs.renovatebot.com/renovate-schema.json",
   extends: [
     "github>soulwhisper/renovate-config",
-    "github>soulwhisper/homelab-ops//.renovate/autoMerge.json5",
-    "github>soulwhisper/homelab-ops//.renovate/custom.json5",
-    "github>soulwhisper/homelab-ops//.renovate/groups.json5",
-    "github>soulwhisper/homelab-ops//.renovate/packageRules.json5",
+    "github>soulwhisper/home-ops//.renovate/autoMerge.json5",
+    "github>soulwhisper/home-ops//.renovate/custom.json5",
+    "github>soulwhisper/home-ops//.renovate/groups.json5",
+    "github>soulwhisper/home-ops//.renovate/packageRules.json5",
   ],
   flux: {
     managerFilePatterns: ["/^kubernetes/.+\\.ya?ml$/"],

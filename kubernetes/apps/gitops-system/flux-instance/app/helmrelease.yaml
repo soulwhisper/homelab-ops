@@ -23,7 +23,7 @@ spec:
         - notification-controller
       sync:
         kind: GitRepository
-        url: https://github.com/soulwhisper/homelab-ops.git
+        url: https://github.com/soulwhisper/home-ops.git
         ref: refs/heads/main
         path: kubernetes/flux/cluster
         interval: 30m

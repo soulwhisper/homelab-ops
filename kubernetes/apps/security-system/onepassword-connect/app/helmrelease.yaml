@@ -17,7 +17,7 @@ spec:
         strategy: RollingUpdate
         annotations:
           reloader.stakater.com/auto: "true"
-          config.homelab.ops/proxy: "https" # https_proxy needed
+          config.home.ops/proxy: "https" # https_proxy needed
         containers:
           api:
             image:

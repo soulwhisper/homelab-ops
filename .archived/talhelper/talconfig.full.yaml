@@ -61,7 +61,7 @@ controlPlane:
     arch: amd64
   nodeLabels:
     topology.kubernetes.io/region: *clusterName
-    topology.kubernetes.io/zone: homelab
+    topology.kubernetes.io/zone: home
   schematic:
     customization:
       # bootloader: sd-boot, until talhelper catchup

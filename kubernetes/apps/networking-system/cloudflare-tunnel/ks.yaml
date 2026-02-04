@@ -5,7 +5,7 @@ kind: Kustomization
 metadata:
   name: &name cloudflare-tunnel
   labels:
-    config.homelab.ops/substitution: "false"
+    config.home.ops/substitution: "false"
 spec:
   commonMetadata:
     labels:
