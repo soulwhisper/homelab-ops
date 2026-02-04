@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <url>
+         <loc>https://soulwhisper.github.io/home-ops/</loc>
+         <lastmod>2026-02-04</lastmod>
+    </url>
+    <url>
+         <loc>https://soulwhisper.github.io/home-ops/decisions/bgp/</loc>
+         <lastmod>2026-02-04</lastmod>
+    </url>
+    <url>
+         <loc>https://soulwhisper.github.io/home-ops/deployment/bootstrap/</loc>
+         <lastmod>2026-02-04</lastmod>
+    </url>
+    <url>
+         <loc>https://soulwhisper.github.io/home-ops/infrastructure/hardware/</loc>
+         <lastmod>2026-02-04</lastmod>
+    </url>
+    <url>
+         <loc>https://soulwhisper.github.io/home-ops/infrastructure/kubernetes/</loc>
+         <lastmod>2026-02-04</lastmod>
+    </url>
+    <url>
+         <loc>https://soulwhisper.github.io/home-ops/infrastructure/networking/</loc>
+         <lastmod>2026-02-04</lastmod>
+    </url>
+</urlset>
