@@ -28,6 +28,6 @@ jobs:
         with:
           python-version: "pypy-3.11"
       - name: Deploy docs
-        uses: afritzler/mkdocs-gh-pages-action@6629f808b6a2441945933712a4f0ca906f027c0d # v9
+        uses: afritzler/mkdocs-gh-pages-action@b7c2e615036e37d40cbf3cbbcde37d1ef34df8de # v9
         env:
           GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
