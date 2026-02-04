@@ -59,3 +59,8 @@ spec:
             subPath: data
           - path: /var/www/FreshRSS/extensions
             subPath: extensions
+      tmpfs:
+        type: emptyDir
+        globalMounts:
+          - path: /var/www/FreshRSS/data/cache
+            subPath: cache
