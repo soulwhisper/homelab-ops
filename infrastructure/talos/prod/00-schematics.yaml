@@ -4,7 +4,6 @@ customization:
   bootloader: sd-boot
   systemExtensions:
     officialExtensions:
-      - siderolabs/bird2
       - siderolabs/i915
       - siderolabs/intel-ucode
       - siderolabs/mei

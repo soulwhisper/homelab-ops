@@ -6,7 +6,6 @@ customization:
     - console=ttyS0 # hci only
   systemExtensions:
     officialExtensions:
-      - siderolabs/bird2
       - siderolabs/i915
       - siderolabs/intel-ucode
       - siderolabs/mei
