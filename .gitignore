@@ -3,8 +3,8 @@
 Thumbs.db
 
 # Docs
-.venv/
-site/
+.cache/
+site*/
 
 # Other files
 kubeconfig
