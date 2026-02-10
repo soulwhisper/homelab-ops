@@ -31,7 +31,7 @@ D(
   "homelab.internal",
   REG_NONE,
   DnsProvider(DSP_ADGUARDHOME),
-  A("nas", "10.10.0.10"),
   A("zigbee", "10.10.0.20"),
+  A("nas", "10.10.0.100"),
   ...generateClusterRecords("k8s", CLUSTER_NODES)
 );
