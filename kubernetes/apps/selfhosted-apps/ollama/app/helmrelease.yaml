@@ -34,7 +34,7 @@ spec:
           model-puller:
             image:
               repository: mirror.gcr.io/ollama/ollama
-              tag: 0.15.4
+              tag: 0.15.6
             command:
               - "/bin/sh"
               - "-c"
@@ -69,7 +69,7 @@ spec:
           app:
             image:
               repository: mirror.gcr.io/ollama/ollama
-              tag: 0.15.4
+              tag: 0.15.6
             env:
               OLLAMA_CONTEXT_LENGTH: "8192"
               OLLAMA_FLASH_ATTENTION: "0"
