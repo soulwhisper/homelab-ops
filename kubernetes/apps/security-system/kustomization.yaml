@@ -8,4 +8,5 @@ components:
 resources:
   - ./cert-manager/ks.yaml
   - ./external-secrets/ks.yaml
+  - ./falco/ks.yaml
   - ./onepassword-connect/ks.yaml

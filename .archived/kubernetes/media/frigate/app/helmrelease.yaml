@@ -50,7 +50,7 @@ spec:
           lbipam.cilium.io/ips: "10.10.0.142"
         ports:
           http:
-            appProtocol: kubernetes.io/wss
+            appProtocol: kubernetes.io/ws
             primary: true
             port: 5000
           go2rtc:
