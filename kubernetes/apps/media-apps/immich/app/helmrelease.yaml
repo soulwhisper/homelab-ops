@@ -109,7 +109,7 @@ spec:
         hostnames: ["photo.noirprime.com"]
         annotations:
           gethomepage.dev/enabled: "true"
-          gethomepage.dev/icon: immich.png
+          gethomepage.dev/icon: immich.svg
           gethomepage.dev/name: Immich
           gethomepage.dev/group: Media
           gethomepage.dev/widget.type: immich
@@ -118,7 +118,6 @@ spec:
         parentRefs:
           - name: kgateway-internal
             namespace: networking-system
-            sectionName: https
 
     persistence:
       shared:

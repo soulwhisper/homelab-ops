@@ -44,13 +44,12 @@ spec:
         hostnames: ["calibre.noirprime.com"]
         annotations:
           gethomepage.dev/enabled: "true"
-          gethomepage.dev/icon: calibre.png
+          gethomepage.dev/icon: calibre.svg
           gethomepage.dev/name: Calibre
           gethomepage.dev/group: Service
         parentRefs:
           - name: kgateway-internal
             namespace: networking-system
-            sectionName: https
 
     persistence:
       app:

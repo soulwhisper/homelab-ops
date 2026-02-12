@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &name comfyui
+  name: &name spoolman
 spec:
   interval: 30m
   chartRef:
@@ -18,22 +18,40 @@ spec:
       *name :
         annotations:
           reloader.stakater.com/auto: "true"
-          config.home.ops/proxy: "https" # https_proxy needed
         containers:
           app:
             image:
-              repository: mirror.gcr.io/zeroclue/comfyui
-              tag: base-torch2.8.0-cu126
+              repository: ghcr.io/donkie/spoolman
+              tag: 0.23.1
+            command:
+              - uvicorn
+              - spoolman.main:app
+              - --host
+              - 0.0.0.0
             env:
-              COMFYUI_EXTRA_ARGS: "--cpu --preview-method auto"
-              ENABLE_CODE_SERVER: "true"
-              ENABLE_PRESET_MANAGER: "true"
-              IMAGE_PRESET_DOWNLOAD: "FLUX_DEV_BASIC,FLUX_SCHNELL_BASIC"
+              SPOOLMAN_PORT: &httpPort 8000
+            probes:
+              liveness: &probes
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /api/v1/health
+                    port: *httpPort
+                  periodSeconds: 10
+                  timeoutSeconds: 5
+                  failureThreshold: 5
+              readiness: *probes
+              startup:
+                enabled: true
+                spec:
+                  failureThreshold: 30
+                  periodSeconds: 10
             resources:
               requests:
-                cpu: 4000m
+                cpu: 128Mi
               limits:
-                memory: 80Gi
+                memory: 512Mi
             securityContext:
               allowPrivilegeEscalation: false
               capabilities: { drop: ["ALL"] }
@@ -43,19 +61,14 @@ spec:
       app:
         ports:
           http:
-            port: 3000
-            primary: true
-          code:
-            port: 8080
-          jupyter:
-            port: 8888
+            port: *httpPort
     route:
       app:
-        hostnames: ["comfyui.noirprime.com"]
+        hostnames: ["spoolman.noirprime.com"]
         annotations:
           gethomepage.dev/enabled: "true"
-          gethomepage.dev/icon: comfy-ui.svg
-          gethomepage.dev/name: Comfyui
+          gethomepage.dev/icon: spoolman.svg
+          gethomepage.dev/name: Spoolman
           gethomepage.dev/group: Service
         parentRefs:
           - name: kgateway-internal
@@ -65,8 +78,4 @@ spec:
       app:
         existingClaim: *name
         globalMounts:
-          - path: /workspace
-      tmpfs:
-        type: emptyDir
-        globalMounts:
-          - path: /tmp
+          - path: /home/app/.local/share/spoolman

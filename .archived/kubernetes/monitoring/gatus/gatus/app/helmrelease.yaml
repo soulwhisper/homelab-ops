@@ -95,7 +95,6 @@ spec:
         parentRefs:
           - name: external
             namespace: kube-system
-            sectionName: https
 
     serviceAccount:
       *name : {}

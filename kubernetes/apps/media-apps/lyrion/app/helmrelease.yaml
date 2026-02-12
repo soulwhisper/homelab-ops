@@ -52,13 +52,12 @@ spec:
         hostnames: ["music.noirprime.com"]
         annotations:
           gethomepage.dev/enabled: "true"
-          gethomepage.dev/icon: lyrion.png
+          gethomepage.dev/icon: lyrion.svg
           gethomepage.dev/name: Lyrion
           gethomepage.dev/group: Media
         parentRefs:
           - name: kgateway-internal
             namespace: networking-system
-            sectionName: https
 
     persistence:
       app:

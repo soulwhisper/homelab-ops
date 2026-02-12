@@ -69,7 +69,6 @@ spec:
         parentRefs:
           - name: kgateway-internal
             namespace: networking-system
-            sectionName: https
 
     persistence:
       app:

@@ -68,13 +68,13 @@ spec:
         hostnames: ["frigate.noirprime.com"]
         annotations:
           gethomepage.dev/enabled: "true"
-          gethomepage.dev/icon: frigate.png
+          gethomepage.dev/icon: frigate.svg
           gethomepage.dev/name: FrigateNVR
           gethomepage.dev/group: Service
         parentRefs:
           - name: kgateway-internal
             namespace: networking-system
-            sectionName: https
+
         rules:
           - backendRefs:
               - identifier: app
@@ -84,7 +84,7 @@ spec:
         parentRefs:
           - name: kgateway-internal
             namespace: networking-system
-            sectionName: https
+
         rules:
           - backendRefs:
               - identifier: app

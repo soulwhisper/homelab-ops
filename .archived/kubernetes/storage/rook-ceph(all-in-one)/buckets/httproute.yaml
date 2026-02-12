@@ -6,7 +6,7 @@ metadata:
   name: &name rook-ceph-rgw-ceph-objectstore-external
   annotations:
     gethomepage.dev/enabled: "true"
-    gethomepage.dev/icon: ceph.png
+    gethomepage.dev/icon: ceph.svg
     gethomepage.dev/name: ceph-buckets
     gethomepage.dev/group: Storage
 spec:
@@ -14,7 +14,7 @@ spec:
   parentRefs:
     - name: kgateway-internal
       namespace: kube-system
-      sectionName: https
+
   rules:
     - backendRefs:
         - name: *name

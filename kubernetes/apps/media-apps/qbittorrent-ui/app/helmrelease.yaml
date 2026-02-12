@@ -52,13 +52,12 @@ spec:
         hostnames: ["qui.noirprime.com"]
         annotations:
           gethomepage.dev/enabled: "true"
-          gethomepage.dev/icon: qbittorrent.png
+          gethomepage.dev/icon: qbittorrent.svg
           gethomepage.dev/name: qUI
           gethomepage.dev/group: Service
         parentRefs:
           - name: kgateway-internal
             namespace: networking-system
-            sectionName: https
 
     persistence:
       app:

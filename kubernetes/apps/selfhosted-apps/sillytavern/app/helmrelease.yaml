@@ -43,13 +43,12 @@ spec:
         hostnames: ["tavern.noirprime.com"]
         annotations:
           gethomepage.dev/enabled: "true"
-          gethomepage.dev/icon: sillytavern.png
+          gethomepage.dev/icon: sillytavern.svg
           gethomepage.dev/name: SillyTavern
           gethomepage.dev/group: Service
         parentRefs:
           - name: kgateway-internal
             namespace: networking-system
-            sectionName: https
 
     persistence:
       app:

@@ -6,7 +6,7 @@ metadata:
   name: &name victoria-logs-server
   annotations:
     gethomepage.dev/enabled: "true"
-    gethomepage.dev/icon: victoriametrics.png
+    gethomepage.dev/icon: victoriametrics.svg
     gethomepage.dev/name: VictoriaLogs
     gethomepage.dev/group: Observability
     gethomepage.dev/pod-selector: "app.kubernetes.io/name=victoria-logs-single"
@@ -15,7 +15,7 @@ spec:
   parentRefs:
     - name: kgateway-internal
       namespace: networking-system
-      sectionName: https
+
   rules:
     - matches:
         - path:

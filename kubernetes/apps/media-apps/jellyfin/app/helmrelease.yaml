@@ -46,7 +46,7 @@ spec:
         hostnames: ["movie.noirprime.com"]
         annotations:
           gethomepage.dev/enabled: "true"
-          gethomepage.dev/icon: jellyfin.png
+          gethomepage.dev/icon: jellyfin.svg
           gethomepage.dev/name: Jellyfin
           gethomepage.dev/group: Media
           gethomepage.dev/widget.type: jellyfin
@@ -60,7 +60,6 @@ spec:
         parentRefs:
           - name: kgateway-internal
             namespace: networking-system
-            sectionName: https
 
     persistence:
       app:

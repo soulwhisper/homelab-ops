@@ -49,13 +49,12 @@ spec:
         hostnames: ["audiobookshelf.noirprime.com"]
         annotations:
           gethomepage.dev/enabled: "true"
-          gethomepage.dev/icon: audiobookshelf.png
+          gethomepage.dev/icon: audiobookshelf.svg
           gethomepage.dev/name: AudioBookShelf
           gethomepage.dev/group: Service
         parentRefs:
           - name: kgateway-internal
             namespace: networking-system
-            sectionName: https
 
     persistence:
       app:

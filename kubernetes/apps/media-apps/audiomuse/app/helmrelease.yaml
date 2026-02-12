@@ -73,13 +73,12 @@ spec:
         hostnames: ["muse.noirprime.com"]
         annotations:
           gethomepage.dev/enabled: "true"
-          gethomepage.dev/icon: hl-audiomuse-ai.png
+          gethomepage.dev/icon: hl-audiomuse-ai.svg
           gethomepage.dev/name: AudioMuse
           gethomepage.dev/group: Media
         parentRefs:
           - name: kgateway-internal
             namespace: networking-system
-            sectionName: https
 
     persistence:
       shared:

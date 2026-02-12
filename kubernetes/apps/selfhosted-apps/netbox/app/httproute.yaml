@@ -6,7 +6,7 @@ metadata:
   name: netbox
   annotations:
     gethomepage.dev/enabled: "true"
-    gethomepage.dev/icon: netbox.png
+    gethomepage.dev/icon: netbox.svg
     gethomepage.dev/name: Netbox
     gethomepage.dev/group: Service
     gethomepage.dev/pod-selector: "app.kubernetes.io/component=netbox"
@@ -18,7 +18,7 @@ spec:
   parentRefs:
     - name: kgateway-internal
       namespace: networking-system
-      sectionName: https
+
   rules:
     - backendRefs:
         - name: netbox

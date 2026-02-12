@@ -43,13 +43,12 @@ spec:
         hostnames: ["rss.noirprime.com"]
         annotations:
           gethomepage.dev/enabled: "true"
-          gethomepage.dev/icon: freshrss.png
+          gethomepage.dev/icon: freshrss.svg
           gethomepage.dev/name: FreshRSS
           gethomepage.dev/group: Service
         parentRefs:
           - name: kgateway-internal
             namespace: networking-system
-            sectionName: https
 
     persistence:
       app:

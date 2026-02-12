@@ -58,13 +58,12 @@ spec:
         hostnames: ["fvtt.noirprime.com"]
         annotations:
           gethomepage.dev/enabled: "true"
-          gethomepage.dev/icon: foundry-vtt.png
+          gethomepage.dev/icon: foundry-vtt.svg
           gethomepage.dev/name: FoundryVTT
           gethomepage.dev/group: Service
         parentRefs:
           - name: kgateway-internal
             namespace: networking-system
-            sectionName: https
 
     persistence:
       app:

@@ -6,7 +6,7 @@ metadata:
   name: hubble-dashboard
   annotations:
     gethomepage.dev/enabled: "true"
-    gethomepage.dev/icon: cilium.png
+    gethomepage.dev/icon: cilium.svg
     gethomepage.dev/name: hubble
     gethomepage.dev/group: Observability
 spec:
@@ -14,7 +14,7 @@ spec:
   parentRefs:
     - name: kgateway-internal
       namespace: networking-system
-      sectionName: https
+
   rules:
     - backendRefs:
         - name: hubble-ui

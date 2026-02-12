@@ -48,13 +48,12 @@ spec:
         hostnames: ["spdf.noirprime.com"]
         annotations:
           gethomepage.dev/enabled: "true"
-          gethomepage.dev/icon: stirling-pdf.png
+          gethomepage.dev/icon: stirling-pdf.svg
           gethomepage.dev/name: Stirling-PDF
           gethomepage.dev/group: Service
         parentRefs:
           - name: kgateway-internal
             namespace: networking-system
-            sectionName: https
 
     persistence:
       app:

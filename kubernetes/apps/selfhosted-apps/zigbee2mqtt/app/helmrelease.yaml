@@ -114,14 +114,14 @@ spec:
         hostnames: ["z2m.noirprime.com"]
         annotations:
           gethomepage.dev/enabled: "true"
-          gethomepage.dev/icon: zigbee2mqtt.png
+          gethomepage.dev/icon: zigbee2mqtt.svg
           gethomepage.dev/name: Zigbee2MQTT
           gethomepage.dev/group: SmartHome
           gethomepage.dev/pod-selector: "app.kubernetes.io/name=zigbee2mqtt"
         parentRefs:
           - name: kgateway-internal
             namespace: networking-system
-            sectionName: https
+
         rules:
           - backendRefs:
               - identifier: app
@@ -130,14 +130,14 @@ spec:
         hostnames: ["z2m-code.noirprime.com"]
         annotations:
           gethomepage.dev/enabled: "true"
-          gethomepage.dev/icon: code-server.png
+          gethomepage.dev/icon: code-server.svg
           gethomepage.dev/name: Zigbee2MQTT-Code
           gethomepage.dev/group: SmartHome
           gethomepage.dev/pod-selector: "app.kubernetes.io/name=zigbee2mqtt"
         parentRefs:
           - name: kgateway-internal
             namespace: networking-system
-            sectionName: https
+
         rules:
           - backendRefs:
               - identifier: code-server

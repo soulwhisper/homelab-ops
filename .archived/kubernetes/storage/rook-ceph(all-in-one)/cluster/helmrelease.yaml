@@ -26,7 +26,7 @@ spec:
         parentRefs:
           - name: internal
             namespace: kube-system
-            sectionName: https
+
     toolbox:
       enabled: false
     cephClusterSpec:

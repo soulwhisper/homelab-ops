@@ -15,7 +15,7 @@ spec:
   parentRefs:
     - name: kgateway-internal
       namespace: networking-system
-      sectionName: https
+
   rules:
     # /console/api
     - matches:

@@ -48,13 +48,12 @@ spec:
         hostnames: ["book.noirprime.com"]
         annotations:
           gethomepage.dev/enabled: "true"
-          gethomepage.dev/icon: kavita.png
+          gethomepage.dev/icon: kavita.svg
           gethomepage.dev/name: Kavita
           gethomepage.dev/group: Media
         parentRefs:
           - name: kgateway-internal
             namespace: networking-system
-            sectionName: https
 
     persistence:
       app:

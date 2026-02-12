@@ -80,7 +80,6 @@ spec:
         parentRefs:
           - name: kgateway-external
             namespace: networking-system
-            sectionName: https
 
     persistence:
       config:

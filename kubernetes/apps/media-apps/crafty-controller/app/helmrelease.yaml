@@ -59,7 +59,7 @@ spec:
         hostnames: ["crafty.noirprime.com"]
         annotations:
           gethomepage.dev/enabled: "true"
-          gethomepage.dev/icon: crafty-controller.png
+          gethomepage.dev/icon: crafty-controller.svg
           gethomepage.dev/name: Crafty
           gethomepage.dev/group: Service
           gethomepage.dev/widget.type: minecraft
@@ -67,7 +67,7 @@ spec:
         parentRefs:
           - name: kgateway-internal
             namespace: networking-system
-            sectionName: https
+
         rules:
           - backendRefs:
               - identifier: app

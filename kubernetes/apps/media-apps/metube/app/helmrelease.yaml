@@ -52,13 +52,12 @@ spec:
         hostnames: ["metube.noirprime.com"]
         annotations:
           gethomepage.dev/enabled: "true"
-          gethomepage.dev/icon: metube.png
+          gethomepage.dev/icon: metube.svg
           gethomepage.dev/name: Metube
           gethomepage.dev/group: Download
         parentRefs:
           - name: kgateway-internal
             namespace: networking-system
-            sectionName: https
 
     persistence:
       movie:

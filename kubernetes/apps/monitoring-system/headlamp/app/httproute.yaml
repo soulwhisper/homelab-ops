@@ -6,7 +6,7 @@ metadata:
   name: &name headlamp
   annotations:
     gethomepage.dev/enabled: "true"
-    gethomepage.dev/icon: headlamp.png
+    gethomepage.dev/icon: headlamp.svg
     gethomepage.dev/name: Headlamp
     gethomepage.dev/group: Observability
 spec:
@@ -14,7 +14,7 @@ spec:
   parentRefs:
     - name: kgateway-internal
       namespace: networking-system
-      sectionName: https
+
   rules:
     - backendRefs:
         - name: *name

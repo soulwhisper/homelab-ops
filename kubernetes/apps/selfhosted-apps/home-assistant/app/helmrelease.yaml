@@ -74,14 +74,14 @@ spec:
         hostnames: ["hass.noirprime.com"]
         annotations:
           gethomepage.dev/enabled: "true"
-          gethomepage.dev/icon: home-assistant.png
+          gethomepage.dev/icon: home-assistant.svg
           gethomepage.dev/name: Home-Assistant
           gethomepage.dev/group: SmartHome
           gethomepage.dev/pod-selector: "app.kubernetes.io/name=home-assistant"
         parentRefs:
           - name: kgateway-internal
             namespace: networking-system
-            sectionName: https
+
         rules:
           - backendRefs:
               - identifier: app
@@ -90,14 +90,14 @@ spec:
         hostnames: ["hass-code.noirprime.com"]
         annotations:
           gethomepage.dev/enabled: "true"
-          gethomepage.dev/icon: code-server.png
+          gethomepage.dev/icon: code-server.svg
           gethomepage.dev/name: Home-Assistant-Code
           gethomepage.dev/group: SmartHome
           gethomepage.dev/pod-selector: "app.kubernetes.io/name=home-assistant"
         parentRefs:
           - name: kgateway-internal
             namespace: networking-system
-            sectionName: https
+
         rules:
           - backendRefs:
               - identifier: code-server

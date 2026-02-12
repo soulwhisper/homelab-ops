@@ -47,13 +47,12 @@ spec:
         hostnames: ["orca.noirprime.com"]
         annotations:
           gethomepage.dev/enabled: "true"
-          gethomepage.dev/icon: orcaslicer.png
+          gethomepage.dev/icon: orcaslicer.svg
           gethomepage.dev/name: Orcaslicer
           gethomepage.dev/group: Service
         parentRefs:
           - name: kgateway-internal
             namespace: networking-system
-            sectionName: https
 
     persistence:
       app:

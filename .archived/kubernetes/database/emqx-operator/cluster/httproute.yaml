@@ -6,7 +6,7 @@ metadata:
   name: emqx
   annotations:
     gethomepage.dev/enabled: "true"
-    gethomepage.dev/icon: emqx.png
+    gethomepage.dev/icon: emqx.svg
     gethomepage.dev/name: ENQX
     gethomepage.dev/group: Observability
 spec:
@@ -14,7 +14,7 @@ spec:
   parentRefs:
     - name: internal
       namespace: kube-system
-      sectionName: https
+
   rules:
     - backendRefs:
         - name: emqx-dashboard

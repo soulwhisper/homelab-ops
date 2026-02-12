@@ -16,7 +16,7 @@ data:
     # https://pictogrammers.com/library/mdi/
     # https://simpleicons.org/
     title: Dashboard
-    favicon: https://github.com/homarr-labs/dashboard-icons/tree/main/png/heimdall.png
+    favicon: https://github.com/homarr-labs/dashboard-icons/tree/main/png/heimdall.svg
     theme: dark
     headerStyle: boxed
     hideVersion: true
@@ -57,17 +57,17 @@ data:
   bookmarks.yaml: |
     - Social:
         - Discord:
-            - icon: discord.png
+            - icon: discord.svg
               href: https://discord.com/app
         - Outlook:
-            - icon: microsoft-outlook.png
+            - icon: microsoft-outlook.svg
               href: https://outlook.live.com/mail/0/
     - Cloud:
         - Cloudflare:
-            - icon: cloudflare.png
+            - icon: cloudflare.svg
               href: https://dash.cloudflare.com
         - Pushover:
-            - icon: pushover.png
+            - icon: pushover.svg
               href: https://client.pushover.net/
     - Icons:
         - Homepage Dashboard:
@@ -96,7 +96,7 @@ data:
     - Infrastructure:
         - Proxmox:
             href: https://10.0.0.100:8006
-            icon: proxmox.png
+            icon: proxmox.svg
             widget:
               type: proxmox
               url: https://10.0.0.100:8006
@@ -104,7 +104,7 @@ data:
               password: {{HOMEPAGE_VAR_PROXMOX_PASSWORD}}
         - OpenWRT:
             href: https://10.0.0.1
-            icon: openwrt.png
+            icon: openwrt.svg
             widget:
               type: openwrt
               url: https://10.0.0.1
@@ -114,7 +114,7 @@ data:
     - Networking:
         - Unifi:
             href: https://10.0.0.200:9801
-            icon: unifi.png
+            icon: unifi.svg
             widget:
               type: unifi
               url: https://10.0.0.200:9801
@@ -122,7 +122,7 @@ data:
               password: {{HOMEPAGE_VAR_UNIFI_PASSWORD}}
         - Cloudflare:
             href: https://dash.cloudflare.com/
-            icon: cloudflare.png
+            icon: cloudflare.svg
             widget:
               type: cloudflared
               accountid: {{HOMEPAGE_VAR_CLOUDFLARE_ACCOUNTID}}
@@ -131,7 +131,7 @@ data:
     - Storage:
         - NAS:
             href: https://10.0.0.10:5001
-            icon: synology.png
+            icon: synology.svg
             widget:
               type: diskstation
               url: https://10.0.0.10:5001

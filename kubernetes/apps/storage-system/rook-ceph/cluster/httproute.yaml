@@ -6,7 +6,7 @@ metadata:
   name: rook-ceph-dashboard
   annotations:
     gethomepage.dev/enabled: "true"
-    gethomepage.dev/icon: rook.png
+    gethomepage.dev/icon: rook.svg
     gethomepage.dev/name: Rook
     gethomepage.dev/group: Storage
     gethomepage.dev/pod-selector: app.kubernetes.io/name=ceph-mgr
@@ -18,7 +18,7 @@ spec:
   parentRefs:
     - name: kgateway-internal
       namespace: networking-system
-      sectionName: https
+
   rules:
     - backendRefs:
         - name: rook-ceph-mgr-dashboard

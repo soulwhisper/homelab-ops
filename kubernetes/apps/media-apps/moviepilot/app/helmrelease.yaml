@@ -90,13 +90,12 @@ spec:
         hostnames: ["moviepilot.noirprime.com"]
         annotations:
           gethomepage.dev/enabled: "true"
-          gethomepage.dev/icon: movie-pilot.png
+          gethomepage.dev/icon: movie-pilot.svg
           gethomepage.dev/name: Moviepilot
           gethomepage.dev/group: Media
         parentRefs:
           - name: kgateway-internal
             namespace: networking-system
-            sectionName: https
 
     persistence:
       app:

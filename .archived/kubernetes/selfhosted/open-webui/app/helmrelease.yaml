@@ -50,13 +50,12 @@ spec:
         hostnames: ["chat.noirprime.com"]
         annotations:
           gethomepage.dev/enabled: "true"
-          gethomepage.dev/icon: open-webui.png
+          gethomepage.dev/icon: open-webui.svg
           gethomepage.dev/name: open-webui
           gethomepage.dev/group: AI
         parentRefs:
           - name: internal
             namespace: kube-system
-            sectionName: https
 
     persistence:
       app:

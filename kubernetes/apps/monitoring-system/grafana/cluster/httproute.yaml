@@ -6,7 +6,7 @@ metadata:
   name: &name grafana-service
   annotations:
     gethomepage.dev/enabled: "true"
-    gethomepage.dev/icon: grafana.png
+    gethomepage.dev/icon: grafana.svg
     gethomepage.dev/name: Grafana
     gethomepage.dev/group: Observability
 spec:
@@ -14,7 +14,7 @@ spec:
   parentRefs:
     - name: kgateway-internal
       namespace: networking-system
-      sectionName: https
+
   rules:
     - backendRefs:
         - name: *name
