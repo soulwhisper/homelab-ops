@@ -16,7 +16,7 @@ metadata:
 spec:
   hostnames: ["rook.noirprime.com"]
   parentRefs:
-    - name: envoy-internal
+    - name: kgateway-internal
       namespace: networking-system
       sectionName: https
   rules:

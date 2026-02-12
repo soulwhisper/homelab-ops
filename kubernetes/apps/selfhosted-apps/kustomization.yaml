@@ -6,6 +6,7 @@ namespace: selfhosted-apps
 components:
   - ../../components/namespace
 resources:
+  - ./bambuddy/ks.yaml
   - ./convertx/ks.yaml
   - ./dispatcharr/ks.yaml
   - ./freshrss/ks.yaml

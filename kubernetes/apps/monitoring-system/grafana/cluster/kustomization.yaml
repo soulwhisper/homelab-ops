@@ -15,5 +15,6 @@ resources:
   - ./dashboards/database
   - ./dashboards/default
   - ./dashboards/envoy
+  - ./dashboards/kgateway
   - ./dashboards/kubernetes
   - ./dashboards/victoria-metrics

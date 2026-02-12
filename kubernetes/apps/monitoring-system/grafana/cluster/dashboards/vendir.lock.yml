@@ -55,6 +55,13 @@ directories:
     path: envoy-mixin-downstream
   path: _sources/envoy
 - contents:
+  - configDigest: c9e48287ea9684f1cf9b49549a96532a6020303e76834b5373e81fc33eb6bc97
+    git:
+      commitTitle: 'dashboards: add initial agentgateway dashboard (#3)...'
+      sha: ed6c5b2177981126a0eb9b73e919c6a59e5b839b
+    path: .
+  path: _sources/kgateway
+- contents:
   - configDigest: e2b09003c7643f7797f26aafc5a5bda8981bfb6778986db52397f1c1f1a8f307
     http: {}
     path: k8s-system-api-server

@@ -58,7 +58,7 @@ spec:
           gethomepage.dev/widget.showEpisodeNumber: "true"
           gethomepage.dev/widget.expandOneStreamToTwoRows: "true"
         parentRefs:
-          - name: envoy-internal
+          - name: kgateway-internal
             namespace: networking-system
             sectionName: https
 

@@ -77,7 +77,7 @@ spec:
           gethomepage.dev/name: AudioMuse
           gethomepage.dev/group: Media
         parentRefs:
-          - name: envoy-internal
+          - name: kgateway-internal
             namespace: networking-system
             sectionName: https
 

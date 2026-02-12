@@ -116,7 +116,7 @@ spec:
           gethomepage.dev/widget.url: http://immich.media-apps.svc.cluster.local:2283
           gethomepage.dev/widget.key: '{{ "{{HOMEPAGE_VAR_IMMICH_API_KEY}}" }}'
         parentRefs:
-          - name: envoy-internal
+          - name: kgateway-internal
             namespace: networking-system
             sectionName: https
 

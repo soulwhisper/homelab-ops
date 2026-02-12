@@ -72,13 +72,13 @@ spec:
           gethomepage.dev/group: Service
           gethomepage.dev/pod-selector: "app.kubernetes.io/name=n8n"
         parentRefs:
-          - name: envoy-internal
+          - name: kgateway-internal
             namespace: networking-system
             sectionName: https
       webhook:
         hostnames: ["n8n-webhook.noirprime.com"]
         parentRefs:
-          - name: envoy-external
+          - name: kgateway-external
             namespace: networking-system
             sectionName: https
         rules:

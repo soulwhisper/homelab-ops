@@ -1,0 +1,18 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.noirprime.com/monitoring.coreos.com/servicemonitor_v1.json
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: &name kgateway
+spec:
+  jobLabel: *name
+  namespaceSelector:
+    matchNames:
+      - networking-system
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: kgateway
+  endpoints:
+    - port: http
+      path: /metrics
+      honorLabels: true

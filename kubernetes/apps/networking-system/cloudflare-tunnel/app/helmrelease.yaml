@@ -49,11 +49,15 @@ spec:
                   httpGet:
                     path: /ready
                     port: &port 8080
-                  initialDelaySeconds: 0
                   periodSeconds: 10
-                  timeoutSeconds: 1
-                  failureThreshold: 3
+                  timeoutSeconds: 5
+                  failureThreshold: 5
               readiness: *probes
+              startup:
+                enabled: true
+                spec:
+                  failureThreshold: 30
+                  periodSeconds: 10
             resources:
               requests:
                 cpu: 10m
@@ -96,5 +100,5 @@ spec:
                 originRequest:
                   http2Origin: true
                   originServerName: gateway-ext.noirprime.com
-                service: https://envoy-external.networking-system.svc.cluster.local:443
+                service: https://kgateway-external.networking-system.svc.cluster.local:443
               - service: http_status:404

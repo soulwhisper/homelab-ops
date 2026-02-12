@@ -1,0 +1,70 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.noirprime.com/kustomize.toolkit.fluxcd.io/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: &name kgateway-crds
+spec:
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *name
+  targetNamespace: networking-system
+  path: "./kubernetes/apps/networking-system/kgateway/crds"
+  sourceRef:
+    kind: GitRepository
+    name: gitops-system
+    namespace: gitops-system
+  interval: 1h
+  timeout: 5m
+  prune: true
+  wait: true
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.noirprime.com/kustomize.toolkit.fluxcd.io/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: &name kgateway
+spec:
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *name
+  targetNamespace: networking-system
+  path: "./kubernetes/apps/networking-system/kgateway/app"
+  sourceRef:
+    kind: GitRepository
+    name: gitops-system
+    namespace: gitops-system
+  interval: 1h
+  timeout: 5m
+  prune: true
+  wait: true
+  dependsOn:
+    - name: kgateway-crds
+      namespace: networking-system
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.noirprime.com/kustomize.toolkit.fluxcd.io/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: &name kgateway-config
+spec:
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: kgateway
+  targetNamespace: networking-system
+  path: "./kubernetes/apps/networking-system/kgateway/config"
+  sourceRef:
+    kind: GitRepository
+    name: gitops-system
+    namespace: gitops-system
+  interval: 1h
+  timeout: 5m
+  prune: true
+  wait: true
+  dependsOn:
+    - name: kgateway
+      namespace: networking-system
+    - name: cert-manager
+      namespace: security-system
+    - name: onepassword-connect
+      namespace: security-system

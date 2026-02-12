@@ -1,0 +1,36 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.noirprime.com/monitoring.coreos.com/podmonitor_v1.json
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: &name kgateway-external
+spec:
+  jobLabel: *name
+  namespaceSelector:
+    matchNames:
+      - networking-system
+  podMetricsEndpoints:
+    - port: http-monitoring
+      path: /metrics
+      honorLabels: true
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: *name
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.noirprime.com/monitoring.coreos.com/podmonitor_v1.json
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: &name kgateway-internal
+spec:
+  jobLabel: *name
+  namespaceSelector:
+    matchNames:
+      - networking-system
+  podMetricsEndpoints:
+    - port: http-monitoring
+      path: /metrics
+      honorLabels: true
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: *name

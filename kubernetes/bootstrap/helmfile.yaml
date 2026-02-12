@@ -34,11 +34,10 @@ releases:
     needs: ["kube-system/coredns"]
 
   # for gateway-api crds
-  - name: envoy-gateway
-    namespace: networking-system
-    chart: oci://mirror.gcr.io/envoyproxy/gateway-helm
-    version: v1.7.0
-    values: ["./values.yaml.gotmpl"]
+  - name: gateway-api-crds
+    namespace: kube-system
+    chart: oci://ghcr.io/wiremind/wiremind-helm-charts/gateway-api-crds
+    version: 1.4.0
     needs: ["kube-system/spegel"]
 
   # for component crds
@@ -52,7 +51,7 @@ releases:
   - name: flux-operator
     namespace: gitops-system
     chart: oci://ghcr.io/controlplaneio-fluxcd/charts/flux-operator
-    version: 0.41.0
+    version: 0.41.1
     values: ["./values.yaml.gotmpl"]
     needs: ["security-system/external-secrets"]
     hooks:
@@ -68,6 +67,6 @@ releases:
   - name: flux-instance
     namespace: gitops-system
     chart: oci://ghcr.io/controlplaneio-fluxcd/charts/flux-instance
-    version: 0.41.0
+    version: 0.41.1
     values: ["./values.yaml.gotmpl"]
     needs: ["gitops-system/flux-operator"]
