@@ -52,7 +52,7 @@ spec:
           gethomepage.dev/name: Stirling-PDF
           gethomepage.dev/group: Service
         parentRefs:
-          - name: envoy-internal
+          - name: kgateway-internal
             namespace: networking-system
             sectionName: https
 

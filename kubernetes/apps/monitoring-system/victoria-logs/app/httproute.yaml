@@ -13,7 +13,7 @@ metadata:
 spec:
   hostnames: ["logs.noirprime.com"]
   parentRefs:
-    - name: envoy-internal
+    - name: kgateway-internal
       namespace: networking-system
       sectionName: https
   rules:

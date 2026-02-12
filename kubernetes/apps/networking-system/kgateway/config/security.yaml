@@ -3,7 +3,7 @@
 apiVersion: gateway.envoyproxy.io/v1alpha1
 kind: SecurityPolicy
 metadata:
-  name: envoy-internal-secure
+  name: kgateway-internal-secure
 spec:
   extAuth:
     failOpen: false
@@ -24,4 +24,4 @@ spec:
   targetRefs:
     - group: gateway.networking.k8s.io
       kind: Gateway
-      name: envoy-internal
+      name: kgateway-internal

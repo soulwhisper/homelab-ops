@@ -72,7 +72,7 @@ spec:
           gethomepage.dev/name: FrigateNVR
           gethomepage.dev/group: Service
         parentRefs:
-          - name: envoy-internal
+          - name: kgateway-internal
             namespace: networking-system
             sectionName: https
         rules:
@@ -82,7 +82,7 @@ spec:
       go2rtc:
         hostnames: ["frigate-go2rtc.noirprime.com"]
         parentRefs:
-          - name: envoy-internal
+          - name: kgateway-internal
             namespace: networking-system
             sectionName: https
         rules:

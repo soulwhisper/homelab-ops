@@ -34,11 +34,10 @@ releases:
     needs: ["kube-system/coredns"]
 
   # for gateway-api crds
-  - name: envoy-gateway
-    namespace: networking-system
-    chart: oci://mirror.gcr.io/envoyproxy/gateway-helm
-    version: v1.7.0
-    values: ["./values.yaml.gotmpl"]
+  - name: gateway-api-crds
+    namespace: kube-system
+    chart: oci://ghcr.io/wiremind/wiremind-helm-charts/gateway-api-crds
+    version: 1.4.0
     needs: ["kube-system/spegel"]
 
   # for component crds

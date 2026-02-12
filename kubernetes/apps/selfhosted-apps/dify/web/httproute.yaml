@@ -6,14 +6,14 @@ metadata:
   name: dify
   annotations:
     gethomepage.dev/enabled: "true"
-    gethomepage.dev/icon: "https://avatars.githubusercontent.com/u/127165244?s=200&v=4"
+    gethomepage.dev/icon: "sh-langflow"
     gethomepage.dev/name: Dify
     gethomepage.dev/group: Service
     gethomepage.dev/pod-selector: "app.kubernetes.io/name=dify-web"
 spec:
   hostnames: ["dify.noirprime.com"]
   parentRefs:
-    - name: envoy-internal
+    - name: kgateway-internal
       namespace: networking-system
       sectionName: https
   rules:

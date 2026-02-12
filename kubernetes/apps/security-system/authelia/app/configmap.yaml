@@ -50,7 +50,7 @@ data:
     access_control:
       default_policy: two_factor
       networks:
-        - name: envoy-internal
+        - name: kgateway-internal
           networks:
             - 10.0.0.0/8
             - 172.16.0.0/12

@@ -96,6 +96,18 @@ directories:
           }
 
   # ---------------------------------------------------------
+  # Folder : kgateway
+  # ---------------------------------------------------------
+  - path: _sources/kgateway
+    contents:
+      - path: .
+        lazy: true
+        git:
+          url: https://github.com/kgateway-dev/dashboards
+          ref: main
+        includePaths: ["install/helm/kgateway-dashboards/dashboards/*.json"]
+
+  # ---------------------------------------------------------
   # Folder : kubernetes
   # ---------------------------------------------------------
   - path: _sources/kubernetes

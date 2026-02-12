@@ -119,7 +119,7 @@ spec:
           gethomepage.dev/group: SmartHome
           gethomepage.dev/pod-selector: "app.kubernetes.io/name=zigbee2mqtt"
         parentRefs:
-          - name: envoy-internal
+          - name: kgateway-internal
             namespace: networking-system
             sectionName: https
         rules:
@@ -135,7 +135,7 @@ spec:
           gethomepage.dev/group: SmartHome
           gethomepage.dev/pod-selector: "app.kubernetes.io/name=zigbee2mqtt"
         parentRefs:
-          - name: envoy-internal
+          - name: kgateway-internal
             namespace: networking-system
             sectionName: https
         rules:

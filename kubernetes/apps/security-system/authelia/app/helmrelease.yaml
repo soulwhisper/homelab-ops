@@ -71,11 +71,15 @@ spec:
                   httpGet:
                     path: /api/health
                     port: &port 80
-                  initialDelaySeconds: 0
                   periodSeconds: 10
-                  timeoutSeconds: 1
-                  failureThreshold: 3
+                  timeoutSeconds: 5
+                  failureThreshold: 5
               readiness: *probes
+              startup:
+                enabled: true
+                spec:
+                  failureThreshold: 30
+                  periodSeconds: 10
               startup:
                 enabled: false
             resources:
@@ -98,7 +102,7 @@ spec:
       app:
         hostnames: ["auth.noirprime.com"]
         parentRefs:
-          - name: envoy-internal
+          - name: kgateway-internal
             namespace: networking-system
             sectionName: https
 

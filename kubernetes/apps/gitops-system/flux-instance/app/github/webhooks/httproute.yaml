@@ -10,7 +10,7 @@ metadata:
 spec:
   hostnames: ["flux-webhook.noirprime.com"]
   parentRefs:
-    - name: envoy-external
+    - name: kgateway-external
       namespace: networking-system
       sectionName: https
   rules:

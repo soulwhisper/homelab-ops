@@ -44,11 +44,15 @@ spec:
                   httpGet:
                     path: /readyz
                     port: *hport
-                  initialDelaySeconds: 0
                   periodSeconds: 10
-                  timeoutSeconds: 1
-                  failureThreshold: 3
+                  timeoutSeconds: 5
+                  failureThreshold: 5
               readiness: *probes
+              startup:
+                enabled: true
+                spec:
+                  failureThreshold: 30
+                  periodSeconds: 10
             resources:
               requests:
                 cpu: 5m
@@ -74,7 +78,7 @@ spec:
             conditions: ["[STATUS] == 404"]
         hostnames: ["kromgo.noirprime.com"]
         parentRefs:
-          - name: envoy-external
+          - name: kgateway-external
             namespace: networking-system
             sectionName: https
 

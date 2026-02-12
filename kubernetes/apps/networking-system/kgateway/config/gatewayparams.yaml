@@ -1,0 +1,20 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.noirprime.com/gateway.kgateway.dev/gatewayparameters_v1alpha1.json
+apiVersion: gateway.kgateway.dev/v1alpha1
+kind: GatewayParameters
+metadata:
+  name: kgateway-params
+spec:
+  kube:
+    deployment:
+      replicas: 3
+    envoyContainer:
+      resources:
+        requests:
+          cpu: "500m"
+          memory: "512Mi"
+        limits:
+          cpu: "2"
+          memory: "2Gi"
+    service:
+      externalTrafficPolicy: Local

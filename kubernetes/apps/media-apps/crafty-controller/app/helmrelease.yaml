@@ -65,7 +65,7 @@ spec:
           gethomepage.dev/widget.type: minecraft
           gethomepage.dev/widget.url: "udp://10.10.0.143:25565"
         parentRefs:
-          - name: envoy-internal
+          - name: kgateway-internal
             namespace: networking-system
             sectionName: https
         rules:
