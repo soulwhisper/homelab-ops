@@ -9,20 +9,16 @@ resources:
   # storage
   - ./nfs-shared/ks.yaml
   # media
-  # - ./audiobookshelf/ks.yaml
   - ./audiomuse/ks.yaml
   - ./calibre-web/ks.yaml
   - ./crafty-controller/ks.yaml
+  - ./foundryvtt/ks.yaml
   - ./jellyfin/ks.yaml
   - ./immich/ks.yaml
   - ./kavita/ks.yaml
   - ./lyrion/ks.yaml
   - ./metube/ks.yaml
   - ./moviepilot/ks.yaml
-  # - ./mumc/ks.yaml
   - ./orcaslicer/ks.yaml
   - ./qbittorrent/ks.yaml
   - ./qbittorrent-ui/ks.yaml
-  # others
-  # - ./frigate/ks.yaml
-  # - ./foundryvtt/ks.yaml

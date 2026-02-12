@@ -11,9 +11,3 @@ resources:
   # utils
   - ./https-redirect.yaml
   - ./podmonitor.yaml
-  # until authelia enabled
-  # -./security.yaml
-  # until sth. outside needs it
-  # - ./pushsecret.yaml
-  # archived
-  # - ./envoy.yaml
