@@ -58,4 +58,9 @@
       commitMessageExtra: "( {{currentVersion}} → {{newVersion}} )",
     },
   ],
+  lockFileMaintenance: {
+    enabled: true,
+    automerge: true,
+    schedule: ["before 4am on Monday"],
+  },
 }
