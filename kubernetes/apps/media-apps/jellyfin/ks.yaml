@@ -29,6 +29,7 @@ spec:
       namespace: storage-system
   components:
     - ../../../../components/keda-nfs-scaler
+    - ../../../../components/kgateway-policy
     - ../../../../components/volsync
   postBuild:
     substitute:

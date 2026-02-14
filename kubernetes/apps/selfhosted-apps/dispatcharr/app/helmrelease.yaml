@@ -18,6 +18,20 @@ spec:
       *name :
         annotations:
           reloader.stakater.com/auto: "true"
+        initContainers:
+          chown-dbdir:
+            image:
+              repository: mirror.gcr.io/library/alpine
+              tag: "3.23"
+            command:
+              - /bin/sh
+              - -c
+            args:
+              - |
+                mkdir -p /data/db
+                chmod 0750 /data/db
+            securityContext:
+              runAsUser: 0
         containers:
           app:
             image:
@@ -33,10 +47,10 @@ spec:
               CELERY_BROKER_URL: redis://localhost:6379/0
             resources:
               requests:
-                cpu: 20m
+                memory: 1Gi
                 gpu.intel.com/i915: 1
               limits:
-                memory: 1Gi
+                memory: 3Gi
                 gpu.intel.com/i915: 1
 
     service:
@@ -62,3 +76,7 @@ spec:
         existingClaim: *name
         globalMounts:
           - path: /data
+      tmpfs:
+        type: emptyDir
+        globalMounts:
+          - path: /tmp

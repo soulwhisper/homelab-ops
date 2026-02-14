@@ -24,6 +24,7 @@ spec:
     - name: volsync
       namespace: storage-system
   components:
+    - ../../../../components/kgateway-policy
     - ../../../../components/volsync
   postBuild:
     substitute:

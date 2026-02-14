@@ -10,4 +10,6 @@ resources:
   - ./internal.yaml
   # utils
   - ./https-redirect.yaml
+  - ./httplistenerpolicy.yaml
   - ./podmonitor.yaml
+  - ./trafficpolicy.yaml
