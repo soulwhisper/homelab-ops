@@ -28,8 +28,8 @@ spec:
         containers: # this container has to start as host root
           app:
             image:
-              repository: mirror.gcr.io/jxxghp/moviepilot-v2
-              tag: 2.8.7
+              repository: ghcr.io/jxxghp/moviepilot-v2
+              tag: 2.9.11
             env:
               NGINX_PORT: &port 3000
               PORT: &apiPort 3001
