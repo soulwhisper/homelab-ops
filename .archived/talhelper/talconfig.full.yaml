@@ -138,7 +138,7 @@ patches:
           kubernetes:
             disabled: true
           service:
-            endpoint: http://10.10.0.10:9300
+            endpoint: http://10.10.0.100:9300
       network:
         podSubnets:
           - 10.100.0.0/17
@@ -233,8 +233,8 @@ patches:
   # - |-
   #   machine:
   #     env:
-  #       http_proxy: http://10.10.0.10:1080
-  #       https_proxy: http://10.10.0.10:1080
+  #       http_proxy: http://10.10.0.100:1080
+  #       https_proxy: http://10.10.0.100:1080
   #       no_proxy: .noirprime.com,.homelab.internal,localhost,127.0.0.1,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16
 
   # : Enable OpenEBS Storage

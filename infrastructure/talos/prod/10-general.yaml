@@ -17,7 +17,7 @@ cluster:
       kubernetes:
         disabled: true
       service:
-        endpoint: http://10.10.0.10:9300
+        endpoint: http://10.10.0.100:9300
   network:
     cni:
       name: none
@@ -142,7 +142,7 @@ kind: ExtensionServiceConfig
 name: nut-client
 configFiles:
   - content: |-
-      MONITOR ups@10.10.0.10 1 monuser secret secondary
+      MONITOR ups@10.10.0.100 1 monuser secret secondary
       SHUTDOWNCMD "/sbin/poweroff"
     mountPath: /usr/local/etc/nut/upsmon.conf
 ---

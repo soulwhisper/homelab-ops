@@ -119,7 +119,7 @@ patches:
           kubernetes:
             disabled: true
           service:
-            endpoint: http://10.10.0.10:9300
+            endpoint: http://10.10.0.100:9300
       network:
         podSubnets:
           - 10.100.0.0/17
