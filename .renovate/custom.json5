@@ -44,6 +44,10 @@
   ],
   packageRules: [
     {
+      matchDatasources: ["python-version"],
+      enabled: false,
+    },
+    {
       matchManagers: ["vendir"],
       matchDatasources: ["git-refs", "git-tags", "github-tags"],
       addLabels: ["renovate/vendir-git"],
