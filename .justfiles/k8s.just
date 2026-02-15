@@ -7,11 +7,11 @@ default:
 
 [doc('Browse a PVC')]
 browse-pvc ns pvc:
-  kubectl browse-pvc -n {{ns}} -i mirror.gcr.io/alpine:latest {{pvc}}
+  kubectl browse-pvc -n {{ns}} -i alpine:latest {{pvc}}
 
 [doc('Open a shell on a node')]
 node-shell node:
-  kubectl debug node/{{node}} -n default -it --image='mirror.gcr.io/alpine:latest' --profile sysadmin
+  kubectl debug node/{{node}} -n default -it --image='alpine:latest' --profile sysadmin
   kubectl get pods -n default | awk '/node-debugger-/ {print $1}' | xargs kubectl delete pod -n default
 
 [doc('Prune pods in Failed, Pending, or Succeeded state')]

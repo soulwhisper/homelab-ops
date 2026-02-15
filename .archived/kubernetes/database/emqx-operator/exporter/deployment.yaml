@@ -23,7 +23,7 @@ spec:
             secretName: emqx-exporter
       containers:
         - name: exporter
-          image: mirror.gcr.io/emqx/emqx-exporter:0.2.11
+          image: emqx/emqx-exporter:0.2.11
           imagePullPolicy: IfNotPresent
           args:
             - --config.file

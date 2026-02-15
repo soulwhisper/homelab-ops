@@ -22,7 +22,7 @@ spec:
         containers:
           app:
             image:
-              repository: mirror.gcr.io/zeroclue/comfyui
+              repository: zeroclue/comfyui
               tag: base-torch2.8.0-cu126
             env:
               COMFYUI_EXTRA_ARGS: "--cpu --preview-method auto"

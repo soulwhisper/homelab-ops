@@ -21,7 +21,7 @@ spec:
         containers:
           app:
             image:
-              repository: mirror.gcr.io/ubuntu/squid
+              repository: ubuntu/squid
               tag: 5.2-22.04_beta
             command: ["sh", "/docker-entrypoint.sh"]
             env:

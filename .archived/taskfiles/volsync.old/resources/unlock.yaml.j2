@@ -12,7 +12,7 @@ spec:
       restartPolicy: OnFailure
       containers:
         - name: volsync-unlock
-          image: mirror.gcr.io/restic/restic:latest
+          image: restic/restic:latest
           args: ["unlock", "--remove-all"]
           envFrom:
             - secretRef:

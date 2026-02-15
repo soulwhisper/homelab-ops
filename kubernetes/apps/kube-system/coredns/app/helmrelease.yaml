@@ -13,7 +13,7 @@ spec:
   values:
     fullnameOverride: *name
     image:
-      repository: mirror.gcr.io/coredns/coredns
+      repository: coredns/coredns
     replicaCount: 3 # critical for HA
     k8sAppLabelOverride: kube-dns
     serviceAccount:

@@ -21,8 +21,8 @@ spec:
         containers:
           app:
             image:
-              repository: mirror.gcr.io/arcw/sgcc_electricity
-              tag: v1.7.0
+              repository: arcw/sgcc_electricity
+              tag: v1.7.1
             command:
               - python3
               - main.py

@@ -27,7 +27,7 @@ spec:
         containers:
           app:
             image:
-              repository: mirror.gcr.io/langgenius/dify-plugin-daemon
+              repository: langgenius/dify-plugin-daemon
               tag: 0.5.3-local
             env:
               DB_HOST: "postgres-rw.database-system.svc.cluster.local"

@@ -29,7 +29,7 @@ spec:
         containers:
           api:
             image:
-              repository: mirror.gcr.io/langgenius/dify-api
+              repository: langgenius/dify-api
               tag: 1.13.0
             env:
               MODE: "api"
@@ -52,7 +52,7 @@ spec:
 
           worker:
             image:
-              repository: mirror.gcr.io/langgenius/dify-api
+              repository: langgenius/dify-api
               tag: 1.13.0
             env:
               MODE: "worker"
@@ -68,7 +68,7 @@ spec:
 
           worker-beat:
             image:
-              repository: mirror.gcr.io/langgenius/dify-api
+              repository: langgenius/dify-api
               tag: 1.13.0
             env:
               MODE: "beat"

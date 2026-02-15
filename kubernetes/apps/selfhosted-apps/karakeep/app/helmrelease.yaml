@@ -68,7 +68,7 @@ spec:
 
           meilisearch:
             image:
-              repository: mirror.gcr.io/getmeili/meilisearch
+              repository: getmeili/meilisearch
               tag: v1.35.0
             args:
               - /bin/meilisearch

@@ -15,7 +15,7 @@ spec:
       restartPolicy: OnFailure
       containers:
         - name: list-snapshots
-          image: mirror.gcr.io/restic/restic:latest
+          image: restic/restic:latest
           args:
             - snapshots
           envFrom:

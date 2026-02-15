@@ -21,7 +21,7 @@ spec:
         initContainers:
           chown-dbdir:
             image:
-              repository: mirror.gcr.io/library/alpine
+              repository: library/alpine
               tag: "3.23"
             command:
               - /bin/sh

@@ -149,3 +149,10 @@ configFiles:
 apiVersion: v1alpha1
 kind: OOMConfig
 triggerExpression: "false" # disable until 'MemAvailable' implemented
+---
+apiVersion: v1alpha1
+kind: RegistryMirrorConfig
+name: docker.io
+endpoints:
+  - url: https://mirror.gcr.io
+skipFallback: false

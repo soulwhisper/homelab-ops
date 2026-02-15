@@ -19,6 +19,6 @@ spec:
     replicaCount: 1
     fullnameOverride: *name
     image:
-      repository: mirror.gcr.io/emqx/emqx-operator-controller
+      repository: emqx/emqx-operator-controller
     cert-manager:
       enable: true

@@ -33,7 +33,7 @@ spec:
         initContainers:
           model-puller:
             image:
-              repository: mirror.gcr.io/ollama/ollama
+              repository: ollama/ollama
               tag: 0.16.1
             command:
               - "/bin/sh"
@@ -68,7 +68,7 @@ spec:
         containers:
           app:
             image:
-              repository: mirror.gcr.io/ollama/ollama
+              repository: ollama/ollama
               tag: 0.16.1
             env:
               OLLAMA_CONTEXT_LENGTH: "8192"

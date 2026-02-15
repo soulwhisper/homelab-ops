@@ -19,7 +19,7 @@ spec:
         containers:
           app:
             image:
-              repository: mirror.gcr.io/langgenius/dify-web
+              repository: langgenius/dify-web
               tag: 1.13.0
             env:
               NEXT_TELEMETRY_DISABLED: "0"

@@ -37,7 +37,7 @@ spec:
         containers:
           app:
             image:
-              repository: mirror.gcr.io/eclipse-mosquitto
+              repository: eclipse-mosquitto
               tag: 2.0.22
             probes:
               liveness:

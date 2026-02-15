@@ -22,7 +22,7 @@ spec:
         containers:
           app:
             image:
-              repository: mirror.gcr.io/langgenius/dify-sandbox
+              repository: langgenius/dify-sandbox
               tag: 0.2.12
             env:
               API_KEY: "dify-sandbox"
