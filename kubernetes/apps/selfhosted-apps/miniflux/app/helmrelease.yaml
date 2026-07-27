@@ -33,6 +33,7 @@ spec:
               tag: 2.3.3
             env:
               RUN_MIGRATIONS: "true"
+              DISABLE_LOCAL_AUTH: "true"
               DB_POSTGRESQL_DATABASE:
                 valueFrom:
                   secretKeyRef:
