@@ -62,4 +62,4 @@ spec:
   resources:
     requests:
       storage: 300Gi
-  storageClassName: synology-volume1
+  storageClassName: synology-volume2
