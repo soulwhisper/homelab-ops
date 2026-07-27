@@ -8,3 +8,4 @@ resources:
   - ./keeper.yaml
   # utils
   - ./configmap.yaml
+  - ./externalsecret.yaml

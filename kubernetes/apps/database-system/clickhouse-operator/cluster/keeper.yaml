@@ -5,7 +5,7 @@ kind: KeeperCluster
 metadata:
   name: default
 spec:
-  replicas: 2
+  replicas: 3
   dataVolumeClaimSpec:
     storageClassName: ceph-block
     accessModes: ["ReadWriteOnce"]

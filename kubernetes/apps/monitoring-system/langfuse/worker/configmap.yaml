@@ -11,7 +11,6 @@ data:
   CLICKHOUSE_URL: "http://default-clickhouse.database-system.svc.cluster.local:8123"
   CLICKHOUSE_DB: "langfuse"
   CLICKHOUSE_USER: "langfuse"
-  CLICKHOUSE_PASSWORD: "langfuse"
   CLICKHOUSE_CLUSTER_ENABLED: "false"
   LANGFUSE_USE_AZURE_BLOB: "false"
   LANGFUSE_USE_OCI_NATIVE_OBJECT_STORAGE: "false"
