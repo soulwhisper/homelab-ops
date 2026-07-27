@@ -35,7 +35,7 @@ jobs:
         with:
           token: "${{ steps.app-token.outputs.token }}"
           repository: "${{ github.repository }}"
-          retain_days: "14"
+          retain_days: "7"
           keep_minimum_runs: "3"
           delete_run_by_conclusion_pattern: "success"
       - name: Cleanup workflow failure runs
