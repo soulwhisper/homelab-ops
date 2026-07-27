@@ -11,7 +11,7 @@ spec:
     name: app-template
     namespace: gitops-system
 
-  # check init password: kubectl -n media-apps exec crafty-controller-xxxx -- cat /crafty/app/config/default-creds.txt
+  # check init password: kubectl -n gaming-apps exec crafty-controller-xxxx -- cat /crafty/app/config/default-creds.txt
 
   values:
     controllers:

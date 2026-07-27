@@ -3,7 +3,6 @@ kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
   name: backup
-  namespace: media-apps
 spec:
   accessModes:
     - ReadWriteMany
@@ -16,7 +15,6 @@ kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
   name: trpg
-  namespace: media-apps
 spec:
   accessModes:
     - ReadWriteMany
