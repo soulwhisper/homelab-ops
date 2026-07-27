@@ -41,7 +41,7 @@ spec:
                       - /bin/sh
                       - -c
                       - >
-                        ls /recs > /dev/null
+                        ls /nvr > /dev/null
                   initialDelaySeconds: 30
                   periodSeconds: 30
                   timeoutSeconds: 15

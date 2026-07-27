@@ -17,6 +17,8 @@ spec:
   dependsOn:
     - name: agentgateway
       namespace: networking-system
+  components:
+    - ../../../../components/volsync
   postBuild:
     substitute:
       APP: *name
