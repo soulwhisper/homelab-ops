@@ -88,10 +88,55 @@ jobs:
             ${{ steps.diff.outputs.diff }}
             ```
 
+  kubeconform:
+    if: ${{ needs.filter.outputs.changed-files != '[]' }}
+    needs: filter
+    name: Flux Checks - Kubeconform
+    runs-on: ubuntu-latest
+    env:
+      CHANGED_FILES: ${{ needs.filter.outputs.changed-files }}
+    steps:
+      - name: Checkout Pull Request Branch
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+
+      - name: Install kubeconform
+        run: |
+          # renovate: datasource=github-releases depName=yannh/kubeconform
+          KUBECONFORM_VERSION="v0.8.0"
+          curl -fsSL "https://github.com/yannh/kubeconform/releases/download/${KUBECONFORM_VERSION}/kubeconform-linux-amd64.tar.gz" \
+            | tar -xz -C /tmp kubeconform
+          sudo install -m 0755 /tmp/kubeconform /usr/local/bin/kubeconform
+
+      # mirrors the kubeconform hook in .pre-commit-config.yaml: strict mode,
+      # default schemas plus the custom soulwhisper/k8s-schemas location,
+      # run over changed kubernetes/** manifests only
+      - name: Validate changed manifests
+        run: |
+          mapfile -t FILES < <(echo "${CHANGED_FILES}" | jq --raw-output '.[]' \
+            | grep --extended-regexp '\.ya?ml$' \
+            | grep --invert-match '_sources/' || true)
+          MANIFESTS=()
+          for FILE in "${FILES[@]}"; do
+            [ -f "${FILE}" ] && MANIFESTS+=("${FILE}")
+          done
+          if [ "${#MANIFESTS[@]}" -eq 0 ]; then
+            echo "No changed kubernetes manifests to validate."
+            exit 0
+          fi
+          kubeconform \
+            -strict \
+            -summary \
+            -schema-location default \
+            -schema-location 'https://soulwhisper.github.io/k8s-schemas/{{.Group}}/{{.ResourceKind}}_{{.ResourceAPIVersion}}.json' \
+            "${MANIFESTS[@]}"
+
   success:
     if: ${{ !cancelled() }}
     needs:
       - test
+      - kubeconform
     name: Flux Checks - Success
     runs-on: ubuntu-latest
     steps:
