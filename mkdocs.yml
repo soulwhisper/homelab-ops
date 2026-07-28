@@ -46,15 +46,19 @@ extra_css:
   - stylesheets/extra.css
 
 nav:
-  # files under ./docs
   - Home: index.md
-  - Infrastructure:
-      - Kubernetes: infrastructure/kubernetes.md
-      - Networking: infrastructure/networking.md
+  - Architecture:
+      - Cluster: infrastructure/kubernetes.md
+      - Network: infrastructure/networking.md
+      - Storage: infrastructure/storage.md
       - Hardware: infrastructure/hardware.md
+  - Applications:
+      - Catalog: apps/catalog.md
+      - Authentication: deployment/authentication.md
+  - Operations:
+      - Bootstrap: deployment/bootstrap.md
+      - Monitoring: infrastructure/monitoring.md
+      - AI Infrastructure: ai-infra.md
   - Decisions:
       - BGP: decisions/bgp.md
-      - Public: decisions/public-exposure.md
-  - Deployment:
-      - Bootstrap: deployment/bootstrap.md
-      - Authentication: deployment/authentication.md
+      - Public Exposure: decisions/public-exposure.md

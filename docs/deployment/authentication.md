@@ -1,53 +1,66 @@
-## OIDC
+# Application Authentication
 
-- authentik guides, [ref](https://integrations.goauthentik.io/applications/);
+## OIDC via Authentik
 
-### Calibre
+14 applications use Authentik OIDC for SSO, managed declaratively via Blueprints (ConfigMap + Secret).
 
-- must configure via WEB UI, [ref](https://github.com/crocodilestick/Calibre-Web-Automated/wiki/OAuth-Configuration);
+| App | OIDC Provider | Notes |
+|-----|:------------:|-------|
+| Audiomuse | Authentik | SSO-protected |
+| Calibre-Web | Authentik | Configure via web UI after OIDC app created |
+| Grafana | Authentik | SSO-protected |
+| Headlamp | Authentik | K8s dashboard with read-only SA |
+| Home Assistant | Authentik | Requires `hass-openid` plugin + `/config/configuration.yaml` packages |
+| Immich | Authentik | SSO-protected |
+| Jellyfin | Authentik | Install `jellyfin-plugin-sso` first, then web UI config |
+| Karakeep | Authentik | SSO-protected |
+| Kavita | Authentik | Configure via Admin Settings → OpenID Connect |
+| Miniflux | Authentik | SSO-protected |
+| NetBox | Authentik | SSO-protected |
+| Qbittorrent-UI (QUI) | Authentik | SSO-protected web UI |
+| RSSHub | Authentik | SSO-protected |
+| Stirling-PDF | Authentik | SSO-protected |
 
-### Home-assistant
+New OIDC apps are added by creating a Blueprint Secret (`authentik-blueprints-oidc-<name>`) and referencing it in the Authentik HelmRelease.
 
-- edit `/config/configuration.yaml` first;
-- then install `hass-openid` plugin;
+## Built-in Authentication
 
-```yaml
-# configuration.yaml
-homeassistant:
-  packages: !include_dir_named packages
-```
+These apps use their own authentication — no OIDC needed:
 
-### Jellyfin
+| App | Auth Method |
+|-----|------------|
+| Bambuddy | Bambu Lab account |
+| Crafty Controller | Default admin credentials (retrieve via `kubectl exec`) |
+| Dispatcharr | Built-in user system |
+| Fast-Note-Sync | Built-in user system |
+| FoundryVTT | Built-in user system |
+| MoviePilot | Built-in user system |
+| Navidrome | Built-in user system |
+| Rook-Ceph Dashboard | Built-in auth (or SAML2 via manual setup) |
+| Scrypted | Sign up as `admin`, ForwardAuth compatible |
 
-- install plugin `9p4/jellyfin-plugin-sso` first;
-- then configure via WEB UI, [ref](https://github.com/9p4/jellyfin-plugin-sso/blob/main/providers.md#authentik);
+## No Authentication
 
-### Kavita
+| App | Reason |
+|-----|--------|
+| MeTube | Single-user download tool |
+| ConvertX | Single-user file conversion |
 
-- must configure via WEB UI, [ref](https://wiki.kavitareader.com/guides/admin-settings/open-id-connect/);
+## Rook-Ceph SAML2 (Manual)
 
-### Rook Ceph Dashboard
-
-- use its own auth, or set saml2 manually;
-- assume idp user is also `admin`;
-- need `BackendConfigPolicy` to solve backend schema issues;
+If SAML2 SSO is needed for the Ceph dashboard:
 
 ```shell
 openssl req -new -nodes -x509 \
   -subj "/O=Rook/CN=rook-ceph-mgr-dashboard.storage-system.svc.cluster.local" \
   -addext "subjectAltName=DNS:rook-ceph-mgr-dashboard.storage-system.svc.cluster.local" \
-  -days 3650 \
-  -keyout dashboard.key \
-  -out dashboard.crt
+  -days 3650 -keyout dashboard.key -out dashboard.crt
 
 kubectl -n storage-system create secret generic rook-ceph-dashboard-ca \
   --from-file=ca.crt=dashboard.crt
 
-CERT=$(cat dashboard.crt)
-kubectl rook-ceph ceph config-key set mgr/dashboard/crt "$CERT"
-
-KEY=$(cat dashboard.key)
-kubectl rook-ceph ceph config-key set mgr/dashboard/key "$KEY"
+CERT=$(cat dashboard.crt) && kubectl rook-ceph ceph config-key set mgr/dashboard/crt "$CERT"
+KEY=$(cat dashboard.key) && kubectl rook-ceph ceph config-key set mgr/dashboard/key "$KEY"
 
 kubectl rook-ceph ceph mgr module disable dashboard
 kubectl rook-ceph ceph mgr module enable dashboard
@@ -56,40 +69,4 @@ kubectl rook-ceph ceph dashboard sso setup saml2 \
   "https://rook.noirprime.com" \
   "https://auth.noirprime.com/application/saml/rook-ceph/metadata/" \
   "username"
-
-kubectl rook-ceph ceph dashboard sso status
 ```
-
-## Other
-
-### Crafty-4
-
-- login via `admin` and below password;
-
-```shell
-kubectl -n gaming-apps exec crafty-controller -- cat /crafty/app/config/default-creds.txt
-```
-
-### Dispatcharr
-
-- use its own user system;
-
-### FastNoteSync
-
-- use its own user system;
-
-### FoundryVTT
-
-- use its own user system;
-
-### Moviepilot
-
-- use its own user system;
-
-### Navidrome
-
-- use its own user system, VPN first;
-
-### Scrypted
-
-- signup as `admin`, then forwardAuth works;
