@@ -54,32 +54,12 @@ spec:
 apiVersion: agentgateway.dev/v1alpha1
 kind: AgentgatewayBackend
 metadata:
-  name: llm-backend-vision
+  name: llm-backend-omni
 spec:
   ai:
     provider:
       openai:
-        model: "Qwen/Qwen3-VL-30B-A3B-Instruct"
-      host: &host api.siliconflow.cn
-      port: 443
-  policies:
-    auth:
-      secretRef:
-        name: siliconflow-credentials
-    tls:
-      sni: *host
----
-# yaml-language-server: $schema=https://soulwhisper.github.io/k8s-schemas/agentgateway.dev/agentgatewaybackend_v1alpha1.json
-apiVersion: agentgateway.dev/v1alpha1
-kind: AgentgatewayBackend
-metadata:
-  name: llm-backend-anthropic
-spec:
-  ai:
-    # if using deepseek, add 'prefix: /anthropic/v1'
-    provider:
-      anthropic:
-        model: "zai-org/GLM-5.2"
+        model: "Qwen/Qwen3-Omni-30B-A3B-Instruct"
       host: &host api.siliconflow.cn
       port: 443
   policies:

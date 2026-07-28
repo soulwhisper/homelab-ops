@@ -34,13 +34,13 @@ The network is built around an enterprise-grade Layer 3 core switch with eBGP + 
             VLAN 100 (10.10.0.0/24) — K8S + NAS
 ```
 
-| Device | Role | NIC | Uplink |
-|--------|------|-----|--------|
-| H3C S6520-24S-SI | L3 core switch, BGP router (AS 65000) | 24×10G SFP+ | 2×10G LACP to router |
-| Miniforum MS-01 ×3 | Talos K8s control-plane + worker | Intel X710 2×10G SFP+ | 2×10G LACP per node |
-| N305 IPC | ESXi 8 hypervisor | 2.5G RJ45 | OpenWrt VM + management |
-| Synology DS923+ | NAS (NFS, S3, Docker) | 2×1G RJ45 LACP | 2×1G LACP |
-| SANTAK TG-Box 850 | UPS (NUT) | USB | — |
+| Device             | Role                                  | NIC                   | Uplink                  |
+| ------------------ | ------------------------------------- | --------------------- | ----------------------- |
+| H3C S6520-24S-SI   | L3 core switch, BGP router (AS 65000) | 24×10G SFP+           | 2×10G LACP to router    |
+| Miniforum MS-01 ×3 | Talos K8s control-plane + worker      | Intel X710 2×10G SFP+ | 2×10G LACP per node     |
+| N305 IPC           | ESXi 8 hypervisor                     | 2.5G RJ45             | OpenWrt VM + management |
+| Synology DS923+    | NAS (NFS, S3, Docker)                 | 2×1G RJ45 LACP        | 2×1G LACP               |
+| SANTAK TG-Box 850  | UPS (NUT)                             | USB                   | —                       |
 
 ```mermaid
 graph TD
@@ -90,14 +90,14 @@ graph TD
 
 The core switch enforces strict L3 isolation between security domains. Inter-VLAN routing is handled by the switch itself; VLAN 1000 provides the transit link to the edge router for WAN egress.
 
-| VLAN | Name | Subnet | Gateway | Purpose | DHCP |
-|------|------|--------|---------|---------|------|
-| 1 | Management | 10.0.0.0/24 | 10.0.0.1 | Switch mgmt, ESXi, UniFi, OOB access | Yes (switch) |
-| 10 | LAN | 10.0.10.0/24 | 10.0.10.1 | Trusted wired LAN | Yes (OpenWrt) |
-| 100 | K8S / NAS | 10.10.0.0/24 | 10.10.0.1 | Kubernetes nodes, NAS, workstation, BGP peering | Static / OpenWrt |
-| 200 | WiFi | 10.20.0.0/24 | 10.20.0.1 | Trusted wireless clients | Yes (OpenWrt) |
-| 210 | IoT | 10.20.10.0/24 | 10.20.10.1 | Untrusted IoT devices (ACL-isolated) | Yes (OpenWrt) |
-| 1000 | Transit | 10.255.255.0/30 | 10.255.255.1 | Switch↔Router point-to-point link | Static |
+| VLAN | Name       | Subnet          | Gateway      | Purpose                                         | DHCP             |
+| ---- | ---------- | --------------- | ------------ | ----------------------------------------------- | ---------------- |
+| 1    | Management | 10.0.0.0/24     | 10.0.0.1     | Switch mgmt, ESXi, UniFi, OOB access            | Yes (switch)     |
+| 10   | LAN        | 10.0.10.0/24    | 10.0.10.1    | Trusted wired LAN                               | Yes (OpenWrt)    |
+| 100  | K8S / NAS  | 10.10.0.0/24    | 10.10.0.1    | Kubernetes nodes, NAS, workstation, BGP peering | Static / OpenWrt |
+| 200  | WiFi       | 10.20.0.0/24    | 10.20.0.1    | Trusted wireless clients                        | Yes (OpenWrt)    |
+| 210  | IoT        | 10.20.10.0/24   | 10.20.10.1   | Untrusted IoT devices (ACL-isolated)            | Yes (OpenWrt)    |
+| 1000 | Transit    | 10.255.255.0/30 | 10.255.255.1 | Switch↔Router point-to-point link               | Static           |
 
 **IoT isolation (VLAN 210):** An advanced ACL (3500) restricts IoT egress to DHCP, DNS (switch only), NTP, and ICMP toward the gateway. Internet access is permitted; all RFC 1918 private ranges are explicitly denied. Inbound from WiFi (VLAN 200) is restricted to the Aqara hub (10.20.10.100) on TCP 80/443 plus ICMP. A QoS policy (10 Mbps CIR) caps all IoT traffic at the access switch uplink.
 
@@ -105,14 +105,14 @@ The core switch enforces strict L3 isolation between security domains. Inter-VLA
 
 All LACP bonds use **layer 3+4** hashing (`xmitHashPolicy: layer3+4`) for optimal distribution across diverse traffic patterns. Jumbo frames (MTU 9000) are enabled on the K8s, NAS, and router bonds.
 
-| Bond ID | Devices | Speed | Type | VLAN | Description |
-|---------|---------|-------|------|------|-------------|
-| 10 | Ten-GE 1/0/1–2 | 2×10G | Dynamic LACP, access | 100 | K8s node exarch-01 |
-| 20 | Ten-GE 1/0/3–4 | 2×10G | Dynamic LACP, access | 100 | K8s node exarch-02 |
-| 30 | Ten-GE 1/0/5–6 | 2×10G | Dynamic LACP, access | 100 | K8s node exarch-03 |
-| 70 | Ten-GE 1/0/13–14 | 2×1G | Dynamic LACP, access | 100 | Synology NAS |
-| 80 | Ten-GE 1/0/15–16 | 2×10G | Dynamic LACP, access | 100 | ESXi workstation fiber |
-| 120 | Ten-GE 1/0/23–24 | 2×10G | Static LAG, trunk | 10,100,200,210,1000 | Router fiber (ESXi VSS limitation) |
+| Bond ID | Devices          | Speed | Type                 | VLAN                | Description                        |
+| ------- | ---------------- | ----- | -------------------- | ------------------- | ---------------------------------- |
+| 10      | Ten-GE 1/0/1–2   | 2×10G | Dynamic LACP, access | 100                 | K8s node exarch-01                 |
+| 20      | Ten-GE 1/0/3–4   | 2×10G | Dynamic LACP, access | 100                 | K8s node exarch-02                 |
+| 30      | Ten-GE 1/0/5–6   | 2×10G | Dynamic LACP, access | 100                 | K8s node exarch-03                 |
+| 70      | Ten-GE 1/0/13–14 | 2×1G  | Dynamic LACP, access | 100                 | Synology NAS                       |
+| 80      | Ten-GE 1/0/15–16 | 2×10G | Dynamic LACP, access | 100                 | ESXi workstation fiber             |
+| 120     | Ten-GE 1/0/23–24 | 2×10G | Static LAG, trunk    | 10,100,200,210,1000 | Router fiber (ESXi VSS limitation) |
 
 Ports are configured as **STP edge ports** on all access bonds, and the switch operates as the RSTP root bridge with BPDU protection enabled.
 
@@ -122,10 +122,10 @@ Management connectivity uses a dedicated access port (Ten-GE 1/0/19, VLAN 1) wit
 
 The core switch and each Kubernetes node run eBGP to advertise pod and LoadBalancer CIDRs.
 
-| Component | ASN | Router ID | Peers |
-|-----------|-----|-----------|-------|
+| Component               | ASN   | Router ID | Peers                   |
+| ----------------------- | ----- | --------- | ----------------------- |
 | Core switch (Comware 7) | 65000 | 10.10.0.1 | 10.10.0.101, .102, .103 |
-| FRR-K8s per node | 65100 | (node IP) | 10.10.0.1 |
+| FRR-K8s per node        | 65100 | (node IP) | 10.10.0.1               |
 
 - **Advertised prefixes (FRR→switch):** Pod CIDR `10.100.0.0/17`, LoadBalancer pool `10.10.0.128/27`
 - **Advertised prefixes (switch→FRR):** `import-route direct` (connected routes)
@@ -136,13 +136,13 @@ The core switch and each Kubernetes node run eBGP to advertise pod and LoadBalan
 
 BFD runs between the switch's VLAN 100 SVI and each K8s node via FRR-K8s:
 
-| Parameter | Value |
-|-----------|-------|
-| TX interval | 400ms |
-| RX interval | 400ms |
+| Parameter         | Value            |
+| ----------------- | ---------------- |
+| TX interval       | 400ms            |
+| RX interval       | 400ms            |
 | Detect multiplier | 5 (2s detection) |
-| Echo mode | Disabled |
-| Min TTL | 1 |
+| Echo mode         | Disabled         |
+| Min TTL           | 1                |
 
 This provides sub-2-second failure detection for pod and service IP reachability, independent of BGP hold timers.
 
@@ -150,41 +150,41 @@ This provides sub-2-second failure detection for pod and service IP reachability
 
 Cilium runs as the sole CNI with full kube-proxy replacement on a `netkit` datapath.
 
-| Feature | Configuration |
-|---------|---------------|
-| Datapath | `netkit` (optimized for Intel X710 / `ice` driver) |
-| Routing | Native (`autoDirectNodeRoutes`, `endpointRoutes`) |
-| Pod CIDR | `10.100.0.0/17` |
-| Service CIDR | `10.100.128.0/17` |
-| IPAM | Kubernetes host-scope |
-| kube-proxy | Replaced (`kubeProxyReplacement: true`) |
-| Bandwidth management | BBR congestion control, enabled |
-| BIGTCP | Enabled (IPv4) |
-| BPF clock probe | Enabled |
-| BPF map preallocation | Enabled (8% dynamic size ratio, distributed LRU) |
-| Masquerade | BPF-based |
-| PMTU discovery | Disabled (packetization-layer) |
-| LoadBalancer mode | Hybrid (DSR + SNAT), Maglev hashing, native acceleration |
-| LoadBalancer IP pool | `10.10.0.128/27` — advertised via BGP |
-| Service topology | Enabled |
-| Hubble | Enabled (relay ×2 replicas, UI, metrics + ServiceMonitors) |
-| Hubble metrics | DNS, drop, TCP, flow, port-distribution, ICMP, HTTP |
-| Gateway API | Disabled (kgateway handles this) |
-| L2 announcements | Disabled |
-| Envoy | Disabled |
-| Devices | `bond+` (binds to all bond interfaces) |
-| Cluster ID | 1, name: `main` |
+| Feature               | Configuration                                              |
+| --------------------- | ---------------------------------------------------------- |
+| Datapath              | `netkit` (optimized for Intel X710 / `ice` driver)         |
+| Routing               | Native (`autoDirectNodeRoutes`, `endpointRoutes`)          |
+| Pod CIDR              | `10.100.0.0/17`                                            |
+| Service CIDR          | `10.100.128.0/17`                                          |
+| IPAM                  | Kubernetes host-scope                                      |
+| kube-proxy            | Replaced (`kubeProxyReplacement: true`)                    |
+| Bandwidth management  | BBR congestion control, enabled                            |
+| BIGTCP                | Enabled (IPv4)                                             |
+| BPF clock probe       | Enabled                                                    |
+| BPF map preallocation | Enabled (8% dynamic size ratio, distributed LRU)           |
+| Masquerade            | BPF-based                                                  |
+| PMTU discovery        | Disabled (packetization-layer)                             |
+| LoadBalancer mode     | Hybrid (DSR + SNAT), Maglev hashing, native acceleration   |
+| LoadBalancer IP pool  | `10.10.0.128/27` — advertised via BGP                      |
+| Service topology      | Enabled                                                    |
+| Hubble                | Enabled (relay ×2 replicas, UI, metrics + ServiceMonitors) |
+| Hubble metrics        | DNS, drop, TCP, flow, port-distribution, ICMP, HTTP        |
+| Gateway API           | Disabled (kgateway handles this)                           |
+| L2 announcements      | Disabled                                                   |
+| Envoy                 | Disabled                                                   |
+| Devices               | `bond+` (binds to all bond interfaces)                     |
+| Cluster ID            | 1, name: `main`                                            |
 
 **Kernel tuning** (applied via Talos sysctls):
 
-| Parameter | Value | Purpose |
-|-----------|-------|---------|
-| `net.core.netdev_max_backlog` | 16384 | 10G NIC packet queue depth |
-| `net.core.somaxconn` | 32768 | Listen backlog |
-| `net.ipv4.tcp_max_syn_backlog` | 8192 | SYN queue per socket |
-| `net.core.rmem_max` / `wmem_max` | 128MB | Socket buffer maximums |
+| Parameter                               | Value          | Purpose                    |
+| --------------------------------------- | -------------- | -------------------------- |
+| `net.core.netdev_max_backlog`           | 16384          | 10G NIC packet queue depth |
+| `net.core.somaxconn`                    | 32768          | Listen backlog             |
+| `net.ipv4.tcp_max_syn_backlog`          | 8192           | SYN queue per socket       |
+| `net.core.rmem_max` / `wmem_max`        | 128MB          | Socket buffer maximums     |
 | `net.ipv4.neigh.default.gc_thresh1/2/3` | 1024/2048/4096 | ARP table for BGP + Cilium |
-| `sunrpc.tcp_slot_table_entries` | 128 | NFS over 10G concurrency |
+| `sunrpc.tcp_slot_table_entries`         | 128            | NFS over 10G concurrency   |
 
 **IRQ affinity:** Network IRQs for the `ice` driver are pinned to P-cores 2–11 (i9-13900H) via a Talos static pod, avoiding contention with E-cores.
 
@@ -194,10 +194,10 @@ Traffic ingress is handled by two Gateway API implementations deployed in the `n
 
 #### kgateway (Envoy-based)
 
-| Gateway | LB IP | External DNS Target | Purpose |
-|---------|-------|---------------------|---------|
+| Gateway             | LB IP       | External DNS Target         | Purpose                                       |
+| ------------------- | ----------- | --------------------------- | --------------------------------------------- |
 | `kgateway-internal` | 10.10.0.131 | `gateway-int.noirprime.com` | Internal services (media, gaming, monitoring) |
-| `kgateway-external` | 10.10.0.132 | `gateway-ext.noirprime.com` | Public-facing services |
+| `kgateway-external` | 10.10.0.132 | `gateway-ext.noirprime.com` | Public-facing services                        |
 
 Both gateways use the `kgateway` GatewayClass with TLS termination via cert-manager certificates (`noirprime-com-tls`). The internal gateway accepts routes from all namespaces on HTTPS; the external gateway restricts HTTP routes to `Same` namespace. Cilium LB IPAM assigns the LoadBalancer IPs from the `10.10.0.128/27` pool, and BGP advertises them to the switch.
 
@@ -207,19 +207,18 @@ Both gateways use the `kgateway` GatewayClass with TLS termination via cert-mana
 
 **LLM routing** — header-based model dispatch on `/chat`:
 
-| Header | Value | Backend | Timeout |
-|--------|-------|---------|---------|
-| `x-priority: high` | — | `llm-backend-complex` | 300s |
-| `x-model: complex` | — | `llm-backend-complex` | 300s |
-| `x-model: fast` | — | `llm-backend-fast` | 300s |
-| `x-model: memory` | — | `llm-backend-memory` | 300s |
-| `x-model: vision` | — | `llm-backend-vision` | 300s |
-| `x-model` | regex `^claude-.*` | `llm-backend-anthropic` | 300s |
+| Header             | Value | Backend               | Timeout |
+| ------------------ | ----- | --------------------- | ------- |
+| `x-priority: high` | —     | `llm-backend-complex` | 300s    |
+| `x-model: complex` | —     | `llm-backend-complex` | 300s    |
+| `x-model: fast`    | —     | `llm-backend-fast`    | 300s    |
+| `x-model: memory`  | —     | `llm-backend-memory`  | 300s    |
+| `x-model: omni`    | —     | `llm-backend-omni`    | 300s    |
 
 **MCP routing** — tool-call dispatch on `/mcp`:
 
-| Path | Backend |
-|------|---------|
+| Path   | Backend       |
+| ------ | ------------- |
 | `/mcp` | `mcp-backend` |
 
 API key authentication is enforced via `AgentgatewayPolicy` in strict mode for all LLM routes. The gateway is used by Audiomuse and other AI-capable workloads for cost-aware model selection.
@@ -235,16 +234,16 @@ Split-horizon DNS separates internal homelab resolution from public records.
 - **Management:** [dnscontrol](https://github.com/StackExchange/dnscontrol) with declarative JS configuration
 - **Records:**
 
-| Hostname | IP | Purpose |
-|----------|-----|---------|
-| `exarch-01.homelab.internal` | 10.10.0.101 | K8s node |
-| `exarch-02.homelab.internal` | 10.10.0.102 | K8s node |
-| `exarch-03.homelab.internal` | 10.10.0.103 | K8s node |
-| `k8s.homelab.internal` | 10.10.0.101/102/103 | Round-robin cluster endpoint |
-| `esxi.homelab.internal` | 10.0.0.10 | ESXi management |
-| `zigbee.homelab.internal` | 10.10.0.20 | Zigbee coordinator |
-| `nas.homelab.internal` | 10.10.0.100 | Synology NAS |
-| `unifi.homelab.internal` | 10.10.0.200 | UniFi controller |
+| Hostname                     | IP                  | Purpose                      |
+| ---------------------------- | ------------------- | ---------------------------- |
+| `exarch-01.homelab.internal` | 10.10.0.101         | K8s node                     |
+| `exarch-02.homelab.internal` | 10.10.0.102         | K8s node                     |
+| `exarch-03.homelab.internal` | 10.10.0.103         | K8s node                     |
+| `k8s.homelab.internal`       | 10.10.0.101/102/103 | Round-robin cluster endpoint |
+| `esxi.homelab.internal`      | 10.0.0.10           | ESXi management              |
+| `zigbee.homelab.internal`    | 10.10.0.20          | Zigbee coordinator           |
+| `nas.homelab.internal`       | 10.10.0.100         | Synology NAS                 |
+| `unifi.homelab.internal`     | 10.10.0.200         | UniFi controller             |
 
 #### Dynamic DNS — external-dns
 
@@ -264,12 +263,12 @@ The dnscontrol configuration also supports Cloudflare as a provider for public D
 
 While the infrastructure is predominantly self-hosted, a small set of cloud services addresses chicken-and-egg problems, ensures critical-service availability independent of cluster status, and provides business continuity:
 
-| Service | Use | Cost |
-|---------|-----|------|
-| [1Password](https://1password.com/) | Secrets via [External Secrets Operator](https://external-secrets.io/) (1Password Connect) | ~$36/yr |
-| [Cloudflare](https://www.cloudflare.com/) | Domain registrar, S3-compatible R2, Zero Trust tunnels | Free |
-| [GitHub](https://github.com/) | Repository hosting, CI/CD (Flux + Renovate) | Free |
-| [Pushover](https://pushover.net/) | Notification delivery for alerts and events | One-time $5 |
+| Service                                   | Use                                                                                       | Cost        |
+| ----------------------------------------- | ----------------------------------------------------------------------------------------- | ----------- |
+| [1Password](https://1password.com/)       | Secrets via [External Secrets Operator](https://external-secrets.io/) (1Password Connect) | ~$36/yr     |
+| [Cloudflare](https://www.cloudflare.com/) | Domain registrar, S3-compatible R2, Zero Trust tunnels                                    | Free        |
+| [GitHub](https://github.com/)             | Repository hosting, CI/CD (Flux + Renovate)                                               | Free        |
+| [Pushover](https://pushover.net/)         | Notification delivery for alerts and events                                               | One-time $5 |
 
 **Total: ~$3/mo**
 
