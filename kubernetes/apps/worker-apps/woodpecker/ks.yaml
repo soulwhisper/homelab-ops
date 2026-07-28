@@ -14,8 +14,3 @@ spec:
       app.kubernetes.io/name: *name
   targetNamespace: worker-apps
   path: "./kubernetes/apps/worker-apps/woodpecker/app"
-  postBuild:
-    substitute:
-      APP: *name
-      # chart-managed StatefulSet volumeClaimTemplate PVC (no existingClaim support in woodpecker chart 3.6.5)
-      VOLSYNC_CLAIM: data-woodpecker-server-0
