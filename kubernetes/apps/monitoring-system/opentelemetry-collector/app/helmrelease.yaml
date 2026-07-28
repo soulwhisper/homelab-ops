@@ -13,7 +13,7 @@ spec:
   values:
     fullnameOverride: *name
     mode: deployment
-    replicaCount: 1
+    replicaCount: 2
     image:
       repository: ghcr.io/open-telemetry/opentelemetry-collector-releases/opentelemetry-collector-k8s
     command:

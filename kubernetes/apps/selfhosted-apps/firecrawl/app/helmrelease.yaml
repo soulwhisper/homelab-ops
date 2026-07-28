@@ -24,7 +24,7 @@ spec:
           app:
             image:
               repository: ghcr.io/firecrawl/firecrawl
-              tag: latest
+              tag: 2.11.137@sha256:d2fe554a1a723d95f3af3ceb4146db5765efaba7fb1b1850f8fd2713b11da7f6
             command: ["node"]
             args:
               - --max-old-space-size=512
@@ -32,6 +32,11 @@ spec:
             env:
               FLY_PROCESS_GROUP: app
               PORT: "3002"
+              NUQ_DATABASE_URL:
+                valueFrom:
+                  secretKeyRef:
+                    name: firecrawl-database
+                    key: NUQ_DATABASE_URL
             envFrom: &envFrom
               - configMapRef:
                   name: *name
@@ -100,7 +105,7 @@ spec:
           app:
             image:
               repository: ghcr.io/firecrawl/firecrawl
-              tag: latest
+              tag: 2.11.137@sha256:d2fe554a1a723d95f3af3ceb4146db5765efaba7fb1b1850f8fd2713b11da7f6
             command: ["node"]
             args:
               - --max-old-space-size=1024
@@ -108,6 +113,11 @@ spec:
             env:
               FLY_PROCESS_GROUP: nuq-worker
               NUQ_WORKER_PORT: "3006"
+              NUQ_DATABASE_URL:
+                valueFrom:
+                  secretKeyRef:
+                    name: firecrawl-database
+                    key: NUQ_DATABASE_URL
             envFrom: *envFrom
             probes:
               liveness: &nuq_worker_liveness
@@ -136,7 +146,7 @@ spec:
           app:
             image:
               repository: ghcr.io/firecrawl/playwright-service
-              tag: latest
+              tag: latest@sha256:8c50add7293201e575110e6c7489fa383a9dfc46f168936526a458e06ffc5c28
             env:
               PORT: "3000"
               ALLOW_LOCAL_WEBHOOKS: "false"

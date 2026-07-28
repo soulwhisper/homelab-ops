@@ -14,7 +14,6 @@ data:
   # Database
   REDIS_URL: "redis://firecrawl-database-dragonfly.selfhosted-apps.svc.cluster.local:6379"
   REDIS_RATE_LIMIT_URL: "redis://firecrawl-database-dragonfly.selfhosted-apps.svc.cluster.local:6379"
-  NUQ_DATABASE_URL: "postgresql://postgres:postgres@firecrawl-database.selfhosted-apps.svc.cluster.local:5432/postgres"
   # Service
   PLAYWRIGHT_MICROSERVICE_URL: "http://firecrawl.selfhosted-apps.svc.cluster.local:3000"
   MAX_CONCURRENT_JOBS: "2"

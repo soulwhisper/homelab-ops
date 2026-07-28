@@ -30,7 +30,14 @@ jobs:
           token: ${{ steps.app-token.outputs.token }}
           ref: ${{ github.head_ref || github.ref }}
       - name: Install vendir
-        run: curl -L https://carvel.dev/install.sh | bash
+        run: |
+          # renovate: datasource=github-releases depName=carvel-dev/vendir
+          VENDIR_VERSION="v0.46.0"
+          mkdir -p /tmp/vendir-install && cd /tmp/vendir-install
+          curl -fsSL -O "https://github.com/carvel-dev/vendir/releases/download/${VENDIR_VERSION}/vendir-linux-amd64"
+          curl -fsSL -O "https://github.com/carvel-dev/vendir/releases/download/${VENDIR_VERSION}/checksums.txt"
+          grep "vendir-linux-amd64" checksums.txt | sha256sum --check --ignore-missing
+          sudo install -m 0755 vendir-linux-amd64 /usr/local/bin/vendir
       - name: Run vendir
         id: run-vendir
         run: |

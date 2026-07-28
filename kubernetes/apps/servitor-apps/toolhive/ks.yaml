@@ -6,6 +6,8 @@ metadata:
   name: &name toolhive-crds
   annotations:
     config.home-ops.io/managed: "true"
+  labels:
+    config.home-ops.io/deps: "infra"
 spec:
   commonMetadata:
     labels:
@@ -21,6 +23,8 @@ metadata:
   name: &name toolhive
   annotations:
     config.home-ops.io/managed: "true"
+  labels:
+    config.home-ops.io/deps: "infra"
 spec:
   commonMetadata:
     labels:
@@ -39,6 +43,8 @@ metadata:
   name: &name toolhive-config
   annotations:
     config.home-ops.io/managed: "true"
+  labels:
+    config.home-ops.io/deps: "infra"
 spec:
   commonMetadata:
     labels:

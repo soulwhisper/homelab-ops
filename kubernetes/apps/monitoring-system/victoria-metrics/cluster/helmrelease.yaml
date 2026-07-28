@@ -104,9 +104,6 @@ spec:
         receivers:
           - name: "blackhole"
           - name: "default"
-            webhook_configs:
-              - send_resolved: true
-                url: https://robusta-runner.monitoring-system.svc.cluster.local/api/alerts
             pushoverConfigs:
               - sendResolved: true
                 html: true

@@ -43,6 +43,7 @@ jobs:
         with:
           token: "${{ steps.app-token.outputs.token }}"
           repository: "${{ github.repository }}"
-          retain_days: "0"
-          keep_minimum_runs: "1"
+          # keep failure runs at least 7 days so failed runs remain debuggable
+          retain_days: "7"
+          keep_minimum_runs: "3"
           delete_run_by_conclusion_pattern: "action_required,failure"

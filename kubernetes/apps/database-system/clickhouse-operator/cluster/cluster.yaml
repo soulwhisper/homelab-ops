@@ -23,8 +23,11 @@ spec:
         configMap:
           name: clickhouse-init-db
       - name: init-user
-        configMap:
-          name: clickhouse-init-user
+        secret:
+          secretName: clickhouse-credentials
+          items:
+            - key: langfuse.yaml
+              path: langfuse.yaml
   containerTemplate:
     resources:
       requests:
@@ -44,6 +47,6 @@ spec:
     enableDatabaseSync: true
     defaultUserPassword:
       passwordType: plaintext_password
-      configMap:
-        key: clickhouse-credentials
-        name: default_password
+      secret:
+        name: clickhouse-credentials
+        key: default_password

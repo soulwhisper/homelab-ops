@@ -45,6 +45,7 @@ configMapGenerator:
       - ./blueprints/forward/convertx.yaml
       - ./blueprints/forward/frigate.yaml
       - ./blueprints/forward/hermes-agent.yaml
+      - ./blueprints/forward/hindsight.yaml
       - ./blueprints/forward/homepage.yaml
       - ./blueprints/forward/hubble.yaml
       - ./blueprints/forward/metube.yaml

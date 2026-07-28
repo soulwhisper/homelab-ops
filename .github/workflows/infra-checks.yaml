@@ -1,0 +1,138 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+# yamllint disable rule:truthy
+
+name: Infra-checks
+
+permissions:
+  contents: read
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - "infrastructure/**"
+      - ".justfiles/**"
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  dnscontrol:
+    name: Infra Checks - DNSControl
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Pull Request Branch
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+
+      - name: Install dnscontrol
+        run: |
+          # renovate: datasource=github-releases depName=StackExchange/dnscontrol
+          DNSCONTROL_VERSION="v4.44.1"
+          curl -fsSL "https://github.com/StackExchange/dnscontrol/releases/download/${DNSCONTROL_VERSION}/dnscontrol_${DNSCONTROL_VERSION#v}_linux_amd64.tar.gz" \
+            | tar -xz -C /tmp dnscontrol
+          sudo install -m 0755 /tmp/dnscontrol /usr/local/bin/dnscontrol
+
+      - name: Run dnscontrol check
+        working-directory: infrastructure/dnscontrol
+        run: dnscontrol check
+
+  compose:
+    name: Infra Checks - Compose
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Pull Request Branch
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+
+      - name: Validate synology compose files
+        run: |
+          for FILE in infrastructure/synology/*/docker-compose*.y*ml; do
+            echo "Validating ${FILE}"
+            # --no-interpolate: sops-encrypted env values are unavailable in CI
+            docker compose --file "${FILE}" config --quiet --no-interpolate
+          done
+
+  shellcheck:
+    name: Infra Checks - Shellcheck
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Pull Request Branch
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+
+      - name: Install shellcheck
+        run: |
+          # renovate: datasource=github-releases depName=koalaman/shellcheck
+          SHELLCHECK_VERSION="v0.11.0"
+          curl -fsSL "https://github.com/koalaman/shellcheck/releases/download/${SHELLCHECK_VERSION}/shellcheck-${SHELLCHECK_VERSION}.linux.x86_64.tar.xz" \
+            | tar -xJ -C /tmp
+          sudo install -m 0755 "/tmp/shellcheck-${SHELLCHECK_VERSION}/shellcheck" /usr/local/bin/shellcheck
+
+      - name: Run shellcheck
+        # switch configs are H3C Comware CLI snippets pasted into the console,
+        # not executed by a shell; error severity keeps real syntax breakage
+        # while ignoring false positives on CLI content (e.g. password hashes)
+        run: shellcheck --severity=error infrastructure/switch/*.sh
+
+  talos:
+    name: Infra Checks - Talos
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Pull Request Branch
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+
+      - name: Install talosctl
+        run: |
+          # renovate: datasource=github-releases depName=siderolabs/talos
+          TALOS_VERSION="v1.13.7"
+          curl -fsSL -o /tmp/talosctl "https://github.com/siderolabs/talos/releases/download/${TALOS_VERSION}/talosctl-linux-amd64"
+          sudo install -m 0755 /tmp/talosctl /usr/local/bin/talosctl
+
+      - name: Render and validate machineconfigs
+        run: |
+          WORK_DIR=$(mktemp -d)
+          talosctl gen secrets -o "${WORK_DIR}/secrets.yaml"
+          for MODE in prod test; do
+            case "${MODE}" in
+              prod) CLUSTER_NAME="main"; CLUSTER_ENDPOINT="https://k8s.homelab.internal:6443" ;;
+              test) CLUSTER_NAME="test"; CLUSTER_ENDPOINT="https://172.19.82.101:6443" ;;
+            esac
+            talosctl gen config "${CLUSTER_NAME}" "${CLUSTER_ENDPOINT}" \
+              --with-docs=false --with-examples=false --force \
+              --with-secrets "${WORK_DIR}/secrets.yaml" \
+              --output "${WORK_DIR}/${MODE}"
+            for FILE in "infrastructure/talos/${MODE}"/nodes/*.yaml; do
+              NODE=$(basename "${FILE}" .yaml)
+              PATCH_ARGS=()
+              for PATCH in "infrastructure/talos/${MODE}"/[1-9][0-9]-*.yaml; do
+                PATCH_ARGS+=(--patch "@${PATCH}")
+              done
+              talosctl machineconfig patch "${WORK_DIR}/${MODE}/controlplane.yaml" \
+                --output "${WORK_DIR}/${MODE}/${CLUSTER_NAME}-${NODE}.yaml" \
+                "${PATCH_ARGS[@]}" \
+                --patch "@${FILE}"
+              talosctl validate --config "${WORK_DIR}/${MODE}/${CLUSTER_NAME}-${NODE}.yaml" --mode metal
+            done
+          done
+
+  success:
+    if: ${{ !cancelled() }}
+    needs:
+      - dnscontrol
+      - compose
+      - shellcheck
+      - talos
+    name: Infra Checks - Success
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check job status
+        if: ${{ contains(needs.*.result, 'failure') }}
+        run: exit 1

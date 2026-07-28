@@ -12,7 +12,8 @@ spec:
 
   values:
     connect:
-      replicas: 1
+      # HA pair; all replicas mount the same shared credentials secret
+      replicas: 2
       credentialsName: *name
       credentialsKey: 1password-credentials.json
       api:
@@ -20,5 +21,15 @@ spec:
         imageRepository: ghcr.io/1password/connect-api
         serviceMonitor:
           enabled: true
+        resources:
+          requests: { cpu: 200m, memory: 128Mi }
+          limits: { memory: 256Mi }
       sync:
         imageRepository: ghcr.io/1password/connect-sync
+        resources:
+          requests: { cpu: 50m, memory: 64Mi }
+          limits: { memory: 128Mi }
+      pdb:
+        enabled: true
+        maxUnavailable: null # chart default (1) would win over minAvailable
+        minAvailable: 1

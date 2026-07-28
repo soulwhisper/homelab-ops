@@ -67,6 +67,8 @@ spec:
     persistence:
       app:
         existingClaim: *name
+        globalMounts:
+          - path: /config
       config:
         type: configMap
         identifier: *name

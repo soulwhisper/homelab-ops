@@ -31,17 +31,27 @@ _schema mode:
 [doc('Generate talos configuration')]
 [script]
 generate mode:
+  case "{{mode}}" in
+    prod) CLUSTER_NAME="main"; CLUSTER_ENDPOINT="https://k8s.homelab.internal:6443" ;;
+    test) CLUSTER_NAME="test"; CLUSTER_ENDPOINT="https://172.19.82.101:6443" ;;
+    *) echo "❌ Unknown mode: {{mode}} (expected: prod|test)"; exit 1 ;;
+  esac
   op inject -i "${TALOS_DIR}/secret.yaml" | talosctl gen config \
-    main https://k8s.homelab.internal:6443 \
+    "${CLUSTER_NAME}" "${CLUSTER_ENDPOINT}" \
     --with-docs=false --with-examples=false --force \
     --with-secrets /dev/stdin \
     --output "${TALOS_DIR}/clusterconfig"
   for FILE in $(ls ${TALOS_DIR}/{{mode}}/nodes/*.yaml); do
     NODE=$(basename "$FILE" .yaml)
-    talosctl patch machineconfig "${TALOS_DIR}/clusterconfig/controlplane.yaml" \
+    # apply every numbered patch (10-, 15-, 20-, 30-, ...) in lexical order
+    PATCH_ARGS=()
+    for PATCH in "${TALOS_DIR}/{{mode}}"/[1-9][0-9]-*.yaml; do
+      PATCH_ARGS+=(--patch "@${PATCH}")
+    done
+    talosctl machineconfig patch "${TALOS_DIR}/clusterconfig/controlplane.yaml" \
       --output "${TALOS_DIR}/clusterconfig/main-$NODE.yaml" \
-      --patch "${TALOS_DIR}/{{mode}}/10-general.yaml" \
-      --patch "${TALOS_DIR}/{{mode}}/nodes/$NODE.yaml"
+      "${PATCH_ARGS[@]}" \
+      --patch "@${FILE}"
   done
   mkdir -p ~/.talos && cp "${TALOSCONFIG}" ~/.talos/config
 

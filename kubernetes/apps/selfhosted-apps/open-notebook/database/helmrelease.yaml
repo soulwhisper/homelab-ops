@@ -30,12 +30,16 @@ spec:
             image:
               # upgrade until: https://github.com/lfnovo/open-notebook/issues/378
               repository: surrealdb/surrealdb
-              tag: v2
+              tag: v2.6.5@sha256:d653f6c8a89e81f865ee31cd2f587c50f50ace922175e04150b1e385d2f86011
             args: ["start"]
             env:
               SURREAL_PATH: "rocksdb:/data"
               SURREAL_USER: root
-              SURREAL_PASS: root
+              SURREAL_PASS:
+                valueFrom:
+                  secretKeyRef:
+                    name: *name
+                    key: SURREAL_PASS
               SURREAL_LOG: info
               SURREAL_EXPERIMENTAL_GRAPHQL: true
             resources:

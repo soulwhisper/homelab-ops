@@ -5,7 +5,6 @@ kind: Gateway
 metadata:
   name: kgateway-internal
   annotations:
-    cert-manager.io/issuer: letsencrypt-production
     external-dns.kubernetes.io/target: &hostname gateway-int.noirprime.com
 spec:
   gatewayClassName: kgateway

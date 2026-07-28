@@ -21,6 +21,7 @@ spec:
     - name: llama
       namespace: servitor-apps
   components:
+    - ../../../../components/authentik
     - ../../../../components/cnpg
   postBuild:
     substitute:

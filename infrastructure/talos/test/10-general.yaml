@@ -149,9 +149,12 @@ addresses:
 apiVersion: v1alpha1
 kind: ExtensionServiceConfig
 name: nut-client
+# test subnet (172.19.82.0/24) cannot reach the prod UPS at 10.10.0.254;
+# 172.19.82.10 is the test infra host (NTP/DNS/proxy), matching the prod
+# pattern where the infra host also serves NUT.
 configFiles:
   - content: |-
-      MONITOR ups@10.10.0.254 1 upsmon upsmon secondary
+      MONITOR ups@172.19.82.10 1 upsmon upsmon secondary
       SHUTDOWNCMD "/sbin/poweroff"
     mountPath: /usr/local/etc/nut/upsmon.conf
 ---

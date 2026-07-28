@@ -12,10 +12,16 @@ spec:
 
   values:
     installCRDs: true
-    replicaCount: 1
+    replicaCount: 2
     leaderElect: true
     image:
       repository: ghcr.io/external-secrets/external-secrets
+    resources:
+      requests: { cpu: 10m, memory: 64Mi }
+      limits: { memory: 256Mi }
+    podDisruptionBudget:
+      enabled: true
+      minAvailable: 1
     serviceMonitor:
       enabled: true
       interval: 1m
@@ -26,8 +32,15 @@ spec:
         enabled: true
         interval: 1m
     webhook:
+      replicaCount: 2
       image:
         repository: ghcr.io/external-secrets/external-secrets
+      resources:
+        requests: { cpu: 10m, memory: 32Mi }
+        limits: { memory: 128Mi }
+      podDisruptionBudget:
+        enabled: true
+        minAvailable: 1
       serviceMonitor:
         enabled: true
         interval: 1m
