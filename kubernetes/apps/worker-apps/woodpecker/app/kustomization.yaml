@@ -9,4 +9,3 @@ resources:
   # utils
   - ./externalsecret.yaml
   - ./httproute.yaml
-  - ./replicationsource.yaml
