@@ -13,6 +13,9 @@ spec:
   values:
     operator:
       replicaCount: 1
+      # cluster scope
+      features:
+        storageVersionMigrator: false
       rbac:
         scope: "namespace"
         allowedNamespaces:
