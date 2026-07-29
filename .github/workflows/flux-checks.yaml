@@ -126,6 +126,7 @@ jobs:
             | grep --extended-regexp '\.ya?ml$' \
             | grep --invert-match --regexp='_sources/' \
             | grep --invert-match --regexp='/ks\.yaml$' \
+            | grep --invert-match --regexp='/helmfile\.yaml$' \
             | grep --invert-match --regexp='authentik/app/blueprints/' || true)
           MANIFESTS=()
           for FILE in "${FILES[@]}"; do
