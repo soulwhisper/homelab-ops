@@ -12,7 +12,8 @@ spec:
   image: ghcr.io/github/github-mcp-server:v1.7.0
   args: ["http"]
   env:
-    GITHUB_READ_ONLY: "1"
+    - name: GITHUB_READ_ONLY
+      value: "1"
   mcpPort: 8082
   secrets:
     - name: *name

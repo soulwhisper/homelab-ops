@@ -15,7 +15,8 @@ spec:
           command: ["/app/mcp-grafana"]
           args: ["--transport", "streamable-http", "--address", "0.0.0.0:8000"]
   env:
-    GRAFANA_URL: "http://grafana-service.monitoring-system.svc.cluster.local:3000"
+    - name: GRAFANA_URL
+      value: "http://grafana-service.monitoring-system.svc.cluster.local:3000"
   mcpPort: 8000
   secrets:
     - name: mcp-grafana-sa
