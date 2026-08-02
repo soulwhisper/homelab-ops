@@ -33,13 +33,7 @@ spec:
             image:
               repository: ghcr.io/soulwhisper/hermes-extras
               tag: "2026.08.02"
-            command: ["/bin/sh", "-c"]
-            args:
-              - |
-                set -eu
-                mkdir -p /opt/data/.local/bin
-                cp -rf /data/* /opt/data/.local/bin/
-                echo "Extra Binaries are initialized"
+            command: ["/bin/sh", "/app/install.sh"]
         containers:
           app:
             image:
