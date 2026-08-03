@@ -23,7 +23,7 @@ spec:
           app:
             image:
               repository: ghcr.io/diygod/rsshub
-              tag: chromium-bundled-2026-04-06
+              tag: chromium-bundled-2026-08-03
             env:
               NODE_ENV: "production"
               NODE_OPTIONS: "--max-old-space-size=1536"

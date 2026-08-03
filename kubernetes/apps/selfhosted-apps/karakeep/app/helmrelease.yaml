@@ -74,7 +74,7 @@ spec:
               repository: getmeili/meilisearch
               tag: v1.51.0
             args:
-              - --experimental-dumpless-upgrade
+              - --upgrade-db
             env:
               MEILI_NO_ANALYTICS: true
             envFrom:

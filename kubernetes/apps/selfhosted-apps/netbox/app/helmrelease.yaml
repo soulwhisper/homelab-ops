@@ -35,7 +35,7 @@ spec:
               "social_core.pipeline.social_auth.associate_user",
               "social_core.pipeline.social_auth.load_extra_data",
               "social_core.pipeline.user.user_details",
-              "netbox.sso_pipeline_roles.set_role",
+              "netbox.sso_pipeline_roles.set_roles",
             ]
     extraEnvs:
       - name: SOCIAL_AUTH_OIDC_KEY
