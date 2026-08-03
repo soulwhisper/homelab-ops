@@ -1,7 +1,7 @@
 ---
-# yaml-language-server: $schema=https://soulwhisper.github.io/k8s-schemas/gateway.kgateway.dev/gatewayparameters_v1alpha1.json
-apiVersion: gateway.kgateway.dev/v1alpha1
-kind: GatewayParameters
+# yaml-language-server: $schema=https://soulwhisper.github.io/k8s-schemas/agentgateway.dev/agentgatewayparameters_v1alpha1.json
+apiVersion: agentgateway.dev/v1alpha1
+kind: AgentgatewayParameters
 metadata:
   name: agentgateway-params
 spec:
