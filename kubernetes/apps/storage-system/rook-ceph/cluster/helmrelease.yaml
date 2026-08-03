@@ -19,10 +19,6 @@ spec:
       createPrometheusRules: true
     toolbox:
       enabled: false
-    # M1: pin Ceph daemon image (matches chart default v20.2.2 at rook-ceph-cluster v1.20.3)
-    cephImage:
-      repository: quay.io/ceph/ceph
-      tag: v20.2.2
     cephClusterSpec:
       cephConfig:
         global:
