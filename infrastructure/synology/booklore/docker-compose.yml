@@ -35,14 +35,14 @@ services:
     image: lscr.io/linuxserver/mariadb:11.8.8
     container_name: mariadb
     restart: unless-stopped
-    env_file:
-      - booklore.sops.env
     environment:
       - "PUID=2000"
       - "PGID=101"
       - "TZ=Asia/Shanghai"
+      - "MYSQL_ROOT_PASSWORD=ChangeMe_MariaDBRoot_2025!"
       - "MYSQL_DATABASE=grimmory"
       - "MYSQL_USER=grimmory"
+      - "MYSQL_PASSWORD=grimmory"
     volumes:
       - /volume3/docker/grimmory/mariadb:/config
     healthcheck:
