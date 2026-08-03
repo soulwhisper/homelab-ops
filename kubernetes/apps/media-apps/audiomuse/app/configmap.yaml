@@ -13,9 +13,7 @@ data:
   MUSIC_LIBRARIES: "/music"
   # : redis
   REDIS_URL: "redis://audiomuse-dragonfly.media-apps.svc.cluster.local:6379/0"
-  # : postgres, hardcoded
-  POSTGRES_USER: "audiomuse"
-  POSTGRES_PASSWORD: "audiomuse"
+  # : postgres
   POSTGRES_DB: "audiomuse"
   POSTGRES_HOST: "postgres-rw.database-system.svc.cluster.local"
   POSTGRES_PORT: "5432"
