@@ -73,7 +73,7 @@ spec:
     ipv4NativeRoutingCIDR: 10.100.0.0/17
     k8sServiceHost: localhost
     k8sServicePort: 7445
-    kubeProxyReplacement: true
+    kubeProxyReplacement: "true"
     kubeProxyReplacementHealthzBindAddr: 0.0.0.0:10256
     l2announcements:
       enabled: false
