@@ -28,12 +28,12 @@ spec:
             image:
               repository: busybox
               tag: "1.38.0"
+            env:
+              HACS_VERSION: "2.0.5"
             command:
               - sh
               - -c
               - |
-                HACS_VERSION=$(wget -qO- https://api.github.com/repos/hacs/integration/releases/latest \
-                  | grep '"tag_name"' | cut -d'"' -f4)
                 wget -O /tmp/hacs.zip \
                   "https://github.com/hacs/integration/releases/download/${HACS_VERSION}/hacs.zip"
                 mkdir -p /config/custom_components/hacs

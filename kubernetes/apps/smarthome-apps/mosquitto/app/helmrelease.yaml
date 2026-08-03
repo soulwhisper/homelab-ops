@@ -80,4 +80,5 @@ spec:
         name: *name
         globalMounts:
           - path: /etc/mosquitto/password_file
+            subPath: mosquitto
             readOnly: true
