@@ -17,7 +17,7 @@ spec:
   rules:
     - backendRefs:
         - name: *name
-          port: 7000 # 8443 if saml2
+          port: 7000
 ---
 # yaml-language-server: $schema=https://soulwhisper.github.io/k8s-schemas/gateway.networking.k8s.io/httproute_v1.json
 apiVersion: gateway.networking.k8s.io/v1

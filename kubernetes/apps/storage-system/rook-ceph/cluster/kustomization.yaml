@@ -9,8 +9,3 @@ resources:
   # utils
   - ./service.yaml
   - ./httproute.yaml
-  # patches
-  # * saml2 support
-  # - ./patches/backendconfigpolicy.yaml
-  # * official chart sc might be missing
-  # - ./patches/storageclass.yaml

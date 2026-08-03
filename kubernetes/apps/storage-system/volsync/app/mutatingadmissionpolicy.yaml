@@ -31,7 +31,7 @@ spec:
     - name: has-volsync-created-by-labels
       expression: >-
         object.metadata.?labels["app.kubernetes.io/created-by"].orValue("") == "volsync"
-  failurePolicy: Fail
+  failurePolicy: Ignore
   reinvocationPolicy: IfNeeded
   mutations:
     - patchType: "JSONPatch"
@@ -46,7 +46,7 @@ spec:
               op: "add", path: "/spec/template/spec/initContainers/-",
               value: Object.spec.template.spec.initContainers{
                 name: "jitter",
-                image: "docker.io/library/busybox:latest",
+                image: "docker.io/library/busybox:latest@sha256:dc2d74b28e4cf8984fa52af1f39bc7c3d9c73760b41a74d629f5d11b1ab28616",
                 imagePullPolicy: "IfNotPresent",
                 command: ["sh", "-c", "sleep $(shuf -i 0-30 -n 1)"]
               }
