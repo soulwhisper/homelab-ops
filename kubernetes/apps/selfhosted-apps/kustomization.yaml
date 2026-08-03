@@ -7,7 +7,6 @@ components:
   - ../../components/namespace
 resources:
   - ./bambuddy/ks.yaml
-  - ./convertx/ks.yaml
   - ./dispatcharr/ks.yaml
   - ./fast-note-sync/ks.yaml
   - ./firecrawl/ks.yaml

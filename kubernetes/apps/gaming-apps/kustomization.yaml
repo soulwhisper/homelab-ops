@@ -6,6 +6,7 @@ namespace: gaming-apps
 components:
   - ../../components/namespace
 resources:
+  # ref: https://github.com/joryirving/home-ops/tree/main/kubernetes/apps/base/games
   # storage
   - ./gaming-nfs/ks.yaml
   # app

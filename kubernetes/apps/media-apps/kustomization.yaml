@@ -9,8 +9,6 @@ resources:
   # storage
   - ./media-nfs/ks.yaml
   # app
-  - ./audiomuse/ks.yaml
-  - ./calibre-web/ks.yaml
   - ./jellyfin/ks.yaml
   - ./immich/ks.yaml
   - ./kavita/ks.yaml
