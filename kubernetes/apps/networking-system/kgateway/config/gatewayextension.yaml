@@ -5,7 +5,6 @@ kind: GatewayExtension
 metadata:
   name: authentik-ext-auth
 spec:
-  type: ExtAuth
   extAuth:
     httpService:
       backendRef:

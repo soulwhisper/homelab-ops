@@ -10,7 +10,7 @@ spec:
     matchNames:
       - networking-system
   podMetricsEndpoints:
-    - port: http-monitoring
+    - port: metrics
       path: /metrics
       honorLabels: true
   selector:

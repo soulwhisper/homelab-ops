@@ -14,7 +14,6 @@ spec:
     fullnameOverride: *name
     domainFilters: ["noirprime.com"]
     extraArgs:
-      - --webhook-provider-url=http://localhost:8888
       - --gateway-name=kgateway-internal
     podAnnotations:
       reloader.stakater.com/auto: "true"
@@ -43,7 +42,7 @@ spec:
           - name: DRY_RUN
             value: "false"
           - name: LOG_LEVEL
-            value: debug
+            value: info
           - name: SERVER_HOST
             value: 0.0.0.0
           - name: ADGUARD_URL
@@ -68,4 +67,5 @@ spec:
     sources:
       - gateway-httproute
       - service
+    txtOwnerId: "home-ops"
     txtPrefix: "k8s-int."

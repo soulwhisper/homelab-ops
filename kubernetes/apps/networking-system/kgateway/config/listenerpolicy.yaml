@@ -23,10 +23,10 @@ spec:
           openTelemetry:
             serviceName: kgateway
             grpcService:
-              backendRefs:
-                - name: opentelemetry-collector
-                  namespace: monitoring-system
-                  port: 4317
+              backendRef:
+                name: opentelemetry-collector
+                namespace: monitoring-system
+                port: 4317
         spawnUpstreamSpan: true
         clientSampling: 100
         randomSampling: 100
