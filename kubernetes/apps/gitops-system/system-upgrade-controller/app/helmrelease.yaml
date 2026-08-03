@@ -13,3 +13,8 @@ spec:
   values:
     fullnameOverride: *name
     replicaCount: 2
+    controller:
+      logLevel: info
+    monitoring:
+      serviceMonitor:
+        enabled: true

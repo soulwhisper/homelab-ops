@@ -16,10 +16,6 @@ spec:
       - start: "0 1 * * 0"
         duration: "4h"
         timezone: "Asia/Shanghai"
-  drain:
-    deleteLocalData: true
-    ignoreDaemonSets: true
-    force: true
   parallelism: 1
   policy:
     force: false
