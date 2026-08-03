@@ -110,4 +110,4 @@ spec:
                 limits:
                   memory: 512Mi
   disableDefaultAdminSecret: true
-  version: grafana/grafana:12.3.1
+  version: grafana/grafana:12.3.9
