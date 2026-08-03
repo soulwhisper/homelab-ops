@@ -11,6 +11,10 @@ spec:
     name: authentik
 
   values:
+    # chart renders no config Secret; deployments envFrom the ESO-owned Secret below
+    authentik:
+      existingSecret:
+        secretName: *name
     postgresql:
       enabled: false
     global:
