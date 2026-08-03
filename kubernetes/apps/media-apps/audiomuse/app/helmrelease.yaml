@@ -38,6 +38,16 @@ spec:
               tag: 0.7.12-beta
             env:
               SERVICE_TYPE: "flask"
+              POSTGRES_USER:
+                valueFrom:
+                  secretKeyRef:
+                    name: &pguser audiomuse-pguser
+                    key: username
+              POSTGRES_PASSWORD:
+                valueFrom:
+                  secretKeyRef:
+                    name: *pguser
+                    key: password
             envFrom: &envFrom
               - configMapRef:
                   name: *name
@@ -77,6 +87,16 @@ spec:
               tag: 0.7.12-beta
             env:
               SERVICE_TYPE: "worker"
+              POSTGRES_USER:
+                valueFrom:
+                  secretKeyRef:
+                    name: *pguser
+                    key: username
+              POSTGRES_PASSWORD:
+                valueFrom:
+                  secretKeyRef:
+                    name: *pguser
+                    key: password
             envFrom: *envFrom
             resources: *resources
             securityContext: *securityContext

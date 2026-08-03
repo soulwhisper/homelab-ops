@@ -85,6 +85,9 @@ spec:
         ports:
           bittorrent-tcp:
             port: *torrentPort
+          bittorrent-udp:
+            port: *torrentPort
+            protocol: UDP
     route:
       app:
         hostnames: ["bt.noirprime.com"]
