@@ -26,6 +26,14 @@ services:
       - "/run/udev:/run/udev:ro"
       - "/volume3/docker/scrutiny/config:/opt/scrutiny/config"
       - "/volume3/docker/scrutiny/influxdb:/opt/scrutiny/influxdb"
+    healthcheck:
+      # curl ships in the omnibus image (docker/Dockerfile, debian runtime)
+      # upstream example compose: curl -f http://localhost:8080/api/health
+      test: ["CMD", "curl", "-f", "http://localhost:8080/api/health"]
+      interval: 60s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
 
 configs:
   collector.yaml:
