@@ -8,14 +8,13 @@ services:
     image: ghcr.io/grimmory-tools/grimmory:v3.2.4
     container_name: grimmory
     restart: unless-stopped
-    env_file:
-      - booklore.sops.env
     environment:
       - "USER_ID=2000"
       - "GROUP_ID=101"
       - "TZ=Asia/Shanghai"
       - "DATABASE_URL=jdbc:mariadb://mariadb:3306/grimmory"
       - "DATABASE_USERNAME=grimmory"
+      - "DATABASE_PASSWORD=grimmory"
     depends_on:
       mariadb:
         condition: service_healthy
