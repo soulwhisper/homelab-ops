@@ -26,7 +26,7 @@ spec:
           app:
             image:
               repository: ghcr.io/searxng/searxng
-              tag: 2026.4.24-a7ac696b4
+              tag: 2026.8.1-8892414dc
             env:
               SEARXNG_PORT: &port 8080
               SEARXNG_BASE_URL: https://search.noirprime.com

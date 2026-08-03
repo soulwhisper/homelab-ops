@@ -6,7 +6,6 @@ metadata:
 data:
   # ref:https://docs.stirlingpdf.com/Configuration
   # : Common Settings
-  MODE: "Both"
   DISABLE_ADDITIONAL_FEATURES: "false"
   JAVA_TOOL_OPTIONS: "-Xms512m -Xmx4g"
   SYSTEM_MAXFILESIZE: "2000" # MB
@@ -36,10 +35,7 @@ data:
   SECURITY_VALIDATION_REVOCATION_MODE: "ocsp+crl"
   SECURITY_VALIDATION_REVOCATION_HARDFAIL: "false"
   # : JWT Authentication
-  SECURITY_JWT_PERSISTENCE: "true"
-  SECURITY_JWT_ENABLEKEYROTATION: "true"
   SECURITY_JWT_ENABLEKEYCLEANUP: "true"
-  SECURITY_JWT_KEYRETENTIONDAYS: "7"
   # : Email Configuration
   MAIL_ENABLED: "false"
   MAIL_ENABLEINVITES: "false"

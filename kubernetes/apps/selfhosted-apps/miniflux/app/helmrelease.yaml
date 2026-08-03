@@ -34,7 +34,7 @@ spec:
             env:
               RUN_MIGRATIONS: "true"
               DISABLE_LOCAL_AUTH: "true"
-              DB_POSTGRESQL_DATABASE:
+              DATABASE_URL:
                 valueFrom:
                   secretKeyRef:
                     name: miniflux-pguser
