@@ -7,19 +7,15 @@ metadata:
 spec:
   groupRef:
     name: external
-  image: ghcr.io/firecrawl/firecrawl-mcp-server:latest
+  image: ghcr.io/firecrawl/firecrawl-mcp-server:latest@sha256:4753735de5ee894ea73d985fab2431626860d8f80dfb62df2582945aa8d2f829
   env:
     - name: PORT
-      value: &port 3000
+      value: "3000"
     - name: FIRECRAWL_API_URL
       value: "http://firecrawl.selfhosted-apps.svc.cluster.local:3002"
-    - name: FIRECRAWL_RETRY_MAX_ATTEMPTS
-      value: "10"
-    - name: FIRECRAWL_RETRY_INITIAL_DELAY
-      value: "500"
-    - name: TTP_STREAMABLE_SERVER
+    - name: HTTP_STREAMABLE_SERVER
       value: "true"
-  mcpPort: *port
+  mcpPort: 3000
   resources:
     requests:
       cpu: 100m

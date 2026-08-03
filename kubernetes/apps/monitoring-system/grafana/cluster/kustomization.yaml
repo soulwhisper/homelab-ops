@@ -6,7 +6,9 @@ resources:
   # app
   - ./grafana.yaml
   - ./grafanadatasource.yaml
+  - ./grafanaserviceaccount.yaml
   # utils
+  - ./eso-rbac.yaml
   - ./httproute.yaml
   - ./servicemonitor.yaml
   - ./poddisruptionbudget.yaml

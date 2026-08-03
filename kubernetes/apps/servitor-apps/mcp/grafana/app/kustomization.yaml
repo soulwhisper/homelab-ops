@@ -6,4 +6,4 @@ resources:
   # app
   - ./mcpserver.yaml
   # utils
-  - ./grafanaserviceaccount.yaml
+  - ./externalsecret.yaml
