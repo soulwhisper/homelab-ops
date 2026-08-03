@@ -34,6 +34,10 @@ spec:
               repository: ghcr.io/soulwhisper/hermes-extras
               tag: "2026.08.02"
             command: ["/bin/sh", "/app/install.sh"]
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities: { drop: ["ALL"] }
+              readOnlyRootFilesystem: true
         containers:
           app:
             image:

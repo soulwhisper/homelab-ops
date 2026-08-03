@@ -7,7 +7,7 @@ metadata:
 spec:
   groupRef:
     name: internal-ro
-  image: ghcr.io/victoriametrics-community/mcp-victorialogs:7.1.0
+  image: ghcr.io/victoriametrics-community/mcp-victorialogs:v1.8.0@sha256:d2a0826def2b4a25f0e26c8d3e7f28f02117f90b6b4c99f2c354421f6dee30d1
   env:
     - name: VL_INSTANCE_ENTRYPOINT
       value: "http://victoria-logs-server.monitoring-system.svc.cluster.local:9428"
