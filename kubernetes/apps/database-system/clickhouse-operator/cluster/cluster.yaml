@@ -46,7 +46,7 @@ spec:
   settings:
     enableDatabaseSync: true
     defaultUserPassword:
-      passwordType: plaintext_password
+      passwordType: password
       secret:
         name: clickhouse-credentials
         key: default_password
