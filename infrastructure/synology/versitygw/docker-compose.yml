@@ -18,5 +18,14 @@ services:
       - "VGW_WEBUI_PORT=:9001"
       - "VGW_WEBUI_GATEWAYS=http://10.10.0.100:9000"
       - "VGW_WEBUI_ADMIN_GATEWAYS=http://10.10.0.100:9000"
+      # unauthenticated GET health endpoint on the S3 port (upstream --health flag)
+      - "VGW_HEALTH=/healthz"
     volumes:
       - "/volume3/docker/versitygw:/tmp/gw"
+    healthcheck:
+      # image is alpine-based (busybox wget); VGW_HEALTH verified in v1.7.0 cmd/versitygw/main.go
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://localhost:9000/healthz"]
+      interval: 60s
+      timeout: 5s
+      retries: 3
+      start_period: 15s

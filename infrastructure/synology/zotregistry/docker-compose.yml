@@ -22,7 +22,7 @@ x-zot-shared: &zot-shared
 
 services:
   zot-valkey:
-    image: "valkey/valkey:9.1-alpine"
+    image: "valkey/valkey:9.1.1-alpine"
     container_name: "zot-valkey"
     restart: "unless-stopped"
     command:
@@ -44,7 +44,7 @@ services:
       retries: 5
 
   zot-caddy:
-    image: "caddy:2-alpine"
+    image: "caddy:2.11-alpine"
     container_name: "zot-caddy"
     restart: "unless-stopped"
     ports:

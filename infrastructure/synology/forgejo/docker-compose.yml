@@ -29,3 +29,11 @@ services:
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - "/volume3/docker/forgejo:/data"
+    healthcheck:
+      # curl ships in codeberg.org/forgejo/forgejo (alpine, Dockerfile v16.0.2)
+      # /api/healthz registered in routers/web/web.go
+      test: ["CMD", "curl", "-f", "http://localhost:9003/api/healthz"]
+      interval: 60s
+      timeout: 10s
+      retries: 3
+      start_period: 30s

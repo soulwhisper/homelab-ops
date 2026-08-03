@@ -8,13 +8,14 @@ services:
     image: ghcr.io/grimmory-tools/grimmory:v3.2.4
     container_name: grimmory
     restart: unless-stopped
+    env_file:
+      - booklore.sops.env
     environment:
       - "USER_ID=2000"
       - "GROUP_ID=101"
       - "TZ=Asia/Shanghai"
       - "DATABASE_URL=jdbc:mariadb://mariadb:3306/grimmory"
       - "DATABASE_USERNAME=grimmory"
-      - "DATABASE_PASSWORD=grimmory"
     depends_on:
       mariadb:
         condition: service_healthy
@@ -35,14 +36,14 @@ services:
     image: lscr.io/linuxserver/mariadb:11.8.8
     container_name: mariadb
     restart: unless-stopped
+    env_file:
+      - booklore.sops.env
     environment:
       - "PUID=2000"
       - "PGID=101"
       - "TZ=Asia/Shanghai"
-      - "MYSQL_ROOT_PASSWORD=ChangeMe_MariaDBRoot_2025!"
       - "MYSQL_DATABASE=grimmory"
       - "MYSQL_USER=grimmory"
-      - "MYSQL_PASSWORD=grimmory"
     volumes:
       - /volume3/docker/grimmory/mariadb:/config
     healthcheck:
