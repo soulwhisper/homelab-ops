@@ -6,12 +6,6 @@
       pinDigests: false,
     },
     {
-      description: "Override Helmfile Dependency Name",
-      matchDatasources: ["docker"],
-      matchManagers: ["helmfile"],
-      overrideDepName: "{{packageName}}",
-    },
-    {
       description: "Pin Postgres version to 18",
       matchDatasources: ["docker"],
       matchPackagePatterns: [

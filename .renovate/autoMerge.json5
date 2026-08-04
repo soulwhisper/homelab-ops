@@ -43,7 +43,6 @@
         "kubernetes/apps/networking-system/**",
         "kubernetes/apps/monitoring-system/**",
         "infrastructure/**",
-        "kubernetes/bootstrap/**",
       ],
       matchUpdateTypes: ["minor"],
       automerge: false,
