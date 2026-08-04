@@ -1,0 +1,10 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: home-assistant-sgcc
+data:
+  # shared
+  PUBLISHER: "mqtt"
+  MQTT_HOST: "http://mosquitto.smarthome-apps.svc.cluster.local"
+  MQTT_PORT: "1883"

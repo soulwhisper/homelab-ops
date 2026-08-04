@@ -51,7 +51,6 @@ spec:
       secrets:
         - authentik-blueprints-core-users
         # new odic apps, add es names below
-        - authentik-blueprints-oidc-calibre
         - authentik-blueprints-oidc-grafana
         - authentik-blueprints-oidc-headlamp
         - authentik-blueprints-oidc-hass
