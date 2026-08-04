@@ -1,63 +1,55 @@
 ---
 # yaml-language-server: $schema=https://json.schemastore.org/helmfile
+
+# Bootstraps core applications that provide a minimal runtime base for the
+# cluster. These releases are installed first so the cluster has the resources
+# Flux needs before its own reconciliation begins.
+#
+# After this bootstrap phase, Flux is ready to take over management of the
+# application stack and continue reconciling downstream state.
+
 helmDefaults:
   cleanupOnFail: true
+  forceConflicts: true
   timeout: 600
   wait: true
   waitForJobs: true
 
+bases:
+  - ./templates/default.yaml
+
+defaultInherit: default
+
 releases:
   - name: prometheus-crds
     namespace: monitoring-system
-    chart: oci://ghcr.io/prometheus-community/charts/prometheus-operator-crds
-    version: 31.0.0
 
   - name: cilium
     namespace: kube-system
-    chart: oci://quay.io/cilium/charts/cilium
-    version: 1.20.0
-    values: ["./values.yaml.gotmpl"]
     needs: ["monitoring-system/prometheus-crds"]
 
   - name: coredns
     namespace: kube-system
-    chart: oci://ghcr.io/coredns/charts/coredns
-    version: 1.47.0
-    values: ["./values.yaml.gotmpl"]
     needs: ["kube-system/cilium"]
 
   - name: spegel
     namespace: kube-system
-    chart: oci://ghcr.io/spegel-org/helm-charts/spegel
-    version: 0.7.4
-    values: ["./values.yaml.gotmpl"]
     needs: ["kube-system/coredns"]
 
   # for gateway-api crds
   - name: gateway-api-crds
     namespace: kube-system
-    chart: oci://ghcr.io/wiremind/wiremind-helm-charts/gateway-api-crds
-    version: 1.6.0
     needs: ["kube-system/spegel"]
 
   # for component crds
   - name: external-secrets
     namespace: security-system
-    chart: oci://ghcr.io/external-secrets/charts/external-secrets
-    version: 2.8.0
-    values: ["./values.yaml.gotmpl"]
     needs: ["kube-system/gateway-api-crds"]
 
   - name: flux-operator
     namespace: gitops-system
-    chart: oci://ghcr.io/controlplaneio-fluxcd/charts/flux-operator
-    version: 0.57.0
-    values: ["./values.yaml.gotmpl"]
     needs: ["security-system/external-secrets"]
 
   - name: flux-instance
     namespace: gitops-system
-    chart: oci://ghcr.io/controlplaneio-fluxcd/charts/flux-instance
-    version: 0.57.0
-    values: ["./values.yaml.gotmpl"]
     needs: ["gitops-system/flux-operator"]
