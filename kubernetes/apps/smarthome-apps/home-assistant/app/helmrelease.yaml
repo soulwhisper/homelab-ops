@@ -83,7 +83,6 @@ spec:
         existingClaim: *name
         globalMounts:
           - path: /config
-            subPath: config
       packages:
         type: configMap
         name: *name

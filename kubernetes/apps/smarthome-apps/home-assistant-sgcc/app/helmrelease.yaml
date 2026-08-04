@@ -25,38 +25,24 @@ spec:
         containers:
           app:
             image:
-              repository: arcw/sgcc_electricity
-              tag: v1.8.1
-            command:
-              - python3
-              - main.py
-            env:
-              ARK_API_KEY:
-                valueFrom:
-                  secretKeyRef:
-                    name: home-assistant
-                    key: ark_api_key
-              DB_TYPE: SQLITE
-              HASS_URL: home-assistant:8123
-              HASS_TOKEN:
-                secretKeyRef:
-                  name: home-assistant
-                  key: supervisor_token
-              PHONE_NUMBER:
-                valueFrom:
-                  secretKeyRef:
-                    name: home-assistant
-                    key: sgcc_username
-              PASSWORD:
-                valueFrom:
-                  secretKeyRef:
-                    name: home-assistant
-                    key: sgcc_password
-            resources:
+              repository: ghcr.io/maribelhearm/sgcc-home-assistant-bridge
+              tag: v0.1.8
+            envFrom: &envFrom
+              - configMapRef:
+                  name: *name
+              - secretRef:
+                  name: *name
+            resources: &resources
               requests:
                 cpu: 40m
               limits:
                 memory: 1Gi
+          browser:
+            image:
+              repository: ghcr.io/maribelhearm/sgcc-home-assistant-bridge-browser
+              tag: v0.1.8
+            envFrom: *envFrom
+            resources: *resources
 
     persistence:
       app:
