@@ -13,6 +13,9 @@ spec:
   values:
     replicaCount: 1
     relayUrl: wss://buzz.noirprime.com
+    service:
+      annotations:
+        lbipam.cilium.io/ips: "10.10.0.145"
 
     # admin_public_key
     ownerPubkey: "51128b278bea1a25c47128f6fe6811e8752837c119f67edc7fe0cdc3b7b2959a"

@@ -21,21 +21,18 @@ spec:
         pod:
           securityContext:
             runAsNonRoot: true
-            runAsUser: 1000
-            runAsGroup: 1000
-            fsGroup: 1000
+            runAsUser: 2000
+            runAsGroup: 2000
+            fsGroup: 2000
             fsGroupChangePolicy: OnRootMismatch
         containers:
           app:
             image:
               repository: ghcr.io/soulwhisper/buzz-agent-omp
-              tag: 2026.07.14
+              tag: 2026.08.05
             env:
               BUZZ_RELAY_URL: ws://buzz.servitor-apps.svc.cluster.local:3000
-              BUZZ_ACP_AGENT_COMMAND: omp
-              BUZZ_ACP_AGENT_ARGS: acp
               BUZZ_ACP_RESPOND_TO: owner-only
-              BUZZ_ACP_SESSION_TITLE: oh-my-pi
             envFrom:
               - secretRef:
                   name: *name
@@ -51,20 +48,12 @@ spec:
               readOnlyRootFilesystem: true
 
     persistence:
-      app:
-        existingClaim: *name
-        globalMounts:
-          - path: /home/agent/.omp
-            subPath: omp
-          - path: /workspace
-            subPath: workspace
       cache:
         type: emptyDir
         globalMounts:
+          - path: /home/agent/.omp
+            subPath: omp
           - path: /home/agent/.cache
-      tmpfs:
-        type: emptyDir
-        medium: Memory
-        sizeLimit: 512Mi
-        globalMounts:
+            subPath: cache
           - path: /tmp
+            subPath: tmp

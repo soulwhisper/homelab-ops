@@ -46,8 +46,3 @@ spec:
   dependsOn:
     - name: buzz
       namespace: servitor-apps
-  components:
-    - ../../../../components/volsync
-  postBuild:
-    substitute:
-      APP: *name
