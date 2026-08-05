@@ -29,7 +29,7 @@ spec:
           rules:
             http:
               - method: "POST"
-                pathRegex: "/chat/.*"
+                path: "/chat/.*"
 
     # DNS
     - toEndpoints:
