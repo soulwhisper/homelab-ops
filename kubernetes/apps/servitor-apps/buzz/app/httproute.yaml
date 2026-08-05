@@ -15,9 +15,6 @@ spec:
     - name: kgateway-internal
       namespace: networking-system
   rules:
-    # Relay serves WebSocket (Nostr), REST bridge, media, git, and the web UI
-    # on a single port. No authentik ext-auth: clients authenticate with
-    # Nostr keys (NIP-42 / NIP-98), an SSO redirect would break agents.
     - backendRefs:
         - name: *name
           port: 3000

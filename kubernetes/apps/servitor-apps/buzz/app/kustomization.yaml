@@ -5,10 +5,7 @@ kind: Kustomization
 resources:
   # app
   - ./helmrelease.yaml
-  - ./agent-helmrelease.yaml
   - ./ocirepository.yaml
   # utils
-  - ./ciliumnetworkpolicy.yaml
   - ./externalsecret.yaml
-  - ./agent-externalsecret.yaml
   - ./httproute.yaml

@@ -11,38 +11,26 @@ spec:
     name: buzz
 
   values:
-    # Public wss:// URL clients dial; also drives media base URL.
-    relayUrl: wss://buzz.noirprime.com
-    # 64-char lowercase hex Nostr pubkey of the relay operator.
-    # EXAMPLE value (keypair generated for this commit) — replace with the
-    # operator's real pubkey before exposing the relay publicly.
-    ownerPubkey: "8233002e09d8c17b7ea28fc64b321d07aec2784ac2f7e241f918a3191ae2c532"
-
     replicaCount: 1
+    relayUrl: wss://buzz.noirprime.com
 
-    # All sensitive env via the ExternalSecret-managed `buzz` Secret:
-    # BUZZ_RELAY_PRIVATE_KEY, BUZZ_GIT_HOOK_HMAC_SECRET, DATABASE_URL, REDIS_URL.
+    # admin_public_key
+    ownerPubkey: "51128b278bea1a25c47128f6fe6811e8752837c119f67edc7fe0cdc3b7b2959a"
+
     secrets:
       existingSecret: *name
-
-    # Postgres: shared CNPG cluster via components/cnpg (buzz-pguser).
-    # Redis/Valkey: per-app Dragonfly via components/dragonfly (buzz-dragonfly).
-    # S3: Ceph RGW via components/ceph-bucket (ceph-bucket-buzz OBC).
-    s3:
-      # Chart 0.1.7 has no s3.addressingStyle key; the relay defaults to
-      # path-style, which is what Ceph RGW expects.
-      endpoint: http://rook-ceph-rgw-ceph-objectstore.storage-system.svc.cluster.local
-      bucket: *name
-
-    # Git state is object-store-backed (S3 pointer CAS + Postgres repo names);
-    # the on-disk repo path is pure scratch -> per-pod emptyDir, no PVC,
-    # nothing for volsync to back up here.
-    persistence:
-      git:
-        enabled: false
-        size: 10Gi
-
-    # Create the buzz database/user on the shared CNPG cluster before start.
+    relay:
+      extraEnv:
+        - name: BUZZ_S3_ACCESS_KEY
+          valueFrom:
+            secretKeyRef:
+              name: ceph-bucket-buzz
+              key: AWS_ACCESS_KEY_ID
+        - name: BUZZ_S3_SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              name: ceph-bucket-buzz
+              key: AWS_SECRET_ACCESS_KEY
     extraInitContainers:
       - name: init-db
         image: ghcr.io/home-operations/postgres-init:18
@@ -58,20 +46,15 @@ spec:
             memory: 32Mi
           limits:
             memory: 128Mi
-
-    relay:
-      extraEnv:
-        # Ceph RGW bucket credentials minted by the ObjectBucketClaim.
-        - name: BUZZ_S3_ACCESS_KEY
-          valueFrom:
-            secretKeyRef:
-              name: ceph-bucket-buzz
-              key: AWS_ACCESS_KEY_ID
-        - name: BUZZ_S3_SECRET_KEY
-          valueFrom:
-            secretKeyRef:
-              name: ceph-bucket-buzz
-              key: AWS_SECRET_ACCESS_KEY
-
+    persistence:
+      git:
+        enabled: false
+    externalPostgresql:
+      url: "postgresql://buzz:buzz@postgres-rw.database-system.svc.cluster.local:5432/buzz"
+    externalRedis:
+      url: "redis://buzz-dragonfly.servitor-apps.svc.cluster.local:6379"
+    s3:
+      endpoint: http://rook-ceph-rgw-ceph-objectstore.storage-system.svc.cluster.local
+      bucket: *name
     serviceMonitor:
       enabled: true

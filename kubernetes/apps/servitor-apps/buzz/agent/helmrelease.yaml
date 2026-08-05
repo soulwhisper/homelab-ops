@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &name devbox
+  name: &name buzz-agent
 spec:
   interval: 30m
   chartRef:
@@ -21,24 +21,28 @@ spec:
         pod:
           securityContext:
             runAsNonRoot: true
-            runAsUser: 2000
-            runAsGroup: 2000
-            fsGroup: 2000
+            runAsUser: 1000
+            runAsGroup: 1000
+            fsGroup: 1000
             fsGroupChangePolicy: OnRootMismatch
         containers:
           app:
             image:
-              repository: ghcr.io/soulwhisper/devbox
+              repository: ghcr.io/soulwhisper/buzz-agent-omp
               tag: 2026.07.14
             env:
-              ANTHROPIC_BASE_URL: "http://agentgateway-proxy.networking-system.svc.cluster.local:80"
+              BUZZ_RELAY_URL: ws://buzz.servitor-apps.svc.cluster.local:3000
+              BUZZ_ACP_AGENT_COMMAND: omp
+              BUZZ_ACP_AGENT_ARGS: acp
+              BUZZ_ACP_RESPOND_TO: owner-only
+              BUZZ_ACP_SESSION_TITLE: oh-my-pi
             envFrom:
               - secretRef:
                   name: *name
             resources:
               requests:
                 cpu: 200m
-                memory: 1Gi
+                memory: 512Mi
               limits:
                 memory: 4Gi
             securityContext:
@@ -50,9 +54,17 @@ spec:
       app:
         existingClaim: *name
         globalMounts:
-          - path: /home/dev
-      tmpfs:
+          - path: /home/agent/.omp
+            subPath: omp
+          - path: /workspace
+            subPath: workspace
+      cache:
         type: emptyDir
         globalMounts:
+          - path: /home/agent/.cache
+      tmpfs:
+        type: emptyDir
+        medium: Memory
+        sizeLimit: 512Mi
+        globalMounts:
           - path: /tmp
-            subPath: tmp
