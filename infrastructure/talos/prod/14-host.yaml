@@ -1,9 +1,4 @@
 ---
-# Host-level multi-document config (Talos v1.14).
-# Replaces deprecated v1alpha1 machine.{sysctls,files,pods}.
-# Sources: pkg/machinery/config/types/{runtime,cri,k8s} @ v1.14.0-beta.1
-# was: machine.sysctls (values are strings in SysctlConfig params)
-# source: pkg/machinery/config/types/runtime/sysctl.go
 apiVersion: v1alpha1
 kind: SysctlConfig
 params:
@@ -31,12 +26,9 @@ params:
   vm.dirty_background_ratio: "5" # start background writeback at 5% dirty (default 10%)
   vm.dirty_ratio: "10" # block writes at 10% dirty (default 20%)
 ---
-# was: machine.files entry /etc/cri/conf.d/20-customization.part (TOML content verbatim)
-# name `customization` is reserved for the legacy file-based part, hence `20-customization`
-# source: pkg/machinery/config/types/cri/customization.go
 apiVersion: v1alpha1
 kind: CRICustomizationConfig
-name: 20-customization
+name: default-patch
 content: |
   [plugins]
     [plugins."io.containerd.cri.v1.images"]
@@ -47,8 +39,6 @@ content: |
       enable_unprivileged_ports = true
       enable_unprivileged_icmp = true
 ---
-# was: machine.pods (network-irq-optimizer static pod, pod definition verbatim)
-# source: pkg/machinery/config/types/k8s/static_pod.go
 apiVersion: v1alpha1
 kind: KubeStaticPodConfig
 name: network-irq-optimizer
