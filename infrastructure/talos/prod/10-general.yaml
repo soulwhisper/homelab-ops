@@ -1,32 +1,26 @@
 ---
-# v1alpha1 survivors (NOT deprecated in Talos v1.14): cluster.etcd, machine.features.nodeAddressSortAlgorithm, machine.install.
-# Deprecated v1alpha1 fields moved to multi-document patches: 12-k8s.yaml (cluster.* + machine.{kubelet,nodeLabels,features.kubernetesTalosAPIAccess}) and 14-host.yaml (machine.{sysctls,files,pods}).
-# machine.features.hostDNS is deprecated in v1.14 ("Use ResolverConfig document instead") and lives in the ResolverConfig document below.
 cluster:
-  etcd: # extraArgs + advertisedSubnets remain valid v1alpha1 fields (only the legacy singular `subnet` field is deprecated)
+  etcd:
     extraArgs:
       quota-backend-bytes: 8589934592
     advertisedSubnets:
       - 10.10.0.0/24
 machine:
   features:
-    nodeAddressSortAlgorithm: v2 # not deprecated in v1.14, stays here
-  install: # not deprecated in v1.14, stays here
-    # renovate: datasource=docker depName=ghcr.io/siderolabs/installer
+    nodeAddressSortAlgorithm:
+  install:
+    # renovate: datasource=github-releases depName=siderolabs/talos
     image: factory.talos.dev/metal-installer/88a80a46089706032472a6cb4ecbe8e19a6774d3520869dec3a203631eadbc21:v1.13.7
     grubUseUKICmdline: true
     diskSelector:
       model: "SQF-C3AV1-256GDEDM"
 ---
-# already multi-document in v1.13, unchanged
 apiVersion: v1alpha1
 kind: TimeSyncConfig
 ntp:
   servers:
     - 10.10.0.254
 ---
-# already multi-document in v1.13; in v1.14 it also carries hostDNS (machine.features.hostDNS is deprecated)
-# the generated base ResolverConfig sets hostDNS.{enabled,forwardKubeDNSToHost}: true; only resolveMemberNames needs to be added
 apiVersion: v1alpha1
 kind: ResolverConfig
 nameservers:
@@ -36,15 +30,13 @@ searchDomains:
 hostDNS:
   resolveMemberNames: true
 ---
-# already multi-document in v1.13, unchanged
 apiVersion: v1alpha1
 kind: LinkConfig
-name: lo # fix forwardKubeDNSToHost
+name: kubedns-forward-host-fix
 up: true
 addresses:
   - address: 169.254.116.108/32
 ---
-# already multi-document in v1.13, unchanged
 apiVersion: v1alpha1
 kind: ExtensionServiceConfig
 name: nut-client
@@ -54,12 +46,10 @@ configFiles:
       SHUTDOWNCMD "/sbin/poweroff"
     mountPath: /usr/local/etc/nut/upsmon.conf
 ---
-# already multi-document in v1.13, unchanged
 apiVersion: v1alpha1
 kind: OOMConfig
 triggerExpression: "false" # disable until 'MemAvailable' implemented
 ---
-# already multi-document in v1.13, unchanged
 apiVersion: v1alpha1
 kind: VolumeConfig
 name: EPHEMERAL
@@ -68,7 +58,6 @@ provisioning:
     match: system_disk
   maxSize: 80GiB
 ---
-# already multi-document in v1.13, unchanged
 apiVersion: v1alpha1
 kind: UserVolumeConfig
 name: local-hostpath
