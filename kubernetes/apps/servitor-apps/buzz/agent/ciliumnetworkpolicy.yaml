@@ -3,13 +3,22 @@
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
 metadata:
-  name: hermes-agent-egress
+  name: buzz-agent-egress
 spec:
   endpointSelector:
     matchLabels:
-      "app.kubernetes.io/name": hermes-agent
+      "app.kubernetes.io/name": buzz-agent
   egress:
-    # LLM
+    # Buzz relay (in-namespace)
+    - toServices:
+        - k8sService:
+            serviceName: buzz
+            namespace: servitor-apps
+      toPorts:
+        - ports:
+            - { port: "3000", protocol: TCP }
+
+    # LLM via agentgateway
     - toServices:
         - k8sService:
             serviceName: agentgateway-proxy
@@ -21,14 +30,6 @@ spec:
             http:
               - method: "POST"
                 path: "/chat/.*"
-
-    # MCP
-    - toEndpoints:
-        - matchLabels:
-            "toolhive.stacklok.dev/component": virtualmcp
-      toPorts:
-        - ports:
-            - { port: "4483", protocol: TCP }
 
     # DNS
     - toEndpoints:
