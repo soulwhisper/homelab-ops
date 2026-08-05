@@ -7,7 +7,7 @@ cluster:
       - 10.10.0.0/24
 machine:
   features:
-    nodeAddressSortAlgorithm:
+    nodeAddressSortAlgorithm: v2
   install:
     # renovate: datasource=github-releases depName=siderolabs/talos
     image: factory.talos.dev/metal-installer/88a80a46089706032472a6cb4ecbe8e19a6774d3520869dec3a203631eadbc21:v1.13.7
