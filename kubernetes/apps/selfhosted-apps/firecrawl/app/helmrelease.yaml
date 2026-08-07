@@ -24,7 +24,7 @@ spec:
           app:
             image:
               repository: ghcr.io/firecrawl/firecrawl
-              tag: 2.11.185@sha256:4d54c207b9b6db81fd7e2ebb9452849b2aeb9037cf5784a5110dc18402057fc3
+              tag: 2.11.188@sha256:a88c2c1b546560b77206cf88da87600cb69ac65358eed1a0f8bb06dde691b065
             command: ["node"]
             args:
               - --max-old-space-size=512
@@ -105,7 +105,7 @@ spec:
           app:
             image:
               repository: ghcr.io/firecrawl/firecrawl
-              tag: 2.11.185@sha256:4d54c207b9b6db81fd7e2ebb9452849b2aeb9037cf5784a5110dc18402057fc3
+              tag: 2.11.188@sha256:a88c2c1b546560b77206cf88da87600cb69ac65358eed1a0f8bb06dde691b065
             command: ["node"]
             args:
               - --max-old-space-size=1024
