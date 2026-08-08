@@ -42,11 +42,12 @@ lacp system-priority 100
 dhcp enable
 dhcp snooping enable
 
-# unifi: "https://10.10.0.200:8443/inform"
+# unifi: 0104 + hex'10.10.0.200'
+# https://solariz.de/posts/20/unifi_l3_adoption_with_dhcp_option_43_on_pfsense_m/
 dhcp server ip-pool 0
 gateway-list 10.0.0.1
 dns-list 10.0.0.254
-option 43 hex 68747470733a2f2f31302e31302e302e3230303a383434332f696e666f726d
+option 43 hex 01040a0a00c8
 static-bind ip-address 10.0.0.201 24 hardware-address 9C05-D6A1-6277
 static-bind ip-address 10.0.0.202 24 hardware-address 9C05-D6A1-69C7
 
@@ -107,7 +108,7 @@ ip route-static 0.0.0.0 0 10.255.255.2
 bfd session init-mode active
 bgp 65000
  router-id 10.10.0.1
- timer keepalive 60 hold 180
+ timer keepalive 10 hold 30
  group k8s external
   peer k8s bfd
   peer k8s as-number 65100
@@ -125,6 +126,7 @@ interface bridge-aggregation 10
  link-aggregation mode dynamic
  port link-type access
  port access vlan 100
+ lacp edge-port
  stp edged-port
  ipv6 nd raguard role host
 
@@ -133,6 +135,7 @@ interface bridge-aggregation 20
  link-aggregation mode dynamic
  port link-type access
  port access vlan 100
+ lacp edge-port
  stp edged-port
  ipv6 nd raguard role host
 
@@ -141,6 +144,7 @@ interface bridge-aggregation 30
  link-aggregation mode dynamic
  port link-type access
  port access vlan 100
+ lacp edge-port
  stp edged-port
  ipv6 nd raguard role host
 
@@ -202,10 +206,21 @@ interface ten-gigabitethernet 1/0/16
  port link-aggregation group 80 force
  lacp period short
 
+# to winbox eth
+interface ten-gigabitethernet 1/0/18
+ description winbox-eth
+ port link-type access
+ port access vlan 10
+ stp edged-port
+ broadcast-suppression 5
+ multicast-suppression 5
+ unicast-suppression 5
+
 # to management eth
 interface ten-gigabitethernet 1/0/19
  description management-eth
  port link-type access
+ port access vlan 1
  stp edged-port
  broadcast-suppression 5
  multicast-suppression 5
@@ -236,8 +251,6 @@ interface bridge-aggregation 120
 
 interface ten-gigabitethernet 1/0/23
  port link-aggregation group 120 force
- lacp period short
 
 interface ten-gigabitethernet 1/0/24
  port link-aggregation group 120 force
- lacp period short
