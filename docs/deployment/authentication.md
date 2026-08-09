@@ -4,22 +4,20 @@
 
 14 applications use Authentik OIDC for SSO, managed declaratively via Blueprints (ConfigMap + Secret).
 
-| App | OIDC Provider | Notes |
-|-----|:------------:|-------|
-| Audiomuse | Authentik | SSO-protected |
-| Calibre-Web | Authentik | Configure via web UI after OIDC app created |
-| Grafana | Authentik | SSO-protected |
-| Headlamp | Authentik | K8s dashboard with read-only SA |
-| Home Assistant | Authentik | Requires `hass-openid` plugin + `/config/configuration.yaml` packages |
-| Immich | Authentik | SSO-protected |
-| Jellyfin | Authentik | Install `jellyfin-plugin-sso` first, then web UI config |
-| Karakeep | Authentik | SSO-protected |
-| Kavita | Authentik | Configure via Admin Settings → OpenID Connect |
-| Miniflux | Authentik | SSO-protected |
-| NetBox | Authentik | SSO-protected |
-| Qbittorrent-UI (QUI) | Authentik | SSO-protected web UI |
-| RSSHub | Authentik | SSO-protected |
-| Stirling-PDF | Authentik | SSO-protected |
+| App                  | OIDC Provider | Notes                                                                 |
+| -------------------- | :-----------: | --------------------------------------------------------------------- |
+| Grafana              |   Authentik   | SSO-protected                                                         |
+| Headlamp             |   Authentik   | K8s dashboard with read-only SA                                       |
+| Home Assistant       |   Authentik   | Requires `hass-openid` plugin + `/config/configuration.yaml` packages |
+| Immich               |   Authentik   | SSO-protected                                                         |
+| Jellyfin             |   Authentik   | Install `jellyfin-plugin-sso` first, then web UI config               |
+| Karakeep             |   Authentik   | SSO-protected                                                         |
+| Kavita               |   Authentik   | Configure via Admin Settings → OpenID Connect                         |
+| Miniflux             |   Authentik   | SSO-protected                                                         |
+| NetBox               |   Authentik   | SSO-protected                                                         |
+| Qbittorrent-UI (QUI) |   Authentik   | SSO-protected web UI                                                  |
+| RSSHub               |   Authentik   | SSO-protected                                                         |
+| Stirling-PDF         |   Authentik   | SSO-protected                                                         |
 
 New OIDC apps are added by creating a Blueprint Secret (`authentik-blueprints-oidc-<name>`) and referencing it in the Authentik HelmRelease.
 
@@ -27,24 +25,23 @@ New OIDC apps are added by creating a Blueprint Secret (`authentik-blueprints-oi
 
 These apps use their own authentication — no OIDC needed:
 
-| App | Auth Method |
-|-----|------------|
-| Bambuddy | Bambu Lab account |
-| Crafty Controller | Default admin credentials (retrieve via `kubectl exec`) |
-| Dispatcharr | Built-in user system |
-| Fast-Note-Sync | Built-in user system |
-| FoundryVTT | Built-in user system |
-| MoviePilot | Built-in user system |
-| Navidrome | Built-in user system |
-| Rook-Ceph Dashboard | Built-in auth (or SAML2 via manual setup) |
-| Scrypted | Sign up as `admin`, ForwardAuth compatible |
+| App                 | Auth Method                                             |
+| ------------------- | ------------------------------------------------------- |
+| Bambuddy            | Bambu Lab account                                       |
+| Crafty Controller   | Default admin credentials (retrieve via `kubectl exec`) |
+| Dispatcharr         | Built-in user system                                    |
+| Fast-Note-Sync      | Built-in user system                                    |
+| FoundryVTT          | Built-in user system                                    |
+| MoviePilot          | Built-in user system                                    |
+| Navidrome           | Built-in user system                                    |
+| Rook-Ceph Dashboard | Built-in auth (or SAML2 via manual setup)               |
+| Scrypted            | Sign up as `admin`, ForwardAuth compatible              |
 
 ## No Authentication
 
-| App | Reason |
-|-----|--------|
+| App    | Reason                    |
+| ------ | ------------------------- |
 | MeTube | Single-user download tool |
-| ConvertX | Single-user file conversion |
 
 ## Rook-Ceph SAML2 (Manual)
 

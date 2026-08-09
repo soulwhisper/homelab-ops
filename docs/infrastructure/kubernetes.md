@@ -93,10 +93,10 @@ sync:
 
 The cluster-level `Kustomization` resources live in `kubernetes/flux/cluster/cluster.yaml` and form a two-stage pipeline:
 
-| Kustomization | Path | Depends On | Purpose |
-|---|---|---|---|
-| `flux-repositories` | `./kubernetes/flux/repositories` | _(none)_ | Registers shared OCI chart sources |
-| `cluster-apps` | `./kubernetes/apps` | `flux-repositories` | Recursively reconciles all namespaces and applications |
+| Kustomization       | Path                             | Depends On          | Purpose                                                |
+| ------------------- | -------------------------------- | ------------------- | ------------------------------------------------------ |
+| `flux-repositories` | `./kubernetes/flux/repositories` | _(none)_            | Registers shared OCI chart sources                     |
+| `cluster-apps`      | `./kubernetes/apps`              | `flux-repositories` | Recursively reconciles all namespaces and applications |
 
 ### Recursive Discovery
 
@@ -176,7 +176,7 @@ spec:
     strategy:
       name: RetryOnFailure
     remediation:
-      retries: -1        # retry indefinitely until success
+      retries: -1 # retry indefinitely until success
   rollback:
     cleanupOnFail: true
     recreate: true
@@ -207,16 +207,16 @@ All Helm charts are sourced from OCI registries. The legacy `HelmRepository` CRD
 
 Each non-trivial application defines its own `OCIRepository` resource in its `app/` subdirectory alongside its `HelmRelease`. These 52 repositories pull charts directly from their publishers' OCI registries:
 
-| Namespace | Count | Example Charts |
-|---|---|---|
-| kube-system | 10 | cilium, coredns, spegel, frr-k8s, descheduler, reloader, metrics-server, k8tz, gateway-api-crds, intel-device-plugins (operator + GPU) |
-| security-system | 4 | authentik, cert-manager, external-secrets, onepassword-connect |
-| storage-system | 6 | rook-ceph (app + cluster), volsync, snapshot-controller, openebs-localpv, csi-driver-nfs |
-| database-system | 4 | cloudnative-pg, plugin-barman-cloud, dragonfly-operator, clickhouse-operator |
-| networking-system | 5 | kgateway (app + CRDs), agentgateway (app + CRDs), externaldns |
-| monitoring-system | 13 | victoria-metrics (operator + cluster + app), victoria-logs (app + collector), victoria-traces, grafana, kube-state-metrics, node-exporter, prometheus-crds, blackbox-exporter, smartctl-exporter, opentelemetry-collector, silence-operator, headlamp |
-| gitops-system | 3 | flux-operator, flux-instance, tuppr (system-upgrade-controller) |
-| others | 7 | toolhive (app + CRDs), woodpecker, netbox |
+| Namespace         | Count | Example Charts                                                                                                                                                                                                                                        |
+| ----------------- | ----- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| kube-system       | 10    | cilium, coredns, spegel, frr-k8s, descheduler, reloader, metrics-server, k8tz, gateway-api-crds, intel-device-plugins (operator + GPU)                                                                                                                |
+| security-system   | 4     | authentik, cert-manager, external-secrets, onepassword-connect                                                                                                                                                                                        |
+| storage-system    | 6     | rook-ceph (app + cluster), volsync, snapshot-controller, openebs-localpv, csi-driver-nfs                                                                                                                                                              |
+| database-system   | 4     | cloudnative-pg, plugin-barman-cloud, dragonfly-operator, clickhouse-operator                                                                                                                                                                          |
+| networking-system | 5     | kgateway (app + CRDs), agentgateway (app + CRDs), externaldns                                                                                                                                                                                         |
+| monitoring-system | 13    | victoria-metrics (operator + cluster + app), victoria-logs (app + collector), victoria-traces, grafana, kube-state-metrics, node-exporter, prometheus-crds, blackbox-exporter, smartctl-exporter, opentelemetry-collector, silence-operator, headlamp |
+| gitops-system     | 3     | flux-operator, flux-instance, tuppr (system-upgrade-controller)                                                                                                                                                                                       |
+| others            | 7     | toolhive (app + CRDs), woodpecker, netbox                                                                                                                                                                                                             |
 
 The `OCIRepository` fetches only the chart layer via `layerSelector` with `operation: copy`, which extracts the Helm chart tarball from the OCI manifest without pulling unrelated layers.
 
@@ -250,18 +250,18 @@ spec:
     namespace: gitops-system
 ```
 
-This cross-namespace reference is used by 44 HelmReleases across 9 namespaces:
+This cross-namespace reference is used by 41 HelmReleases across 9 namespaces:
 
-| Namespace | Count | Example Apps |
-|---|---|---|
-| media-apps | 10 | jellyfin, kavita, navidrome, qbittorrent, immich, audiomuse, calibre-web, moviepilot, metube, qbittorrent-ui |
-| selfhosted-apps | 11 | miniflux, rsshub, searxng, sillytavern, stirling-pdf, bambuddy, convertx, dispatcharr, karakeep, homepage, fast-note-sync |
-| smarthome-apps | 7 | home-assistant (app + sgcc), frigate, zigbee2mqtt, mosquitto, scrypted, code-server |
-| servitor-apps | 3 | llama, hermes-agent, devbox |
-| gaming-apps | 2 | crafty-controller, foundryvtt |
-| monitoring-system | 3 | langfuse (app + worker), heartbeats |
-| selfhosted-apps (multi-pod) | 3 | honcho (app + worker), open-notebook (app + database), firecrawl (app + database) |
-| networking-system | 1 | agentgateway MCP config |
+| Namespace                   | Count | Example Apps                                                                                                    |
+| --------------------------- | ----- | --------------------------------------------------------------------------------------------------------------- |
+| media-apps                  | 8     | jellyfin, kavita, navidrome, qbittorrent, immich, moviepilot, metube, qbittorrent-ui                            |
+| selfhosted-apps             | 10    | miniflux, rsshub, searxng, sillytavern, stirling-pdf, bambuddy, dispatcharr, karakeep, homepage, fast-note-sync |
+| smarthome-apps              | 7     | home-assistant (app + sgcc), frigate, zigbee2mqtt, mosquitto, scrypted, code-server                             |
+| servitor-apps               | 3     | llama, hermes-agent, buzz                                                                                       |
+| gaming-apps                 | 2     | crafty-controller, foundryvtt                                                                                   |
+| monitoring-system           | 3     | langfuse (app + worker), heartbeats                                                                             |
+| selfhosted-apps (multi-pod) | 3     | honcho (app + worker), open-notebook (app + database), firecrawl (app + database)                               |
+| networking-system           | 1     | agentgateway MCP config                                                                                         |
 
 The `flux-repositories` Kustomization is reconciled before `cluster-apps` (via `dependsOn`), ensuring the `app-template` `OCIRepository` is always available before any application HelmRelease references it.
 
@@ -296,12 +296,12 @@ The `name: _` is a Kustomize placeholder — postBuild substitution in each name
 
 The most heavily used component. It provisions a complete backup-and-recovery pipeline for stateful applications:
 
-| Resource | Purpose |
-|---|---|
-| `PersistentVolumeClaim` | Creates the application's data PVC with the correct StorageClass and access mode |
-| `ExternalSecret` | Pulls S3 credentials (Restic password, access keys) from 1Password into a Kubernetes Secret |
-| `ReplicationSource` | Configures source-side snapshot and replication to S3 (schedule, retention, pruning) |
-| `ReplicationDestination` | Configures destination-side restore from S3 for disaster recovery scenarios |
+| Resource                 | Purpose                                                                                     |
+| ------------------------ | ------------------------------------------------------------------------------------------- |
+| `PersistentVolumeClaim`  | Creates the application's data PVC with the correct StorageClass and access mode            |
+| `ExternalSecret`         | Pulls S3 credentials (Restic password, access keys) from 1Password into a Kubernetes Secret |
+| `ReplicationSource`      | Configures source-side snapshot and replication to S3 (schedule, retention, pruning)        |
+| `ReplicationDestination` | Configures destination-side restore from S3 for disaster recovery scenarios                 |
 
 Applications that need persistent data backed up to S3 include this component. The PVC template is parameterized through `postBuild` substitution with the `APP` variable.
 
@@ -331,9 +331,9 @@ The `ExternalSecret` references the 1Password item containing the database conne
 
 Injects Dragonfly database resources for applications using Dragonfly (a Redis-compatible drop-in):
 
-| Resource | Purpose |
-|---|---|
-| `Dragonfly` | Declares a Dragonfly instance with the application's name |
+| Resource     | Purpose                                                      |
+| ------------ | ------------------------------------------------------------ |
+| `Dragonfly`  | Declares a Dragonfly instance with the application's name    |
 | `PodMonitor` | Configures Prometheus metrics scraping for the Dragonfly pod |
 
 Applications with caching or session storage requirements include this component.
@@ -350,9 +350,9 @@ Applications frequently stack multiple components. For example, `moviepilot` (`k
 
 ```yaml
 components:
-  - ../../../../components/cnpg        # PostgreSQL database
-  - ../../../../components/dragonfly   # Redis cache
-  - ../../../../components/volsync     # PVC backup to S3
+  - ../../../../components/cnpg # PostgreSQL database
+  - ../../../../components/dragonfly # Redis cache
+  - ../../../../components/volsync # PVC backup to S3
 ```
 
 The most complex stacks combine four components: `netbox` uses `cnpg`, `dragonfly`, `volsync`, and `authentik`, while `langfuse` uses `cnpg`, `dragonfly`, `ceph-bucket`, and `authentik`.
@@ -361,21 +361,21 @@ The most complex stacks combine four components: `netbox` uses `cnpg`, `dragonfl
 
 The cluster uses 13 namespaces, ordered by dependency from foundational infrastructure to end-user applications:
 
-| # | Namespace | Purpose | Key Resources |
-|---|---|---|---|
-| 1 | `kube-system` | Cluster networking and node services | Cilium CNI, CoreDNS, Spegel mirror, FRR-K8s BGP, Intel GPU plugins, Reloader, Descheduler, k8tz, Gateway API CRDs, Metrics Server, Runtime Classes |
-| 2 | `security-system` | Identity, certificates, secrets | Authentik SSO, cert-manager, External Secrets Operator, 1Password Connect |
-| 3 | `storage-system` | Persistent storage and backups | Rook-Ceph (block + object), OpenEBS LocalPV, CSI NFS driver, VolSync, Snapshot Controller |
-| 4 | `database-system` | Database operators | CloudNativePG, Dragonfly Operator, ClickHouse Operator |
-| 5 | `networking-system` | Ingress, DNS, API gateway | kgateway (Envoy Gateway), Agent Gateway (AI agent routing), ExternalDNS |
-| 6 | `monitoring-system` | Observability | Victoria Metrics (operator + cluster), Victoria Logs, Victoria Traces, Grafana, Prometheus CRDs, kube-state-metrics, node-exporter, blackbox-exporter, Smartctl exporter, OTel Collector, Silence Operator, Langfuse, Heartbeats, Headlamp |
-| 7 | `servitor-apps` | AI and development tooling | llama.cpp, Hermes Agent, Devbox, Toolhive, MCP servers |
-| 8 | `smarthome-apps` | Home automation | Home Assistant, Frigate NVR, Zigbee2MQTT, Mosquitto MQTT, Scrypted, code-server |
-| 9 | `media-apps` | Media serving and management | Jellyfin, Kavita, Navidrome, qBittorrent, Immich, Calibre-Web, Audiomuse, MoviePilot, MeTube |
-| 10 | `selfhosted-apps` | Self-hosted web services | Miniflux, RSSHub, SearXNG, NetBox, Stirling PDF, SillyTavern, Karakeep, Homepage, Hindsight, Dispatcharr, Honcho, ConvertX, BambuBuddy, Fast Note Sync, Open Notebook, Firecrawl |
-| 11 | `gaming-apps` | Game servers | Crafty Controller (Minecraft), Foundry VTT |
-| 12 | `worker-apps` | CI/CD and automation | Woodpecker CI |
-| 13 | `gitops-system` | Flux itself | Flux Operator, Flux Instance, System Upgrade Controller |
+| #   | Namespace           | Purpose                              | Key Resources                                                                                                                                                                                                                              |
+| --- | ------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| 1   | `kube-system`       | Cluster networking and node services | Cilium CNI, CoreDNS, Spegel mirror, FRR-K8s BGP, Intel GPU plugins, Reloader, Descheduler, k8tz, Gateway API CRDs, Metrics Server, Runtime Classes                                                                                         |
+| 2   | `security-system`   | Identity, certificates, secrets      | Authentik SSO, cert-manager, External Secrets Operator, 1Password Connect                                                                                                                                                                  |
+| 3   | `storage-system`    | Persistent storage and backups       | Rook-Ceph (block + object), OpenEBS LocalPV, CSI NFS driver, VolSync, Snapshot Controller                                                                                                                                                  |
+| 4   | `database-system`   | Database operators                   | CloudNativePG, Dragonfly Operator, ClickHouse Operator                                                                                                                                                                                     |
+| 5   | `networking-system` | Ingress, DNS, API gateway            | kgateway (Envoy Gateway), Agent Gateway (AI agent routing), ExternalDNS                                                                                                                                                                    |
+| 6   | `monitoring-system` | Observability                        | Victoria Metrics (operator + cluster), Victoria Logs, Victoria Traces, Grafana, Prometheus CRDs, kube-state-metrics, node-exporter, blackbox-exporter, Smartctl exporter, OTel Collector, Silence Operator, Langfuse, Heartbeats, Headlamp |
+| 7   | `servitor-apps`     | AI and development tooling           | llama.cpp, Hermes Agent, Buzz, Toolhive, MCP servers                                                                                                                                                                                       |
+| 8   | `smarthome-apps`    | Home automation                      | Home Assistant, Frigate NVR, Zigbee2MQTT, Mosquitto MQTT, Scrypted, code-server                                                                                                                                                            |
+| 7   | `media-apps`        | Media serving and management         | Jellyfin, Kavita, Navidrome, qBittorrent, Immich, MoviePilot, MeTube                                                                                                                                                                       |
+| 8   | `selfhosted-apps`   | Self-hosted web services             | Miniflux, RSSHub, SearXNG, NetBox, Stirling PDF, SillyTavern, Karakeep, Homepage, Hindsight, Dispatcharr, BambuBuddy, Fast Note Sync, Open Notebook, Firecrawl                                                                             |
+| 11  | `gaming-apps`       | Game servers                         | Crafty Controller (Minecraft), Foundry VTT                                                                                                                                                                                                 |
+| 12  | `worker-apps`       | CI/CD and automation                 | Woodpecker CI                                                                                                                                                                                                                              |
+| 13  | `gitops-system`     | Flux itself                          | Flux Operator, Flux Instance, System Upgrade Controller                                                                                                                                                                                    |
 
 ### Dependency Order
 
@@ -387,8 +387,8 @@ The namespace numbering reflects the reconciliation dependency chain:
 4. **database-system** runs the operators that create databases for applications.
 5. **networking-system** configures ingress routes and DNS records for externally accessible services.
 6. **monitoring-system** scrapes metrics and collects logs from all other namespaces.
-7-12. **Application namespaces** depend on layers 1-6 being operational.
-13. **gitops-system** runs Flux itself — bootstrapped externally, then self-managed.
+   7-12. **Application namespaces** depend on layers 1-6 being operational.
+7. **gitops-system** runs Flux itself — bootstrapped externally, then self-managed.
 
 ## Bootstrap Chain
 
@@ -412,16 +412,16 @@ Flux cannot install itself. The bootstrap chain uses helmfile for the initial pr
 
 ### Step Details
 
-| Step | Chart | Values Source | Purpose |
-|---|---|---|---|
-| 1. `prometheus-crds` | `oci://ghcr.io/prometheus-community/charts/prometheus-operator-crds` | _(none)_ | Installs Prometheus Operator CRDs (ServiceMonitor, PodMonitor, etc.) before Victoria Metrics operator |
-| 2. `cilium` | `oci://quay.io/cilium/charts/cilium` | `values.yaml.gotmpl` | eBPF-based CNI with Gateway API, BGP, and network policy support |
-| 3. `coredns` | `oci://ghcr.io/coredns/charts/coredns` | `values.yaml.gotmpl` | Cluster DNS — can only start after Cilium provides pod networking |
-| 4. `spegel` | `oci://ghcr.io/spegel-org/helm-charts/spegel` | `values.yaml.gotmpl` | Stateless OCI registry mirror using P2P image distribution |
-| 5. `gateway-api-crds` | `oci://ghcr.io/wiremind/wiremind-helm-charts/gateway-api-crds` | _(none)_ | Gateway API CRDs (GatewayClass, Gateway, HTTPRoute, etc.) |
-| 6. `external-secrets` | `oci://ghcr.io/external-secrets/charts/external-secrets` | `values.yaml.gotmpl` | Kubernetes External Secrets Operator — syncs secrets from 1Password |
-| 7. `flux-operator` | `oci://ghcr.io/controlplaneio-fluxcd/charts/flux-operator` | `values.yaml.gotmpl` | Manages Flux Instance lifecycle |
-| 8. `flux-instance` | `oci://ghcr.io/controlplaneio-fluxcd/charts/flux-instance` | `values.yaml.gotmpl` | Creates the GitRepository and Kustomization resources that begin GitOps reconciliation |
+| Step                  | Chart                                                                | Values Source        | Purpose                                                                                               |
+| --------------------- | -------------------------------------------------------------------- | -------------------- | ----------------------------------------------------------------------------------------------------- |
+| 1. `prometheus-crds`  | `oci://ghcr.io/prometheus-community/charts/prometheus-operator-crds` | _(none)_             | Installs Prometheus Operator CRDs (ServiceMonitor, PodMonitor, etc.) before Victoria Metrics operator |
+| 2. `cilium`           | `oci://quay.io/cilium/charts/cilium`                                 | `values.yaml.gotmpl` | eBPF-based CNI with Gateway API, BGP, and network policy support                                      |
+| 3. `coredns`          | `oci://ghcr.io/coredns/charts/coredns`                               | `values.yaml.gotmpl` | Cluster DNS — can only start after Cilium provides pod networking                                     |
+| 4. `spegel`           | `oci://ghcr.io/spegel-org/helm-charts/spegel`                        | `values.yaml.gotmpl` | Stateless OCI registry mirror using P2P image distribution                                            |
+| 5. `gateway-api-crds` | `oci://ghcr.io/wiremind/wiremind-helm-charts/gateway-api-crds`       | _(none)_             | Gateway API CRDs (GatewayClass, Gateway, HTTPRoute, etc.)                                             |
+| 6. `external-secrets` | `oci://ghcr.io/external-secrets/charts/external-secrets`             | `values.yaml.gotmpl` | Kubernetes External Secrets Operator — syncs secrets from 1Password                                   |
+| 7. `flux-operator`    | `oci://ghcr.io/controlplaneio-fluxcd/charts/flux-operator`           | `values.yaml.gotmpl` | Manages Flux Instance lifecycle                                                                       |
+| 8. `flux-instance`    | `oci://ghcr.io/controlplaneio-fluxcd/charts/flux-instance`           | `values.yaml.gotmpl` | Creates the GitRepository and Kustomization resources that begin GitOps reconciliation                |
 
 ### Values Templating
 
