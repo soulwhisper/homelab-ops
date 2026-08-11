@@ -52,7 +52,7 @@ spec:
 
           chrome:
             image:
-              repository: gcr.io/zenika-hub/alpine-chrome
+              repository: zenika-hub/alpine-chrome
               tag: 124
             command:
               - chromium-browser
