@@ -26,7 +26,7 @@ spec:
           app:
             image:
               repository: ghcr.io/maribelhearm/sgcc-home-assistant-bridge
-              tag: v0.1.8
+              tag: v0.1.9
             envFrom: &envFrom
               - configMapRef:
                   name: *name
