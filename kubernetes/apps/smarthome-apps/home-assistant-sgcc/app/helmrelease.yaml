@@ -40,7 +40,7 @@ spec:
           browser:
             image:
               repository: ghcr.io/maribelhearm/sgcc-home-assistant-bridge-browser
-              tag: v0.1.8
+              tag: v0.1.9
             envFrom: *envFrom
             resources: *resources
 
