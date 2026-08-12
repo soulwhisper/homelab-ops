@@ -29,7 +29,10 @@ spec:
               repository: ghcr.io/navidrome/navidrome
               tag: 0.63.2
             env:
+              ND_BASEURL: https://music.noirprime.com
               ND_ENABLEINSIGHTSCOLLECTOR: "false"
+              ND_ENABLESHARING: "false"
+              ND_ENABLESTARRATING: "false"
             resources:
               requests:
                 cpu: 40m
