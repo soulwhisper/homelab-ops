@@ -53,12 +53,12 @@ nav:
       - Storage: infrastructure/storage.md
       - Hardware: infrastructure/hardware.md
   - Applications:
-      - Catalog: apps/catalog.md
-      - Authentication: deployment/authentication.md
+      - Catalog: application/catalog.md
+      - Authentication: application/authentication.md
+      - Monitoring: application/monitoring.md
+      - AI: application/ai.md
   - Operations:
       - Bootstrap: deployment/bootstrap.md
-      - Monitoring: infrastructure/monitoring.md
-      - AI Infrastructure: ai-infra.md
   - Decisions:
       - BGP: decisions/bgp.md
       - Public Exposure: decisions/public-exposure.md
