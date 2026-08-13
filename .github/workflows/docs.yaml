@@ -39,9 +39,9 @@ jobs:
       - name: Install uv
         uses: astral-sh/setup-uv@ae62891fec2bb8e7d6c99fc78c9fec3a63790f8d # v10.0.0
         with:
-          version-file: "pyproject.toml"
+          version: "latest-known"
       - name: Build Docs
-        run: uv run --frozen zensical build --clean
+        run: uvx zensical build --clean
       - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5
         with:
           path: site
