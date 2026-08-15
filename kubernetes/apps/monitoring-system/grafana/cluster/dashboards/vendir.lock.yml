@@ -38,13 +38,12 @@ directories:
     path: dragonfly
   path: _sources/database
 - contents:
-  - configDigest: 65cc3bc48689a98f106a016efe3d0e31242c5c4f870dd70b3927c75219b64552
+  - configDigest: e3dc91e28fe8b7818fbab13c20907d888f70a62425cb3a9634bfffc5a772282f
     git:
-      commitTitle: '[release-1.8] fix: update ratelimit image fallback tag in helm
-        helpers (#9552)'
-      sha: 94850d4323922cba7c67b5b5ad23de9c715f8048
+      commitTitle: bump ratelimit version (#9757)...
+      sha: 39763b1c07ec30a5526fe70434a2cfe4181de642
       tags:
-      - v1.8.3
+      - v1.9.0
     path: gateway
   - configDigest: 2c2d52a9a6ad49c01930aed359636ab4d036c5735a863717a84fcc67c6d96e27
     http: {}
