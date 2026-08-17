@@ -11,6 +11,9 @@ spec:
     name: app-template
     namespace: gitops-system
 
+  # homepage has built-in auth and oidc since v2
+  # ref:https://github.com/gethomepage/homepage/blob/dev/docs/installation/index.md
+
   values:
     defaultPodOptions:
       automountServiceAccountToken: true
