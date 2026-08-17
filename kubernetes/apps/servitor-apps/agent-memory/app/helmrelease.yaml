@@ -1,0 +1,189 @@
+---
+# yaml-language-server: $schema=https://soulwhisper.github.io/k8s-schemas/helm.toolkit.fluxcd.io/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &name agent-memory
+spec:
+  interval: 30m
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+    namespace: gitops-system
+
+  # : One-time admin bootstrap after first deploy (generates the user_key
+  #   clients present to the proxy as their API key):
+  #   kubectl -n servitor-apps exec deploy/agent-memory-core -- \
+  #     curl -sS -X POST -H "Content-Type: application/json" \
+  #       -H "x-tdai-service-id: default" \
+  #       http://localhost:8420/v3/internal/meta/user/init-admin \
+  #       -d '{"username":"admin","user_key":"sk-mem-<32 random alnum>"}'
+  #   Core stores it in the PVC; re-running returns 409 (already initialized).
+
+  values:
+    controllers:
+      # ── memory-core: kernel gateway (memory/skill extraction, auth) ───────
+      core:
+        annotations:
+          reloader.stakater.com/auto: "true"
+        containers:
+          app:
+            image:
+              repository: agentmemory/memory-core
+              tag: 1.0.1-beta.1
+            envFrom: &envFrom
+              - configMapRef:
+                  name: *name
+              - secretRef:
+                  name: *name
+            probes:
+              startup:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet: { path: /health, port: &core_port 8420 }
+                  periodSeconds: 10
+                  failureThreshold: 30
+              liveness: &core_probe
+                enabled: true
+                custom: true
+                spec:
+                  httpGet: { path: /health, port: *core_port }
+                  periodSeconds: 30
+                  failureThreshold: 5
+              readiness: *core_probe
+            resources:
+              requests:
+                cpu: 100m
+                memory: 512Mi
+              limits:
+                memory: 2Gi
+
+      # ── memory-hub: management panel + knowledge server ──────────────────
+      hub:
+        annotations:
+          reloader.stakater.com/auto: "true"
+        containers:
+          app:
+            image:
+              repository: agentmemory/memory-hub
+              tag: 1.0.1-beta.2
+            envFrom: *envFrom
+            probes:
+              startup:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet: { path: /health, port: &panel_port 8125 }
+                  periodSeconds: 10
+                  failureThreshold: 60
+              liveness: &hub_probe
+                enabled: true
+                custom: true
+                spec:
+                  httpGet: { path: /health, port: *panel_port }
+                  periodSeconds: 30
+                  failureThreshold: 5
+              readiness: *hub_probe
+            resources:
+              requests:
+                cpu: 100m
+                memory: 512Mi
+              limits:
+                memory: 2Gi
+
+      # ── memory-proxy: client-facing LLM proxy (auth + session + inject) ──
+      proxy:
+        annotations:
+          reloader.stakater.com/auto: "true"
+        pod:
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 10001 # app
+            runAsGroup: 10001
+            fsGroup: 10001
+            fsGroupChangePolicy: OnRootMismatch
+        containers:
+          app:
+            image:
+              repository: agentmemory/memory-proxy
+              tag: 1.0.1-beta.1
+            envFrom: *envFrom
+            probes:
+              startup:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet: { path: /health, port: &proxy_port 8096 }
+                  periodSeconds: 10
+                  failureThreshold: 30
+              liveness: &proxy_probe
+                enabled: true
+                custom: true
+                spec:
+                  httpGet: { path: /health, port: *proxy_port }
+                  periodSeconds: 30
+                  failureThreshold: 5
+              readiness: *proxy_probe
+            resources:
+              requests:
+                cpu: 100m
+                memory: 256Mi
+              limits:
+                memory: 2Gi
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities: { drop: ["ALL"] }
+
+    service:
+      proxy:
+        primary: true
+        controller: proxy
+        ports:
+          http:
+            port: *proxy_port
+      core:
+        controller: core
+        ports:
+          http:
+            port: *core_port
+      hub:
+        controller: hub
+        ports:
+          panel:
+            primary: true
+            port: *panel_port
+          knowledge:
+            port: 8424
+
+    persistence:
+      # volsync-backed claim (${APP}); core + hub share it via subPath
+      data:
+        existingClaim: *name
+        advancedMounts:
+          core:
+            app:
+              - path: /data/tdai-memory
+                subPath: memory-core
+          hub:
+            app:
+              - path: /data/knowledge
+                subPath: memory-hub
+      # proxy upstream/auth config (rendered from configmap.yaml)
+      config:
+        type: configMap
+        name: agent-memory-proxy
+        advancedMounts:
+          proxy:
+            app:
+              - path: /data/config.yaml
+                subPath: config.yaml
+                readOnly: true
+      # proxy session-state sqlite (PROXY_DB_PATH); disposable — loss only
+      # forces clients through the session-init form again
+      proxy-data:
+        type: emptyDir
+        advancedMounts:
+          proxy:
+            app:
+              - path: /data/tdai-memory-proxy

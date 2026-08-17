@@ -1,0 +1,105 @@
+---
+# General env for TencentDB Agent Memory (memory-core + memory-hub + memory-proxy)
+# Upstream: https://github.com/TencentCloud/TencentDB-Agent-Memory
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: &name agent-memory
+data:
+  # ── memory-core (gateway, env overrides yaml — see MemoryCore/src/gateway/config.ts)
+  TDAI_DEPLOY_MODE: standalone
+  TDAI_INSTANCE_ID: default
+  TDAI_GATEWAY_HOST: 0.0.0.0
+  TDAI_GATEWAY_PORT: "8420"
+  TDAI_DATA_DIR: /data/tdai-memory
+  TDAI_SKILL_ENABLED: "true"
+  # memory group LLM (embed/summarize/extract)
+  TDAI_LLM_BASE_URL: https://api.deepseek.com/v1
+  TDAI_LLM_MODEL: deepseek-chat
+  TDAI_LLM_MAX_TOKENS: "32000"
+  TDAI_LLM_TIMEOUT_MS: "300000"
+  # ── memory-hub (panel :8125 + knowledge :8424)
+  PANEL_PORT: "8125"
+  KNOWLEDGE_PORT: "8424"
+  KNOWLEDGE_PUBLIC_BASE_URL: http://agent-memory-hub.servitor-apps.svc.cluster.local:8424/v3
+  KNOWLEDGE_LLM_BINDING_SYNC: "0"
+  REMOTE_INSTANCE_ID: default
+  REMOTE_INSTANCE_NAME: default
+  REMOTE_INSTANCE_URL: http://agent-memory-core.servitor-apps.svc.cluster.local:8420
+  REMOTE_INSTANCE_PROXY_URL: http://agent-memory-proxy.servitor-apps.svc.cluster.local:8096
+  LLM_MODE: custom
+  LLM_PROTOCOL: openai
+  LLM_BASE_URL: https://api.deepseek.com/v1
+  LLM_MODEL: deepseek-chat
+  # ── memory-proxy (upstream LLM; apiKey comes from the secret via ${VAR} expansion)
+  PROXY_UPSTREAM_URL: https://api.deepseek.com/v1
+---
+# proxy config file — mounted at /data/config.yaml (container CMD: --config /data/config.yaml)
+# "${VAR}" string values are expanded from process.env at load time (MemoryProxy/src/config.ts).
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: agent-memory-proxy
+data:
+  config.yaml: |
+    server:
+      host: 0.0.0.0
+      port: 8096
+      forwardTimeoutMs: 600000
+
+    upstream:
+      url: "${PROXY_UPSTREAM_URL}"
+      apiKey: "${PROXY_UPSTREAM_API_KEY}"
+
+    log:
+      file: ""
+      level: info
+      backend: console
+
+    # tdai kernel (memory injection / recall); gateway Bearer gate is disabled
+    # (TDAI_GATEWAY_API_KEY unset) so the placeholder token is accepted.
+    tdai:
+      enabled: true
+      endpoint: "http://agent-memory-core.servitor-apps.svc.cluster.local:8420"
+      apiKey: "local"
+      serviceId: default
+      memory:
+        enabled: true
+        inject: true
+        writeL0: true
+        recallL1: true
+        injectL2L3: true
+
+    skill:
+      endpoint: "http://agent-memory-core.servitor-apps.svc.cluster.local:8420"
+      serviceToken: "local"
+
+    auth:
+      enabled: true
+      url: "http://agent-memory-core.servitor-apps.svc.cluster.local:8420"
+      timeoutMs: 5000
+
+    sessionInit:
+      enabled: true
+      maxRetries: 3
+      injectAgentContext: true
+      injectTaskContext: true
+      headerAutoSelect:
+        enabled: true
+        teamHeader: "x-team-id"
+        agentHeader: "x-agent-id"
+        taskHeader: "x-task-id"
+        onMismatch: "form"
+
+    costGuard:
+      enabled: false
+
+    injection:
+      enabled: true
+      injectors:
+        - skill
+        - knowledge
+        - tdai-memory
+
+    redis:
+      enabled: false
