@@ -11,6 +11,9 @@ spec:
     name: app-template
     namespace: gitops-system
 
+  # homepage has built-in auth and oidc since v2
+  # ref:https://github.com/gethomepage/homepage/blob/dev/docs/installation/index.md
+
   values:
     defaultPodOptions:
       automountServiceAccountToken: true
@@ -24,7 +27,7 @@ spec:
           app:
             image:
               repository: ghcr.io/gethomepage/homepage
-              tag: v1.13.2
+              tag: v2.0.0
             env:
               HOMEPAGE_ALLOWED_HOSTS: "home.noirprime.com"
             envFrom:
