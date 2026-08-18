@@ -12,12 +12,12 @@ directories:
     path: ceph-pools
   path: _sources/ceph
 - contents:
-  - configDigest: 44b6ae4bcd0fb3406646c564b89f6fd118659f2ffc19e3c2aa5ad5f79451df12
+  - configDigest: 9930a3ca841617c42df8e959ef66b13f75f13902972a79d7b2b03cbe1c002d40
     git:
-      commitTitle: 'ipam/service/allocator: fix IPv6 offset aliasing...'
-      sha: 2d3b6d513a781aea99cd87d5ee7947fd44cb147b
+      commitTitle: Prepare for release v1.20.1...
+      sha: 7d68cfb394f2960e10aa72e76d0d51e66c1b2ebc
       tags:
-      - v1.20.0-pre.4-39-g2d3b6d513a
+      - 1.20.1
     path: .
   path: _sources/cilium
 - contents:
