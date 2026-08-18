@@ -7,7 +7,7 @@ metadata:
 spec:
   groupRef:
     name: external
-  image: ghcr.io/firecrawl/firecrawl-mcp-server:latest@sha256:53730c3bb4fd40841b7c5a1bfba0efb3a38514b09d9f73cb2d04277b57f011df
+  image: ghcr.io/firecrawl/firecrawl-mcp-server:latest@sha256:3d08c40685b786d6e5277c945d774df3b23dd022e62b5f405b4f94a6a3b872c1
   env:
     - name: PORT
       value: "3000"
