@@ -9,7 +9,7 @@ spec:
     name: external
   toolConfigRef:
     name: *name
-  image: ghcr.io/github/github-mcp-server:v1.10.0
+  image: ghcr.io/github/github-mcp-server:v1.10.1
   args: ["http"]
   env:
     - name: GITHUB_READ_ONLY
