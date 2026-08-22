@@ -24,7 +24,7 @@ spec:
           app:
             image:
               repository: ghcr.io/firecrawl/firecrawl
-              tag: 2.11.226@sha256:ea2bd6b71d7cd13b6637bcf4578b6a46b1aca0c8e17fac0f7f9a5f1b8bb58aa3
+              tag: 2.11.226
             command: ["node"]
             args:
               - --max-old-space-size=512
@@ -105,7 +105,7 @@ spec:
           app:
             image:
               repository: ghcr.io/firecrawl/firecrawl
-              tag: 2.11.226@sha256:ea2bd6b71d7cd13b6637bcf4578b6a46b1aca0c8e17fac0f7f9a5f1b8bb58aa3
+              tag: 2.11.226
             command: ["node"]
             args:
               - --max-old-space-size=1024
@@ -146,7 +146,7 @@ spec:
           app:
             image:
               repository: ghcr.io/firecrawl/playwright-service
-              tag: latest@sha256:468009bae00911d40d7120d58489a1d529362c22c45585cb9076094fe61b0025
+              tag: latest
             env:
               PORT: "3000"
               ALLOW_LOCAL_WEBHOOKS: "false"

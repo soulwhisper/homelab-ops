@@ -2,10 +2,6 @@
   $schema: "https://docs.renovatebot.com/renovate-schema.json",
   packageRules: [
     {
-      matchDatasources: ["docker"],
-      pinDigests: false,
-    },
-    {
       description: "Pin Postgres version to 18",
       matchDatasources: ["docker"],
       matchPackagePatterns: [

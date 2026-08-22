@@ -2,12 +2,9 @@
   $schema: "https://docs.renovatebot.com/renovate-schema.json",
   packageRules: [
     {
-      description: "Auto merge digests",
-      matchUpdateTypes: ["digest"],
-      automerge: true,
-      automergeType: "pr",
-      platformAutomerge: true,
-      ignoreTests: false,
+      description: "Disable digest pinning for all Docker references",
+      matchDatasources: ["docker"],
+      pinDigests: false,
     },
     {
       description: "Auto-merge patch updates after CI",
@@ -18,6 +15,15 @@
       ignoreTests: false,
     },
     {
+      description: "Auto-merge GitHub Actions updates after CI",
+      matchManagers: ["github-actions"],
+      automerge: true,
+      automergeType: "pr",
+      platformAutomerge: true,
+      matchUpdateTypes: ["minor", "patch"],
+      ignoreTests: false,
+    },
+    {
       description: "User apps: auto-merge minor updates after CI",
       matchFileNames: [
         "kubernetes/apps/gaming-apps/**",
@@ -25,6 +31,7 @@
         "kubernetes/apps/selfhosted-apps/**",
         "kubernetes/apps/servitor-apps/**",
         "kubernetes/apps/smarthome-apps/**",
+        "kubernetes/apps/monitoring-system/langfuse/**",
       ],
       matchUpdateTypes: ["minor"],
       automerge: true,
@@ -53,15 +60,6 @@
       matchUpdateTypes: ["major"],
       automerge: false,
       addLabels: ["review/required"],
-    },
-    {
-      description: "Auto-merge GitHub Actions updates after CI",
-      matchManagers: ["github-actions"],
-      automerge: true,
-      automergeType: "pr",
-      platformAutomerge: true,
-      matchUpdateTypes: ["minor", "patch", "digest"],
-      ignoreTests: false,
     },
   ],
 }

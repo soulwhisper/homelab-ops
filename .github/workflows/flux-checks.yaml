@@ -39,7 +39,7 @@ jobs:
       FLATE_SOURCE_RETRY_MAX_WAIT: 30s
     steps:
       - name: Checkout Pull Request Branch
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
           persist-credentials: false
@@ -71,7 +71,7 @@ jobs:
 
       - if: ${{ steps.diff.outputs.diff != '' }}
         name: Generate Token
-        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
+        uses: actions/create-github-app-token@v3
         id: app-token
         with:
           client-id: ${{ secrets.APP_CLIENT_ID }}
@@ -79,7 +79,7 @@ jobs:
 
       - if: ${{ steps.diff.outputs.diff != '' }}
         name: Add Comment
-        uses: marocchino/sticky-pull-request-comment@5770ad5eb8f42dd2c4f34da00c94c5381e49af88 # v3.0.5
+        uses: marocchino/sticky-pull-request-comment@v3
         with:
           GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
           header: ${{ github.event.pull_request.number }}/kubernetes
@@ -97,7 +97,7 @@ jobs:
       CHANGED_FILES: ${{ needs.filter.outputs.changed-files }}
     steps:
       - name: Checkout Pull Request Branch
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        uses: actions/checkout@v7
         with:
           persist-credentials: false
 
