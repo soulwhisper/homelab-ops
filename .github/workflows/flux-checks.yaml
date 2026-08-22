@@ -25,7 +25,7 @@ jobs:
     steps:
       - name: Get Changed Files
         id: changed-files
-        uses: bjw-s-labs/action-changed-files@a9a36fb08ce06db9b02fbd8026cc2c0945eb9841 # v0.6.0
+        uses: bjw-s-labs/action-changed-files@v0.6.0
         with:
           patterns: kubernetes/**/*
 
@@ -45,7 +45,7 @@ jobs:
           persist-credentials: false
 
       - name: Install flate
-        uses: home-operations/flate/action@af6f188c520a6a9c55b4b863bb9c77227e5fd37f # v0.5.1
+        uses: home-operations/flate/action@v0.5.1
         with:
           cache: true
           token: ""
