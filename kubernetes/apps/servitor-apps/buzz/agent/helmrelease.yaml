@@ -29,7 +29,7 @@ spec:
           app:
             image:
               repository: ghcr.io/soulwhisper/buzz-agent-omp
-              tag: 2026.08.22
+              tag: 2026.08.24
             env:
               BUZZ_RELAY_URL: ws://buzz.servitor-apps.svc.cluster.local:3000
               BUZZ_ACP_RESPOND_TO: owner-only
