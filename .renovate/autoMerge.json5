@@ -31,7 +31,6 @@
         "kubernetes/apps/selfhosted-apps/**",
         "kubernetes/apps/servitor-apps/**",
         "kubernetes/apps/smarthome-apps/**",
-        "kubernetes/apps/monitoring-system/langfuse/**",
       ],
       matchUpdateTypes: ["minor"],
       automerge: true,
