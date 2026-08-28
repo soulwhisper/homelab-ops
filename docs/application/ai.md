@@ -20,8 +20,7 @@ flowchart TB
     end
 
     subgraph LLM["LLM Providers"]
-        DS-Complex["DeepSeek V4 Pro<br/>(external API)"]
-        Studio["MacStudio oMLX<br/>Qwen3.5-4B (MLX 4bit)<br/>10.10.0.210"]
+        Studio["MacStudio oMLX<br/>Qwen3.8-27B + Qwen3.5-4B<br/>(MLX 4bit, 10.10.0.210)"]
     end
 
     subgraph MCP["MCP Gateway (ToolHive 0.33.0)"]
@@ -36,7 +35,6 @@ flowchart TB
 
     Clients --> AG-LLM
     Clients --> AG-MCP
-    AG-LLM --> DS-Complex
     AG-LLM --> Studio
     AG-MCP --> VMCP-RO
     AG-MCP --> VMCP-RW
@@ -52,12 +50,12 @@ The agent gateway is the single entry point for all AI traffic. Every AI app rou
 
 | Route Header                             | Backend               | Model                              | Provider            |
 | ---------------------------------------- | --------------------- | ---------------------------------- | ------------------- |
-| `x-model: complex` or `x-priority: high` | `llm-backend-complex` | `deepseek-v4-pro`                  | External API        |
+| `x-model: complex` or `x-priority: high` | `llm-backend-complex` | `qwen3.8-27b`                      | **Local** MacStudio        |
 | `x-model: fast`                          | `llm-backend-fast`    | `qwen3.5-4b`                       | **Local** MacStudio        |
 | `x-model: memory`                        | `llm-backend-memory`  | `qwen3.5-4b`                       | **Local** MacStudio |
 | `x-model: vision`                        | `llm-backend-vision`  | `qwen3.5-4b` (vision-capable)      | **Local** MacStudio |
 
-All backends speak OpenAI-compatible API. Auth via ExternalSecret-managed API keys. The `fast`/`memory`/`vision` lanes run on the MacStudio inference host (`studio.homelab.internal`, 10.10.0.210, oMLX OpenAI-compatible endpoint). Qwen3.5-4B is a unified vision-language model, so one endpoint serves all three lanes. No cloud fallback is configured for local lanes — the studio is a deliberate SPOF.
+All backends speak OpenAI-compatible API. Auth via ExternalSecret-managed API keys. Every lane now runs on the MacStudio inference host (`studio.homelab.internal`, 10.10.0.210, oMLX OpenAI-compatible endpoint) — no external LLM API dependency remains. `complex`/`x-priority: high` uses Qwen3.8-27B; `fast`/`memory`/`vision` use Qwen3.5-4B (a unified vision-language model, one endpoint serves all three lanes). No cloud fallback is configured — the studio is a deliberate SPOF.
 
 ### Intranet exposure
 
@@ -68,6 +66,18 @@ The gateway API surface is exposed to the intranet via `kgateway-internal` (10.1
 - `/ui` — agentgateway dashboard
 
 TLS terminates at kgateway (cert-manager `noirprime-com-tls`); external-dns auto-creates the AdGuardHome record. Machine clients authenticate with agentgateway API keys — no SSO extAuth on API paths. Reachable from trusted VLANs (10/100/200); IoT VLAN 210 is ACL-blocked from RFC1918.
+
+### App → model lane
+
+| App                  | Lane              | Model              | Notes                                                        |
+| -------------------- | ----------------- | ------------------ | ------------------------------------------------------------ |
+| hermes-agent         | `complex`         | Qwen3.8-27B        | Agentic reasoning / KB QA / automation; set via 1Password (out-of-band) |
+| hindsight            | `memory`          | Qwen3.5-4B         | Extraction-dominant (single-model constraint); embeddings + reranker direct to studio |
+| firecrawl            | `fast`            | Qwen3.5-4B         | Batch page extraction/summarization                          |
+| karakeep             | `fast` + `vision` | Qwen3.5-4B         | Text + image tagging                                         |
+| home-assistant-sgcc  | `vision`          | Qwen3.5-4B         | Meter/bill photo OCR                                         |
+| SillyTavern          | UI-configured     | Gemma4-31B lane    | Creative/RP; no repo-level config                            |
+| open-notebook        | UI-configured     | suggest `complex`  | Research synthesis; no repo-level config                     |
 
 ### MCP Backend
 
@@ -235,8 +245,8 @@ All local lanes (`fast`/`memory`/`vision`) run on the MacStudio inference host. 
 ## Model Routing Summary
 
 ```
-x-priority: high  ──────────► DeepSeek V4 Pro              (external, paid API)
-x-model: complex  ──────────► DeepSeek V4 Pro              (external, paid API)
+x-priority: high  ──────────► Qwen3.8-27B                  (local, MacStudio)
+x-model: complex  ──────────► Qwen3.8-27B                  (local, MacStudio)
 x-model: fast     ──────────► Qwen3.5-4B                   (local, MacStudio)
 x-model: memory   ──────────► Qwen3.5-4B                   (local, MacStudio)
 x-model: vision   ──────────► Qwen3.5-4B (vision)         (local, MacStudio)

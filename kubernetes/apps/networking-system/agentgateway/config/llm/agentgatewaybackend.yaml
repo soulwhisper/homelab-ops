@@ -8,15 +8,9 @@ spec:
   ai:
     provider:
       openai:
-        model: deepseek-v4-pro
-      host: &host api.deepseek.com
-      port: 443
-  policies:
-    auth:
-      secretRef:
-        name: deepseek-credentials
-    tls:
-      sni: *host
+        model: "qwen3.8-27b"
+      host: 10.10.0.210
+      port: 8080
 ---
 # MacStudio inference host (studio.homelab.internal, oMLX OpenAI-compatible).
 # Literal IP: cluster DNS resolution of homelab.internal is not guaranteed.

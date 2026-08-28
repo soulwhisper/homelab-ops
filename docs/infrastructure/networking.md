@@ -221,7 +221,7 @@ Both gateways use the `kgateway` GatewayClass with TLS termination via cert-mana
 | ------ | ------------- |
 | `/mcp` | `mcp-backend` |
 
-API key authentication is enforced via `AgentgatewayPolicy` in strict mode for all LLM routes. The gateway is used by Audiomuse and other AI-capable workloads for cost-aware model selection.
+API key authentication is enforced via `AgentgatewayPolicy` in strict mode for all LLM and MCP routes. The gateway is used by all AI-capable workloads as the single choke point for auth, routing, guardrails, and observability.
 
 ### DNS Architecture
 
