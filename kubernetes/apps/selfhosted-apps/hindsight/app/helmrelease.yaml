@@ -29,13 +29,26 @@ spec:
         containers:
           app:
             image:
-              repository: ghcr.io/soulwhisper/hindsight
-              tag: 0.9.2
+              repository: ghcr.io/vectorize-io/hindsight
+              tag: 0.9.2-slim
             env:
               HINDSIGHT_API_OTEL_TRACES_ENABLED: "true"
               HINDSIGHT_API_OTEL_EXPORTER_OTLP_ENDPOINT: "http://opentelemetry-collector.monitoring-system.svc.cluster.local:4318"
               HINDSIGHT_API_VECTOR_EXTENSION: "vchord"
               HINDSIGHT_API_TEXT_SEARCH_EXTENSION: "pgroonga"
+              # Embeddings run on the MacStudio (Qwen3-Embedding-4B via oMLX,
+              # OpenAI-compatible /v1/embeddings); no in-process local-ml.
+              HINDSIGHT_API_EMBEDDINGS_PROVIDER: "openai"
+              HINDSIGHT_API_EMBEDDINGS_OPENAI_BASE_URL: "http://10.10.0.210:8080/v1"
+              HINDSIGHT_API_EMBEDDINGS_OPENAI_MODEL: "qwen3-embedding-4b"
+              # oMLX has no auth; the provider requires a non-empty key.
+              HINDSIGHT_API_EMBEDDINGS_OPENAI_API_KEY: "unused-local"
+              # Rerank via Qwen3-Reranker-0.6B on the MacStudio (oMLX serves a
+              # Cohere-compatible /rerank endpoint).
+              HINDSIGHT_API_RERANKER_PROVIDER: "cohere"
+              HINDSIGHT_API_RERANKER_COHERE_BASE_URL: "http://10.10.0.210:8080/v1/rerank"
+              HINDSIGHT_API_RERANKER_COHERE_MODEL: "qwen3-reranker-0.6b"
+              HINDSIGHT_API_RERANKER_COHERE_API_KEY: "unused-local"
               HINDSIGHT_API_DATABASE_URL:
                 valueFrom:
                   secretKeyRef:
@@ -46,11 +59,11 @@ spec:
                   name: *name
             resources:
               requests:
-                cpu: "1"
-                memory: 3.5Gi
+                cpu: "200m"
+                memory: 512Mi
               limits:
-                cpu: "4" # OMP_NUM_THREADS=4
-                memory: 6Gi
+                cpu: "2"
+                memory: 2Gi
             securityContext:
               allowPrivilegeEscalation: false
               capabilities: { drop: ["ALL"] }
