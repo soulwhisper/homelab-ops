@@ -39,14 +39,14 @@ spec:
               # Embeddings run on the MacStudio (Qwen3-Embedding-4B via oMLX,
               # OpenAI-compatible /v1/embeddings); no in-process local-ml.
               HINDSIGHT_API_EMBEDDINGS_PROVIDER: "openai"
-              HINDSIGHT_API_EMBEDDINGS_OPENAI_BASE_URL: "http://10.10.0.210:8080/v1"
+              HINDSIGHT_API_EMBEDDINGS_OPENAI_BASE_URL: "http://studio.homelab.internal:8080/v1"
               HINDSIGHT_API_EMBEDDINGS_OPENAI_MODEL: "qwen3-embedding-4b"
               # oMLX has no auth; the provider requires a non-empty key.
               HINDSIGHT_API_EMBEDDINGS_OPENAI_API_KEY: "unused-local"
               # Rerank via Qwen3-Reranker-0.6B on the MacStudio (oMLX serves a
               # Cohere-compatible /rerank endpoint).
               HINDSIGHT_API_RERANKER_PROVIDER: "cohere"
-              HINDSIGHT_API_RERANKER_COHERE_BASE_URL: "http://10.10.0.210:8080/v1/rerank"
+              HINDSIGHT_API_RERANKER_COHERE_BASE_URL: "http://studio.homelab.internal:8080/v1/rerank"
               HINDSIGHT_API_RERANKER_COHERE_MODEL: "qwen3-reranker-0.6b"
               HINDSIGHT_API_RERANKER_COHERE_API_KEY: "unused-local"
               HINDSIGHT_API_DATABASE_URL:
