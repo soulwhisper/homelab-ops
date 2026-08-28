@@ -22,8 +22,8 @@ spec:
           port: 15000
 ---
 # Exposes the agentgateway API surface (/chat, /mcp) to the intranet via
-# kgateway-internal (10.10.0.131): TLS termination + external-dns automation.
-# Specific path matches win over the dashboard catch-all on the same hostname.
+# kgateway-internal (10.10.0.131) on its own subdomain: TLS termination via
+# the wildcard cert + external-dns automation. Dashboard stays on ai.noirprime.com.
 # Auth stays at agentgateway (strict API key) — no SSO extAuth on API paths.
 # yaml-language-server: $schema=https://soulwhisper.github.io/k8s-schemas/gateway.networking.k8s.io/httproute_v1.json
 apiVersion: gateway.networking.k8s.io/v1
@@ -31,7 +31,7 @@ kind: HTTPRoute
 metadata:
   name: agentgateway-intranet
 spec:
-  hostnames: ["ai.noirprime.com"]
+  hostnames: ["api.noirprime.com"]
   parentRefs:
     - name: kgateway-internal
       namespace: networking-system

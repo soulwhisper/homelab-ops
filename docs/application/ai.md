@@ -59,13 +59,13 @@ All backends speak OpenAI-compatible API. Auth via ExternalSecret-managed API ke
 
 ### Intranet exposure
 
-The gateway API surface is exposed to the intranet via `kgateway-internal` (10.10.0.131) at `https://ai.noirprime.com`:
+The gateway API surface is exposed to the intranet via `kgateway-internal` (10.10.0.131) at `https://api.noirprime.com` (`/chat`, `/mcp`; dashboard stays on `https://ai.noirprime.com/ui`):
 
 - `/chat` — LLM routing (strict API key, 300s timeout, promptGuard guardrails)
 - `/mcp` — MCP tool routing (strict API key, backend guardrails)
-- `/ui` — agentgateway dashboard
+  (dashboard UI lives separately at `https://ai.noirprime.com/ui`)
 
-TLS terminates at kgateway (cert-manager `noirprime-com-tls`); external-dns auto-creates the AdGuardHome record. Machine clients authenticate with agentgateway API keys — no SSO extAuth on API paths. Reachable from trusted VLANs (10/100/200); IoT VLAN 210 is ACL-blocked from RFC1918.
+TLS terminates at kgateway (cert-manager `noirprime-com-tls`, wildcard `*.noirprime.com`); external-dns auto-creates the AdGuardHome record. Machine clients authenticate with agentgateway API keys — no SSO extAuth on API paths. Reachable from trusted VLANs (10/100/200); IoT VLAN 210 is ACL-blocked from RFC1918.
 
 ### App → model lane
 
