@@ -7,10 +7,8 @@ components:
   - ../../components/namespace
 resources:
   # system
-  - ./llama/ks.yaml
   - ./toolhive/ks.yaml
   # mcp
   - ./mcp
   # app
-  - ./buzz/ks.yaml
   - ./hermes-agent/ks.yaml
