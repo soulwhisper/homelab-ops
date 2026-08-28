@@ -203,7 +203,7 @@ Both gateways use the `kgateway` GatewayClass with TLS termination via cert-mana
 
 #### AgentGateway (LLM + MCP Proxy)
 
-`agentgateway-proxy` is a purpose-built Gateway API implementation for AI workload routing, exposed internally at `http://agentgateway-proxy.networking-system.svc.cluster.local:80`.
+`agentgateway-proxy` is a purpose-built Gateway API implementation for AI workload routing, exposed internally at `http://agentgateway-proxy.networking-system.svc.cluster.local:80`. Its API surface (`/chat`, `/mcp`) is also exposed to the intranet through `kgateway-internal` at `https://ai.noirprime.com` (TLS at kgateway, DNS via external-dns, strict API-key auth at agentgateway). Local lanes (`fast`/`memory`/`vision`) route to the MacStudio inference host at 10.10.0.210 (`studio.homelab.internal`).
 
 **LLM routing** — header-based model dispatch on `/chat`:
 
@@ -213,7 +213,7 @@ Both gateways use the `kgateway` GatewayClass with TLS termination via cert-mana
 | `x-model: complex` | —     | `llm-backend-complex` | 300s    |
 | `x-model: fast`    | —     | `llm-backend-fast`    | 300s    |
 | `x-model: memory`  | —     | `llm-backend-memory`  | 300s    |
-| `x-model: omni`    | —     | `llm-backend-omni`    | 300s    |
+| `x-model: vision`  | —     | `llm-backend-vision`  | 300s    |
 
 **MCP routing** — tool-call dispatch on `/mcp`:
 

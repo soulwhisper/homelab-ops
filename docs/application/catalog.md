@@ -125,14 +125,12 @@
 | Bambuddy       | 3D printer monitor (Bambu Lab)                   |   ⭐⭐⭐   |
 | Dispatcharr    | IPTV dispatch (iGPU transcode)                   |   ⭐⭐⭐   |
 
-## servitor-apps — AI Infrastructure (5)
+## servitor-apps — AI Infrastructure (3)
 
 | App               | Purpose                                                                 |   Rating   |
 | ----------------- | ----------------------------------------------------------------------- | :--------: |
 | Hermes Agent      | AI agent suite (Kata VM, WeChat)                                        | ⭐⭐⭐⭐⭐ |
-| Llama (llama.cpp) | Local LLM (Qwen3.5-4B, CephFS 50Gi)                                     | ⭐⭐⭐⭐⭐ |
 | ToolHive          | MCP gateway (11 servers, semantic search)                               | ⭐⭐⭐⭐⭐ |
-| Devbox            | AI dev sandbox (Kata VM, AgentGateway)                                  |  ⭐⭐⭐⭐  |
 | MCP Servers       | kubernetes/HA/hindsight/honcho/note/github/firecrawl/grafana/flux/vlogs | ⭐⭐⭐⭐⭐ |
 
 ## gaming-apps — Gaming (3)

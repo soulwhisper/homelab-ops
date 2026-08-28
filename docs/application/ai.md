@@ -1,6 +1,6 @@
 # AI Infrastructure Summary
 
-Last updated: 2026-07-03
+Last updated: 2026-08-28
 Source: Flux manifests in `kubernetes/apps/`.
 
 ## Architecture Overview
@@ -10,7 +10,6 @@ flowchart TB
     subgraph Clients["AI Clients"]
         Hermes["Hermes Agent Suite"]
         Dify["Dify 1.15.0"]
-        Devbox["Devbox<br/>(dev container)"]
         ST["SillyTavern 1.18.0"]
         HS["Hindsight 0.8.4"]
     end
@@ -22,9 +21,7 @@ flowchart TB
 
     subgraph LLM["LLM Providers"]
         DS-Complex["DeepSeek V4 Pro<br/>(external API)"]
-        DS-Fast["DeepSeek V4 Flash<br/>(external API)"]
-        Local["llama.cpp (Qwen3.5-4B)<br/>local inference"]
-        SF-Omni["Qwen3-Omni-30B-A3B-Instruct<br/>(external API)"]
+        Studio["MacStudio oMLX<br/>Qwen3.5-4B (MLX 4bit)<br/>10.10.0.210"]
     end
 
     subgraph MCP["MCP Gateway (ToolHive 0.33.0)"]
@@ -40,9 +37,7 @@ flowchart TB
     Clients --> AG-LLM
     Clients --> AG-MCP
     AG-LLM --> DS-Complex
-    AG-LLM --> DS-Fast
-    AG-LLM --> Local
-    AG-LLM --> SF-Omni
+    AG-LLM --> Studio
     AG-MCP --> VMCP-RO
     AG-MCP --> VMCP-RW
     AG-MCP --> VMCP-EXT
@@ -58,11 +53,21 @@ The agent gateway is the single entry point for all AI traffic. Every AI app rou
 | Route Header                             | Backend               | Model                              | Provider            |
 | ---------------------------------------- | --------------------- | ---------------------------------- | ------------------- |
 | `x-model: complex` or `x-priority: high` | `llm-backend-complex` | `deepseek-v4-pro`                  | External API        |
-| `x-model: fast`                          | `llm-backend-fast`    | `deepseek-v4-flash`                | External API        |
-| `x-model: memory`                        | `llm-backend-memory`  | `qwen3.5-4b`                       | **Local** llama.cpp |
-| `x-model: omni`                          | `llm-backend-omni`    | `Qwen/Qwen3-Omni-30B-A3B-Instruct` | External API        |
+| `x-model: fast`                          | `llm-backend-fast`    | `qwen3.5-4b`                       | **Local** MacStudio        |
+| `x-model: memory`                        | `llm-backend-memory`  | `qwen3.5-4b`                       | **Local** MacStudio |
+| `x-model: vision`                        | `llm-backend-vision`  | `qwen3.5-4b` (vision-capable)      | **Local** MacStudio |
 
-All backends speak OpenAI-compatible API. Auth via ExternalSecret-managed API keys. Internal-only, no public ingress.
+All backends speak OpenAI-compatible API. Auth via ExternalSecret-managed API keys. The `fast`/`memory`/`vision` lanes run on the MacStudio inference host (`studio.homelab.internal`, 10.10.0.210, oMLX OpenAI-compatible endpoint). Qwen3.5-4B is a unified vision-language model, so one endpoint serves all three lanes. No cloud fallback is configured for local lanes — the studio is a deliberate SPOF.
+
+### Intranet exposure
+
+The gateway API surface is exposed to the intranet via `kgateway-internal` (10.10.0.131) at `https://ai.noirprime.com`:
+
+- `/chat` — LLM routing (strict API key, 300s timeout, promptGuard guardrails)
+- `/mcp` — MCP tool routing (strict API key, backend guardrails)
+- `/ui` — agentgateway dashboard
+
+TLS terminates at kgateway (cert-manager `noirprime-com-tls`); external-dns auto-creates the AdGuardHome record. Machine clients authenticate with agentgateway API keys — no SSO extAuth on API paths. Reachable from trusted VLANs (10/100/200); IoT VLAN 210 is ACL-blocked from RFC1918.
 
 ### MCP Backend
 
@@ -76,17 +81,7 @@ Routes to 3 **ToolHive VirtualMCP servers** (`StreamableHTTP` on port 8080):
 
 ## LLM Inference — Local
 
-### llama-qwen3
-
-| Field      | Value                                                              |
-| ---------- | ------------------------------------------------------------------ |
-| Runtime    | `llama.cpp` server                                                 |
-| Model      | `Qwen3.5-4B` / `Q6_K_L` GGUF quant                                 |
-| Context    | 8192 tokens, flash attention enabled                               |
-| Resources  | req: 2 CPU / 3Gi RAM, lim: 8 CPU / 6Gi RAM                         |
-| Storage    | 50Gi RWX CephFS PVC (model auto-downloads on cold start)           |
-| Startup    | Up to 10min for model download (~2.5GB)                            |
-| Scheduling | Anti-affinity with all inference workloads (`workload: inference`) |
+All local lanes (`fast`/`memory`/`vision`) run on the MacStudio inference host. The in-cluster llama.cpp deployment (`llama-qwen3`) was archived 2026-08-28 (`.archived/kubernetes/servitor/llama`); its 50Gi CephFS PVC `llama` is retained for manual cleanup.
 
 ---
 
@@ -139,7 +134,7 @@ Routes to 3 **ToolHive VirtualMCP servers** (`StreamableHTTP` on port 8080):
   - Hybrid semantic search (0.6 semantic / 0.4 keyword ratio)
   - Circuit breaker (3 failures → 30s timeout)
   - OTEL telemetry (5% sampling)
-- **Ingress restricted**: Only vmagent, hermes-agent, dify-api, devbox can connect
+- **Ingress restricted**: Only vmagent and hermes-agent can connect
 
 ### MCP Servers (11 total)
 
@@ -209,14 +204,15 @@ Routes to 3 **ToolHive VirtualMCP servers** (`StreamableHTTP` on port 8080):
 ### Hindsight 0.8.4
 
 - AI memory / context store
-- Resources: req: 1 CPU / 3.5Gi, lim: 4 CPU / 6Gi — **heaviest AI workload**
+- Resources: req: 200m / 512Mi, lim: 2 CPU / 2Gi — slim image; embeddings run on the MacStudio (Qwen3-Embedding-4B via oMLX), reranking is Qwen3-Reranker-0.6B on the MacStudio
 - pgvector + pgroonga extensions, OTEL enabled
 - Exposed as MCP server for agent context retrieval
 
-### Devbox
+### Archived
 
-- AI development container, Kata VM isolation
-- Connects to agentgateway-proxy for LLM access
+- **Buzz** (relay + buzz-agent-omp) — archived 2026-08-28 (`.archived/kubernetes/servitor/buzz`); hermes-agent is the only in-cluster agent.
+- **Devbox** — removed from cluster 2026-08-05; image retained in `soulwhisper/containers` as an ad-hoc exec sandbox.
+- **llama.cpp (llama-qwen3)** — archived 2026-08-28; all local lanes moved to the MacStudio.
 
 ---
 
@@ -241,9 +237,9 @@ Routes to 3 **ToolHive VirtualMCP servers** (`StreamableHTTP` on port 8080):
 ```
 x-priority: high  ──────────► DeepSeek V4 Pro              (external, paid API)
 x-model: complex  ──────────► DeepSeek V4 Pro              (external, paid API)
-x-model: fast     ──────────► DeepSeek V4 Flash            (external, paid API)
-x-model: memory   ──────────► Qwen3.5-4B GGUF              (local, llama.cpp)
-x-model: omni     ──────────► Qwen3-Omni-30B-A3B-Instruct  (external, paid API)
+x-model: fast     ──────────► Qwen3.5-4B                   (local, MacStudio)
+x-model: memory   ──────────► Qwen3.5-4B                   (local, MacStudio)
+x-model: vision   ──────────► Qwen3.5-4B (vision)         (local, MacStudio)
 ```
 
 All routing is internal via the agent gateway. No app has direct LLM provider access — the gateway is the single choke point for auth, routing, and observability.
