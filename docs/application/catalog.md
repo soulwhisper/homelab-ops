@@ -116,7 +116,7 @@
 | RSSHub         | RSS feed generator (Dragonfly, OIDC)                         |
 | SearXNG        | Privacy meta-search (Dragonfly, bot detection)               |
 | Homepage       | App dashboard                                                |
-| Karakeep       | Bookmark manager (Kata VM, Chrome + Meilisearch, vision lane) |
+| Karakeep       | Bookmark manager (Kata VM, Chrome + Meilisearch, fast+vision lanes) |
 | Hindsight      | AI memory (slim image; LLM + embeddings + rerank on MacStudio) |
 | Open-Notebook  | AI research notebook (SurrealDB)                             |
 | Firecrawl      | Web scraping pipeline (Kata, 3 containers, MCP)              |
