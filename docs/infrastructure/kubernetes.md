@@ -35,7 +35,7 @@ flowchart TB
         Kustomization"]
         CA --> NS["13 Namespace
         Kustomizations"]
-        NS --> APPS["96 Application
+        NS --> APPS["90 Application
         Kustomizations"]
     end
 
@@ -43,23 +43,23 @@ flowchart TB
         NS_COMP["namespace
         13 consumers"]
         VOLSYNC["volsync
-        27 consumers"]
+        23 consumers"]
         AUTHENTIK["authentik
-        17 consumers"]
+        14 consumers"]
         CNPG["cnpg
-        10 consumers"]
+        8 consumers"]
         DRAGONFLY["dragonfly
-        9 consumers"]
+        7 consumers"]
         CEPH["ceph-bucket
         1 consumer"]
     end
 
     subgraph Charts["Chart Sources"]
-        OCI_OWN["52 Own
+        OCI_OWN["53 Own
         OCIRepositories"]
         OCI_TPL["1 app-template
         OCIRepository"]
-        CROSS["44 Cross-namespace
+        CROSS["37 Cross-namespace
         chartRef References"]
     end
 
@@ -100,7 +100,7 @@ The cluster-level `Kustomization` resources live in `kubernetes/flux/cluster/clu
 
 ### Recursive Discovery
 
-`cluster-apps` scans `kubernetes/apps/` recursively. Flux discovers each namespace's top-level `kustomization.yaml`, which references individual application `ks.yaml` files. This yields **13 namespace Kustomizations** and **96 application Kustomizations** (156 total Kustomization resources including inner app subdirectories).
+`cluster-apps` scans `kubernetes/apps/` recursively. Flux discovers each namespace's top-level `kustomization.yaml`, which references individual application `ks.yaml` files. This yields **13 namespace Kustomizations** and **90 application Kustomizations** (`ks.yaml` leaves).
 
 Each application `ks.yaml` is a leaf `Kustomization` that points to its `app/` subdirectory containing the `HelmRelease`, `OCIRepository`, and any supplementary resources (ConfigMaps, Secrets, etc.).
 
@@ -119,7 +119,7 @@ The Flux controllers are configured with aggressive tuning for a single-node clu
 
 ## Strategic Patching System
 
-The `cluster-apps` Kustomization applies three strategic patches to every child `Kustomization` in the tree. These are defined in `kubernetes/flux/cluster/cluster.yaml` and eliminate boilerplate from all 96 application definitions.
+The `cluster-apps` Kustomization applies three strategic patches to every child `Kustomization` in the tree. These are defined in `kubernetes/flux/cluster/cluster.yaml` and eliminate boilerplate from all 90 application definitions.
 
 ### Layer 1: Kustomization Defaults (managed annotation)
 
@@ -203,24 +203,24 @@ Key behaviors this enforces cluster-wide:
 
 All Helm charts are sourced from OCI registries. The legacy `HelmRepository` CRD is eliminated — every chart reference uses `OCIRepository` exclusively.
 
-### Own OCIRepositories (52)
+### Own OCIRepositories (53)
 
-Each non-trivial application defines its own `OCIRepository` resource in its `app/` subdirectory alongside its `HelmRelease`. These 52 repositories pull charts directly from their publishers' OCI registries:
+Each non-trivial application defines its own `OCIRepository` resource in its `app/` subdirectory alongside its `HelmRelease`. These 53 repositories pull charts directly from their publishers' OCI registries:
 
 | Namespace         | Count | Example Charts                                                                                                                                                                                                                                        |
 | ----------------- | ----- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| kube-system       | 10    | cilium, coredns, spegel, frr-k8s, descheduler, reloader, metrics-server, k8tz, gateway-api-crds, intel-device-plugins (operator + GPU)                                                                                                                |
+| kube-system       | 11    | cilium, coredns, spegel, frr-k8s, descheduler, reloader, metrics-server, k8tz, gateway-api-crds, intel-device-plugins (operator + GPU)                                                                                                                |
 | security-system   | 4     | authentik, cert-manager, external-secrets, onepassword-connect                                                                                                                                                                                        |
-| storage-system    | 6     | rook-ceph (app + cluster), volsync, snapshot-controller, openebs-localpv, csi-driver-nfs                                                                                                                                                              |
+| storage-system    | 7     | rook-ceph (app + cluster + drivers), volsync, snapshot-controller, openebs-localpv, csi-driver-nfs                                                                                                                                                              |
 | database-system   | 4     | cloudnative-pg, plugin-barman-cloud, dragonfly-operator, clickhouse-operator                                                                                                                                                                          |
 | networking-system | 5     | kgateway (app + CRDs), agentgateway (app + CRDs), externaldns                                                                                                                                                                                         |
-| monitoring-system | 13    | victoria-metrics (operator + cluster + app), victoria-logs (app + collector), victoria-traces, grafana, kube-state-metrics, node-exporter, prometheus-crds, blackbox-exporter, smartctl-exporter, opentelemetry-collector, silence-operator, headlamp |
+| monitoring-system | 15    | victoria-metrics (operator + cluster + app), victoria-logs (app + collector), victoria-traces, grafana, kube-state-metrics, node-exporter, prometheus-crds, blackbox-exporter, smartctl-exporter, opentelemetry-collector, silence-operator, headlamp |
 | gitops-system     | 3     | flux-operator, flux-instance, tuppr (system-upgrade-controller)                                                                                                                                                                                       |
-| others            | 7     | toolhive (app + CRDs), woodpecker, netbox                                                                                                                                                                                                             |
+| others            | 4     | toolhive (app + CRDs), woodpecker, netbox                                                                                                                                                                                                             |
 
 The `OCIRepository` fetches only the chart layer via `layerSelector` with `operation: copy`, which extracts the Helm chart tarball from the OCI manifest without pulling unrelated layers.
 
-### App-Template Pattern (44 Cross-Namespace References)
+### App-Template Pattern (37 Cross-Namespace References)
 
 For applications that don't need a custom Helm chart, the **app-template** pattern is used. A single `OCIRepository` is defined in `kubernetes/flux/repositories/app-template.yaml`:
 
@@ -250,18 +250,18 @@ spec:
     namespace: gitops-system
 ```
 
-This cross-namespace reference is used by 41 HelmReleases across 9 namespaces:
+This cross-namespace reference is used by 37 HelmReleases across 8 namespaces:
 
 | Namespace                   | Count | Example Apps                                                                                                    |
 | --------------------------- | ----- | --------------------------------------------------------------------------------------------------------------- |
 | media-apps                  | 8     | jellyfin, kavita, navidrome, qbittorrent, immich, moviepilot, metube, qbittorrent-ui                            |
-| selfhosted-apps             | 10    | miniflux, rsshub, searxng, sillytavern, stirling-pdf, bambuddy, dispatcharr, karakeep, homepage, fast-note-sync |
-| smarthome-apps              | 7     | home-assistant (app + sgcc), frigate, zigbee2mqtt, mosquitto, scrypted, code-server                             |
+| selfhosted-apps             | 15    | miniflux, rsshub, searxng, sillytavern, stirling-pdf, bambuddy, dispatcharr, karakeep, homepage, fast-note-sync, hindsight, open-notebook (app + database), firecrawl (app + database) |
+| smarthome-apps              | 6     | home-assistant (app + sgcc), frigate, zigbee2mqtt, mosquitto, scrypted                             |
 | servitor-apps               | 1     | hermes-agent                                                                                       |
 | gaming-apps                 | 2     | crafty-controller, foundryvtt                                                                                   |
 | monitoring-system           | 3     | langfuse (app + worker), heartbeats                                                                             |
-| selfhosted-apps (multi-pod) | 3     | honcho (app + worker), open-notebook (app + database), firecrawl (app + database)                               |
 | networking-system           | 1     | agentgateway MCP config                                                                                         |
+| database-system             | 1     | cnpg maintenance (dr-test cronjob)                                                                              |
 
 The `flux-repositories` Kustomization is reconciled before `cluster-apps` (via `dependsOn`), ensuring the `app-template` `OCIRepository` is always available before any application HelmRelease references it.
 
@@ -290,7 +290,7 @@ metadata:
 
 The `name: _` is a Kustomize placeholder — postBuild substitution in each namespace's `kustomization.yaml` fills in the actual namespace name.
 
-### Component: volsync (27 consumers)
+### Component: volsync (23 consumers)
 
 **Path**: `kubernetes/components/volsync/`
 
@@ -305,7 +305,7 @@ The most heavily used component. It provisions a complete backup-and-recovery pi
 
 Applications that need persistent data backed up to S3 include this component. The PVC template is parameterized through `postBuild` substitution with the `APP` variable.
 
-### Component: authentik (17 consumers)
+### Component: authentik (14 consumers)
 
 **Path**: `kubernetes/components/authentik/`
 
@@ -317,7 +317,7 @@ The policy enforces:
 - Unauthenticated requests redirected to the Authentik login flow
 - Session validation on every request
 
-### Component: cnpg (10 consumers)
+### Component: cnpg (8 consumers)
 
 **Path**: `kubernetes/components/cnpg/`
 
@@ -325,7 +325,7 @@ Injects an `ExternalSecret` that provisions a CloudNativePG database user secret
 
 The `ExternalSecret` references the 1Password item containing the database connection URI, username, and password, making them available as Kubernetes secrets for the application's pods.
 
-### Component: dragonfly (9 consumers)
+### Component: dragonfly (7 consumers)
 
 **Path**: `kubernetes/components/dragonfly/`
 
@@ -370,11 +370,11 @@ The cluster uses 13 namespaces, ordered by dependency from foundational infrastr
 | 5   | `networking-system` | Ingress, DNS, API gateway            | kgateway (Envoy Gateway), Agent Gateway (AI agent routing), ExternalDNS                                                                                                                                                                    |
 | 6   | `monitoring-system` | Observability                        | Victoria Metrics (operator + cluster), Victoria Logs, Victoria Traces, Grafana, Prometheus CRDs, kube-state-metrics, node-exporter, blackbox-exporter, Smartctl exporter, OTel Collector, Silence Operator, Langfuse, Heartbeats, Headlamp |
 | 7   | `servitor-apps`     | AI and development tooling           | Hermes Agent, Toolhive, MCP servers                                                                                                                                                                                       |
-| 8   | `smarthome-apps`    | Home automation                      | Home Assistant, Frigate NVR, Zigbee2MQTT, Mosquitto MQTT, Scrypted, code-server                                                                                                                                                            |
-| 7   | `media-apps`        | Media serving and management         | Jellyfin, Kavita, Navidrome, qBittorrent, Immich, MoviePilot, MeTube                                                                                                                                                                       |
-| 8   | `selfhosted-apps`   | Self-hosted web services             | Miniflux, RSSHub, SearXNG, NetBox, Stirling PDF, SillyTavern, Karakeep, Homepage, Hindsight, Dispatcharr, BambuBuddy, Fast Note Sync, Open Notebook, Firecrawl                                                                             |
+| 8   | `smarthome-apps`    | Home automation                      | Home Assistant (app + SGCC), Frigate NVR, Zigbee2MQTT, Mosquitto MQTT, Scrypted                                                                                                                                           |
+| 9   | `media-apps`        | Media serving and management         | Jellyfin, Kavita, Navidrome, qBittorrent, Immich, MoviePilot, MeTube                                                                                                                                                                       |
+| 10  | `selfhosted-apps`   | Self-hosted web services             | Miniflux, RSSHub, SearXNG, NetBox, Stirling PDF, SillyTavern, Karakeep, Homepage, Hindsight, Dispatcharr, BambuBuddy, Fast Note Sync, Open Notebook, Firecrawl                                                                             |
 | 11  | `gaming-apps`       | Game servers                         | Crafty Controller (Minecraft), Foundry VTT                                                                                                                                                                                                 |
-| 12  | `worker-apps`       | CI/CD and automation                 | Woodpecker CI                                                                                                                                                                                                                              |
+| 12  | `worker-apps`       | CI/CD and automation                 | Woodpecker CI                                                                                                                                                                                                                      |
 | 13  | `gitops-system`     | Flux itself                          | Flux Operator, Flux Instance, System Upgrade Controller                                                                                                                                                                                    |
 
 ### Dependency Order
@@ -458,7 +458,7 @@ Two custom labels and an annotation drive the strategic patching and component i
 
 **Type**: Annotation
 **Purpose**: Opts a `Kustomization` into Layer 1 strategic patching (Kustomization defaults).
-**Scope**: Every application `ks.yaml` (96 files).
+**Scope**: Every application `ks.yaml` (90 files).
 
 Without this annotation, a Kustomization would not receive the automatic `sourceRef`, `prune`, `interval`, and `timeout` defaults. Infrastructure-only Kustomizations (like `flux-repositories`) omit it intentionally.
 
@@ -466,7 +466,7 @@ Without this annotation, a Kustomization would not receive the automatic `source
 
 **Type**: Label
 **Purpose**: Opts a `Kustomization` into Layer 2 strategic patching (baseline infrastructure dependencies).
-**Scope**: Applications that need TLS certificates, secrets, storage, and backups before starting (55 `ks.yaml` files).
+**Scope**: Applications that need TLS certificates, secrets, storage, and backups before starting (49 `ks.yaml` files).
 
 This label signals "I'm a workload that needs the core infra layer." Infrastructure components themselves (e.g., cert-manager, rook-ceph, cnpg-operator) omit this label — they _are_ the infra, so they only carry `managed: "true"`.
 
@@ -511,10 +511,10 @@ kubernetes/
 │   └── values.yaml.gotmpl         #   Values bridge to Flux HelmReleases
 ├── components/                    # Reusable Kustomize Components
 │   ├── namespace/                 #   Namespace + alerts (13 consumers)
-│   ├── volsync/                   #   PVC backup pipeline (27 consumers)
-│   ├── authentik/                 #   SSO traffic policy (17 consumers)
-│   ├── cnpg/                      #   PostgreSQL secret (10 consumers)
-│   ├── dragonfly/                 #   Redis-compatible cache (9 consumers)
+│   ├── volsync/                   #   PVC backup pipeline (23 consumers)
+│   ├── authentik/                 #   SSO traffic policy (14 consumers)
+│   ├── cnpg/                      #   PostgreSQL secret (8 consumers)
+│   ├── dragonfly/                 #   Redis-compatible cache (7 consumers)
 │   └── ceph-bucket/               #   S3 object bucket (1 consumer)
 └── flux/                          # Flux cluster configuration
     ├── cluster/

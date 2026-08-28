@@ -30,10 +30,10 @@ function generateClusterRecords(endpointName, nodes) {
 
 var STATIC_RECORDS = [
   A("esxi", "10.0.0.10"),
-  A("studio", "10.10.0.210"),
   A("zigbee", "10.10.0.20"),
   A("nas", "10.10.0.100"),
   A("unifi", "10.10.0.200"),
+  A("studio", "10.10.0.210"),
 ];
 
 D.apply(

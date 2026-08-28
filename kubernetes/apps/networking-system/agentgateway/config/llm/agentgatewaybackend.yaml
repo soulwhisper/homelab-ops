@@ -9,11 +9,10 @@ spec:
     provider:
       openai:
         model: "qwen3.8-27b"
-      host: 10.10.0.210
+      host: studio.homelab.internal
       port: 8080
 ---
 # MacStudio inference host (studio.homelab.internal, oMLX OpenAI-compatible).
-# Literal IP: cluster DNS resolution of homelab.internal is not guaranteed.
 # Qwen3.5-4B is a unified vision-language model (image-text-to-text), so one
 # endpoint serves the fast, memory and vision lanes.
 # yaml-language-server: $schema=https://soulwhisper.github.io/k8s-schemas/agentgateway.dev/agentgatewaybackend_v1alpha1.json
@@ -39,7 +38,7 @@ spec:
     provider:
       openai:
         model: "qwen3.5-4b"
-      host: 10.10.0.210
+      host: studio.homelab.internal
       port: 8080
 ---
 # yaml-language-server: $schema=https://soulwhisper.github.io/k8s-schemas/agentgateway.dev/agentgatewaybackend_v1alpha1.json
@@ -52,5 +51,5 @@ spec:
     provider:
       openai:
         model: "qwen3.5-4b"
-      host: 10.10.0.210
+      host: studio.homelab.internal
       port: 8080

@@ -205,17 +205,21 @@ All local lanes (`fast`/`memory`/`vision`) run on the MacStudio inference host. 
 - Backed by SearXNG, Dragonfly Redis, nuq-postgres
 - Exposed as MCP server + internal endpoint for Hermes
 
-### Open-Notebook 1.10.0
+### Open-Notebook 1.14.0
 
-- AI-powered research notebook, `ghcr.io/lfnovo/open-notebook:1.10.0`
+- AI-powered research notebook, `ghcr.io/lfnovo/open-notebook:1.14.0`
 - UI (:8502 Streamlit) + REST API (:5055), SurrealDB backend
 - No public ingress
 
-### Hindsight 0.8.4
+### Hindsight 0.9.2
 
-- AI memory / context store
-- Resources: req: 200m / 512Mi, lim: 2 CPU / 2Gi — slim image; embeddings run on the MacStudio (Qwen3-Embedding-4B via oMLX), reranking is Qwen3-Reranker-0.6B on the MacStudio
-- pgvector + pgroonga extensions, OTEL enabled
+- AI memory / context store (agent long-term memory: retain / recall / reflect)
+- Image: upstream `ghcr.io/vectorize-io/hindsight:0.9.2-slim` — no in-process local-ml
+- LLM: `memory` lane → **Qwen3.5-4B on the MacStudio** (via agentgateway)
+- Embeddings: **Qwen3-Embedding-4B on the MacStudio** (oMLX, OpenAI-compatible `/v1/embeddings`)
+- Reranker: **Qwen3-Reranker-0.6B on the MacStudio** (Cohere-compatible `/v1/rerank`)
+- Resources: req: 200m CPU / 512Mi, lim: 2 CPU / 2Gi
+- Storage: CloudNativePG (vchord vector + pgroonga text search), OTEL enabled
 - Exposed as MCP server for agent context retrieval
 
 ### Archived
