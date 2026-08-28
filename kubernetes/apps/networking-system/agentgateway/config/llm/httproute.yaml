@@ -73,10 +73,10 @@ spec:
           headers:
             - type: Exact
               name: x-model
-              value: "omni"
+              value: "vision"
       backendRefs:
         - group: agentgateway.dev
           kind: AgentgatewayBackend
-          name: llm-backend-omni
+          name: llm-backend-vision
       timeouts:
         request: 300s

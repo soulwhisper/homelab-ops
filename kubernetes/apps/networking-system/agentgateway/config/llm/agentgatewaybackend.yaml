@@ -18,6 +18,10 @@ spec:
     tls:
       sni: *host
 ---
+# MacStudio inference host (studio.homelab.internal, oMLX OpenAI-compatible).
+# Literal IP: cluster DNS resolution of homelab.internal is not guaranteed.
+# Qwen3.5-4B is a unified vision-language model (image-text-to-text), so one
+# endpoint serves the fast, memory and vision lanes.
 # yaml-language-server: $schema=https://soulwhisper.github.io/k8s-schemas/agentgateway.dev/agentgatewaybackend_v1alpha1.json
 apiVersion: agentgateway.dev/v1alpha1
 kind: AgentgatewayBackend
@@ -27,15 +31,9 @@ spec:
   ai:
     provider:
       openai:
-        model: deepseek-v4-flash
-      host: &host api.deepseek.com
-      port: 443
-  policies:
-    auth:
-      secretRef:
-        name: deepseek-credentials
-    tls:
-      sni: *host
+        model: "qwen3.5-4b"
+      host:  10.10.0.210
+      port:  8080
 ---
 # yaml-language-server: $schema=https://soulwhisper.github.io/k8s-schemas/agentgateway.dev/agentgatewaybackend_v1alpha1.json
 apiVersion: agentgateway.dev/v1alpha1
@@ -47,24 +45,18 @@ spec:
     provider:
       openai:
         model: "qwen3.5-4b"
-      host: llama-qwen3.servitor-apps.svc.cluster.local
+      host: 10.10.0.210
       port: 8080
 ---
 # yaml-language-server: $schema=https://soulwhisper.github.io/k8s-schemas/agentgateway.dev/agentgatewaybackend_v1alpha1.json
 apiVersion: agentgateway.dev/v1alpha1
 kind: AgentgatewayBackend
 metadata:
-  name: llm-backend-omni
+  name: llm-backend-vision
 spec:
   ai:
     provider:
       openai:
-        model: "Qwen/Qwen3-Omni-30B-A3B-Instruct"
-      host: &host api.siliconflow.cn
-      port: 443
-  policies:
-    auth:
-      secretRef:
-        name: siliconflow-credentials
-    tls:
-      sni: *host
+        model: "qwen3.5-4b"
+      host: 10.10.0.210
+      port: 8080

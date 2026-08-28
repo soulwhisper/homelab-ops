@@ -9,5 +9,6 @@ resources:
   - ./agentgatewaypolicy.yaml
   # utils
   - ./httproute.yaml
+  - ./httproute-api.yaml
   - ./podmonitor.yaml
   - ./servicemonitor.yaml
