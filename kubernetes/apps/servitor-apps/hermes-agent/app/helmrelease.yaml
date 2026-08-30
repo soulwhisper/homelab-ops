@@ -32,7 +32,7 @@ spec:
           hermes-extras:
             image:
               repository: ghcr.io/soulwhisper/hermes-extras
-              tag: "2026.08.26"
+              tag: "2026.08.30"
             command: ["/bin/sh", "/app/install.sh"]
             securityContext:
               allowPrivilegeEscalation: false
