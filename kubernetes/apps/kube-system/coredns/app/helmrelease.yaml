@@ -45,7 +45,8 @@ spec:
           - name: cache
             configBlock: |-
               prefetch 20
-              serve_stale
+              # until fixed: https://github.com/coredns/coredns/issues/8390
+              # serve_stale
           - name: loop
           - name: reload
           - name: loadbalance
