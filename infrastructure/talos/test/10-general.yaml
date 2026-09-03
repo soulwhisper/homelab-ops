@@ -1,5 +1,4 @@
 ---
-# v1alpha1 core: only fields without a dedicated document replacement remain
 machine:
   features:
     nodeAddressSortAlgorithm: v2
@@ -10,35 +9,30 @@ cluster:
     advertisedSubnets:
       - 172.19.82.0/24
 ---
-# v1.14 default enables PodSecurity (enforce: baseline); keep it disabled
 apiVersion: v1alpha1
 kind: KubeAdmissionControlConfig
 name: PodSecurity
 $patch: delete
 ---
-# Cilium is the CNI; drop the generated Flannel document
 apiVersion: v1alpha1
 kind: KubeFlannelCNIConfig
 $patch: delete
 ---
-# replaces cluster.discovery (self-hosted discovery service)
 apiVersion: v1alpha1
 kind: DiscoveryServiceConfig
 name: default
 endpoint: http://172.19.82.10:9300
 ---
-# replaces machine.install; grubUseUKICmdline dropped (schematic uses sd-boot)
 apiVersion: v1alpha1
 kind: UnattendedInstallConfig
 installer:
-  # renovate: datasource=docker depName=ghcr.io/siderolabs/installer-base
+  # renovate: datasource=github-releases depName=siderolabs/talos
   image: factory.talos.dev/metal-installer/5bf167b739a3594940f8012df8e9659662dddd8e6e3b2a3ed5262f16bbf1d7c0:v1.14.0
 provisioning:
   diskSelector:
     match: disk.dev_path == "/dev/sda"
   wipe: false
 ---
-# replaces machine.env
 apiVersion: v1alpha1
 kind: EnvironmentConfig
 variables:
@@ -52,21 +46,15 @@ nameservers:
   - address: 172.19.82.10
 searchDomains:
   disableDefault: true
-  # domains:
-  #   - homelab.internal
 hostDNS:
   enabled: true
   forwardKubeDNSToHost: true
   resolveMemberNames: true
 ---
-# map merge is per-key union with no delete, so replace the generated
-# KubeNodeConfig wholesale: keep its default labels, drop the control-plane
-# taint (replaces cluster.allowSchedulingOnControlPlanes)
 apiVersion: v1alpha1
 kind: KubeNodeConfig
 $patch: delete
 ---
-# replaces machine.kubelet.nodeIP and machine.nodeLabels
 apiVersion: v1alpha1
 kind: KubeNodeConfig
 nodeIP:
@@ -84,7 +72,6 @@ kind: KubeletConfig
 # renovate: datasource=docker depName=ghcr.io/siderolabs/kubelet
 image: ghcr.io/siderolabs/kubelet:v1.37.0
 ---
-# replaces cluster.network
 apiVersion: v1alpha1
 kind: KubeNetworkConfig
 podSubnets:
@@ -92,17 +79,14 @@ podSubnets:
 serviceSubnets:
   - 10.100.128.0/17
 ---
-# replaces cluster.coreDNS.disabled
 apiVersion: v1alpha1
 kind: KubeCoreDNSConfig
 enabled: false
 ---
-# replaces cluster.proxy.disabled
 apiVersion: v1alpha1
 kind: KubeProxyConfig
 enabled: false
 ---
-# replaces cluster.scheduler.config
 apiVersion: v1alpha1
 kind: KubeSchedulerConfig
 config:
@@ -127,7 +111,6 @@ config:
                   - pod-template-hash
                   - controller-revision-hash
 ---
-# replaces machine.features.kubernetesTalosAPIAccess
 apiVersion: v1alpha1
 kind: KubeTalosAPIAccessConfig
 allowedRoles:
@@ -136,7 +119,6 @@ allowedRoles:
 allowedKubernetesNamespaces:
   - gitops-system
 ---
-# replaces machine.sysctls
 apiVersion: v1alpha1
 kind: SysctlConfig
 params:
@@ -164,7 +146,6 @@ params:
   vm.dirty_background_ratio: "5" # start background writeback at 5% dirty (default 10%)
   vm.dirty_ratio: "10" # block writes at 10% dirty (default 20%)
 ---
-# replaces machine.files /etc/cri/conf.d/20-customization.part
 apiVersion: v1alpha1
 kind: CRICustomizationConfig
 name: 20-customization
@@ -223,7 +204,7 @@ apiVersion: v1alpha1
 kind: VolumeConfig
 name: EPHEMERAL
 mount:
-  secure: true # v1.14 default
+  secure: true
 provisioning:
   diskSelector:
     match: system_disk
