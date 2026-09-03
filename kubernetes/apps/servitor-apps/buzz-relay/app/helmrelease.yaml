@@ -12,9 +12,8 @@ spec:
 
   values:
     replicaCount: 1
-    # chart appVersion lags (0.1.0); pin the latest relay patch explicitly.
-    # keep in sync with BUZZ_VERSION/BUZZ_REF in containers/apps/hermes-extras
     image:
+      # renovate: datasource=docker depName=ghcr.io/block/buzz
       tag: "0.1.1"
     relayUrl: wss://buzz.noirprime.com
     service:
