@@ -12,3 +12,4 @@ resources:
   - ./mcp
   # app
   - ./hermes-agent/ks.yaml
+  - ./buzz-relay/ks.yaml
