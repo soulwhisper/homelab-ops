@@ -1,9 +1,6 @@
 ---
 cluster:
   allowSchedulingOnControlPlanes: true
-  apiServer:
-    admissionControl:
-      $patch: delete
   coreDNS:
     disabled: true
   etcd:
@@ -80,8 +77,8 @@ machine:
             enable_unprivileged_ports = true
             enable_unprivileged_icmp = true
   install:
-    # renovate: datasource=docker depName=ghcr.io/siderolabs/installer
-    image: factory.talos.dev/metal-installer/5bf167b739a3594940f8012df8e9659662dddd8e6e3b2a3ed5262f16bbf1d7c0:v1.13.9
+    # renovate: datasource=docker depName=ghcr.io/siderolabs/installer-base
+    image: factory.talos.dev/metal-installer/5bf167b739a3594940f8012df8e9659662dddd8e6e3b2a3ed5262f16bbf1d7c0:v1.14.0
     grubUseUKICmdline: true
     disk: /dev/sda
   kubelet:
