@@ -36,14 +36,9 @@ generate mode:
     test) CLUSTER_NAME="test"; CLUSTER_ENDPOINT="https://172.19.82.101:6443" ;;
     *) echo "❌ Unknown mode: {{mode}} (expected: prod|test)"; exit 1 ;;
   esac
-  # --talos-version keeps gen config on the legacy single-document v1alpha1
-  # contract; talosctl >= 1.14 otherwise emits new-style config documents
-  # (DiscoveryServiceConfig, UnattendedInstallConfig, ...) that conflict with
-  # the numbered v1alpha1 patches below.
   op inject -i "${TALOS_DIR}/secret.yaml" | talosctl gen config \
     "${CLUSTER_NAME}" "${CLUSTER_ENDPOINT}" \
     --with-docs=false --with-examples=false --force \
-    --talos-version v1.13.9 \
     --with-secrets /dev/stdin \
     --output "${TALOS_DIR}/clusterconfig"
   for FILE in $(ls ${TALOS_DIR}/{{mode}}/nodes/*.yaml); do

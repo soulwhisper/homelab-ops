@@ -105,12 +105,8 @@ jobs:
               prod) CLUSTER_NAME="main"; CLUSTER_ENDPOINT="https://k8s.homelab.internal:6443" ;;
               test) CLUSTER_NAME="test"; CLUSTER_ENDPOINT="https://172.19.82.101:6443" ;;
             esac
-            # --talos-version keeps gen config on the legacy single-document
-            # v1alpha1 contract; talosctl >= 1.14 otherwise emits new-style
-            # config documents that conflict with the numbered patches.
             talosctl gen config "${CLUSTER_NAME}" "${CLUSTER_ENDPOINT}" \
               --with-docs=false --with-examples=false --force \
-              --talos-version v1.13.9 \
               --with-secrets "${WORK_DIR}/secrets.yaml" \
               --output "${WORK_DIR}/${MODE}"
             for FILE in "infrastructure/talos/${MODE}"/nodes/*.yaml; do
