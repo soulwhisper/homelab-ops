@@ -169,6 +169,8 @@ skipFallback: false
 apiVersion: v1alpha1
 kind: VolumeConfig
 name: EPHEMERAL
+mount:
+  secure: true # v1.14 default
 provisioning:
   diskSelector:
     match: system_disk
