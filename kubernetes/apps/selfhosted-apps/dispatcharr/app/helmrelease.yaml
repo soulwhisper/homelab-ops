@@ -39,7 +39,8 @@ spec:
               tag: 0.30.0
             env:
               # Modular deployment bugged until upstream fixed
-              # Not support any kind of proxies
+              # 0.29+: honor X-Forwarded-For only from the pod CIDR (kgateway)
+              DISPATCHARR_TRUSTED_PROXIES: 10.100.0.0/17
               DISPATCHARR_ENV: aio
               DISPATCHARR_LOG_LEVEL: info
               DISPATCHARR_PORT: &port 9191

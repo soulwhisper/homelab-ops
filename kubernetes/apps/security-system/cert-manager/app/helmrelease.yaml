@@ -13,6 +13,7 @@ spec:
   values:
     crds:
       enabled: true
+    featureGates: ACMEUseARI=true # RFC 9773 renewal info; LE drives renewal windows
     dns01RecursiveNameservers: https://1.1.1.1:443/dns-query,https://1.0.0.1:443/dns-query
     dns01RecursiveNameserversOnly: true
     # HTTPS_PROXY is needed, under 'extraEnv'
