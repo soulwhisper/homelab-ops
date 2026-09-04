@@ -1,5 +1,4 @@
 ---
-# group: block
 apiVersion: v1alpha1
 kind: UserVolumeConfig
 name: local-hostpath
@@ -18,13 +17,11 @@ provisioning:
     match: system_disk
   maxSize: 512GiB
 ---
-# group: cluster
 apiVersion: v1alpha1
 kind: DiscoveryServiceConfig
 name: default
 endpoint: http://172.19.82.10:9300
 ---
-# group: cri
 apiVersion: v1alpha1
 kind: CRICustomizationConfig
 name: base
@@ -45,20 +42,15 @@ endpoints:
   - url: https://mirror.gcr.io
 skipFallback: false
 ---
-# group: extensions
 apiVersion: v1alpha1
 kind: ExtensionServiceConfig
 name: nut-client
-# test subnet (172.19.82.0/24) cannot reach the prod UPS at 10.10.0.254;
-# 172.19.82.10 is the test infra host (NTP/DNS/proxy), matching the prod
-# pattern where the infra host also serves NUT.
 configFiles:
   - content: |-
       MONITOR ups@172.19.82.10 1 upsmon upsmon secondary
       SHUTDOWNCMD "/sbin/poweroff"
     mountPath: /usr/local/etc/nut/upsmon.conf
 ---
-# group: kubernetes
 apiVersion: v1alpha1
 kind: KubeAdmissionControlConfig
 name: PodSecurity
@@ -77,7 +69,6 @@ apiVersion: v1alpha1
 kind: KubeCoreDNSConfig
 enabled: false
 ---
-# Cilium is the CNI; drop the generated Flannel document
 apiVersion: v1alpha1
 kind: KubeFlannelCNIConfig
 $patch: delete
@@ -94,9 +85,6 @@ podSubnets:
 serviceSubnets:
   - 10.100.128.0/17
 ---
-# replaces cluster.allowSchedulingOnControlPlanes (nested taint delete per
-# the v1.14 control-plane workloads guide), machine.kubelet.nodeIP and
-# machine.nodeLabels; generated labels/taints merge in
 apiVersion: v1alpha1
 kind: KubeNodeConfig
 nodeIP:
@@ -110,8 +98,6 @@ taints:
   node-role.kubernetes.io/control-plane:
     $patch: delete
 ---
-# gen default, pinned explicitly for tracking: document presence enables
-# KubePrism (there is no enabled field); keeps 1.13 kubePrism.enabled behavior
 apiVersion: v1alpha1
 kind: KubePrismConfig
 port: 7445
@@ -152,7 +138,6 @@ allowedRoles:
 allowedKubernetesNamespaces:
   - gitops-system
 ---
-# group: network
 apiVersion: v1alpha1
 kind: LinkConfig
 name: lo # fix forwardKubeDNSToHost
@@ -166,8 +151,6 @@ nameservers:
   - address: 172.19.82.10
 searchDomains:
   disableDefault: true
-  # domains:
-  #   - homelab.internal
 hostDNS:
   enabled: true
   forwardKubeDNSToHost: true
@@ -176,26 +159,19 @@ hostDNS:
 apiVersion: v1alpha1
 kind: TimeSyncConfig
 ntp:
-  # useNTS omitted: the local server answers NTP by IP without NTS-KE, and
-  # NTS requires hostname servers
   servers:
-    - 172.19.82.10 # local chrony (dockurr/chrony, NTS upstreams, sysclk)
-    - ntp.aliyun.com # fallback: best public in eval (43ms, 100% samples)
-    - time.apple.com # fallback: stratum 1, tight jitter, 73% samples
-    - ntp.ntsc.ac.cn # fallback: matches test upstream list, 20% samples — keep last
-    - time.cloudflare.com # fallback: 100% reachability, high RTT
-# for proxmox only
-# ptp:
-#   devices:
-#     - /dev/ptp0
+    - 172.19.82.10
 ---
-# group: runtime
 apiVersion: v1alpha1
 kind: EnvironmentConfig
 variables:
   http_proxy: http://172.19.82.10:1080
   https_proxy: http://172.19.82.10:1080
   no_proxy: .noirprime.com,.homelab.internal,localhost,127.0.0.1,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16
+---
+apiVersion: v1alpha1
+kind: KernelModuleConfig
+name: raid1
 ---
 apiVersion: v1alpha1
 kind: OOMConfig
@@ -209,8 +185,6 @@ cgroupRankingExpression: |-
   {Besteffort: 1.0, Burstable: 0.5, Guaranteed: 0.0, Podruntime: 0.0, System: 0.0}[class] *
   double(memory_current.orValue(0u))
 ---
-# gen default, pinned explicitly for tracking: runs the container plane
-# (containerd, kubelet, pods) in sandboxd's own PID/mount namespace
 apiVersion: v1alpha1
 kind: SecurityProfileConfig
 workloadIsolation: true
@@ -242,7 +216,6 @@ params:
   vm.dirty_background_ratio: "5" # start background writeback at 5% dirty (default 10%)
   vm.dirty_ratio: "10" # block writes at 10% dirty (default 20%)
 ---
-# replaces machine.install; grubUseUKICmdline dropped (schematic uses sd-boot)
 apiVersion: v1alpha1
 kind: UnattendedInstallConfig
 installer:
@@ -250,24 +223,18 @@ installer:
   image: factory.talos.dev/metal-installer/5bf167b739a3594940f8012df8e9659662dddd8e6e3b2a3ed5262f16bbf1d7c0:v1.14.0
 provisioning:
   diskSelector:
-    match: disk.dev_path == "/dev/disk/by-id/md-name-root"
+    match: '"/dev/disk/by-id/md-name-talos:boot" in disk.symlinks'
   wipe: false
 ---
-# group: storage
-# boot-from-RAID1 (v1.14): sda+sdb assembled by mdadm, array is the install
-# target above. metadata 1.0 keeps the superblock at the member end so any
-# member stays bootable. PREREQ: attach a second disk (/dev/sdb, same size)
-# to each test VM before booting the 1.14 ISO; single-disk VMs skip array
-# creation and the install selector will not match.
 apiVersion: v1alpha1
 kind: RAIDArrayConfig
 name: root
 level: raid1
+metadata: "1.0"
 provisioning:
   volumeSelector:
     match: disk.dev_path == "/dev/sda" || disk.dev_path == "/dev/sdb"
 ---
-# group: v1alpha1 — legacy core: only fields without a document replacement
 machine:
   features:
     nodeAddressSortAlgorithm: v2
