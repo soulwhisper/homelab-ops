@@ -220,6 +220,20 @@ configFiles:
       SHUTDOWNCMD "/sbin/poweroff"
     mountPath: /usr/local/etc/nut/upsmon.conf
 ---
+# v1.14 upstream defaults, pinned explicitly for change tracking. The default
+# trigger dropped the machine-wide memory_full_avg10 clause that caused the
+# false triggers this repo previously disabled the handler over.
+apiVersion: v1alpha1
+kind: OOMConfig
+triggerExpression: |-
+  multiply_qos_vectors(d_qos_memory_full_total, {System: 8.0, Podruntime: 4.0}) > 3000.0 &&
+  multiply_qos_vectors(qos_memory_full_avg10, {System: 1.0, Podruntime: 1.0}) > 5.0 &&
+  time_since_trigger > duration("5s")
+cgroupRankingExpression: |-
+  memory_max.hasValue() ? 0.0 :
+  {Besteffort: 1.0, Burstable: 0.5, Guaranteed: 0.0, Podruntime: 0.0, System: 0.0}[class] *
+  double(memory_current.orValue(0u))
+---
 apiVersion: v1alpha1
 kind: VolumeConfig
 name: EPHEMERAL
