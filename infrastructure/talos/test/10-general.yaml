@@ -1,5 +1,4 @@
 ---
-# group: block
 apiVersion: v1alpha1
 kind: UserVolumeConfig
 name: local-hostpath
@@ -49,9 +48,6 @@ skipFallback: false
 apiVersion: v1alpha1
 kind: ExtensionServiceConfig
 name: nut-client
-# test subnet (172.19.82.0/24) cannot reach the prod UPS at 10.10.0.254;
-# 172.19.82.10 is the test infra host (NTP/DNS/proxy), matching the prod
-# pattern where the infra host also serves NUT.
 configFiles:
   - content: |-
       MONITOR ups@172.19.82.10 1 upsmon upsmon secondary
@@ -198,6 +194,128 @@ variables:
   no_proxy: .noirprime.com,.homelab.internal,localhost,127.0.0.1,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16
 ---
 apiVersion: v1alpha1
+kind: KubeAdmissionControlConfig
+name: PodSecurity
+configuration:
+  apiVersion: pod-security.admission.config.k8s.io/v1alpha1
+  kind: PodSecurityConfiguration
+  defaults:
+    enforce: privileged
+    enforce-version: latest
+    audit: privileged
+    audit-version: latest
+    warn: privileged
+    warn-version: latest
+---
+apiVersion: v1alpha1
+kind: KubeCoreDNSConfig
+enabled: false
+---
+apiVersion: v1alpha1
+kind: KubeFlannelCNIConfig
+$patch: delete
+---
+apiVersion: v1alpha1
+kind: KubeletConfig
+# renovate: datasource=docker depName=ghcr.io/siderolabs/kubelet
+image: ghcr.io/siderolabs/kubelet:v1.37.0
+---
+apiVersion: v1alpha1
+kind: KubeNetworkConfig
+podSubnets:
+  - 10.100.0.0/17
+serviceSubnets:
+  - 10.100.128.0/17
+---
+apiVersion: v1alpha1
+kind: KubeNodeConfig
+nodeIP:
+  validSubnets:
+    - 172.19.82.0/24
+labels:
+  topology.kubernetes.io/region: main
+  topology.kubernetes.io/zone: homelab
+  intel.feature.node.kubernetes.io/gpu: "true"
+taints:
+  node-role.kubernetes.io/control-plane:
+    $patch: delete
+---
+apiVersion: v1alpha1
+kind: KubePrismConfig
+port: 7445
+---
+apiVersion: v1alpha1
+kind: KubeProxyConfig
+enabled: false
+---
+apiVersion: v1alpha1
+kind: KubeSchedulerConfig
+config:
+  apiVersion: kubescheduler.config.k8s.io/v1
+  kind: KubeSchedulerConfiguration
+  profiles:
+    - schedulerName: default-scheduler
+      plugins:
+        score:
+          disabled:
+            - name: ImageLocality
+            - name: SelectorSpread
+      pluginConfig:
+        - name: PodTopologySpread
+          args:
+            defaultingType: List
+            defaultConstraints:
+              - maxSkew: 1
+                topologyKey: kubernetes.io/hostname
+                whenUnsatisfiable: ScheduleAnyway
+                matchLabelKeys:
+                  - pod-template-hash
+                  - controller-revision-hash
+---
+apiVersion: v1alpha1
+kind: KubeTalosAPIAccessConfig
+allowedRoles:
+  - os:admin
+  - os:etcd:backup
+allowedKubernetesNamespaces:
+  - gitops-system
+---
+apiVersion: v1alpha1
+kind: LinkConfig
+name: lo # fix forwardKubeDNSToHost
+up: true
+addresses:
+  - address: 169.254.116.108/32
+---
+apiVersion: v1alpha1
+kind: ResolverConfig
+nameservers:
+  - address: 172.19.82.10
+searchDomains:
+  disableDefault: true
+hostDNS:
+  enabled: true
+  forwardKubeDNSToHost: true
+  resolveMemberNames: true
+---
+apiVersion: v1alpha1
+kind: TimeSyncConfig
+ntp:
+  servers:
+    - 172.19.82.10
+---
+apiVersion: v1alpha1
+kind: EnvironmentConfig
+variables:
+  http_proxy: http://172.19.82.10:1080
+  https_proxy: http://172.19.82.10:1080
+  no_proxy: .noirprime.com,.homelab.internal,localhost,127.0.0.1,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16
+---
+apiVersion: v1alpha1
+kind: KernelModuleConfig
+name: raid1
+---
+apiVersion: v1alpha1
 kind: OOMConfig
 # v1.14 upstream defaults
 triggerExpression: |-
@@ -242,7 +360,6 @@ params:
   vm.dirty_background_ratio: "5" # start background writeback at 5% dirty (default 10%)
   vm.dirty_ratio: "10" # block writes at 10% dirty (default 20%)
 ---
-# replaces machine.install; grubUseUKICmdline dropped (schematic uses sd-boot)
 apiVersion: v1alpha1
 kind: UnattendedInstallConfig
 installer:
@@ -250,7 +367,7 @@ installer:
   image: factory.talos.dev/metal-installer/5bf167b739a3594940f8012df8e9659662dddd8e6e3b2a3ed5262f16bbf1d7c0:v1.14.0
 provisioning:
   diskSelector:
-    match: disk.dev_path == "/dev/disk/by-id/md-name-root"
+    match: '"/dev/disk/by-id/md-name-talos:boot" in disk.symlinks'
   wipe: false
 ---
 # group: storage
@@ -263,11 +380,11 @@ apiVersion: v1alpha1
 kind: RAIDArrayConfig
 name: root
 level: raid1
+metadata: "1.0"
 provisioning:
   volumeSelector:
     match: disk.dev_path == "/dev/sda" || disk.dev_path == "/dev/sdb"
 ---
-# group: v1alpha1 — legacy core: only fields without a document replacement
 machine:
   features:
     nodeAddressSortAlgorithm: v2

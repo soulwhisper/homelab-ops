@@ -1,7 +1,4 @@
 ---
-# group: block
-# new in v1.14: periodic XFS online scrub (xfs_scrub), weekly default;
-# prod has the local-cache XFS volume
 apiVersion: v1alpha1
 kind: FilesystemScrubConfig
 interval: 168h0m0s
@@ -29,6 +26,19 @@ apiVersion: v1alpha1
 kind: DiscoveryServiceConfig
 name: default
 endpoint: http://10.10.0.100:9300
+---
+apiVersion: v1alpha1
+kind: CRICustomizationConfig
+name: base
+content: |
+  [plugins]
+    [plugins."io.containerd.cri.v1.images"]
+      discard_unpacked_layers = false
+    [plugins."io.containerd.cri.v1.runtime"]
+      device_ownership_from_security_context = true
+    [plugins."io.containerd.grpc.v1.cri"]
+      enable_unprivileged_ports = true
+      enable_unprivileged_icmp = true
 ---
 # group: cri
 apiVersion: v1alpha1
@@ -215,6 +225,152 @@ ntp:
 ---
 # group: runtime
 apiVersion: v1alpha1
+kind: KubeAdmissionControlConfig
+name: PodSecurity
+configuration:
+  apiVersion: pod-security.admission.config.k8s.io/v1alpha1
+  kind: PodSecurityConfiguration
+  defaults:
+    enforce: privileged
+    enforce-version: latest
+    audit: privileged
+    audit-version: latest
+    warn: privileged
+    warn-version: latest
+---
+apiVersion: v1alpha1
+kind: KubeCoreDNSConfig
+enabled: false
+---
+apiVersion: v1alpha1
+kind: KubeFlannelCNIConfig
+$patch: delete
+---
+apiVersion: v1alpha1
+kind: KubeletConfig
+# renovate: datasource=docker depName=ghcr.io/siderolabs/kubelet
+image: ghcr.io/siderolabs/kubelet:v1.37.0
+---
+apiVersion: v1alpha1
+kind: KubeNetworkConfig
+podSubnets:
+  - 10.100.0.0/17
+serviceSubnets:
+  - 10.100.128.0/17
+---
+apiVersion: v1alpha1
+kind: KubeNodeConfig
+nodeIP:
+  validSubnets:
+    - 10.10.0.0/24
+labels:
+  topology.kubernetes.io/region: main
+  topology.kubernetes.io/zone: homelab
+  intel.feature.node.kubernetes.io/gpu: "true"
+taints:
+  node-role.kubernetes.io/control-plane:
+    $patch: delete
+---
+apiVersion: v1alpha1
+kind: KubePrismConfig
+port: 7445
+---
+apiVersion: v1alpha1
+kind: KubeProxyConfig
+enabled: false
+---
+apiVersion: v1alpha1
+kind: KubeSchedulerConfig
+config:
+  apiVersion: kubescheduler.config.k8s.io/v1
+  kind: KubeSchedulerConfiguration
+  profiles:
+    - schedulerName: default-scheduler
+      plugins:
+        score:
+          disabled:
+            - name: ImageLocality
+            - name: SelectorSpread
+      pluginConfig:
+        - name: PodTopologySpread
+          args:
+            defaultingType: List
+            defaultConstraints:
+              - maxSkew: 1
+                topologyKey: kubernetes.io/hostname
+                whenUnsatisfiable: ScheduleAnyway
+                matchLabelKeys:
+                  - pod-template-hash
+                  - controller-revision-hash
+---
+apiVersion: v1alpha1
+kind: KubeStaticPodConfig
+name: network-irq-optimizer
+pod:
+  apiVersion: v1
+  kind: Pod
+  metadata:
+    name: network-irq-optimizer
+    namespace: kube-system
+  spec:
+    hostNetwork: true
+    hostPID: true
+    containers:
+      - name: irq-optimizer
+        image: alpine
+        securityContext:
+          privileged: true
+        command: ["/bin/sh", "-c"]
+        args:
+          - |
+            # 13900H P-cores (HT enabled) are 0-11. E-cores are 12-19.
+            while true; do
+              for irq in $(grep 'ice' /proc/interrupts | awk '{print $1}' | tr -d ':'); do
+                echo "2-11" > /proc/irq/$irq/smp_affinity_list
+              done
+              sleep 3600
+            done
+        volumeMounts:
+          - name: proc
+            mountPath: /proc
+    volumes:
+      - name: proc
+        hostPath:
+          path: /proc
+---
+apiVersion: v1alpha1
+kind: KubeTalosAPIAccessConfig
+allowedRoles:
+  - os:admin
+  - os:etcd:backup
+allowedKubernetesNamespaces:
+  - gitops-system
+---
+apiVersion: v1alpha1
+kind: LinkConfig
+name: lo # fix forwardKubeDNSToHost
+up: true
+addresses:
+  - address: 169.254.116.108/32
+---
+apiVersion: v1alpha1
+kind: ResolverConfig
+nameservers:
+  - address: 10.10.0.254
+searchDomains:
+  disableDefault: true
+hostDNS:
+  enabled: true
+  forwardKubeDNSToHost: true
+  resolveMemberNames: true
+---
+apiVersion: v1alpha1
+kind: TimeSyncConfig
+ntp:
+  servers:
+    - 10.10.0.254
+---
+apiVersion: v1alpha1
 kind: OOMConfig
 # v1.14 upstream defaults
 triggerExpression: |-
@@ -259,7 +415,6 @@ params:
   vm.dirty_background_ratio: "5" # start background writeback at 5% dirty (default 10%)
   vm.dirty_ratio: "10" # block writes at 10% dirty (default 20%)
 ---
-# replaces machine.install; grubUseUKICmdline dropped (schematic uses sd-boot)
 apiVersion: v1alpha1
 kind: UnattendedInstallConfig
 installer:
@@ -270,7 +425,6 @@ provisioning:
     match: disk.model == "SQF-C3AV1-256GDEDM"
   wipe: false
 ---
-# group: v1alpha1 — legacy core: only fields without a document replacement
 machine:
   features:
     nodeAddressSortAlgorithm: v2
