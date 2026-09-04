@@ -209,8 +209,9 @@ ntp:
   # (4460 refused), and NTS requires hostname servers
   servers:
     - 10.10.0.254 # local chrony on OpenWrt (upstream time.cloudflare.com, iburst nts prefer, RTC check)
-    - time.apple.com # fallback: stratum 1, lowest public RTT in eval (127ms)
-    - time.cloudflare.com # fallback: 100% reachability in eval
+    - ntp.aliyun.com # fallback: best public in eval (43ms, 100% samples)
+    - time.apple.com # fallback: stratum 1, tight jitter, 73% samples
+    - time.cloudflare.com # fallback: 100% reachability, high RTT
 ---
 # group: runtime
 apiVersion: v1alpha1

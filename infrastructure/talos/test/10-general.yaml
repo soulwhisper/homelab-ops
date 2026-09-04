@@ -180,9 +180,10 @@ ntp:
   # NTS requires hostname servers
   servers:
     - 172.19.82.10 # local chrony (dockurr/chrony, NTS upstreams, sysclk)
-    - ntp.aliyun.com # fallback: reachable in eval, 44ms stratum 3
-    - ntp.ntsc.ac.cn # fallback: matches test chrony upstream list
-    - time.cloudflare.com # fallback: 100% reachability in eval
+    - ntp.aliyun.com # fallback: best public in eval (43ms, 100% samples)
+    - time.apple.com # fallback: stratum 1, tight jitter, 73% samples
+    - ntp.ntsc.ac.cn # fallback: matches test upstream list, 20% samples — keep last
+    - time.cloudflare.com # fallback: 100% reachability, high RTT
 # for proxmox only
 # ptp:
 #   devices:
