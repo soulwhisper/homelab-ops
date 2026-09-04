@@ -1,7 +1,4 @@
 ---
-# group: block
-# new in v1.14: periodic XFS online scrub (xfs_scrub), weekly default;
-# prod has the local-cache XFS volume
 apiVersion: v1alpha1
 kind: FilesystemScrubConfig
 interval: 168h0m0s
@@ -24,13 +21,11 @@ provisioning:
     match: system_disk
   maxSize: 80GiB
 ---
-# group: cluster
 apiVersion: v1alpha1
 kind: DiscoveryServiceConfig
 name: default
 endpoint: http://10.10.0.100:9300
 ---
-# group: cri
 apiVersion: v1alpha1
 kind: CRICustomizationConfig
 name: base
@@ -44,7 +39,6 @@ content: |
       enable_unprivileged_ports = true
       enable_unprivileged_icmp = true
 ---
-# group: extensions
 apiVersion: v1alpha1
 kind: ExtensionServiceConfig
 name: nut-client
@@ -54,7 +48,6 @@ configFiles:
       SHUTDOWNCMD "/sbin/poweroff"
     mountPath: /usr/local/etc/nut/upsmon.conf
 ---
-# group: kubernetes
 apiVersion: v1alpha1
 kind: KubeAdmissionControlConfig
 name: PodSecurity
@@ -73,7 +66,6 @@ apiVersion: v1alpha1
 kind: KubeCoreDNSConfig
 enabled: false
 ---
-# Cilium is the CNI; drop the generated Flannel document
 apiVersion: v1alpha1
 kind: KubeFlannelCNIConfig
 $patch: delete
@@ -90,9 +82,6 @@ podSubnets:
 serviceSubnets:
   - 10.100.128.0/17
 ---
-# replaces cluster.allowSchedulingOnControlPlanes (nested taint delete per
-# the v1.14 control-plane workloads guide), machine.kubelet.nodeIP and
-# machine.nodeLabels; generated labels/taints merge in
 apiVersion: v1alpha1
 kind: KubeNodeConfig
 nodeIP:
@@ -106,8 +95,6 @@ taints:
   node-role.kubernetes.io/control-plane:
     $patch: delete
 ---
-# gen default, pinned explicitly for tracking: document presence enables
-# KubePrism (there is no enabled field); keeps 1.13 kubePrism.enabled behavior
 apiVersion: v1alpha1
 kind: KubePrismConfig
 port: 7445
@@ -183,7 +170,6 @@ allowedRoles:
 allowedKubernetesNamespaces:
   - gitops-system
 ---
-# group: network
 apiVersion: v1alpha1
 kind: LinkConfig
 name: lo # fix forwardKubeDNSToHost
@@ -205,15 +191,9 @@ hostDNS:
 apiVersion: v1alpha1
 kind: TimeSyncConfig
 ntp:
-  # useNTS omitted: the local server answers NTP by IP without NTS-KE
-  # (4460 refused), and NTS requires hostname servers
   servers:
-    - 10.10.0.254 # local chrony on OpenWrt (upstream time.cloudflare.com, iburst nts prefer, RTC check)
-    - ntp.aliyun.com # fallback: best public in eval (43ms, 100% samples)
-    - time.apple.com # fallback: stratum 1, tight jitter, 73% samples
-    - time.cloudflare.com # fallback: 100% reachability, high RTT
+    - 10.10.0.254
 ---
-# group: runtime
 apiVersion: v1alpha1
 kind: OOMConfig
 # v1.14 upstream defaults
@@ -226,8 +206,6 @@ cgroupRankingExpression: |-
   {Besteffort: 1.0, Burstable: 0.5, Guaranteed: 0.0, Podruntime: 0.0, System: 0.0}[class] *
   double(memory_current.orValue(0u))
 ---
-# gen default, pinned explicitly for tracking: runs the container plane
-# (containerd, kubelet, pods) in sandboxd's own PID/mount namespace
 apiVersion: v1alpha1
 kind: SecurityProfileConfig
 workloadIsolation: true
@@ -259,7 +237,6 @@ params:
   vm.dirty_background_ratio: "5" # start background writeback at 5% dirty (default 10%)
   vm.dirty_ratio: "10" # block writes at 10% dirty (default 20%)
 ---
-# replaces machine.install; grubUseUKICmdline dropped (schematic uses sd-boot)
 apiVersion: v1alpha1
 kind: UnattendedInstallConfig
 installer:
@@ -270,7 +247,6 @@ provisioning:
     match: disk.model == "SQF-C3AV1-256GDEDM"
   wipe: false
 ---
-# group: v1alpha1 — legacy core: only fields without a document replacement
 machine:
   features:
     nodeAddressSortAlgorithm: v2
