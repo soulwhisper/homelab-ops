@@ -110,4 +110,3 @@ spec:
                 limits:
                   memory: 512Mi
   disableDefaultAdminSecret: true
-  # no version pin: follows the grafana-operator default image (13.x)
