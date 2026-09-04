@@ -9,8 +9,6 @@ cluster:
     advertisedSubnets:
       - 10.10.0.0/24
 ---
-# keep PodSecurity present but fully permissive (previous behavior: disabled
-# via admissionControl delete-patch); v1.14 default is enforce: baseline
 apiVersion: v1alpha1
 kind: KubeAdmissionControlConfig
 name: PodSecurity
@@ -55,9 +53,6 @@ hostDNS:
   forwardKubeDNSToHost: true
   resolveMemberNames: true
 ---
-# replaces cluster.allowSchedulingOnControlPlanes (nested taint delete per
-# the v1.14 control-plane workloads guide), machine.kubelet.nodeIP and
-# machine.nodeLabels; generated labels/taints merge in
 apiVersion: v1alpha1
 kind: KubeNodeConfig
 nodeIP:
@@ -220,11 +215,9 @@ configFiles:
       SHUTDOWNCMD "/sbin/poweroff"
     mountPath: /usr/local/etc/nut/upsmon.conf
 ---
-# v1.14 upstream defaults, pinned explicitly for change tracking. The default
-# trigger dropped the machine-wide memory_full_avg10 clause that caused the
-# false triggers this repo previously disabled the handler over.
 apiVersion: v1alpha1
 kind: OOMConfig
+# v1.14 upstream defaults
 triggerExpression: |-
   multiply_qos_vectors(d_qos_memory_full_total, {System: 8.0, Podruntime: 4.0}) > 3000.0 &&
   multiply_qos_vectors(qos_memory_full_avg10, {System: 1.0, Podruntime: 1.0}) > 5.0 &&
