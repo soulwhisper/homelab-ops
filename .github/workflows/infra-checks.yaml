@@ -92,7 +92,7 @@ jobs:
       - name: Install talosctl
         run: |
           # renovate: datasource=github-releases depName=siderolabs/talos
-          TALOS_VERSION="v1.13.7"
+          TALOS_VERSION="v1.14.0"
           curl -fsSL -o /tmp/talosctl "https://github.com/siderolabs/talos/releases/download/${TALOS_VERSION}/talosctl-linux-amd64"
           sudo install -m 0755 /tmp/talosctl /usr/local/bin/talosctl
 
