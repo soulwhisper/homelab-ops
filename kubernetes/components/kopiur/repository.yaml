@@ -1,0 +1,25 @@
+---
+# yaml-language-server: $schema=https://soulwhisper.github.io/k8s-schemas/kopiur.home-operations.com/repository_v1alpha1.json
+apiVersion: kopiur.home-operations.com/v1alpha1
+kind: Repository
+metadata:
+  name: "${APP}"
+spec:
+  backend:
+    s3:
+      bucket: volsync
+      prefix: "${APP}/"
+      endpoint: nas.homelab.internal:9000
+      tls:
+        disableTls: true # versitygw on LAN http
+      auth:
+        secretRef:
+          name: "${APP}-kopiur"
+  encryption:
+    passwordSecretRef:
+      name: "${APP}-kopiur"
+      key: KOPIA_PASSWORD
+  create:
+    enabled: true
+  # maintenance omitted: operator creates a default Maintenance
+  # (quick every 6h, full daily 03:00)

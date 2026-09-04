@@ -203,7 +203,7 @@ Dashboards are vendir-synced from upstream sources into `_sources/` and converte
 | Database | `dragonflydb/dragonfly-operator` v1.6.1 | Dragonfly |
 | Envoy | `envoyproxy/gateway` v1.8.3; Grafana.com (IDs 24457-24459) | Gateway, downstream, upstream, overview |
 | Kgateway | `kgateway-dev/dashboards` main | Kgateway dashboards |
-| Default | Grafana.com | cert-manager, cloudflared, external-dns, node-exporter-full, smartctl-exporter, volsync |
+| Default | Grafana.com | cert-manager, cloudflared, external-dns, node-exporter-full, smartctl-exporter |
 | Infrastructure | Grafana.com (IDs 14284, 18153) | Synology, OpenWrt |
 | Devices | Grafana.com (ID 7587) | Blackbox exporter |
 
@@ -241,7 +241,7 @@ CronJob-based external heartbeat checks using the `app-template` chart. Each scr
 | `ceph-health` | `*/5 * * * *` | Ceph health gauge from rook-ceph-mgr metrics |
 | `flux-reconcile` | `*/30 * * * *` | All Flux Kustomization/HelmRelease/Repository Ready conditions |
 | `cnpg-backup` | `15 */6 * * *` | Most recent CNPG Backup in 12h window = completed |
-| `volsync-kopia` | `45 */6 * * *` | All VolSync ReplicationSources synced within 12h window |
+| `kopiur-snapshot` | `45 */6 * * *` | All kopiur SnapshotSchedules succeeded within 12h window |
 
 Time zone: `Asia/Shanghai`. All jobs use `alpine/k8s:1.36.2` with minimal resources and `backoffLimit: 0` (no retries).
 

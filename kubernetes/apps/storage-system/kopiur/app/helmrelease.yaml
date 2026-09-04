@@ -3,27 +3,16 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &name volsync
+  name: &name kopiur
 spec:
   interval: 30m
   chartRef:
     kind: OCIRepository
-    name: volsync
+    name: kopiur
 
   values:
-    fullnameOverride: volsync-perfectra1n
-    image: &image
-      repository: ghcr.io/perfectra1n/volsync
-      tag: v0.17.11
-    kopia: *image
-    rclone: *image
-    restic: *image
-    rsync: *image
-    rsync-tls: *image
-    syncthing: *image
-    manageCRDs: true
-    metrics:
-      disableAuth: true
+    fullnameOverride: *name
+    # webhook cert is self-managed by the chart; no cert-manager dependency
     podSecurityContext:
       runAsNonRoot: true
       runAsUser: 2000

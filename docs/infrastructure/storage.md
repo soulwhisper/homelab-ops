@@ -53,7 +53,7 @@ The metadata server placement uses a `DoNotSchedule` topology spread across `kub
 
 #### CephObjectStore: `ceph-objectstore`
 
-The RADOS Gateway (RGW) exposes an S3-compatible HTTP endpoint used by VolSync and CNPG for backup storage. It is not exposed via Ingress — all consumption is intra-cluster.
+The RADOS Gateway (RGW) exposes an S3-compatible HTTP endpoint used by kopiur and CNPG for backup storage. It is not exposed via Ingress — all consumption is intra-cluster.
 
 ```
 Internal endpoint: http://rook-ceph-rgw-ceph-objectstore.storage-system.svc.cluster.local
@@ -73,7 +73,7 @@ The snapshot-controller operator is deployed with `installCRDs: true` and provid
 | `ceph-block-snapshot` | yes | `storage-system.rbd.csi.ceph.com` | Delete |
 | `ceph-filesystem-snapshot` | no | `storage-system.cephfs.csi.ceph.com` | Delete |
 
-Snapshots are used by VolSync's `copyMethod: Snapshot` to create consistent, instant point-in-time copies before backup.
+Snapshots are used by kopiur's `copyMethod: Snapshot` to create consistent, instant point-in-time copies before backup.
 
 ### OpenEBS LocalPV
 
@@ -86,7 +86,7 @@ Base path:     /var/mnt/local-hostpath
 Replicas:      2 (controller)
 ```
 
-OpenEBS LocalPV is also used as the **cache destination** for VolSync backups — the `cacheStorageClassName` defaults to `openebs-hostpath`, keeping temporary snapshot caches on fast local storage rather than consuming Ceph capacity.
+OpenEBS LocalPV also keeps temporary snapshot caches on fast local storage rather than consuming Ceph capacity (kopiur mover cache defaults).
 
 ### CSI Driver NFS — Synology Integration
 
@@ -99,31 +99,31 @@ The [CSI NFS Driver](https://github.com/kubernetes-csi/csi-driver-nfs) mounts Sy
 
 Both classes use `subDir: ${pvc.metadata.name}` to isolate PVCs under the share, with `onDelete: retain` to prevent the provisioner from removing subdirectories when a PVC is deleted. Common mount tuning includes 128 KiB `rsize`/`wsize`, `actimeo=60` (attribute cache timeout), and `timeo=30`/`retrans=3` for soft-recovery. The Synology NAS limits NFS access to `10.10.0.0/24` with `MapAllToAdmin` for simplified UID mapping.
 
-### VolSync — PVC Backup
+### kopiur — PVC Backup
 
-[VolSync](https://volsync.backube.com) provides automated PVC backup and restore, covering **27 applications** across the cluster. The pattern uses a reusable Kustomize component at `kubernetes/components/volsync/` that each app's `ks.yaml` references.
+[kopiur](https://github.com/home-operations/kopiur) (Kopia-native Rust operator) provides automated PVC backup and restore, covering **27 applications** across the cluster. The pattern uses a reusable Kustomize component at `kubernetes/components/kopiur/` that each app's `ks.yaml` references. Migrated from VolSync (perfectra1n kopia fork); the kopia repositories on S3 are unchanged — same bucket layout, same repository password.
 
 #### Architecture
 
 Each app gets three resources generated from the component:
 
-1. **`ReplicationSource`** (`${APP}`): Periodic (every 6 hours, configurable via `VOLSYNC_SCHEDULE`) Kopia-based backup using `copyMethod: Snapshot`. Creates a CSI snapshot of the source PVC, then streams a compressed (`zstd-fastest`) Kopia repository to S3.
+1. **`Repository`** (`${APP}`): the kopia repository as a first-class CR — S3 backend (`volsync` bucket, `${APP}/` prefix), encryption password from 1Password, operator-managed maintenance (quick every 6h, full daily).
 
-2. **`ReplicationDestination`** (`${APP}-bootstrap`): One-shot restore triggered manually (`manual: restore-once`). On first deployment, it pulls the Kopia repository from S3 and populates a temporary PVC.
+2. **`SnapshotPolicy`** (`${APP}`) + **`SnapshotSchedule`**: the recipe (CSI `copyMethod: Snapshot` via `ceph-block-snapshot`, `zstd-fastest`, keep-daily 14) and its cron invocation (every 6 hours, configurable via `KOPIUR_SCHEDULE`).
 
-3. **`PVC`** (`${APP}`): References the `ReplicationDestination` via `dataSourceRef`, so the working PVC is created from the restored data on first boot, then becomes the source for subsequent backups.
+3. **`Restore`** (`${APP}-bootstrap`) + **`PVC`** (`${APP}`): the Restore acts as a passive volume populator; the working PVC claims it via `dataSourceRef`, so first boot restores from the latest snapshot, then the PVC becomes the backup source.
 
 ```
 ┌──────────────┐    periodic    ┌─────────────────┐   Kopia snapshot   ┌──────────────────┐
-│  Source PVC  │◄──────────────│ ReplicationSource│──────────────────►│  Ceph RGW (S3)   │
+│  Source PVC  │◄──────────────│ SnapshotSchedule │──────────────────►│  Ceph RGW (S3)   │
 │  (ceph-block)│               └─────────────────┘                   │  via VersityGW   │
 └──────┬───────┘                                                      └────────┬─────────┘
        │                                                                       │
        │ restore-once                                                          │
        ▼                                                                       │
 ┌──────────────────┐    dataSourceRef    ┌─────────────────────┐               │
-│  Working PVC     │◄───────────────────│ReplicationDestination│◄──────────────┘
-│  (ceph-block)    │                    │  (temp, auto-cleanup) │
+│  Working PVC     │◄───────────────────│ Restore (populator)  │◄──────────────┘
+│  (ceph-block)    │                    │                      │
 └──────────────────┘                    └─────────────────────┘
 ```
 
@@ -142,20 +142,21 @@ Hourly snapshots are disabled to conserve S3 storage; daily snapshots are kept f
 All backups target the Synology-hosted **VersityGW** S3 gateway at `http://nas.homelab.internal:9000`, stored in path-prefixed buckets under `s3://volsync/<app-name>`. S3 credentials are sourced from 1Password via a per-app `ExternalSecret`:
 
 ```
-KOPIA_REPOSITORY:     s3://volsync/<app>
-KOPIA_PASSWORD:       <1Password encryption_cipher.volsync>
-AWS_S3_ENDPOINT:      http://nas.homelab.internal:9000
-AWS_ACCESS_KEY_ID:    <1Password app-user.admin_user>
+Repository.spec.backend.s3:
+  bucket:   volsync            # path prefix per app: <app>/
+  endpoint: nas.homelab.internal:9000   (TLS disabled, LAN)
+encryption password: <1Password encryption_cipher.volsync>  (unchanged — repos stay readable)
+AWS_ACCESS_KEY_ID:    <1Password app-user.admin_user>       (per-app ExternalSecret)
 AWS_SECRET_ACCESS_KEY:<1Password app-user.admin_pass>
 ```
 
 #### Monitoring
 
-A heartbeat check in the monitoring stack verifies that every `ReplicationSource` has a `lastSyncTime` within a defined window and that no source is stuck in a `Synchronizing` state. System-upgrade-controller plans gate node upgrades on ReplicationSource health: upgrades are paused if any source is actively synchronizing.
+A heartbeat check in the monitoring stack verifies that every `SnapshotSchedule` has a `lastSuccessfulSchedule` within a defined window. Tuppr upgrade plans gate node upgrades on kopiur Snapshot health: upgrades are paused while any Snapshot is `Running` or `Pending`.
 
 ### CNPG PostgreSQL Backup
 
-[CloudNativePG](https://cloudnative-pg.io) backs up the 3-instance PostgreSQL cluster using the **Barman Cloud** plugin, writing directly to the same VersityGW S3 endpoint as VolSync.
+[CloudNativePG](https://cloudnative-pg.io) backs up the 3-instance PostgreSQL cluster using the **Barman Cloud** plugin, writing directly to the same VersityGW S3 endpoint as kopiur.
 
 ```yaml
 ObjectStore:      barman-cloud
@@ -185,7 +186,7 @@ The Synology DS923+ runs several Docker Compose services critical to the storage
 
 #### VersityGW (S3 Gateway)
 
-[VersityGW](https://www.versity.com) provides an S3-compatible API server backed by the local POSIX filesystem at `/volume3/docker/versitygw`. It serves as the **single S3 backend** for both VolSync and CNPG, running on port `9000` with a web UI on `9001`. Configuration is stored in a sops-encrypted env file (`versitygw.sops.env`).
+[VersityGW](https://www.versity.com) provides an S3-compatible API server backed by the local POSIX filesystem at `/volume3/docker/versitygw`. It serves as the **single S3 backend** for both kopiur and CNPG, running on port `9000` with a web UI on `9001`. Configuration is stored in a sops-encrypted env file (`versitygw.sops.env`).
 
 Three S3 buckets are pre-created via the `infra.just` justfile:
 
@@ -211,7 +212,7 @@ Each MS-01 node boots from a 256 GB SSD with the following Talos volume partitio
 | `local-hostpath` | 140 GiB | (Talos-managed) | OpenEBS LocalPV base path (`/var/mnt/local-hostpath`) |
 | `local-cache` | dedicated NVMe | **XFS** | High-performance scratch space on a separate NVMe device |
 
-The `local-cache` volume is a `UserVolumeConfig` that selects a dedicated NVMe device (`/dev/disk/by-path/pci-0000:59:00.0-nvme-1`) and formats it with XFS. This provides fast, isolated storage for workloads that benefit from a dedicated device — such as VolSync cache PVCs or temporary processing — without competing with the Ceph OSD NVMe or the system disk.
+The `local-cache` volume is a `UserVolumeConfig` that selects a dedicated NVMe device (`/dev/disk/by-path/pci-0000:59:00.0-nvme-1`) and formats it with XFS. This provides fast, isolated storage for workloads that benefit from a dedicated device — such as kopiur mover cache PVCs or temporary processing — without competing with the Ceph OSD NVMe or the system disk.
 
 The `local-hostpath` volume lives on the system disk alongside `EPHEMERAL`, pinched to a maximum of 140 GiB to leave headroom for the Talos system partitions.
 

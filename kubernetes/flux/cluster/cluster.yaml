@@ -64,7 +64,7 @@ spec:
               namespace: security-system
             - name: rook-ceph-cluster
               namespace: storage-system
-            - name: volsync
+            - name: kopiur
               namespace: storage-system
       target:
         group: kustomize.toolkit.fluxcd.io

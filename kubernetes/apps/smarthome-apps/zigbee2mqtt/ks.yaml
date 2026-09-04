@@ -19,7 +19,7 @@ spec:
       namespace: smarthome-apps
   components:
     - ../../../../components/authentik
-    - ../../../../components/volsync
+    - ../../../../components/kopiur
   postBuild:
     substitute:
       APP: *name

@@ -42,8 +42,8 @@ flowchart TB
     subgraph Components["Kustomize Components"]
         NS_COMP["namespace
         13 consumers"]
-        VOLSYNC["volsync
-        23 consumers"]
+        KOPIUR["kopiur
+        24 consumers"]
         AUTHENTIK["authentik
         14 consumers"]
         CNPG["cnpg
@@ -156,7 +156,7 @@ spec:
       namespace: security-system
     - name: rook-ceph-cluster
       namespace: storage-system
-    - name: volsync
+    - name: kopiur
       namespace: storage-system
 ```
 
@@ -211,7 +211,7 @@ Each non-trivial application defines its own `OCIRepository` resource in its `ap
 | ----------------- | ----- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | kube-system       | 11    | cilium, coredns, spegel, frr-k8s, descheduler, reloader, metrics-server, k8tz, gateway-api-crds, intel-device-plugins (operator + GPU)                                                                                                                |
 | security-system   | 4     | authentik, cert-manager, external-secrets, onepassword-connect                                                                                                                                                                                        |
-| storage-system    | 7     | rook-ceph (app + cluster + drivers), volsync, snapshot-controller, openebs-localpv, csi-driver-nfs                                                                                                                                                              |
+| storage-system    | 7     | rook-ceph (app + cluster + drivers), kopiur, snapshot-controller, openebs-localpv, csi-driver-nfs                                                                                                                                                              |
 | database-system   | 4     | cloudnative-pg, plugin-barman-cloud, dragonfly-operator, clickhouse-operator                                                                                                                                                                          |
 | networking-system | 5     | kgateway (app + CRDs), agentgateway (app + CRDs), externaldns                                                                                                                                                                                         |
 | monitoring-system | 15    | victoria-metrics (operator + cluster + app), victoria-logs (app + collector), victoria-traces, grafana, kube-state-metrics, node-exporter, prometheus-crds, blackbox-exporter, smartctl-exporter, opentelemetry-collector, silence-operator, headlamp |
@@ -290,18 +290,20 @@ metadata:
 
 The `name: _` is a Kustomize placeholder — postBuild substitution in each namespace's `kustomization.yaml` fills in the actual namespace name.
 
-### Component: volsync (23 consumers)
+### Component: kopiur (24 consumers)
 
-**Path**: `kubernetes/components/volsync/`
+**Path**: `kubernetes/components/kopiur/`
 
 The most heavily used component. It provisions a complete backup-and-recovery pipeline for stateful applications:
 
-| Resource                 | Purpose                                                                                     |
-| ------------------------ | ------------------------------------------------------------------------------------------- |
-| `PersistentVolumeClaim`  | Creates the application's data PVC with the correct StorageClass and access mode            |
-| `ExternalSecret`         | Pulls S3 credentials (Restic password, access keys) from 1Password into a Kubernetes Secret |
-| `ReplicationSource`      | Configures source-side snapshot and replication to S3 (schedule, retention, pruning)        |
-| `ReplicationDestination` | Configures destination-side restore from S3 for disaster recovery scenarios                 |
+| Resource           | Purpose                                                                              |
+| ------------------ | ------------------------------------------------------------------------------------ |
+| `PersistentVolumeClaim` | Creates the application's data PVC (claims the `Restore` populator via `dataSourceRef`) |
+| `ExternalSecret`   | Pulls the kopia repo password and S3 access keys from 1Password into a Secret         |
+| `Repository`       | First-class kopia repository: S3 backend (NAS VersityGW), encryption, maintenance     |
+| `SnapshotPolicy`   | The backup recipe: CSI snapshot copy method, zstd-fastest, keep-daily 14              |
+| `SnapshotSchedule` | Cron invocation of the policy (every 6h, `KOPIUR_SCHEDULE` overridable)               |
+| `Restore`          | Passive volume populator: first boot restores the latest snapshot                     |
 
 Applications that need persistent data backed up to S3 include this component. The PVC template is parameterized through `postBuild` substitution with the `APP` variable.
 
@@ -352,10 +354,10 @@ Applications frequently stack multiple components. For example, `moviepilot` (`k
 components:
   - ../../../../components/cnpg # PostgreSQL database
   - ../../../../components/dragonfly # Redis cache
-  - ../../../../components/volsync # PVC backup to S3
+  - ../../../../components/kopiur # PVC backup to S3
 ```
 
-The most complex stacks combine four components: `netbox` uses `cnpg`, `dragonfly`, `volsync`, and `authentik`, while `langfuse` uses `cnpg`, `dragonfly`, `ceph-bucket`, and `authentik`.
+The most complex stacks combine four components: `netbox` uses `cnpg`, `dragonfly`, `kopiur`, and `authentik`, while `langfuse` uses `cnpg`, `dragonfly`, `ceph-bucket`, and `authentik`.
 
 ## Namespace Inventory
 
@@ -365,7 +367,7 @@ The cluster uses 13 namespaces, ordered by dependency from foundational infrastr
 | --- | ------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | 1   | `kube-system`       | Cluster networking and node services | Cilium CNI, CoreDNS, Spegel mirror, FRR-K8s BGP, Intel GPU plugins, Reloader, Descheduler, k8tz, Gateway API CRDs, Metrics Server, Runtime Classes                                                                                         |
 | 2   | `security-system`   | Identity, certificates, secrets      | Authentik SSO, cert-manager, External Secrets Operator, 1Password Connect                                                                                                                                                                  |
-| 3   | `storage-system`    | Persistent storage and backups       | Rook-Ceph (block + object), OpenEBS LocalPV, CSI NFS driver, VolSync, Snapshot Controller                                                                                                                                                  |
+| 3   | `storage-system`    | Persistent storage and backups       | Rook-Ceph (block + object), OpenEBS LocalPV, CSI NFS driver, kopiur, Snapshot Controller                                                                                                                                                  |
 | 4   | `database-system`   | Database operators                   | CloudNativePG, Dragonfly Operator, ClickHouse Operator                                                                                                                                                                                     |
 | 5   | `networking-system` | Ingress, DNS, API gateway            | kgateway (Envoy Gateway), Agent Gateway (AI agent routing), ExternalDNS                                                                                                                                                                    |
 | 6   | `monitoring-system` | Observability                        | Victoria Metrics (operator + cluster), Victoria Logs, Victoria Traces, Grafana, Prometheus CRDs, kube-state-metrics, node-exporter, blackbox-exporter, Smartctl exporter, OTel Collector, Silence Operator, Langfuse, Heartbeats, Headlamp |
