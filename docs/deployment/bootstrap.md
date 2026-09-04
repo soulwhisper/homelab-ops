@@ -286,7 +286,7 @@ just talos apply exarch-01    # uses test configs
 | Aspect | Production | Test |
 |--------|-----------|------|
 | Hypervisor | Bare metal (M.2 NVMe) | Proxmox / VMware VMs |
-| VLAN / subnet | `10.10.0.0/24` (VLAN 10) | `172.19.82.0/24` (VLAN 19) |
+| Disk | NVMe model selector | RAID1 boot array (`RAIDArrayConfig`, sda+sdb — attach the second disk before ISO boot) |
 | API endpoint | `k8s.homelab.internal:6443` | `172.19.82.101:6443` |
 | Bond mode | 802.3ad (LACP, 2× physical links) | active-backup (single virtual link) |
 | MTU | 9000 (jumbo frames, 10G fabric) | 1500 (standard) |

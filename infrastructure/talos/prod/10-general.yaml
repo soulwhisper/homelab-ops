@@ -226,6 +226,12 @@ cgroupRankingExpression: |-
   {Besteffort: 1.0, Burstable: 0.5, Guaranteed: 0.0, Podruntime: 0.0, System: 0.0}[class] *
   double(memory_current.orValue(0u))
 ---
+# gen default, pinned explicitly for tracking: runs the container plane
+# (containerd, kubelet, pods) in sandboxd's own PID/mount namespace
+apiVersion: v1alpha1
+kind: SecurityProfileConfig
+workloadIsolation: true
+---
 apiVersion: v1alpha1
 kind: SysctlConfig
 params:
