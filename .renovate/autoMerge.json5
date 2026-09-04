@@ -55,6 +55,19 @@
       addLabels: ["review/required"],
     },
     {
+      description: "Frequent quiet-train apps: auto-merge minor updates after CI (langfuse, doco-cd)",
+      matchPackageNames: [
+        "ghcr.io/langfuse/langfuse",
+        "ghcr.io/langfuse/langfuse-worker",
+        "ghcr.io/kimdre/doco-cd",
+      ],
+      matchUpdateTypes: ["minor"],
+      automerge: true,
+      automergeType: "pr",
+      platformAutomerge: true,
+      ignoreTests: false,
+    },
+    {
       description: "Global: major updates always require manual merge",
       matchUpdateTypes: ["major"],
       automerge: false,
