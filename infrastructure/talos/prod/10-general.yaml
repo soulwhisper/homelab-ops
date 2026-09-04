@@ -106,6 +106,12 @@ taints:
   node-role.kubernetes.io/control-plane:
     $patch: delete
 ---
+# gen default, pinned explicitly for tracking: document presence enables
+# KubePrism (there is no enabled field); keeps 1.13 kubePrism.enabled behavior
+apiVersion: v1alpha1
+kind: KubePrismConfig
+port: 7445
+---
 apiVersion: v1alpha1
 kind: KubeProxyConfig
 enabled: false
