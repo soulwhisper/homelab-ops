@@ -16,14 +16,17 @@ spec:
       *name :
         data:
           mosquitto.conf: |
+            # 2.1: password_file/per_listener_settings directives deprecated,
+            # auth moved to the password-file plugin (same code, new shape)
             allow_anonymous false
             autosave_interval 60
             connection_messages false
             listener 1883
-            password_file /etc/mosquitto/password_file
-            per_listener_settings false
+            plugin /usr/lib/mosquitto_password_file.so
+            plugin_opt_password_file /etc/mosquitto/password_file
             persistence true
             persistence_location /config
+            # 2.1 behavior note: max_packet_size now defaults to 2MB (was 256MB)
     controllers:
       *name :
         annotations:
@@ -39,7 +42,7 @@ spec:
           app:
             image:
               repository: eclipse-mosquitto
-              tag: 2.0.22
+              tag: 2.1.2-alpine
             probes:
               liveness:
                 enabled: true
