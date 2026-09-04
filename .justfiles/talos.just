@@ -38,8 +38,8 @@ generate mode:
     test) CLUSTER_NAME="test"; CLUSTER_ENDPOINT="https://172.19.82.101:6443" ;;
     *) echo "❌ Unknown mode: {{mode}} (expected: prod|test)"; exit 1 ;;
   esac
-  TALOS_VERSION=$(yq --raw-output '.talos_version' "${TALOS_DIR}/version.yaml")
-  K8S_VERSION=$(yq --raw-output '.k8s_version' "${TALOS_DIR}/version.yaml")
+  TALOS_VERSION=$(yq -r '.talos_version' "${TALOS_DIR}/version.yaml")
+  K8S_VERSION=$(yq -r '.k8s_version' "${TALOS_DIR}/version.yaml")
   SCHEMATIC_ID=$(just talos _schema {{mode}})
   op inject -i "${TALOS_DIR}/secret.yaml" | talosctl gen config \
     "${CLUSTER_NAME}" "${CLUSTER_ENDPOINT}" \
