@@ -169,3 +169,19 @@ spec:
   configMapRef:
     name: dashboard-blackbox-exporter
     key: blackbox-exporter.json
+---
+# yaml-language-server: $schema=https://soulwhisper.github.io/k8s-schemas/grafana.integreatly.org/grafanadashboard_v1beta1.json
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: kopiur
+spec:
+  folderRef: default
+  resyncPeriod: 30m
+  allowCrossNamespaceImport: true
+  instanceSelector:
+    matchLabels:
+      grafana.internal/instance: grafana
+  configMapRef:
+    name: dashboard-kopiur
+    key: kopiur.json

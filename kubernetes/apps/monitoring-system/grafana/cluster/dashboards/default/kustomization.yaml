@@ -27,6 +27,9 @@ configMapGenerator:
   - name: dashboard-smartctl-exporter
     files:
       - smartctl-exporter.json=../_sources/default/smartctl-exporter/dashboard.json
+  - name: dashboard-kopiur
+    files:
+      - kopiur.json=../_sources/default/kopiur/deploy/helm/kopiur/files/dashboards/kopiur.json
   - name: dashboard-synology
     files:
       - synology.json=../_sources/infrastructure/synology/dashboard.json

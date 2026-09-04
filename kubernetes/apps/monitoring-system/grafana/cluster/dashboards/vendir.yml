@@ -203,6 +203,13 @@ directories:
             url: "https://grafana.com/api/dashboards/22604/revisions/2/download",
           }
 
+      - path: kopiur
+        lazy: true
+        git:
+          url: https://github.com/home-operations/kopiur
+          ref: 0.10.7
+        includePaths: ["deploy/helm/kopiur/files/dashboards/kopiur.json"]
+
   # ---------------------------------------------------------
   # Folder : default/infrastructure
   # ---------------------------------------------------------
