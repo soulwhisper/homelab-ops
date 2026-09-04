@@ -60,6 +60,11 @@ just talos generate prod
    resolving 1Password references to produce cluster secrets (IDs, tokens, CA
    certs and keys). The resolved YAML is piped to `talosctl gen config`.
 
+   `secret.yaml` is compatible with Talos 1.14 unchanged: the secrets bundle
+   schema is identical across 1.13/1.14, and the 1.14 cluster-ID encoding
+   alignment (URL-safe → standard base64) is a non-issue because Talos never
+   decodes the cluster ID — it is used as an opaque identifier string.
+
 2. **Base generation**: `talosctl gen config` produces `controlplane.yaml` and
    `worker.yaml` in `infrastructure/talos/clusterconfig/` using cluster name
    `main` and API endpoint `https://k8s.homelab.internal:6443`.
@@ -70,9 +75,8 @@ just talos generate prod
 
    | Order | File | What it configures |
    |-------|------|--------------------|
-   | 00 | `00-schematic.yaml` | Schematic ID (injected into `machine.install.image`) |
-   | 10 | `10-general.yaml` | Cluster networking, etcd, scheduler, sysctls, CRI, NUT, NTP, volumes |
-   | 15 | `15-watchdog.yaml` | Hardware watchdog (`/dev/watchdog0`, 5m timeout) |
+   | 00 | `00-schematic.yaml` | Schematic ID (Image Factory extension set) |
+   | 10 | `10-general.yaml` | Multi-document config: discovery, install, DNS, kubelet/node, scheduler, sysctls, CRI, NUT, NTP, volumes |
    | 20 | `20-mount-hostpath.yaml` | Secondary NVMe disk as `local-cache` XFS volume |
    | 30 | `30-private-mirrors.yaml` | Registry mirrors routing through NAS cache (`nas.homelab.internal:9002`) |
    | — | `nodes/<hostname>.yaml` | Hostname, bond configuration (802.3ad, 10G, MTU 9000), static IP |
@@ -80,14 +84,15 @@ just talos generate prod
    The result is `clusterconfig/main-<hostname>.yaml` per node. The
    `talosconfig` is copied to `~/.talos/config`.
 
-**Key `10-general.yaml` decisions**:
+**Key `10-general.yaml` decisions** (Talos 1.14 multi-document model):
 
-- CNI is set to `none` (Cilium is installed later via Helm).
-- CoreDNS is disabled (replaced by Cilium-managed CoreDNS).
-- `allowSchedulingOnControlPlanes: true` — all three nodes run workloads.
-- Discovery uses a custom service endpoint (`http://10.10.0.100:9300`) instead of Kubernetes-based discovery.
-- `forwardKubeDNSToHost: true` with a `169.254.116.108/32` loopback link for
+- Flannel document is deleted (Cilium is installed later via Helm).
+- `KubeCoreDNSConfig` disabled (replaced by Cilium-managed CoreDNS).
+- Control-plane taint removed from `KubeNodeConfig` — all three nodes run workloads.
+- Discovery uses a custom `DiscoveryServiceConfig` endpoint (`http://10.10.0.100:9300`) instead of Kubernetes-based discovery.
+- `ResolverConfig` sets `forwardKubeDNSToHost: true` with a `169.254.116.108/32` loopback link for
   host-to-pod DNS resolution.
+- Install is driven by `UnattendedInstallConfig` (Image Factory installer + CEL disk selector).
 
 ---
 
@@ -258,8 +263,7 @@ provisioning, and every other workload.
 | `op inject` fails with "not signed in" | 1Password session expired | `eval $(op signin)` then retry |
 | `talosctl apply-config` hangs | Node not in maintenance mode | Reboot into Talos ISO, verify network reachability |
 | "connection refused" to `k8s.homelab.internal:6443` | DNS not resolving or control plane not ready | Wait for etcd bootstrap; verify DNS record points to node IPs |
-| "etcd is not running" after 5 minutes | Bootstrap command never reached the endpoint | Check network connectivity to `TALOS_ENDPOINT`; verify discovery service is reachable |
-| Helmfile sync fails on `cilium` | kube-proxy not disabled, conflicting iptables rules | Verify `cluster.proxy.disabled: true` in `10-general.yaml` |
+| Helmfile sync fails on `cilium` | kube-proxy not disabled, conflicting iptables rules | Verify `KubeProxyConfig` has `enabled: false` in `10-general.yaml` |
 | `flux reconcile` stuck | Flux controllers not yet healthy | Wait for `flux-operator` and `flux-instance` HelmReleases; check `kubectl get pods -n gitops-system` |
 | Nodes fail to join via discovery | Discovery service unreachable | Verify `http://10.10.0.100:9300` is accessible; check core switch routing |
 | Private registry mirrors fail | NAS cache (Dragonfly) not running | Start NAS services first; or temporarily set `skipFallback: false` in `30-private-mirrors.yaml` |
