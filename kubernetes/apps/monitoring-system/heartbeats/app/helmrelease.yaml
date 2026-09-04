@@ -111,29 +111,29 @@ spec:
             fi
             push "$ENDPOINT" "$SUCCESS" "$(( $(date +%s) - START ))s" "$ERROR"
 
-          # Every ReplicationSource must have a lastSyncTime newer than the window.
-          # Sources never-synced are flagged separately.
-          volsync-kopia.sh: |
+          # Every SnapshotSchedule must have a lastSuccessfulSchedule newer than the window.
+          # Schedules never-succeeded are flagged separately.
+          kopiur-snapshot.sh: |
             #!/bin/bash
             set -eu
             source /scripts/push.sh
             START=$(date +%s)
-            ENDPOINT="cluster-jobs_volsync-kopia-snapshot"
+            ENDPOINT="cluster-jobs_kopiur-snapshot"
             WINDOW_SEC=43200
 
-            ALL=$(kubectl get replicationsources.volsync.backube -A -o json)
+            ALL=$(kubectl get snapshotschedules.kopiur.home-operations.com -A -o json)
             CUTOFF=$(( $(date +%s) - WINDOW_SEC ))
 
             STALE=$(echo "$ALL" | jq -r --argjson cutoff "$CUTOFF" '
               [ .items[]
-                | select(.status.lastSyncTime != null)
-                | select((.status.lastSyncTime | fromdateiso8601) < $cutoff)
+                | select(.status.lastSuccessfulSchedule.at != null)
+                | select((.status.lastSuccessfulSchedule.at | fromdateiso8601) < $cutoff)
                 | "\(.metadata.namespace)/\(.metadata.name)"
               ] | join(",")')
 
             NEVER=$(echo "$ALL" | jq -r '
               [ .items[]
-                | select(.status.lastSyncTime == null)
+                | select(.status.lastSuccessfulSchedule.at == null)
                 | "\(.metadata.namespace)/\(.metadata.name)"
               ] | join(",")')
 
@@ -166,9 +166,9 @@ spec:
             - apiGroups: ["postgresql.cnpg.io"]
               resources: ["backups"]
               verbs: ["get", "list"]
-            # VolSync ReplicationSource status
-            - apiGroups: ["volsync.backube"]
-              resources: ["replicationsources"]
+            # kopiur SnapshotSchedule status
+            - apiGroups: ["kopiur.home-operations.com"]
+              resources: ["snapshotschedules"]
               verbs: ["get", "list"]
             # Flux readiness
             - apiGroups: ["kustomize.toolkit.fluxcd.io"]
@@ -259,7 +259,7 @@ spec:
               requests: { cpu: 10m, memory: 64Mi }
               limits: { cpu: 200m, memory: 256Mi }
 
-      volsync-kopia:
+      kopiur-snapshot:
         type: cronjob
         cronjob:
           schedule: "45 */6 * * *"
@@ -274,7 +274,7 @@ spec:
         containers:
           app:
             image: *image
-            command: ["bash", "/scripts/volsync-kopia.sh"]
+            command: ["bash", "/scripts/kopiur-snapshot.sh"]
             envFrom: *envFrom
             resources:
               requests: { cpu: 10m, memory: 64Mi }

@@ -115,9 +115,6 @@ directories:
   - configDigest: 4df4c2d56d1559a5204d66f43dfce2e8a830e47af0cf56132b4b230d39e105f0
     http: {}
     path: smartctl-exporter
-  - configDigest: 1c16f4db3131b0706e512c0b1282b2f8bf78ad48282c53889156a80b6f294a22
-    http: {}
-    path: volsync
   path: _sources/default
 - contents:
   - configDigest: 824515bc9411036b778e951db855d12feaf87be3b0d3d1fb7829dd7c766adfcd

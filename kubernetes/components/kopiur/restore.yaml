@@ -1,0 +1,17 @@
+---
+apiVersion: kopiur.home-operations.com/v1alpha1
+kind: Restore
+metadata:
+  name: "${APP}-bootstrap"
+  labels:
+    kustomize.toolkit.fluxcd.io/ssa: IfNotPresent
+spec:
+  source:
+    fromPolicy:
+      name: "${APP}"
+      offset: 0 # latest snapshot
+  # passive populator: the PVC claims this Restore via spec.dataSourceRef
+  target:
+    populator: {}
+  policy:
+    onMissingSnapshot: Continue

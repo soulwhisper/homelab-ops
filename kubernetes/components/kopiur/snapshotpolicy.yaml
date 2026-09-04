@@ -1,0 +1,26 @@
+---
+apiVersion: kopiur.home-operations.com/v1alpha1
+kind: SnapshotPolicy
+metadata:
+  name: "${APP}"
+spec:
+  repository:
+    kind: Repository
+    name: "${APP}"
+  sources:
+    - pvc:
+        name: "${KOPIUR_CLAIM:-${APP}}"
+  copyMethod: "${KOPIUR_COPYMETHOD:-Snapshot}"
+  volumeSnapshotClassName: "${KOPIUR_SNAPSHOTCLASS:-ceph-block-snapshot}"
+  retention:
+    keepDaily: 14
+  compression:
+    compressor: zstd-fastest
+  upload:
+    maxParallelFileReads: 2
+  mover:
+    securityContext:
+      runAsUser: "${APP_UID:-2000}"
+      runAsGroup: "${APP_GID:-2000}"
+    podSecurityContext:
+      fsGroup: "${APP_GID:-2000}"

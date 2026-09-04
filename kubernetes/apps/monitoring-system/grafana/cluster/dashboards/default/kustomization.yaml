@@ -27,9 +27,6 @@ configMapGenerator:
   - name: dashboard-smartctl-exporter
     files:
       - smartctl-exporter.json=../_sources/default/smartctl-exporter/dashboard.json
-  - name: dashboard-volsync
-    files:
-      - volsync.json=../_sources/default/volsync/dashboard.json
   - name: dashboard-synology
     files:
       - synology.json=../_sources/infrastructure/synology/dashboard.json

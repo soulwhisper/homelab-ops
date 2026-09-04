@@ -202,7 +202,7 @@ configs:
           alerts:
             - type: pushover
               failure-threshold: 1
-        - name: volsync-kopia-snapshot
+        - name: kopiur-snapshot
           group: cluster-jobs
           token: "${EXTERNAL_TOKEN}"
           heartbeat:

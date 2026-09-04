@@ -116,9 +116,9 @@ jobs:
       #   interval/prune/sourceRef, so the strict schema always rejects them;
       #   they are validated by the flate test job instead
       # - authentik blueprints: custom !Find/!KeyOf YAML tags break YAML->JSON
-      # - volsync ReplicationSource/Destination: repo runs the perfectra1n fork
-      #   (kopia field) while the schema registry carries upstream volsync, and
-      #   the manifests are ${VAR}-templated by flux postBuild
+      # - kopiur Repository/SnapshotPolicy/SnapshotSchedule/Restore: component
+      #   manifests are ${VAR}-templated by flux postBuild and the group is not
+      #   in the schema registry
       # - kustomize kustomization.yaml: no published schema exists
       - name: Validate changed manifests
         run: |
@@ -142,7 +142,7 @@ jobs:
             -strict \
             -summary \
             -ignore-missing-schemas \
-            -skip 'ReplicationSource,ReplicationDestination' \
+            -skip 'Repository,SnapshotPolicy,SnapshotSchedule,Restore,Maintenance' \
             -schema-location default \
             -schema-location 'https://soulwhisper.github.io/k8s-schemas/{{.Group}}/{{.ResourceKind}}_{{.ResourceAPIVersion}}.json' \
             "${MANIFESTS[@]}"

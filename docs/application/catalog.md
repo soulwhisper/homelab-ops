@@ -48,7 +48,7 @@
 | App                 | Purpose                                  |
 | ------------------- | ---------------------------------------- |
 | Rook-Ceph           | Distributed storage (RBD + CephFS + RGW) |
-| VolSync             | PVC backup (Kopia → Ceph S3)             |
+| kopiur              | PVC backup (Kopia → Ceph S3)             |
 | Snapshot Controller | Volume snapshot management               |
 | OpenEBS LocalPV     | Node-local persistent storage            |
 | CSI Driver NFS      | Synology NFS mount CSI                   |

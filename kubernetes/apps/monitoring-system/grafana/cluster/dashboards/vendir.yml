@@ -202,12 +202,6 @@ directories:
           {
             url: "https://grafana.com/api/dashboards/22604/revisions/2/download",
           }
-      - path: volsync
-        lazy: true
-        http:
-          {
-            url: "https://grafana.com/api/dashboards/21356/revisions/3/download",
-          }
 
   # ---------------------------------------------------------
   # Folder : default/infrastructure
