@@ -176,9 +176,13 @@ hostDNS:
 apiVersion: v1alpha1
 kind: TimeSyncConfig
 ntp:
-  # default: time.cloudflare.com
+  # useNTS omitted: the local server answers NTP by IP without NTS-KE, and
+  # NTS requires hostname servers
   servers:
-    - 172.19.82.10
+    - 172.19.82.10 # local chrony (dockurr/chrony, NTS upstreams, sysclk)
+    - ntp.aliyun.com # fallback: reachable in eval, 44ms stratum 3
+    - ntp.ntsc.ac.cn # fallback: matches test chrony upstream list
+    - time.cloudflare.com # fallback: 100% reachability in eval
 # for proxmox only
 # ptp:
 #   devices:

@@ -205,8 +205,12 @@ hostDNS:
 apiVersion: v1alpha1
 kind: TimeSyncConfig
 ntp:
+  # useNTS omitted: the local server answers NTP by IP without NTS-KE
+  # (4460 refused), and NTS requires hostname servers
   servers:
-    - 10.10.0.254
+    - 10.10.0.254 # local chrony on OpenWrt (upstream time.cloudflare.com, iburst nts prefer, RTC check)
+    - time.apple.com # fallback: stratum 1, lowest public RTT in eval (127ms)
+    - time.cloudflare.com # fallback: 100% reachability in eval
 ---
 # group: runtime
 apiVersion: v1alpha1
