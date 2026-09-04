@@ -24,6 +24,8 @@ spec:
     extraArgs: # ignore mountpoints and virtual filesystems
       - --collector.filesystem.ignored-mount-points=^/(dev|proc|sys|var/lib/docker/.+|var/lib/kubelet/.+)($|/)
       - --collector.filesystem.ignored-fs-types=^(autofs|binfmt_misc|bpf|cgroup2?|configfs|debugfs|devpts|devtmpfs|fusectl|hugetlbfs|iso9660|mqueue|nsfs|overlay|proc|procfs|pstore|rpc_pipefs|securityfs|selinuxfs|squashfs|erofs|sysfs|tracefs)$
+      - --collector.nvmesubsystem # NVMe subsystem health (1.12)
+      - --collector.edac # per-DIMM ECC error labels (1.12)
     prometheus:
       monitor:
         enabled: true

@@ -24,3 +24,7 @@ spec:
           - "x-authentik-name"
           - "x-authentik-uid"
           - "set-cookie"
+        # kgateway 2.4: forward the 302 Location to the client on denial so
+        # browsers reach the authentik login page (redirect-based flows)
+        headersToClient:
+          - "location"

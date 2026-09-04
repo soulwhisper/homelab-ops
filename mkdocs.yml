@@ -62,3 +62,5 @@ nav:
   - Decisions:
       - BGP: decisions/bgp.md
       - Public Exposure: decisions/public-exposure.md
+  - Reports:
+      - 2026 Upstream Review: reports/2026-upstream-review.md

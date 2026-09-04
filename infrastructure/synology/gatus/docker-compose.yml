@@ -3,6 +3,8 @@
 #   PUSHOVER_TOKEN=<application-token>
 #   PUSHOVER_USER_KEY=<user-key>
 #   EXTERNAL_TOKEN=<shared bearer for cluster-side push jobs>
+#   GATUS_OIDC_CLIENT_ID=<authentik gatus provider client id>
+#   GATUS_OIDC_CLIENT_SECRET=<authentik gatus provider client secret>
 #
 # Create the data directory before first start:
 #   sudo mkdir -p /volume3/docker/gatus && sudo chown -R 1000:1000 /volume3/docker/gatus
@@ -39,6 +41,19 @@ services:
 configs:
   gatus_config:
     content: |-
+      # Prometheus metrics; /metrics stays public even with OIDC on (gatus#1483)
+      metrics: true
+      # OIDC via authentik (blueprint authentik-blueprints-oidc-gatus).
+      # Requires GATUS_OIDC_CLIENT_ID / GATUS_OIDC_CLIENT_SECRET in gatus.env,
+      # from the 1Password `authentik` item fields gatus_oidc_client_id/secret.
+      # v5.36 hard-fails on invalid security config — do not merge without them.
+      security:
+        oidc:
+          issuer-url: "https://auth.noirprime.com/application/o/gatus/"
+          redirect-url: "http://nas.homelab.internal:9400/authorization-code/callback"
+          client-id: "${GATUS_OIDC_CLIENT_ID}"
+          client-secret: "${GATUS_OIDC_CLIENT_SECRET}"
+          scopes: ["openid", "profile", "email"]
       storage:
         type: sqlite
         path: /data/gatus.db
