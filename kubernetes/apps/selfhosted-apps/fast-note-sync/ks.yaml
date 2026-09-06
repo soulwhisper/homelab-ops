@@ -15,7 +15,7 @@ spec:
   targetNamespace: selfhosted-apps
   path: "./kubernetes/apps/selfhosted-apps/fast-note-sync/app"
   components:
-    - ../../../../components/kopiur
+    - ../../../../components/kopiur/backup
   postBuild:
     substitute:
       APP: *name

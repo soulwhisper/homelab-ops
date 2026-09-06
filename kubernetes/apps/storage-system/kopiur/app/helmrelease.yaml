@@ -17,3 +17,17 @@ spec:
       runAsNonRoot: true
       runAsUser: 2000
       runAsGroup: 2000
+      fsGroup: 2000
+      fsGroupChangePolicy: OnRootMismatch
+    monitoring:
+      # dashboards are managed as GrafanaDashboard CRs from
+      # monitoring-system/grafana/cluster/dashboards/_sources, not chart-rendered
+      prometheusRule:
+        enabled: true
+      serviceMonitor:
+        enabled: true
+    resources:
+      requests:
+        cpu: 100m
+      limits:
+        memory: 2Gi

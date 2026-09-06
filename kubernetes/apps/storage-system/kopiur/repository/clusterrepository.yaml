@@ -1,0 +1,49 @@
+---
+# yaml-language-server: $schema=https://soulwhisper.github.io/k8s-schemas/kopiur.home-operations.com/clusterrepository_v1alpha1.json
+apiVersion: kopiur.home-operations.com/v1alpha1
+kind: ClusterRepository
+metadata:
+  name: nas
+spec:
+  allowedNamespaces:
+    all: true
+  backend:
+    s3:
+      bucket: kopiur
+      endpoint: nas.homelab.internal:9000
+      tls:
+        disableTls: true # versitygw on LAN http
+      auth:
+        secretRef:
+          name: kopiur-repository-secret
+          namespace: storage-system
+  encryption:
+    passwordSecretRef:
+      name: kopiur-repository-secret
+      namespace: storage-system
+      key: KOPIA_PASSWORD
+  create:
+    enabled: true
+  moverDefaults:
+    cache:
+      # warm kopia cache across mover runs: controller-owned RWO PVC per
+      # policy instead of a cold emptyDir each run (~96 mover runs/day)
+      mode: Persistent
+      storageClassName: ceph-block
+      capacity: 10Gi
+      # keep kopia budgets (~6Gi) well under the PVC size
+      metadataCacheSizeMb: 2048
+      contentCacheSizeMb: 4096
+  maintenance:
+    schedule:
+      quick:
+        cron: 0 * * * *
+        jitter: 10m
+      full:
+        cron: 0 3 * * *
+        jitter: 1h
+  parameters:
+    epoch:
+      minDuration: 1h
+  scheduleDefaults:
+    timezone: Asia/Shanghai

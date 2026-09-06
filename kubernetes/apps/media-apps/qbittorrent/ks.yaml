@@ -19,7 +19,7 @@ spec:
       namespace: media-apps
   components:
     - ../../../../components/authentik
-    - ../../../../components/kopiur
+    - ../../../../components/kopiur/backup
   postBuild:
     substitute:
       APP: *name

@@ -24,7 +24,7 @@ spec:
   components:
     - ../../../../components/cnpg
     - ../../../../components/dragonfly
-    - ../../../../components/kopiur
+    - ../../../../components/kopiur/backup
   postBuild:
     substitute:
       APP: *name

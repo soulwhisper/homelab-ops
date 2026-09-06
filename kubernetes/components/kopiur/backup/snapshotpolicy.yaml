@@ -6,8 +6,8 @@ metadata:
   name: "${APP}"
 spec:
   repository:
-    kind: Repository
-    name: "${APP}"
+    kind: ClusterRepository
+    name: nas
   sources:
     - pvc:
         name: "${KOPIUR_CLAIM:-${APP}}"

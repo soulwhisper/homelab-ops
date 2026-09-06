@@ -16,7 +16,7 @@ spec:
   path: "./kubernetes/apps/selfhosted-apps/sillytavern/app"
   components:
     - ../../../../components/authentik
-    - ../../../../components/kopiur
+    - ../../../../components/kopiur/backup
   postBuild:
     substitute:
       APP: *name
