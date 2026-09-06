@@ -9,8 +9,7 @@ spec:
     all: true
   backend:
     s3:
-      bucket: volsync
-      prefix: cluster/
+      bucket: kopiur
       endpoint: nas.homelab.internal:9000
       tls:
         disableTls: true # versitygw on LAN http

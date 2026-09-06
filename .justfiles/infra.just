@@ -4,7 +4,7 @@ set quiet
 set script-interpreter := ['bash', '-euo', 'pipefail']
 set shell := ['bash', '-euo', 'pipefail', '-c']
 
-BUCKETS := 'postgres volsync zot'
+BUCKETS := 'postgres zot kopiur'
 AWS_ENDPOINT_URL := env_var_or_default('AWS_ENDPOINT_URL', 'http://localhost:9000')
 
 [private]
