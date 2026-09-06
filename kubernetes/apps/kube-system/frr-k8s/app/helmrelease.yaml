@@ -5,7 +5,7 @@ kind: HelmRelease
 metadata:
   name: &name frr-k8s
 spec:
-  interval: 30m
+  interval: 1h
   chartRef:
     kind: OCIRepository
     name: frr-k8s
