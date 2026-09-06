@@ -120,6 +120,8 @@ jobs:
       #   in the registry, but the component manifests are ${VAR}-templated by
       #   flux postBuild, so strict validation cannot run on them
       # - kustomize kustomization.yaml: no published schema exists
+      # - bootstrap/*.yaml: helmfile configs (default.yaml bases, crds.yaml),
+      #   not Kubernetes manifests
       - name: Validate changed manifests
         run: |
           mapfile -t FILES < <(echo "${CHANGED_FILES}" | jq --raw-output '.[]' \
@@ -128,6 +130,7 @@ jobs:
             | grep --invert-match --regexp='/dragonfly.yaml$' \
             | grep --invert-match --regexp='/ks\.yaml$' \
             | grep --invert-match --regexp='/helmfile\.yaml$' \
+            | grep --invert-match --regexp='bootstrap/[^/]*\.yaml$' \
             | grep --invert-match --regexp='bootstrap/templates/' \
             | grep --invert-match --regexp='authentik/app/blueprints/' || true)
           MANIFESTS=()
