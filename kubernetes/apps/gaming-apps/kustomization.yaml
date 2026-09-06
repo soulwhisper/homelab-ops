@@ -5,6 +5,7 @@ kind: Kustomization
 namespace: gaming-apps
 components:
   - ../../components/namespace
+  - ../../components/kopiur/secret
 resources:
   # ref: https://github.com/joryirving/home-ops/tree/main/kubernetes/apps/base/games
   # storage

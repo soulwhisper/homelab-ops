@@ -18,7 +18,7 @@ spec:
     - name: media-nfs
       namespace: media-apps
   components:
-    - ../../../../components/kopiur
+    - ../../../../components/kopiur/backup
   postBuild:
     substitute:
       APP: *name

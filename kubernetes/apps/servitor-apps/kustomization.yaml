@@ -5,6 +5,7 @@ kind: Kustomization
 namespace: servitor-apps
 components:
   - ../../components/namespace
+  - ../../components/kopiur/secret
 resources:
   # system
   - ./toolhive/ks.yaml

@@ -5,6 +5,7 @@ kind: Kustomization
 namespace: selfhosted-apps
 components:
   - ../../components/namespace
+  - ../../components/kopiur/secret
 resources:
   - ./bambuddy/ks.yaml
   - ./dispatcharr/ks.yaml

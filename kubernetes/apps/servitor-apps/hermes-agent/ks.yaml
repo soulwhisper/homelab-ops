@@ -18,7 +18,7 @@ spec:
     - name: agentgateway
       namespace: networking-system
   components:
-    - ../../../../components/kopiur
+    - ../../../../components/kopiur/backup
   postBuild:
     substitute:
       APP: *name

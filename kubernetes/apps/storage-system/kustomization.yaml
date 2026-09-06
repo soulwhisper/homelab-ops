@@ -5,6 +5,7 @@ kind: Kustomization
 namespace: storage-system
 components:
   - ../../components/namespace
+  - ../../components/kopiur/secret
 resources:
   - ./csi-driver-nfs/ks.yaml
   - ./openebs-localpv/ks.yaml

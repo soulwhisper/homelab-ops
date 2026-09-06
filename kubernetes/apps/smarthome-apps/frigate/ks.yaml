@@ -18,7 +18,7 @@ spec:
     - name: smarthome-nfs
       namespace: smarthome-apps
   components:
-    - ../../../../components/kopiur
+    - ../../../../components/kopiur/backup
   postBuild:
     substitute:
       APP: *name
