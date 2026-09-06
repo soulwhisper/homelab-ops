@@ -101,22 +101,22 @@ Both classes use `subDir: ${pvc.metadata.name}` to isolate PVCs under the share,
 
 ### kopiur — PVC Backup
 
-[kopiur](https://github.com/home-operations/kopiur) (Kopia-native Rust operator) provides automated PVC backup and restore, covering **27 applications** across the cluster. The pattern uses a reusable Kustomize component at `kubernetes/components/kopiur/` that each app's `ks.yaml` references. Migrated from VolSync (perfectra1n kopia fork); the kopia repositories on S3 are unchanged — same bucket layout, same repository password.
+[kopiur](https://github.com/home-operations/kopiur) (Kopia-native Rust operator) provides automated PVC backup and restore, covering **24 consumers** across the cluster. The pattern uses two reusable Kustomize components under `kubernetes/components/kopiur/`: `backup/` (referenced by each app's `ks.yaml`) and `secret/` (attached once per namespace at the group-level `kustomization.yaml`). Migrated from VolSync (perfectra1n kopia fork) via per-app kopiur `Repository` resources to a single shared `ClusterRepository`.
 
 #### Architecture
 
-Each app gets three resources generated from the component:
+A single cluster-scoped repository plus per-app resources generated from the `backup/` component:
 
-1. **`Repository`** (`${APP}`): the kopia repository as a first-class CR — S3 backend (`volsync` bucket, `${APP}/` prefix), encryption password from 1Password, operator-managed maintenance (quick every 6h, full daily).
+1. **`ClusterRepository`** (`nas`, in `storage-system`): the shared kopia repository as a first-class CR — S3 backend (dedicated `kopiur` bucket, repository at the bucket root), encryption password from 1Password, operator-managed maintenance (quick hourly, full daily 03:00, `Asia/Shanghai`), and `moverDefaults.cache`: a persistent warm kopia cache PVC (`ceph-block`, 10Gi) inherited by every mover. Apps are separated logically by kopia identity (`<policy>@<namespace>:/pvc/<name>`), not by bucket path.
 
-2. **`SnapshotPolicy`** (`${APP}`) + **`SnapshotSchedule`**: the recipe (CSI `copyMethod: Snapshot` via `ceph-block-snapshot`, `zstd-fastest`, keep-daily 14) and its cron invocation (every 6 hours, configurable via `KOPIUR_SCHEDULE`).
+2. **`SnapshotPolicy`** (`${APP}`) + **`SnapshotSchedule`**: the recipe (`repository: {kind: ClusterRepository, name: nas}`, CSI `copyMethod: Snapshot` via `ceph-block-snapshot`, `zstd-fastest`, keep-daily 14) and its cron invocation (every 6 hours, configurable via `KOPIUR_SCHEDULE`).
 
 3. **`Restore`** (`${APP}-bootstrap`) + **`PVC`** (`${APP}`): the Restore acts as a passive volume populator; the working PVC claims it via `dataSourceRef`, so first boot restores from the latest snapshot, then the PVC becomes the backup source.
 
 ```
 ┌──────────────┐    periodic    ┌─────────────────┐   Kopia snapshot   ┌──────────────────┐
-│  Source PVC  │◄──────────────│ SnapshotSchedule │──────────────────►│  Ceph RGW (S3)   │
-│  (ceph-block)│               └─────────────────┘                   │  via VersityGW   │
+│  Source PVC  │◄──────────────│ SnapshotSchedule │──────────────────►│ Synology VersityGW│
+│  (ceph-block)│               └─────────────────┘                   │  s3://kopiur     │
 └──────┬───────┘                                                      └────────┬─────────┘
        │                                                                       │
        │ restore-once                                                          │
@@ -130,25 +130,26 @@ Each app gets three resources generated from the component:
 #### Retention
 
 ```yaml
-retain:
-  hourly: 0
-  daily: 14
+retention:
+  keepDaily: 14
 ```
 
-Hourly snapshots are disabled to conserve S3 storage; daily snapshots are kept for 14 days.
+Snapshots run every 6 hours; daily snapshots are kept for 14 days.
 
 #### S3 Destination
 
-All backups target the Synology-hosted **VersityGW** S3 gateway at `http://nas.homelab.internal:9000`, stored in path-prefixed buckets under `s3://volsync/<app-name>`. S3 credentials are sourced from 1Password via a per-app `ExternalSecret`:
+All backups target the Synology-hosted **VersityGW** S3 gateway at `http://nas.homelab.internal:9000`, in the dedicated `s3://kopiur` bucket (provisioned by `just versity init`). S3 credentials are sourced from 1Password via the `secret/` component — an `ExternalSecret` per consumer namespace materializing `kopiur-repository-secret`, which backup movers read in their own namespace:
 
 ```
-Repository.spec.backend.s3:
-  bucket:   volsync            # path prefix per app: <app>/
+ClusterRepository.spec.backend.s3:
+  bucket:   kopiur             # repository at bucket root
   endpoint: nas.homelab.internal:9000   (TLS disabled, LAN)
-encryption password: <1Password encryption_cipher.volsync>  (unchanged — repos stay readable)
-AWS_ACCESS_KEY_ID:    <1Password app-user.admin_user>       (per-app ExternalSecret)
+encryption password: <1Password encryption_cipher.volsync>  (legacy field name, unchanged)
+AWS_ACCESS_KEY_ID:    <1Password app-user.admin_user>       (per-namespace ExternalSecret)
 AWS_SECRET_ACCESS_KEY:<1Password app-user.admin_pass>
 ```
+
+The legacy `volsync` bucket still holds the abandoned per-app repositories (`volsync/<app>/`) from before the ClusterRepository migration; they remain readable with the same password via the kopia CLI and can be pruned manually once the shared repository has healthy snapshots.
 
 #### Monitoring
 
@@ -191,7 +192,7 @@ The Synology DS923+ runs several Docker Compose services critical to the storage
 Three S3 buckets are pre-created via the `infra.just` justfile:
 
 ```
-BUCKETS: postgres  volsync  zot
+BUCKETS: postgres  kopiur  zot
 ```
 
 #### Zot Registry (OCI Mirror)

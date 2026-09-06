@@ -477,7 +477,7 @@ This label signals "I'm a workload that needs the core infra layer." Infrastruct
 A typical application `ks.yaml` with both markers receives:
 
 1. **From Layer 1** (`managed` annotation): `sourceRef`, `prune: true`, `interval: 1h`, `timeout: 5m`
-2. **From Layer 2** (`deps=infra` label): baseline `dependsOn` (cert-manager, onepassword-connect, rook-ceph-cluster, volsync)
+2. **From Layer 2** (`deps=infra` label): baseline `dependsOn` (cert-manager, onepassword-connect, rook-ceph-cluster, kopiur)
 3. **From Layer 3** (automatic): HelmRelease defaults (CRD management, retry, remediation, rollback)
 
 The application's own `ks.yaml` only specifies what's unique: `targetNamespace`, `path`, app-specific `dependsOn`, `components`, and `postBuild` substitution.
@@ -513,7 +513,7 @@ kubernetes/
 │   └── values.yaml.gotmpl         #   Values bridge to Flux HelmReleases
 ├── components/                    # Reusable Kustomize Components
 │   ├── namespace/                 #   Namespace + alerts (13 consumers)
-│   ├── volsync/                   #   PVC backup pipeline (23 consumers)
+│   ├── kopiur/                    #   PVC backup pipeline (backup + secret, 24 consumers)
 │   ├── authentik/                 #   SSO traffic policy (14 consumers)
 │   ├── cnpg/                      #   PostgreSQL secret (8 consumers)
 │   ├── dragonfly/                 #   Redis-compatible cache (7 consumers)
