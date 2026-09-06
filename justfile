@@ -49,6 +49,9 @@ bootstrap:
   just talos _bootstrap_k8s
   just talos kubeconfig
   echo "completed."
+  echo "Waiting for apiserver and node readiness..."
+  just talos _k8s_ready
+  echo "completed."
   echo "Bootstrapping Apps..."
   just _bootstrap_apps
   echo "completed."
