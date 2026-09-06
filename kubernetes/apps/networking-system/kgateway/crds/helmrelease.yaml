@@ -5,7 +5,7 @@ kind: HelmRelease
 metadata:
   name: &name kgateway-crds
 spec:
-  interval: 30m
+  interval: 1h
   chartRef:
     kind: OCIRepository
     name: kgateway-crds

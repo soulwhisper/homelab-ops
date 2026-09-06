@@ -5,7 +5,7 @@ kind: HelmRelease
 metadata:
   name: &name rook-ceph-drivers
 spec:
-  interval: 30m
+  interval: 1h
   chartRef:
     kind: OCIRepository
     name: ceph-csi-drivers
