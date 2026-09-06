@@ -25,6 +25,16 @@ spec:
       key: KOPIA_PASSWORD
   create:
     enabled: true
+  moverDefaults:
+    cache:
+      # warm kopia cache across mover runs: controller-owned RWO PVC per
+      # policy instead of a cold emptyDir each run (~96 mover runs/day)
+      mode: Persistent
+      storageClassName: ceph-block
+      capacity: 10Gi
+      # keep kopia budgets (~6Gi) well under the PVC size
+      metadataCacheSizeMb: 2048
+      contentCacheSizeMb: 4096
   maintenance:
     schedule:
       quick:
