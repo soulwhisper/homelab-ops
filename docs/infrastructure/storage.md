@@ -107,7 +107,7 @@ Both classes use `subDir: ${pvc.metadata.name}` to isolate PVCs under the share,
 
 A single cluster-scoped repository plus per-app resources generated from the `backup/` component:
 
-1. **`ClusterRepository`** (`nas`, in `storage-system`): the shared kopia repository as a first-class CR — S3 backend (dedicated `kopiur` bucket, repository at the bucket root), encryption password from 1Password, operator-managed maintenance (quick hourly, full daily 03:00, `Asia/Shanghai`), and `moverDefaults.cache`: a persistent warm kopia cache PVC (`ceph-block`, 10Gi) inherited by every mover. Apps are separated logically by kopia identity (`<policy>@<namespace>:/pvc/<name>`), not by bucket path.
+1. **`ClusterRepository`** (`nas`, in `storage-system`): the shared kopia repository as a first-class CR — S3 backend (dedicated `kopiur` bucket under the `cluster/` prefix), encryption password from 1Password, operator-managed maintenance (quick hourly, full daily 03:00, `Asia/Shanghai`), and `moverDefaults.cache`: a persistent warm kopia cache PVC (`ceph-block`, 10Gi) inherited by every mover. Apps are separated logically by kopia identity (`<policy>@<namespace>:/pvc/<name>`), not by bucket path.
 
 2. **`SnapshotPolicy`** (`${APP}`) + **`SnapshotSchedule`**: the recipe (`repository: {kind: ClusterRepository, name: nas}`, CSI `copyMethod: Snapshot` via `ceph-block-snapshot`, `zstd-fastest`, keep-daily 14) and its cron invocation (every 6 hours, configurable via `KOPIUR_SCHEDULE`).
 
@@ -116,7 +116,7 @@ A single cluster-scoped repository plus per-app resources generated from the `ba
 ```
 ┌──────────────┐    periodic    ┌─────────────────┐   Kopia snapshot   ┌──────────────────┐
 │  Source PVC  │◄──────────────│ SnapshotSchedule │──────────────────►│ Synology VersityGW│
-│  (ceph-block)│               └─────────────────┘                   │  s3://kopiur     │
+│  (ceph-block)│               └─────────────────┘                   │ s3://kopiur/cluster│
 └──────┬───────┘                                                      └────────┬─────────┘
        │                                                                       │
        │ restore-once                                                          │
@@ -138,11 +138,11 @@ Snapshots run every 6 hours; daily snapshots are kept for 14 days.
 
 #### S3 Destination
 
-All backups target the Synology-hosted **VersityGW** S3 gateway at `http://nas.homelab.internal:9000`, in the dedicated `s3://kopiur` bucket (provisioned by `just versity init`). S3 credentials are sourced from 1Password via the `secret/` component — an `ExternalSecret` per consumer namespace materializing `kopiur-repository-secret`, which backup movers read in their own namespace:
+All backups target the Synology-hosted **VersityGW** S3 gateway at `http://nas.homelab.internal:9000`, in the dedicated `s3://kopiur/cluster/` prefix (bucket provisioned by `just versity init`). S3 credentials are sourced from 1Password via the `secret/` component — an `ExternalSecret` per consumer namespace materializing `kopiur-repository-secret`, which backup movers read in their own namespace:
 
 ```
 ClusterRepository.spec.backend.s3:
-  bucket:   kopiur             # repository at bucket root
+  bucket:   kopiur             # repository under the cluster/ prefix
   endpoint: nas.homelab.internal:9000   (TLS disabled, LAN)
 encryption password: <1Password encryption_cipher.volsync>  (legacy field name, unchanged)
 AWS_ACCESS_KEY_ID:    <1Password app-user.admin_user>       (per-namespace ExternalSecret)
