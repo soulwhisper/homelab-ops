@@ -10,7 +10,6 @@ spec:
   backend:
     s3:
       bucket: kopiur
-      prefix: cluster/
       endpoint: nas.homelab.internal:9000
       tls:
         disableTls: true # versitygw on LAN http
