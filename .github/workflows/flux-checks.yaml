@@ -120,7 +120,7 @@ jobs:
       #   in the registry, but the component manifests are ${VAR}-templated by
       #   flux postBuild, so strict validation cannot run on them
       # - kustomize kustomization.yaml: no published schema exists
-      # - bootstrap/*.yaml: helmfile configs (default.yaml bases, crds.yaml),
+      # - bootstrap/*.yaml: helmfile configs (default.yaml base),
       #   not Kubernetes manifests
       - name: Validate changed manifests
         run: |
