@@ -1,0 +1,34 @@
+---
+# Woodpecker port of .github/workflows/image-pull.yaml.
+# Kept alongside the GitHub workflow for the forgejo+woodpecker migration.
+# Uses `crane manifest` (existence + linux/amd64 platform check) instead of a
+# real pull. Woodpecker has no dynamic matrix, so images are checked in one
+# step with xargs -P4 (matching the GitHub matrix max-parallel).
+when:
+  - event: pull_request
+    path: ["kubernetes/**"]
+
+steps:
+  - name: check images exist
+    image: alpine:3.22
+    environment:
+      FLATE_PATH: ./kubernetes/flux/cluster
+      FLATE_OUTPUT: json
+    commands:
+      - apk add --no-cache curl git jq > /dev/null
+      - curl -fsSL https://mise.run | sh > /dev/null
+      - export PATH="${HOME}/.local/bin:${PATH}"
+      - mise install --yes
+      - |
+        # renovate: datasource=github-releases depName=google/go-containerregistry
+        CRANE_VERSION="v0.20.2"
+        curl -fsSL "https://github.com/google/go-containerregistry/releases/download/${CRANE_VERSION}/go-containerregistry_Linux_x86_64.tar.gz" \
+          | tar -xz -C /usr/local/bin crane
+      - |
+        IMAGES=$(mise exec -- flate diff images)
+        if [ "${IMAGES}" = "[]" ]; then
+          echo "No new images to check"
+          exit 0
+        fi
+        printf '%s' "${IMAGES}" | jq --raw-output '.[]' \
+          | xargs -P 4 -n 1 sh -c 'crane manifest "$0" --platform linux/amd64 > /dev/null'
