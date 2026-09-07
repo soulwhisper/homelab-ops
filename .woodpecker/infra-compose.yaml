@@ -8,7 +8,7 @@ when:
 
 steps:
   - name: validate synology compose files
-    image: docker:28-cli
+    image: docker:29-cli
     commands:
       - |
         # --no-interpolate: sops-encrypted env values are unavailable in CI

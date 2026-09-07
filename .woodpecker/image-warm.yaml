@@ -25,7 +25,7 @@ steps:
       - "true"
 
   - name: warm docker cli (compose check)
-    image: docker:28-cli
+    image: docker:29-cli
     commands:
       - "true"
 
