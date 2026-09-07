@@ -20,7 +20,7 @@ steps:
       - "true"
 
   - name: warm uv (docs build)
-    image: ghcr.io/astral-sh/uv:0.9
+    image: ghcr.io/astral-sh/uv:0.12
     commands:
       - "true"
 
