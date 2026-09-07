@@ -1,3 +1,7 @@
+[settings]
+# KUBECONFIG_DIR relies on $HOME expansion for the kube ns/cx switch tool
+env_shell_expand = true
+
 [env]
 KUBECONFIG = '{{config_root}}/infrastructure/talos/clusterconfig/kubeconfig'
 TALOSCONFIG = '{{config_root}}/infrastructure/talos/clusterconfig/talosconfig'

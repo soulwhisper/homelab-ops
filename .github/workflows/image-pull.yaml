@@ -62,30 +62,30 @@ jobs:
           echo "${images}" >> "${GITHUB_OUTPUT}"
           echo 'EOF' >> "${GITHUB_OUTPUT}"
 
-  pull:
+  check:
     if: ${{ needs.extract.outputs.images != '[]' }}
     needs: extract
-    name: Image Pull - Pull
-    runs-on: home-ops-runner
+    name: Image Pull - Check
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         image: ${{ fromJSON(needs.extract.outputs.images) }}
       max-parallel: 4
       fail-fast: false
     steps:
-      - name: Pull Image
+      - name: Check Image Exists
         env:
           IMAGE: ${{ matrix.image }}
         run: |
           if [ "${IMAGE}" = "__skip__" ]; then
-            echo "No new images to pull"
+            echo "No new images to check"
             exit 0
           fi
-          crane pull "${IMAGE}" /dev/null --platform linux/amd64
+          crane manifest "${IMAGE}" --platform linux/amd64 > /dev/null
 
   success:
     if: ${{ !cancelled() }}
-    needs: pull
+    needs: check
     name: Image Pull - Success
     runs-on: ubuntu-latest
     steps:
