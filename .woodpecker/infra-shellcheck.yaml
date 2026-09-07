@@ -1,21 +1,16 @@
 ---
 # Woodpecker port of .github/workflows/infra-checks.yaml (job: shellcheck).
 # Kept alongside the GitHub workflow for the forgejo+woodpecker migration.
+# Runner image: ghcr.io/soulwhisper/woodpecker-runner has shellcheck baked.
 when:
   - event: pull_request
     path: ["infrastructure/**", ".justfiles/**"]
 
 steps:
   - name: shellcheck switch configs
-    image: alpine:3.22
+    image: ghcr.io/soulwhisper/woodpecker-runner:latest
+    pull: true
     commands:
-      - apk add --no-cache curl xz > /dev/null
-      - |
-        # renovate: datasource=github-releases depName=koalaman/shellcheck
-        SHELLCHECK_VERSION="v0.11.0"
-        curl -fsSL "https://github.com/koalaman/shellcheck/releases/download/${SHELLCHECK_VERSION}/shellcheck-${SHELLCHECK_VERSION}.linux.x86_64.tar.xz" \
-          | tar -xJ -C /tmp
-      - install -m 0755 "/tmp/shellcheck-v0.11.0/shellcheck" /usr/local/bin/shellcheck
       # switch configs are H3C Comware CLI snippets pasted into the console,
       # not executed by a shell; error severity keeps real syntax breakage
       # while ignoring false positives on CLI content (e.g. password hashes)

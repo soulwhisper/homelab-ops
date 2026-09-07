@@ -3,6 +3,7 @@
 # Kept alongside the GitHub workflow for the forgejo+woodpecker migration.
 # Applies .github/labeler.yaml any-glob-to-any-file rules via the forgejo API.
 # Fork PRs are skipped, matching the GitHub workflow's head-repo guard.
+# Runner image: ghcr.io/soulwhisper/woodpecker-runner has python3+pyyaml baked.
 # Prerequisites:
 #   - woodpecker repo secret `forgejo_token` (issues:write)
 when:
@@ -10,12 +11,12 @@ when:
 
 steps:
   - name: apply labels
-    image: python:3.13-alpine
+    image: ghcr.io/soulwhisper/woodpecker-runner:latest
+    pull: true
     environment:
       FORGEJO_TOKEN:
         from_secret: forgejo_token
     commands:
-      - pip install -q pyyaml
       - |
         python3 <<'EOF'
         import fnmatch, json, os, urllib.request

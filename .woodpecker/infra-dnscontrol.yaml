@@ -2,18 +2,14 @@
 # Woodpecker port of .github/workflows/infra-checks.yaml (job: dnscontrol).
 # Kept alongside the GitHub workflow for the forgejo+woodpecker migration.
 # Split into its own workflow so checks run in parallel on separate agents.
+# Runner image: ghcr.io/soulwhisper/woodpecker-runner has dnscontrol baked.
 when:
   - event: pull_request
     path: ["infrastructure/**", ".justfiles/**"]
 
 steps:
   - name: dnscontrol check
-    image: alpine:3.22
+    image: ghcr.io/soulwhisper/woodpecker-runner:latest
+    pull: true
     commands:
-      - apk add --no-cache curl > /dev/null
-      - |
-        # renovate: datasource=github-releases depName=StackExchange/dnscontrol
-        DNSCONTROL_VERSION="v4.44.1"
-        curl -fsSL "https://github.com/StackExchange/dnscontrol/releases/download/${DNSCONTROL_VERSION}/dnscontrol_${DNSCONTROL_VERSION#v}_linux_amd64.tar.gz" \
-          | tar -xz -C /usr/local/bin dnscontrol
       - cd infrastructure/dnscontrol && dnscontrol check

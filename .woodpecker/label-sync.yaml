@@ -3,6 +3,7 @@
 # Kept alongside the GitHub workflow for the forgejo+woodpecker migration.
 # Syncs .github/labels.yaml (single source of truth) to the forgejo repo,
 # deleting labels not in the config (delete-other-labels: true equivalent).
+# Runner image: ghcr.io/soulwhisper/woodpecker-runner has python3+pyyaml baked.
 # Prerequisites:
 #   - woodpecker repo secret `forgejo_token` (issues:write)
 #   - woodpecker cron entry named `label-sync` with schedule `0 0 * * *`
@@ -16,12 +17,12 @@ when:
 
 steps:
   - name: sync labels
-    image: python:3.13-alpine
+    image: ghcr.io/soulwhisper/woodpecker-runner:latest
+    pull: true
     environment:
       FORGEJO_TOKEN:
         from_secret: forgejo_token
     commands:
-      - pip install -q pyyaml
       - |
         python3 <<'EOF'
         import json, os, urllib.request

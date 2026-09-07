@@ -8,6 +8,7 @@
 #   - failure/action_required: retain 7 days, keep at least 3
 # Once woodpecker is the sole CI this pipeline becomes obsolete (woodpecker
 # pipelines are not garbage-collected by this script).
+# Runner image: ghcr.io/soulwhisper/woodpecker-runner has curl+jq baked.
 # Prerequisites:
 #   - woodpecker repo secret `forgejo_token` (repo admin / actions:write)
 #   - woodpecker cron entry named `schedule-cleanup` with schedule `0 */12 * * *`
@@ -18,12 +19,12 @@ when:
 
 steps:
   - name: delete stale workflow runs
-    image: alpine:3.22
+    image: ghcr.io/soulwhisper/woodpecker-runner:latest
+    pull: true
     environment:
       FORGEJO_TOKEN:
         from_secret: forgejo_token
     commands:
-      - apk add --no-cache curl jq coreutils > /dev/null
       - |
         API="${CI_FORGE_URL}/api/v1/repos/${CI_REPO_OWNER}/${CI_REPO_NAME}/actions/runs"
         AUTH="Authorization: token ${FORGEJO_TOKEN}"

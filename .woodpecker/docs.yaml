@@ -4,6 +4,8 @@
 # Deploy pushes the built site to the `gh-pages` branch; configure the pages
 # source (GitHub Pages branch source or forgejo-pages after cutover) to serve
 # from it.
+# Build keeps the official uv image (no install step); deploy uses the
+# runner image for git.
 # Prerequisites:
 #   - woodpecker repo secret `pages_push_token` (contents:write on the repo)
 when:
@@ -21,12 +23,12 @@ steps:
       - uvx zensical build --clean
 
   - name: deploy to gh-pages branch
-    image: alpine:3.22
+    image: ghcr.io/soulwhisper/woodpecker-runner:latest
+    pull: true
     environment:
       PAGES_PUSH_TOKEN:
         from_secret: pages_push_token
     commands:
-      - apk add --no-cache git > /dev/null
       - |
         cd site
         git init -q

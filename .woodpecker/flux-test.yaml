@@ -4,31 +4,33 @@
 # GitHub Actions remains authoritative until cutover.
 # Prerequisites:
 #   - woodpecker repo secret `forgejo_token` (issues:write on the forgejo repo)
+# Runner image: ghcr.io/soulwhisper/woodpecker-runner (soulwhisper/containers)
+# has flate/git/curl/jq baked; pull: true keeps :latest fresh — layers are
+# node/spegel-cached, so only a manifest HEAD hits the registry per step.
 when:
   - event: pull_request
     path: ["kubernetes/**"]
 
 steps:
   - name: flate test + diff
-    image: alpine:3.22
+    image: ghcr.io/soulwhisper/woodpecker-runner:latest
+    pull: true
     environment:
       FLATE_PATH: ./kubernetes/flux/cluster
       FLATE_SOURCE_RETRY_MAX_WAIT: 30s
+      FLATE_OUTPUT: json
     commands:
-      - apk add --no-cache curl git jq > /dev/null
-      - curl -fsSL https://mise.run | sh > /dev/null
-      - export PATH="${HOME}/.local/bin:${PATH}"
-      - mise install --yes
-      - mise exec -- flate test all --base "origin/${CI_COMMIT_TARGET_BRANCH}"
-      - mise exec -- flate diff all > flate-diff.out || true
+      - git fetch origin "${CI_COMMIT_TARGET_BRANCH}"
+      - flate test all --base "origin/${CI_COMMIT_TARGET_BRANCH}"
+      - flate diff all > flate-diff.out || true
 
   - name: sticky PR comment
-    image: alpine:3.22
+    image: ghcr.io/soulwhisper/woodpecker-runner:latest
+    pull: true
     environment:
       FORGEJO_TOKEN:
         from_secret: forgejo_token
     commands:
-      - apk add --no-cache curl jq > /dev/null
       - |
         if [ ! -s flate-diff.out ]; then
           echo "No diff, skipping comment"

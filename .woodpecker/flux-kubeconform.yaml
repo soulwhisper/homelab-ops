@@ -14,20 +14,16 @@
 # - kustomize kustomization.yaml: no published schema exists
 # - bootstrap/*.yaml: helmfile configs (default.yaml base),
 #   not Kubernetes manifests
+# Runner image: ghcr.io/soulwhisper/woodpecker-runner has kubeconform baked.
 when:
   - event: pull_request
     path: ["kubernetes/**"]
 
 steps:
   - name: validate changed manifests
-    image: alpine:3.22
+    image: ghcr.io/soulwhisper/woodpecker-runner:latest
+    pull: true
     commands:
-      - apk add --no-cache curl git > /dev/null
-      - |
-        # renovate: datasource=github-releases depName=yannh/kubeconform
-        KUBECONFORM_VERSION="v0.8.0"
-        curl -fsSL "https://github.com/yannh/kubeconform/releases/download/${KUBECONFORM_VERSION}/kubeconform-linux-amd64.tar.gz" \
-          | tar -xz -C /usr/local/bin kubeconform
       - git fetch origin "${CI_COMMIT_TARGET_BRANCH}"
       - |
         FILES=$(git diff --name-only "FETCH_HEAD...HEAD" \
