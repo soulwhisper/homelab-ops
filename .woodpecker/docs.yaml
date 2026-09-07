@@ -18,7 +18,7 @@ concurrency: 1
 
 steps:
   - name: build docs
-    image: ghcr.io/astral-sh/uv:0.9
+    image: ghcr.io/astral-sh/uv:0.12
     commands:
       - uvx zensical build --clean
 
