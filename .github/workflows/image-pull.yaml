@@ -66,7 +66,7 @@ jobs:
     if: ${{ needs.extract.outputs.images != '[]' }}
     needs: extract
     name: Image Pull - Check
-    runs-on: home-ops-runner
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         image: ${{ fromJSON(needs.extract.outputs.images) }}
