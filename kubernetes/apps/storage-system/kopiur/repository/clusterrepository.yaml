@@ -30,10 +30,11 @@ spec:
       # policy instead of a cold emptyDir each run (~96 mover runs/day)
       mode: Persistent
       storageClassName: ceph-block
-      capacity: 10Gi
-      # keep kopia budgets (~6Gi) well under the PVC size
-      metadataCacheSizeMb: 2048
-      contentCacheSizeMb: 4096
+      capacity: 20Gi
+      # The metadata budget applies twice:
+      # kopia caps the index-blobs cache at the same size.
+      metadataCacheSizeMb: 10240
+      contentCacheSizeMb: 2048
   maintenance:
     schedule:
       quick:
