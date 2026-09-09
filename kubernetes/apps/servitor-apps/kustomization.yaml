@@ -14,4 +14,3 @@ resources:
   # app
   - ./hermes-agent/ks.yaml
   - ./onyx/ks.yaml
-  - ./buzz-relay/ks.yaml

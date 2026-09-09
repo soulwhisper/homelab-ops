@@ -9,9 +9,6 @@ spec:
     - group: gateway.networking.k8s.io
       kind: HTTPRoute
       name: hermes-agent-dashboard
-    - group: gateway.networking.k8s.io
-      kind: HTTPRoute
-      name: hermes-agent-webui
   extAuth:
     extensionRef:
       name: authentik-ext-auth

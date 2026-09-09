@@ -112,7 +112,7 @@ All lanes run on the MacStudio inference host (`complex` Qwen3.8-27B, `omni` Min
 | --------- | ---- | --------------------------- |
 | Dashboard | 9119 | SSO-protected               |
 | Gateway   | 8642 | Internal, health: `/health` |
-| Web UI    | 8787 | SSO-protected               |
+| Web UI    | 8787 | Deployed, no ingress (chat moved to Onyx; SSO route removed 2026-09-09) |
 
 - **Runtime**: Kata Containers (VM isolation)
 - **Resources**: req: 200m CPU / 1Gi RAM, lim: 4Gi RAM
@@ -266,7 +266,7 @@ Frigate remains the 24/7 trigger layer; MiniCPM-o 4.5 is the event describer. `s
 
 ### Archived
 
-- **Buzz** (relay + buzz-agent-omp) — archived 2026-08-28 (`.archived/kubernetes/servitor/buzz`); hermes-agent is the only in-cluster agent.
+- **Buzz** (relay + buzz-agent-omp) — buzz-agent-omp archived 2026-08-28; buzz-relay archived 2026-09-09 (`.archived/kubernetes/servitor/buzz-relay`), superseded by hermes' native webhook ingestion (`/p/<profile>/webhooks/<route>`, HMAC). Its CNPG DB, Dragonfly, and Ceph bucket are retained for manual cleanup. hermes-agent is the only in-cluster agent.
 - **Devbox** — removed from cluster 2026-08-05; image retained in `soulwhisper/containers` as an ad-hoc exec sandbox.
 - **llama.cpp (llama-qwen3)** — archived 2026-08-28; all local lanes moved to the MacStudio.
 
