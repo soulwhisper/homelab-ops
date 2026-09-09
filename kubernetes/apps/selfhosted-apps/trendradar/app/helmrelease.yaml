@@ -91,6 +91,7 @@ spec:
         type: persistentVolumeClaim
         storageClass: ceph-block
         size: 1Gi
+        accessMode: ReadWriteOnce
         globalMounts:
           - path: /app/output
       tmp:
