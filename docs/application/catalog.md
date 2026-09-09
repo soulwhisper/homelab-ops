@@ -107,7 +107,7 @@
 | MoviePilot    | Media automation (CNPG + Dragonfly + iGPU) |
 | Media-NFS     | Shared media storage                       |
 
-## selfhosted-apps — Self-Hosted Services (14)
+## selfhosted-apps — Self-Hosted Services (13)
 
 | App            | Purpose                                                      |
 | -------------- | ------------------------------------------------------------ |
@@ -122,7 +122,6 @@
 | Open-Notebook  | AI research notebook (SurrealDB)                             |
 | Firecrawl      | Web scraping pipeline (Kata, 3 containers, MCP)              |
 | SillyTavern    | AI character chat (AgentGateway)                             |
-| Fast-Note-Sync | Obsidian sync (REST + MCP + WebSocket)                       |
 | Bambuddy       | 3D printer monitor (Bambu Lab)                               |
 | Dispatcharr    | IPTV dispatch (iGPU transcode)                               |
 
@@ -133,7 +132,7 @@
 | Hermes Agent | AI agent suite (Kata VM, WeChat, cron/automation)                       |
 | ToolHive     | MCP gateway (3 VirtualMCP tiers, semantic search)                       |
 | Onyx         | Enterprise chat + RAG (CNPG + Dragonfly + Ceph S3 + OpenSearch)         |
-| MCP Servers  | kubernetes/HA/hindsight/honcho/note/github/firecrawl/grafana/flux/vlogs |
+| MCP Servers  | kubernetes/HA/hindsight/honcho/github/firecrawl/grafana/flux/vlogs/dropbox |
 
 ## gaming-apps — Gaming (3)
 

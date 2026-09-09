@@ -106,6 +106,8 @@ spec:
         existingSecret: *name
         secretKeys:
           USER_AUTH_SECRET: USER_AUTH_SECRET
+    # inject LANGFUSE_* (and the rest of the onyx secret) into backend pods
+    extraEnvFromSecret: *name
 
     configMap:
       AUTH_TYPE: "basic"
@@ -113,6 +115,8 @@ spec:
 
       REQUIRE_EMAIL_VERIFICATION: "false"
       DISABLE_METRICS_AUTH: "true"
+      # Langfuse tracing (self-hosted; keys injected via extraEnvFromSecret)
+      LANGFUSE_HOST: "http://langfuse-web.monitoring-system.svc.cluster.local:3000"
       # external CNPG
       POSTGRES_HOST: "postgres-rw.database-system.svc.cluster.local"
       POSTGRES_PORT: "5432"

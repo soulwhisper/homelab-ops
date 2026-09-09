@@ -1,0 +1,81 @@
+---
+# Dropbox access tokens are short-lived (~4h). This CronJob exchanges the
+# long-lived refresh token (1Password -> dropbox-mcp secret) for a fresh access
+# token and stores it as the header value the MCPRemoteProxy injects upstream.
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: dropbox-token-refresher
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: dropbox-token-refresher
+rules:
+  - apiGroups: [""]
+    resources: ["secrets"]
+    resourceNames: ["dropbox-mcp-token"]
+    verbs: ["get", "create", "patch"]
+  - apiGroups: [""]
+    resources: ["secrets"]
+    resourceNames: ["dropbox-mcp"]
+    verbs: ["get"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: dropbox-token-refresher
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: dropbox-token-refresher
+subjects:
+  - kind: ServiceAccount
+    name: dropbox-token-refresher
+---
+# yaml-language-server: $schema=https://json.schemastore.org/cronjob
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: dropbox-token-refresher
+spec:
+  schedule: "*/90 * * * *" # access tokens live ~4h; refresh well inside that
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      backoffLimit: 3
+      template:
+        spec:
+          serviceAccountName: dropbox-token-refresher
+          restartPolicy: Never
+          containers:
+            - name: refresh
+              # renovate: datasource=docker depName=alpine/k8s
+              image: alpine/k8s:1.34.1
+              command:
+                - /bin/sh
+                - -ec
+                - |
+                  token=$(curl -fsS https://api.dropboxapi.com/oauth2/token \
+                    -d grant_type=refresh_token \
+                    -d refresh_token="$REFRESH_TOKEN" \
+                    -u "$CLIENT_ID:$CLIENT_SECRET" | jq -r .access_token)
+                  [ -n "$token" ] && [ "$token" != "null" ]
+                  kubectl create secret generic dropbox-mcp-token \
+                    --from-literal=authorization="Bearer $token" \
+                    --dry-run=client -o yaml | kubectl apply -f -
+              env:
+                - name: CLIENT_ID
+                  valueFrom: { secretKeyRef: { name: dropbox-mcp, key: client_id } }
+                - name: CLIENT_SECRET
+                  valueFrom: { secretKeyRef: { name: dropbox-mcp, key: client_secret } }
+                - name: REFRESH_TOKEN
+                  valueFrom: { secretKeyRef: { name: dropbox-mcp, key: refresh_token } }
+              resources:
+                requests: { cpu: 10m, memory: 32Mi }
+                limits: { memory: 128Mi }
+              securityContext:
+                allowPrivilegeEscalation: false
+                capabilities: { drop: ["ALL"] }

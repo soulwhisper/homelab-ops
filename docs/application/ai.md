@@ -155,6 +155,7 @@ All lanes run on the MacStudio inference host (`complex` Qwen3.8-27B, `omni` Min
 - LLM provider is DB-backed — configure once in Admin UI with `api_base` pointing at the agent gateway (`http://agentgateway-proxy.networking-system/chat`), suggested lane `micro`/`omni`; OIDC SSO likewise configured in Admin UI (forward-proxy SSO at kgateway also active)
 - Ingress: `onyx.noirprime.com` via kgateway-internal; `/api|/openapi.json` regex → `onyx-api-service:8080`, `/` → `onyx-webserver:3000`, 900s timeouts
 - **Craft sandboxes disabled** (no code-execution pods; `ENABLE_CRAFT` unset). If ever enabled, Craft runs code in dedicated pods in its own `onyx-sandboxes` namespace — never in hermes
+- **Observability**: Langfuse tracing enabled via `LANGFUSE_HOST` (in-cluster `langfuse-web:3000`) + project keys from 1Password `langfuse.onyx_*` injected to all backend pods (`extraEnvFromSecret`)
 - **Hermes as a model**: register the hermes gateway as an OpenAI-compatible provider with `api_base` = `http://hermes-agent.servitor-apps.svc.cluster.local:8642/p/chat/v1` and the profile's API key; the served model id is `chat` (profile name under multiplexing) — set Onyx **display name to `cluster`** in the provider's model configuration. Use it as the heavy/agentic chat model only — every call runs hermes' full agent loop (MCP tools, skills, memory), so it must never be selected for Onyx's auxiliary LLM calls (query rewrite, contextual RAG, summarization); those stay on `omni`/`micro`
 
 ### Media lanes (studio-hosted, OpenAI-compatible)
@@ -202,7 +203,6 @@ Config: `kubernetes/apps/networking-system/agentgateway/config/media/` — Exter
 | honcho         | HTTP proxy :8080     | Honcho API             |
 | home-assistant | HTTP (FastMCP) :8086 | Home Assistant         |
 | hindsight      | HTTP proxy :8080     | Hindsight MCP endpoint |
-| fast-note-sync | HTTP proxy :8080     | Fast Note Sync API     |
 
 #### external (full egress)
 
@@ -211,6 +211,7 @@ Config: `kubernetes/apps/networking-system/agentgateway/config/media/` — Exter
 | github    | HTTP :8082            | Read-only PAT, 7 tools   |
 | firecrawl | Streamable HTTP :3000 | Local Firecrawl instance |
 | context7  | stdio :3000           | Context7 API             |
+| dropbox   | Streamable HTTP :8080 | Official remote MCP (mcp.dropbox.com), Bearer token refreshed by CronJob (90m); read+write vault files |
 
 ---
 
@@ -267,6 +268,7 @@ Frigate remains the 24/7 trigger layer; MiniCPM-o 4.5 is the event describer. `s
 ### Archived
 
 - **Buzz** (relay + buzz-agent-omp) — buzz-agent-omp archived 2026-08-28; buzz-relay archived 2026-09-09 (`.archived/kubernetes/servitor/buzz-relay`), superseded by hermes' native webhook ingestion (`/p/<profile>/webhooks/<route>`, HMAC). Its CNPG DB, Dragonfly, and Ceph bucket are retained for manual cleanup. hermes-agent is the only in-cluster agent.
+- **Fast-Note-Sync** — archived 2026-09-09 (`.archived/kubernetes/selfhosted/fast-note-sync` + MCP registration); Obsidian vault access moved to the official Dropbox MCP (read+write); sync role unneeded (Dropbox client syncs)
 - **Devbox** — removed from cluster 2026-08-05; image retained in `soulwhisper/containers` as an ad-hoc exec sandbox.
 - **llama.cpp (llama-qwen3)** — archived 2026-08-28; all local lanes moved to the MacStudio.
 
