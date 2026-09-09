@@ -20,3 +20,4 @@ resources:
   - ./searxng/ks.yaml
   - ./sillytavern/ks.yaml
   - ./stirling-pdf/ks.yaml
+  - ./trendradar/ks.yaml

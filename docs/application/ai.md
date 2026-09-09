@@ -185,7 +185,7 @@ Config: `kubernetes/apps/networking-system/agentgateway/config/media/` — Exter
   - OTEL telemetry (5% sampling)
 - **Ingress restricted**: Only vmagent and hermes-agent can connect
 
-### MCP Servers (12 total)
+### MCP Servers (13 total)
 
 #### internal-ro (read-only, no egress)
 
@@ -195,6 +195,7 @@ Config: `kubernetes/apps/networking-system/agentgateway/config/media/` — Exter
 | kubernetes    | HTTP :8080            | kube-apiserver (read-only SA) |
 | grafana       | Streamable HTTP :8000 | Grafana                       |
 | fluxcd        | HTTP :9090            | Flux (read-only SA)           |
+| trendradar    | Streamable HTTP :8080 (proxy→:3333) | TrendRadar news DB |
 | obsidian      | stdio (filesystem MCP) | Obsidian vault, read-only NFS copy (`/volume1/backup/dropbox/Obsidian/noirprime`) |
 
 #### internal-rw (read-write, no egress)
@@ -233,6 +234,14 @@ Plain-text pipeline, no extra copies: Obsidian → Dropbox (canonical; its own s
 - **Features**: Experimental features enabled, telemetry disabled
 
 ---
+
+
+### TrendRadar 6.10.0
+
+- AI news digest pipeline (selfhosted-apps): watch list = custom RSS only (aiera.com.cn, expreview.com + GitHub Atom feeds; hot lists disabled), `report.mode: incremental` (zero-duplicate push), keyword grouping via `frequency_words.txt`, AI analysis via gateway (`openai/omni`, fallback `micro`)
+- Delivery: ntfy topic (1Password `trendradar.ntfy_*`); HTML report at `news.noirprime.com` (SSO)
+- MCP server (:3333) registered as `trendradar` in internal-ro — hermes/agents can query stored news
+- Config fully in ConfigMap (`config.yaml` + `frequency_words.txt` + `ai_interests.txt`); output on 1Gi ceph-block PVC
 
 ## AI-Adjacent Services
 

@@ -1,0 +1,69 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/configmap
+# TrendRadar config: minimal watch list (RSS only, hot lists off), incremental
+# push, keyword grouping, AI analysis via the agent gateway.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: trendradar
+data:
+  config.yaml: |
+    schedule:
+      enabled: true
+    platforms:
+      enabled: false   # hot lists off — minimal watch list
+      sources: []
+    rss:
+      enabled: true
+      freshness_filter:
+        enabled: true
+        max_age_days: 1
+      feeds:
+        - id: "aiera"
+          name: "AI时代"
+          url: "https://aiera.com.cn/feed"
+        - id: "expreview"
+          name: "超能网"
+          url: "https://www.expreview.com/feed"
+        # GitHub repos: add release/commit Atom feeds, e.g.
+        # - id: "gh-<repo>"
+        #   name: "<repo> releases"
+        #   url: "https://github.com/<owner>/<repo>/releases.atom"
+        #   max_age_days: 3
+    report:
+      mode: "incremental"     # 增量监控，零重复
+      display_mode: "keyword" # 按关键词分组
+      rank_threshold: 5
+      max_news_per_keyword: 0
+    filter:
+      method: "keyword"       # frequency_words.txt; switch to "ai" for interest scoring
+      priority_sort_enabled: true
+    ai_filter:
+      min_score: 0.7
+    ai_analysis:
+      mode: "follow_report"
+    notification:
+      push_window: {}         # 推送时间窗留空 = 不限制
+  frequency_words.txt: |
+    # 词组 = 主题分组；空行分隔；行首 + = 必须包含，! = 过滤词
+    AI
+    大模型
+    LLM
+    +人工智能
+
+    显卡
+    GPU
+    评测
+    硬件
+    +装机
+
+    苹果
+    Apple
+    iPhone
+    Mac
+
+    !广告
+    !推广
+  ai_interests.txt: |
+    AI/大模型进展、新硬件发布与评测、苹果生态、家庭自动化与自托管。
+    忽略：营销软文、娱乐八卦、体育。

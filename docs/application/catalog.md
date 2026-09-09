@@ -107,11 +107,12 @@
 | MoviePilot    | Media automation (CNPG + Dragonfly + iGPU) |
 | Media-NFS     | Shared media storage                       |
 
-## selfhosted-apps — Self-Hosted Services (13)
+## selfhosted-apps — Self-Hosted Services (14)
 
 | App            | Purpose                                                      |
 | -------------- | ------------------------------------------------------------ |
 | Stirling-PDF   | PDF toolkit (50+ operations)                                 |
+| TrendRadar     | AI news digest (RSS watch list, CronJob, omni lane, ntfy)    |
 | NetBox         | DCIM/IPAM (9 plugins, CNPG + Dragonfly)                      |
 | Miniflux       | RSS reader (CNPG, OIDC)                                      |
 | RSSHub         | RSS feed generator (Dragonfly, OIDC)                         |
@@ -132,7 +133,7 @@
 | Hermes Agent | AI agent suite (Kata VM, WeChat, cron/automation)                       |
 | ToolHive     | MCP gateway (3 VirtualMCP tiers, semantic search)                       |
 | Onyx         | Enterprise chat + RAG (CNPG + Dragonfly + Ceph S3 + OpenSearch)         |
-| MCP Servers  | kubernetes/HA/hindsight/honcho/github/firecrawl/grafana/flux/vlogs/obsidian/forgejo |
+| MCP Servers  | kubernetes/HA/hindsight/honcho/github/firecrawl/grafana/flux/vlogs/obsidian/forgejo/trendradar |
 
 ## gaming-apps — Gaming (3)
 

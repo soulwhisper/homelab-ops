@@ -16,4 +16,5 @@ resources:
   - ./honcho/ks.yaml
   - ./kubernetes/ks.yaml
   - ./obsidian/ks.yaml
+  - ./trendradar/ks.yaml
   - ./victoria-logs/ks.yaml
