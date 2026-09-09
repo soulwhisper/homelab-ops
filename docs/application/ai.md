@@ -1,6 +1,6 @@
 # AI Infrastructure Summary
+Last updated: 2026-09-09
 
-Last updated: 2026-08-28
 Source: Flux manifests in `kubernetes/apps/`.
 
 ## Architecture Overview
@@ -20,7 +20,7 @@ flowchart TB
     end
 
     subgraph LLM["LLM Providers"]
-        Studio["MacStudio oMLX<br/>Qwen3.8-27B + Qwen3.5-4B<br/>(MLX 4bit, 10.10.0.210)"]
+        Studio["MacStudio oMLX<br/>Qwen3.8-27B + Qwen3.5-4B + MiniCPM5-2B<br/>(MLX 4bit, 10.10.0.210)"]
     end
 
     subgraph MCP["MCP Gateway (ToolHive 0.33.0)"]
@@ -54,15 +54,19 @@ The agent gateway is the single entry point for all AI traffic. Every AI app rou
 | `x-model: fast`                          | `llm-backend-fast`    | `qwen3.5-4b`                       | **Local** MacStudio        |
 | `x-model: memory`                        | `llm-backend-memory`  | `qwen3.5-4b`                       | **Local** MacStudio |
 | `x-model: vision`                        | `llm-backend-vision`  | `qwen3.5-4b` (vision-capable)      | **Local** MacStudio |
+| `x-model: micro`                         | `llm-backend-micro`   | `minicpm5-2b`                      | **Local** MacStudio |
 
 All backends speak OpenAI-compatible API. Auth via ExternalSecret-managed API keys. Every lane now runs on the MacStudio inference host (`studio.homelab.internal`, 10.10.0.210, oMLX OpenAI-compatible endpoint) — no external LLM API dependency remains. `complex`/`x-priority: high` uses Qwen3.8-27B; `fast`/`memory`/`vision` use Qwen3.5-4B (a unified vision-language model, one endpoint serves all three lanes). No cloud fallback is configured — the studio is a deliberate SPOF.
 
+`micro` uses **MiniCPM5-2B** (Apache-2.0, 2.6B dense, official 4-bit MLX port `openbmb/MiniCPM5-2B-MLX`, ~1.4 GB resident on the studio) for cheap, low-latency work: classification, extraction, tagging, short summaries, and as the classifier for semantic routing. Serve it with thinking disabled (`chat_template_kwargs: {"enable_thinking": false}`) and constrained JSON output for label safety. The oMLX model alias on the studio must be `minicpm5-2b` (host-side config, out-of-band).
+
 ### Intranet exposure
 
-The gateway API surface is exposed to the intranet via `kgateway-internal` (10.10.0.131) at `https://api.noirprime.com` (`/chat`, `/mcp`; dashboard stays on `https://ai.noirprime.com/ui`):
+The gateway API surface is exposed to the intranet via `kgateway-internal` (10.10.0.131) at `https://api.noirprime.com` (`/chat`, `/mcp`, `/v1/*` media; dashboard stays on `https://ai.noirprime.com/ui`):
 
 - `/chat` — LLM routing (strict API key, 300s timeout, promptGuard guardrails)
 - `/mcp` — MCP tool routing (strict API key, backend guardrails)
+- `/v1/images`, `/v1/audio`, `/v1/embeddings`, `/v1/rerank` — media passthrough to studio (strict API key, no LLM parsing)
   (dashboard UI lives separately at `https://ai.noirprime.com/ui`)
 
 TLS terminates at kgateway (cert-manager `noirprime-com-tls`, wildcard `*.noirprime.com`); external-dns auto-creates the AdGuardHome record. Machine clients authenticate with agentgateway API keys — no SSO extAuth on API paths. Reachable from trusted VLANs (10/100/200); IoT VLAN 210 is ACL-blocked from RFC1918.
@@ -72,12 +76,13 @@ TLS terminates at kgateway (cert-manager `noirprime-com-tls`, wildcard `*.noirpr
 | App                  | Lane              | Model              | Notes                                                        |
 | -------------------- | ----------------- | ------------------ | ------------------------------------------------------------ |
 | hermes-agent         | `complex`         | Qwen3.8-27B        | Agentic reasoning / KB QA / automation; set via 1Password (out-of-band) |
-| hindsight            | `memory`          | Qwen3.5-4B         | Extraction-dominant (single-model constraint); embeddings + reranker direct to studio |
+| hindsight            | `memory`          | Qwen3.5-4B         | Extraction-dominant (single-model constraint); embeddings + reranker via gateway media routes |
 | firecrawl            | `fast`            | Qwen3.5-4B         | Batch page extraction/summarization                          |
 | karakeep             | `fast` + `vision` | Qwen3.5-4B         | Text + image tagging                                         |
 | home-assistant-sgcc  | `vision`          | Qwen3.5-4B         | Meter/bill photo OCR                                         |
 | SillyTavern          | UI-configured     | Gemma4-31B lane    | Creative/RP; no repo-level config                            |
 | open-notebook        | UI-configured     | suggest `complex`  | Research synthesis; no repo-level config                     |
+| onyx                 | UI-configured     | suggest `micro`/`fast` | Chat/RAG; LLM provider set in admin UI (api_base → agentgateway) |
 
 ### MCP Backend
 
@@ -131,6 +136,27 @@ All local lanes (`fast`/`memory`/`vision`) run on the MacStudio inference host. 
 - **Sandbox**: Kata Containers, max_workers=4, routes egress through squid proxy
 - **Model providers**: Configured at runtime via Dify admin UI, not in manifests
 - **Depends on**: proxy → database → sandbox → api → (worker, beat, web)
+
+### Onyx v4.7.1
+
+- Chat + RAG enterprise search (replaces open-webui), chart 0.8.21 from `oci://ghcr.io/onyx-dot-app/charts/onyx`
+- Components: api-server (:8080), webserver (:3000), inference + indexing model servers (CPU, nomic-embed-text-v1), 8 celery workers, bundled OpenSearch (single-node, 2Gi heap, 30Gi ceph-block)
+- **Backends**: external CNPG (`postgres-rw.database-system`, DB bootstrapped by `onyx-postgres-init` Job), external Dragonfly (no auth), Ceph RGW bucket `onyx`; bundled Postgres/Redis-operator/MinIO/nginx subcharts all disabled
+- LLM provider is DB-backed — configure once in Admin UI with `api_base` pointing at the agent gateway (`http://agentgateway-proxy.networking-system/chat`), suggested lane `micro`/`fast`; OIDC SSO likewise configured in Admin UI (forward-proxy SSO at kgateway also active)
+- Ingress: `onyx.noirprime.com` via kgateway-internal; `/api|/openapi.json` regex → `onyx-api-service:8080`, `/` → `onyx-webserver:3000`, 900s timeouts
+
+### Media lanes (studio-hosted, OpenAI-compatible)
+
+Non-chat modalities run as separate studio processes (oMLX has no image-gen; mlx-audio covers both audio types) and are exposed through the agent gateway as **plain HTTP passthrough** (no LLM parsing) on `agentgateway-media-route`, guarded by the same `llm-api-auth` API keys as `/chat`:
+
+| Path             | Studio port | Server process     | Models                          | Timeout |
+| ---------------- | ----------- | ------------------ | ------------------------------- | ------- |
+| `/v1/images`     | 8001        | `vmlx serve` (mflux) | Z-Image-Turbo (6B)            | 300s    |
+| `/v1/audio`      | 8002        | `mlx_audio.server` | VoxCPM2 (TTS), Qwen3-ASR-1.7B (ASR) | 300s |
+| `/v1/embeddings` | 8000        | oMLX               | Qwen3-Embedding-4B              | 120s    |
+| `/v1/rerank`     | 8000        | oMLX               | Qwen3-Reranker-0.6B (Cohere-compatible) | 120s |
+
+Config: `kubernetes/apps/networking-system/agentgateway/config/media/` — ExternalName `studio-media` → `studio.homelab.internal` (ports 8000/8001/8002), route on `agentgateway-proxy`. Clients use `https://api.noirprime.com` as base URL with their gateway API key. Onyx consumes image/voice via admin-API provider rows (`provider: "openai"` + `api_base` + free-text model name; see Onyx section). Host-side TODO: stand up the three studio processes on the ports above.
 
 ---
 
@@ -216,8 +242,8 @@ All local lanes (`fast`/`memory`/`vision`) run on the MacStudio inference host. 
 - AI memory / context store (agent long-term memory: retain / recall / reflect)
 - Image: upstream `ghcr.io/vectorize-io/hindsight:0.9.2-slim` — no in-process local-ml
 - LLM: `memory` lane → **Qwen3.5-4B on the MacStudio** (via agentgateway)
-- Embeddings: **Qwen3-Embedding-4B on the MacStudio** (oMLX, OpenAI-compatible `/v1/embeddings`)
-- Reranker: **Qwen3-Reranker-0.6B on the MacStudio** (Cohere-compatible `/v1/rerank`)
+- Embeddings: **Qwen3-Embedding-4B on the MacStudio** (oMLX) via gateway `/v1/embeddings`
+- Reranker: **Qwen3-Reranker-0.6B on the MacStudio** (Cohere-compatible) via gateway `/v1/rerank`
 - Resources: req: 200m CPU / 512Mi, lim: 2 CPU / 2Gi
 - Storage: CloudNativePG (vchord vector + pgroonga text search), OTEL enabled
 - Exposed as MCP server for agent context retrieval
@@ -254,6 +280,7 @@ x-model: complex  ──────────► Qwen3.8-27B                 
 x-model: fast     ──────────► Qwen3.5-4B                   (local, MacStudio)
 x-model: memory   ──────────► Qwen3.5-4B                   (local, MacStudio)
 x-model: vision   ──────────► Qwen3.5-4B (vision)         (local, MacStudio)
+x-model: micro    ──────────► MiniCPM5-2B                  (local, MacStudio)
 ```
 
 All routing is internal via the agent gateway. No app has direct LLM provider access — the gateway is the single choke point for auth, routing, and observability.
