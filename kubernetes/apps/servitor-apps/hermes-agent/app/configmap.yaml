@@ -49,6 +49,11 @@ data:
         timeout: 30
         extra_body:
           chat_template_kwargs: { enable_thinking: false }
+    # Secret hygiene: profile .env holds gateway keys and any process secret is
+    # readable by tools running as the same user — so the chat profile gets NO
+    # terminal/file toolsets. MCP tools (mcp_*) are not gated by toolsets.
+    platform_toolsets:
+      cli: [web, vision, skills, todo]
   chat-profile.yaml: |
     description: "Chat frontends (Onyx etc.); isolated memory + API key"
     display_name: "Chat"

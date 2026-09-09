@@ -15,4 +15,5 @@ spec:
   traffic:
     apiKeyAuthentication:
       mode: Strict
-      secretRef: *name
+      secretRef:
+        name: *name
