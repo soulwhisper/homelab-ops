@@ -185,7 +185,7 @@ Config: `kubernetes/apps/networking-system/agentgateway/config/media/` — Exter
   - OTEL telemetry (5% sampling)
 - **Ingress restricted**: Only vmagent and hermes-agent can connect
 
-### MCP Servers (11 total)
+### MCP Servers (12 total)
 
 #### internal-ro (read-only, no egress)
 
@@ -195,6 +195,7 @@ Config: `kubernetes/apps/networking-system/agentgateway/config/media/` — Exter
 | kubernetes    | HTTP :8080            | kube-apiserver (read-only SA) |
 | grafana       | Streamable HTTP :8000 | Grafana                       |
 | fluxcd        | HTTP :9090            | Flux (read-only SA)           |
+| obsidian      | stdio (filesystem MCP) | Obsidian vault, read-only NFS copy (`/volume1/backup/dropbox/Obsidian/noirprime`) |
 
 #### internal-rw (read-write, no egress)
 
@@ -203,6 +204,7 @@ Config: `kubernetes/apps/networking-system/agentgateway/config/media/` — Exter
 | honcho         | HTTP proxy :8080     | Honcho API             |
 | home-assistant | HTTP (FastMCP) :8086 | Home Assistant         |
 | hindsight      | HTTP proxy :8080     | Hindsight MCP endpoint |
+| forgejo        | Streamable HTTP :8080 | Forgejo on nas:9003 (forgejo-mcp v3.0.0); draftbox repo read+write, repo-scoped PAT |
 
 #### external (full egress)
 
@@ -211,7 +213,10 @@ Config: `kubernetes/apps/networking-system/agentgateway/config/media/` — Exter
 | github    | HTTP :8082            | Read-only PAT, 7 tools   |
 | firecrawl | Streamable HTTP :3000 | Local Firecrawl instance |
 | context7  | stdio :3000           | Context7 API             |
-| dropbox   | Streamable HTTP :8080 | Official remote MCP (mcp.dropbox.com), Bearer token refreshed by CronJob (90m); read+write vault files |
+
+#### Obsidian facts workflow
+
+Plain-text pipeline, no extra copies: Obsidian → Dropbox (canonical; its own sync/revisions) → Synology CloudSync pull → `/volume1/backup` on the NAS → `obsidian` MCP serves the vault read-only over NFS (static PV, subDir `backup/dropbox/Obsidian/noirprime`) for agent fact lookup. Agent-authored notes never write back into the vault copy — they go to the **draftbox** git repo on Forgejo (`nas.homelab.internal:9003`) via the `forgejo` MCP (`create_file`/`update_file`, commit-per-call), keeping generated drafts versioned and reviewable before any manual promotion into the vault.
 
 ---
 
@@ -267,8 +272,7 @@ Frigate remains the 24/7 trigger layer; MiniCPM-o 4.5 is the event describer. `s
 
 ### Archived
 
-- **Buzz** (relay + buzz-agent-omp) — buzz-agent-omp archived 2026-08-28; buzz-relay archived 2026-09-09 (`.archived/kubernetes/servitor/buzz-relay`), superseded by hermes' native webhook ingestion (`/p/<profile>/webhooks/<route>`, HMAC). Its CNPG DB, Dragonfly, and Ceph bucket are retained for manual cleanup. hermes-agent is the only in-cluster agent.
-- **Fast-Note-Sync** — archived 2026-09-09 (`.archived/kubernetes/selfhosted/fast-note-sync` + MCP registration); Obsidian vault access moved to the official Dropbox MCP (read+write); sync role unneeded (Dropbox client syncs)
+- **Fast-Note-Sync** — archived 2026-09-09 (`.archived/kubernetes/selfhosted/fast-note-sync` + MCP registration); vault facts now: read via `obsidian` filesystem MCP (read-only NFS copy), write via `forgejo` MCP to the draftbox repo. Dropbox MCP was evaluated and rejected (beta, DCR-limited clients, short-lived tokens, cloud round-trip for local data)
 - **Devbox** — removed from cluster 2026-08-05; image retained in `soulwhisper/containers` as an ad-hoc exec sandbox.
 - **llama.cpp (llama-qwen3)** — archived 2026-08-28; all local lanes moved to the MacStudio.
 
