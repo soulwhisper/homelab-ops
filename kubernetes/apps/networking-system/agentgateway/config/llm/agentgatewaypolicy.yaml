@@ -9,6 +9,9 @@ spec:
     - group: gateway.networking.k8s.io
       kind: HTTPRoute
       name: agentgateway-llm-route
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
+      name: agentgateway-media-route
   traffic:
     apiKeyAuthentication:
       mode: Strict

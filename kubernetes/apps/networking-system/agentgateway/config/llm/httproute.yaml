@@ -80,3 +80,17 @@ spec:
           name: llm-backend-vision
       timeouts:
         request: 300s
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /chat
+          headers:
+            - type: Exact
+              name: x-model
+              value: "micro"
+      backendRefs:
+        - group: agentgateway.dev
+          kind: AgentgatewayBackend
+          name: llm-backend-micro
+      timeouts:
+        request: 120s
