@@ -239,7 +239,7 @@ Plain-text pipeline, no extra copies: Obsidian → Dropbox (canonical; its own s
 ### TrendRadar 6.10.0
 
 - AI news digest pipeline (selfhosted-apps): watch list = custom RSS only (aiera.com.cn, expreview.com + GitHub Atom feeds; hot lists disabled), `report.mode: incremental` (zero-duplicate push), keyword grouping via `frequency_words.txt`, AI analysis via gateway (`openai/omni`, fallback `micro`)
-- Delivery: ntfy topic (1Password `trendradar.ntfy_*`); HTML report at `news.noirprime.com` (SSO)
+- Delivery: none configured by default — add `DINGTALK_WEBHOOK_URL`/`FEISHU_WEBHOOK_URL`/`NTFY_*` env when a channel is chosen (direct push to hermes is not possible: hermes webhooks require HMAC signatures TrendRadar can't emit; agents query news via the `trendradar` MCP instead). HTML report at `news.noirprime.com` (SSO)
 - MCP server (:3333) registered as `trendradar` in internal-ro — hermes/agents can query stored news
 - Config fully in ConfigMap (`config.yaml` + `frequency_words.txt` + `ai_interests.txt`); output on 1Gi ceph-block PVC
 

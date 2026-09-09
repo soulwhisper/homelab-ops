@@ -112,7 +112,7 @@
 | App            | Purpose                                                      |
 | -------------- | ------------------------------------------------------------ |
 | Stirling-PDF   | PDF toolkit (50+ operations)                                 |
-| TrendRadar     | AI news digest (RSS watch list, CronJob, omni lane, ntfy)    |
+| TrendRadar     | AI news digest (RSS watch list, CronJob, omni lane)    |
 | NetBox         | DCIM/IPAM (9 plugins, CNPG + Dragonfly)                      |
 | Miniflux       | RSS reader (CNPG, OIDC)                                      |
 | RSSHub         | RSS feed generator (Dragonfly, OIDC)                         |

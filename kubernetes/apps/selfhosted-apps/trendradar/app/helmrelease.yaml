@@ -31,7 +31,7 @@ spec:
               AI_ANALYSIS_ENABLED: "true"
               AI_MODEL: "openai/omni"
               AI_API_BASE: "http://agentgateway-proxy.networking-system.svc.cluster.local:80/chat"
-              NTFY_SERVER_URL: "https://ntfy.sh" # TODO: self-host if GFW-unreliable
+              # delivery channels: add NTFY_*/DINGTALK_WEBHOOK_URL/FEISHU_WEBHOOK_URL env when chosen
             envFrom:
               - secretRef:
                   name: *name
