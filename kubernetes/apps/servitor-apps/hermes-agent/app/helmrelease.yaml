@@ -108,6 +108,8 @@ spec:
             port: 9119
           web:
             port: 8787
+          webhook:
+            port: 8644
 
     persistence:
       app:

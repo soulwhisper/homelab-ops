@@ -63,6 +63,7 @@ Lane-fit guidance: `micro` fits classification, tagging, title/routing decisions
 
 `omni` uses **MiniCPM-o 4.5** (Apache-2.0, 9B omni: Qwen3-8B backbone + vision/audio encoders; OpenCompass 77.6, OCRBench 876 — a class above the Qwen3.5-4B it replaced) served via mlx-vlm on the studio (alias `minicpm-o-4_5`, ~8.5 GB at Q4_K_M). Migrated 2026-09-09: all `fast`/`memory`/`vision` consumers (firecrawl, karakeep text+image, home-assistant-sgcc OCR, hindsight memory, hermes aux side-tasks) now use `omni`. Not on omni: `complex` (no OpenBMB 27B-class model), `micro` (stays — a 1.4 GB classifier/router shouldn't cost a 9B call), embeddings/reranker (Qwen3-Embedding-4B/Reranker-0.6B — no OpenBMB counterpart), TTS (VoxCPM2 via mlx-audio) and image gen (Z-Image-Turbo; MiniCPM-o has no visual decoder). ASR: no deployment — no current consumer; when one appears, zh/en-only usage means omni's audio-in chat + a `/v1/audio/transcriptions` shim covers it (Qwen3-ASR-1.7B dropped from the plan).
 
+
 ### Intranet exposure
 
 The gateway API surface is exposed to the intranet via `kgateway-internal` (10.10.0.131) at `https://api.noirprime.com` (`/chat`, `/mcp`, `/v1/*` media; dashboard stays on `https://ai.noirprime.com/ui`):
@@ -228,6 +229,10 @@ Config: `kubernetes/apps/networking-system/agentgateway/config/media/` — Exter
 ---
 
 ## AI-Adjacent Services
+
+### Vision alerting (frigate-vision)
+
+Frigate remains the 24/7 trigger layer; MiniCPM-o 4.5 is the event describer. `smarthome-apps/frigate-vision` (python bridge, ConfigMap-mounted): MQTT `frigate/events` (`end` type, label-filtered) → snapshot from frigate :5000 → `omni` lane (image-in, JSON `{description, severity}` out) → severity ≥ `MIN_SEVERITY` (default medium) → HA `persistent_notification` **and** hermes webhook `POST :8644/p/ops/webhooks/frigate-alert` (V2 HMAC) — the `ops` profile ingests it as a user message, so the batching brain sees camera events in context with everything else it knows. Webhook route is declared in the GitOps-managed default `config.yaml` (`platforms.webhook.extra.routes`, HMAC secret via `FRIGATE_WEBHOOK_SECRET` in 1Password). 1Password additions: `home-assistant.hass_token`, `hermes-agent.frigate_webhook_secret`.
 
 ### SillyTavern 1.18.0
 

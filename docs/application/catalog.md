@@ -80,7 +80,7 @@
 | Langfuse                | LLM observability (ClickHouse + CNPG + S3)             |
 | Prometheus CRDs         | Operator CRDs                                          |
 
-## smarthome-apps — Smart Home (7)
+## smarthome-apps — Smart Home (8)
 
 | App                 | Purpose                        |
 | ------------------- | ------------------------------ |
@@ -89,6 +89,7 @@
 | Mosquitto           | MQTT broker (LoadBalancer IP)  |
 | Zigbee2MQTT         | Zigbee → MQTT bridge           |
 | Frigate             | AI NVR (Coral TPU)             |
+| Frigate Vision      | Event → omni VLM → HA + hermes alerts |
 | Scrypted            | Video streaming (iGPU QSV)     |
 | Smarthome-NFS       | Shared NFS storage (500Gi)     |
 

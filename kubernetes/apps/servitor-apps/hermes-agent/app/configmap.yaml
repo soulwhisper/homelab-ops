@@ -19,6 +19,19 @@ data:
       api_key: ${OPENAI_API_KEY}
     gateway:
       multiplex_profiles: true
+    platforms:
+      webhook:
+        enabled: true
+        extra:
+          port: 8644
+          routes:
+            frigate-alert:
+              secret: ${FRIGATE_WEBHOOK_SECRET}
+              profile: ops
+              prompt: |
+                [Frigate alert] camera={camera} severity={severity}: {description}
+                (label={label}, zones={zones}, event={event_id}, ts={timestamp})
+              deliver: log
     # side tasks pinned to cheap gateway lanes (body model -> x-model header)
     auxiliary:
       vision: { provider: main, model: omni, timeout: 30 }
@@ -101,6 +114,7 @@ data:
     API_SERVER_ENABLED=true
     API_SERVER_HOST=0.0.0.0
     API_SERVER_KEY=${API_SERVER_KEY}
+    FRIGATE_WEBHOOK_SECRET=${FRIGATE_WEBHOOK_SECRET}
     EOF
 
     for p in chat ops; do
