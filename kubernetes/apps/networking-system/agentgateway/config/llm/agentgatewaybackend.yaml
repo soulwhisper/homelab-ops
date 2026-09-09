@@ -63,3 +63,16 @@ spec:
         model: "minicpm5-2b"
       host: studio.homelab.internal
       port: 8000
+---
+# yaml-language-server: $schema=https://soulwhisper.github.io/k8s-schemas/agentgateway.dev/agentgatewaybackend_v1alpha1.json
+apiVersion: agentgateway.dev/v1alpha1
+kind: AgentgatewayBackend
+metadata:
+  name: llm-backend-omni
+spec:
+  ai:
+    provider:
+      openai:
+        model: "minicpm-o-4_5"
+      host: studio.homelab.internal
+      port: 8000

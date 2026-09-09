@@ -55,6 +55,7 @@ The agent gateway is the single entry point for all AI traffic. Every AI app rou
 | `x-model: memory`                        | `llm-backend-memory`  | `qwen3.5-4b`                       | **Local** MacStudio |
 | `x-model: vision`                        | `llm-backend-vision`  | `qwen3.5-4b` (vision-capable)      | **Local** MacStudio |
 | `x-model: micro`                         | `llm-backend-micro`   | `minicpm5-2b`                      | **Local** MacStudio |
+| `x-model: omni`                          | `llm-backend-omni`    | `minicpm-o-4_5` (vision+audio in)  | **Local** MacStudio |
 
 All backends speak OpenAI-compatible API. Auth via ExternalSecret-managed API keys. Every lane now runs on the MacStudio inference host (`studio.homelab.internal`, 10.10.0.210, oMLX OpenAI-compatible endpoint) — no external LLM API dependency remains. `complex`/`x-priority: high` uses Qwen3.8-27B; `fast`/`memory`/`vision` use Qwen3.5-4B (a unified vision-language model, one endpoint serves all three lanes). No cloud fallback is configured — the studio is a deliberate SPOF.
 
@@ -62,6 +63,8 @@ All backends speak OpenAI-compatible API. Auth via ExternalSecret-managed API ke
 Lane-fit guidance (from MiniCPM5-2B benchmarks: strong classification/agentic-at-size, weak long-context/knowledge, abstains under uncertainty): `micro` fits classification, tagging, title/routing decisions, short structured extraction. Keep `fast` for summarization, compression, session search, memory writes (fidelity-sensitive; MiniCPM5-2B's long-context recall AA-LCR 59% and abstention bias make it unsafe for memory extraction). `vision` is never a `micro` candidate — MiniCPM5-2B is text-only.
 
 `micro` uses **MiniCPM5-2B** (Apache-2.0, 2.6B dense, official 4-bit MLX port `openbmb/MiniCPM5-2B-MLX`, ~1.4 GB resident on the studio) for cheap, low-latency work: classification, extraction, tagging, short summaries, and as the classifier for semantic routing. Serve it with thinking disabled (`chat_template_kwargs: {"enable_thinking": false}`) and constrained JSON output for label safety. The oMLX model alias on the studio must be `minicpm5-2b` (host-side config, out-of-band).
+
+`omni` uses **MiniCPM-o 4.5** (Apache-2.0, 9B omni: Qwen3-8B backbone + vision/audio encoders; OpenCompass 77.6, OCRBench 876 — a class above Qwen3.5-4B) served via mlx-vlm on the studio (alias `minicpm-o-4_5`, ~8.5 GB at Q4_K_M). It is the designated successor for the `fast`/`memory`/`vision` triad: **migration plan** — validate per consumer (karakeep vision tagging → home-assistant-sgcc OCR → hindsight memory extraction, fidelity-checked), then deprecate Qwen3.5-4B. Explicitly NOT migrating: `complex` (no OpenBMB 27B-class model), `micro` (MiniCPM5-2B stays — 1.4 GB resident classifier/router, merging it into a 9B model defeats its purpose), embeddings/reranker (Qwen3-Embedding-4B/Reranker-0.6B — no OpenBMB counterpart), ASR (Qwen3-ASR-1.7B, 52 languages vs MiniCPM-o's EN/ZH speech) and TTS (VoxCPM2) until an OpenAI-audio shim exists for llama.cpp-omni.
 
 ### Intranet exposure
 
@@ -292,6 +295,7 @@ x-model: fast     ──────────► Qwen3.5-4B                  
 x-model: memory   ──────────► Qwen3.5-4B                   (local, MacStudio)
 x-model: vision   ──────────► Qwen3.5-4B (vision)         (local, MacStudio)
 x-model: micro    ──────────► MiniCPM5-2B                  (local, MacStudio)
+x-model: omni     ──────────► MiniCPM-o 4.5 (vision)      (local, MacStudio; successor to fast/memory/vision)
 ```
 
 All routing is internal via the agent gateway. No app has direct LLM provider access — the gateway is the single choke point for auth, routing, and observability.
