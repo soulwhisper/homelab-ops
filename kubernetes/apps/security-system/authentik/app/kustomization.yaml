@@ -46,6 +46,7 @@ configMapGenerator:
       - ./blueprints/forward/hubble.yaml
       - ./blueprints/forward/metube.yaml
       - ./blueprints/forward/miniflux.yaml
+      - ./blueprints/forward/onyx.yaml
       - ./blueprints/forward/qbittorrent.yaml
       - ./blueprints/forward/rsshub.yaml
       - ./blueprints/forward/scrypted.yaml
