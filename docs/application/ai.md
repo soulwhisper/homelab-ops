@@ -115,10 +115,11 @@ All local lanes (`fast`/`memory`/`vision`) run on the MacStudio inference host. 
 - **Integrations**: WeChat, Firecrawl (internal), ToolHive MCP, Agent Gateway LLM
 - **Egress**: CiliumNetworkPolicy — only agentgateway-proxy, virtualmcp, kube-dns
 - **Depends on**: `agentgateway` (Flux dependency)
-- **Profiles** (runtime state, created via dashboard Profiles page — not repo manifests):
-  - `ops` — the batching brain: existing cron/WeChat/automation workload migrates here (read-only-first posture, ToolHive tiers as today)
-  - `chat` — chat-like frontends (Onyx and similar): own memory scope, own config/persona, per-profile API key in 1Password; reached at `:8642/p/chat/v1`
+- **Profiles** (seeded declaratively by the `seed-config` initContainer from `configmap.yaml`; dashboard edits to `config.yaml`/profile files revert on restart):
+  - `ops` — the batching brain: existing cron/WeChat/automation workload migrates here via the dashboard (runtime state move; read-only-first posture, ToolHive tiers as today)
+  - `chat` — chat-like frontends (Onyx and similar): isolated memory + config, own `API_SERVER_KEY` (scoped secret, 1Password `chat_api_server_key`); multiplexed gateway serves it at `:8642/p/chat/v1` with served model id `chat` (per-profile model names are NOT supported under multiplexing — the id is the profile name); no `API_SERVER_KEY` is seeded for `ops`, so `/p/ops/` fails closed
   - `default` — left untouched as fallback/scratch
+  Model/provider config (`model.provider: custom` → agent gateway, `model.default: complex`) and aux side-tasks (`vision`/`web_extract`/`title_generation`/`session_search`/`compression` → `vision`/`fast`/`micro` lanes) are GitOps-managed in `configmap.yaml`; the gateway's PreRouting transformation maps body `model` → `x-model` header, so lane names are model names. Requires new 1Password `hermes-agent` fields: `api_server_key`, `chat_api_server_key` (both >=16 chars)
   Rationale: profile isolation keeps interactive-chat memory out of the automation brain (and vice versa) without a second deployment; graduate to a separate write-enabled instance only if interactive chat needs `internal-rw` tools
 
 ---
@@ -150,7 +151,7 @@ All local lanes (`fast`/`memory`/`vision`) run on the MacStudio inference host. 
 - LLM provider is DB-backed — configure once in Admin UI with `api_base` pointing at the agent gateway (`http://agentgateway-proxy.networking-system/chat`), suggested lane `micro`/`fast`; OIDC SSO likewise configured in Admin UI (forward-proxy SSO at kgateway also active)
 - Ingress: `onyx.noirprime.com` via kgateway-internal; `/api|/openapi.json` regex → `onyx-api-service:8080`, `/` → `onyx-webserver:3000`, 900s timeouts
 - **Craft sandboxes** enabled (`ENABLE_CRAFT=true`, K8s backend; cluster v1.37 passes the >=1.33 guard): code execution runs in dedicated throwaway pods in the `onyx-sandboxes` namespace behind an egress-filtering sandbox proxy — never in hermes. Requires `sandbox_push_private_key` (Ed25519, base64 raw) in the 1Password `onyx` item; sandbox pods run unscheduled-pinned (`sandboxPod.nodeSelector/tolerations` cleared — chart default targets a `workload=sandbox` nodepool we don't have)
-- **Hermes as a model**: register the hermes gateway as an OpenAI-compatible provider with `api_base` = `http://hermes-agent.servitor-apps.svc.cluster.local:8642/p/chat/v1` (profile-scoped, see Hermes section). Use it as the *heavy* chat model only — every call runs hermes' full agent loop (MCP tools, skills, memory), so it must never be selected for Onyx's auxiliary LLM calls (query rewrite, contextual RAG, summarization); those stay on `fast`/`micro`
+- **Hermes as a model**: register the hermes gateway as an OpenAI-compatible provider with `api_base` = `http://hermes-agent.servitor-apps.svc.cluster.local:8642/p/chat/v1` and the profile's API key; the served model id is `chat` (profile name under multiplexing) — set Onyx **display name to `cluster`** in the provider's model configuration. Use it as the heavy/agentic chat model only — every call runs hermes' full agent loop (MCP tools, skills, memory), so it must never be selected for Onyx's auxiliary LLM calls (query rewrite, contextual RAG, summarization); those stay on `fast`/`micro`
 
 ### Media lanes (studio-hosted, OpenAI-compatible)
 
