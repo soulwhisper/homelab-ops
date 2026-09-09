@@ -115,6 +115,11 @@ All local lanes (`fast`/`memory`/`vision`) run on the MacStudio inference host. 
 - **Integrations**: WeChat, Firecrawl (internal), ToolHive MCP, Agent Gateway LLM
 - **Egress**: CiliumNetworkPolicy — only agentgateway-proxy, virtualmcp, kube-dns
 - **Depends on**: `agentgateway` (Flux dependency)
+- **Profiles** (runtime state, created via dashboard Profiles page — not repo manifests):
+  - `ops` — the batching brain: existing cron/WeChat/automation workload migrates here (read-only-first posture, ToolHive tiers as today)
+  - `chat` — chat-like frontends (Onyx and similar): own memory scope, own config/persona, per-profile API key in 1Password; reached at `:8642/p/chat/v1`
+  - `default` — left untouched as fallback/scratch
+  Rationale: profile isolation keeps interactive-chat memory out of the automation brain (and vice versa) without a second deployment; graduate to a separate write-enabled instance only if interactive chat needs `internal-rw` tools
 
 ---
 
@@ -144,6 +149,8 @@ All local lanes (`fast`/`memory`/`vision`) run on the MacStudio inference host. 
 - **Backends**: external CNPG (`postgres-rw.database-system`, DB bootstrapped by `onyx-postgres-init` Job), external Dragonfly (no auth), Ceph RGW bucket `onyx`; bundled Postgres/Redis-operator/MinIO/nginx subcharts all disabled
 - LLM provider is DB-backed — configure once in Admin UI with `api_base` pointing at the agent gateway (`http://agentgateway-proxy.networking-system/chat`), suggested lane `micro`/`fast`; OIDC SSO likewise configured in Admin UI (forward-proxy SSO at kgateway also active)
 - Ingress: `onyx.noirprime.com` via kgateway-internal; `/api|/openapi.json` regex → `onyx-api-service:8080`, `/` → `onyx-webserver:3000`, 900s timeouts
+- **Craft sandboxes** enabled (`ENABLE_CRAFT=true`, K8s backend; cluster v1.37 passes the >=1.33 guard): code execution runs in dedicated throwaway pods in the `onyx-sandboxes` namespace behind an egress-filtering sandbox proxy — never in hermes. Requires `sandbox_push_private_key` (Ed25519, base64 raw) in the 1Password `onyx` item; sandbox pods run unscheduled-pinned (`sandboxPod.nodeSelector/tolerations` cleared — chart default targets a `workload=sandbox` nodepool we don't have)
+- **Hermes as a model**: register the hermes gateway as an OpenAI-compatible provider with `api_base` = `http://hermes-agent.servitor-apps.svc.cluster.local:8642/p/chat/v1` (profile-scoped, see Hermes section). Use it as the *heavy* chat model only — every call runs hermes' full agent loop (MCP tools, skills, memory), so it must never be selected for Onyx's auxiliary LLM calls (query rewrite, contextual RAG, summarization); those stay on `fast`/`micro`
 
 ### Media lanes (studio-hosted, OpenAI-compatible)
 

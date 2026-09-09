@@ -49,6 +49,13 @@ spec:
         storageClass: ceph-block
 
     # --- Disabled bundled extras ---
+
+    # --- Craft sandbox (code exec in dedicated throwaway pods, K8s backend) ---
+    # Cluster is v1.37 (>= 1.33 render guard passes). Sandbox pods get no
+    # node pinning — the chart default targets a `workload=sandbox` nodepool.
+    sandboxPod:
+      nodeSelector: {}
+      tolerations: []
     nginx:
       enabled: false # kgateway HTTPRoute instead
     slackbot:
@@ -105,6 +112,11 @@ spec:
         existingSecret: *name
         secretKeys:
           USER_AUTH_SECRET: USER_AUTH_SECRET
+      sandboxPushSecret:
+        enabled: true
+        existingSecret: *name
+        secretKeys:
+          ONYX_SANDBOX_PUSH_PRIVATE_KEY: ONYX_SANDBOX_PUSH_PRIVATE_KEY
 
     configMap:
       AUTH_TYPE: "basic"
@@ -114,6 +126,9 @@ spec:
       SESSION_EXPIRE_TIME_SECONDS: "86400"
       REQUIRE_EMAIL_VERIFICATION: "false"
       DISABLE_METRICS_AUTH: "true"
+      # Craft sandboxes: code exec runs in dedicated pods (never in hermes)
+      ENABLE_CRAFT: "true"
+      ONYX_SERVER_URL: "https://onyx.noirprime.com"
       # external CNPG
       POSTGRES_HOST: "postgres-rw.database-system.svc.cluster.local"
       POSTGRES_PORT: "5432"
