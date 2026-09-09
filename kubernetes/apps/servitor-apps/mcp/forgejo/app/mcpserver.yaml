@@ -22,12 +22,10 @@ spec:
     - 0.0.0.0
     - --token
     - $(FORGEJO_ACCESS_TOKEN)
-  env:
-    - name: FORGEJO_ACCESS_TOKEN
-      valueFrom:
-        secretKeyRef:
-          name: *name
-          key: FORGEJO_ACCESS_TOKEN
+  # secrets inject FORGEJO_ACCESS_TOKEN as env; args reference it via $(...)
+  secrets:
+    - name: *name
+      key: FORGEJO_ACCESS_TOKEN
   resources:
     requests:
       cpu: 100m
