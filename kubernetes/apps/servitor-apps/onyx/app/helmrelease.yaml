@@ -113,9 +113,6 @@ spec:
 
       REQUIRE_EMAIL_VERIFICATION: "false"
       DISABLE_METRICS_AUTH: "true"
-      # Craft sandboxes: code exec runs in dedicated pods (never in hermes)
-      ENABLE_CRAFT: "true"
-      ONYX_SERVER_URL: "https://onyx.noirprime.com"
       # external CNPG
       POSTGRES_HOST: "postgres-rw.database-system.svc.cluster.local"
       POSTGRES_PORT: "5432"
