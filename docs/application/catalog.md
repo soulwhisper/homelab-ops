@@ -40,7 +40,7 @@
 | App           | Purpose                                                      |
 | ------------- | ------------------------------------------------------------ |
 | Kgateway      | Envoy Gateway API (internal + external)                      |
-| Agent Gateway | AI LLM routing (complex/fast/memory/vision) + MCP gateway    |
+| Agent Gateway | AI LLM routing (complex/omni/micro) + MCP gateway    |
 | External DNS  | AdGuardHome DNS automation                                   |
 
 ## storage-system — Storage (5)
@@ -116,7 +116,7 @@
 | RSSHub         | RSS feed generator (Dragonfly, OIDC)                         |
 | SearXNG        | Privacy meta-search (Dragonfly, bot detection)               |
 | Homepage       | App dashboard                                                |
-| Karakeep       | Bookmark manager (Kata VM, Chrome + Meilisearch, fast+vision lanes) |
+| Karakeep       | Bookmark manager (Kata VM, Chrome + Meilisearch, omni lane) |
 | Hindsight      | AI memory (slim image; LLM + embeddings + rerank on MacStudio) |
 | Open-Notebook  | AI research notebook (SurrealDB)                             |
 | Firecrawl      | Web scraping pipeline (Kata, 3 containers, MCP)              |
