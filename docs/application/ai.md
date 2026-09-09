@@ -58,6 +58,9 @@ The agent gateway is the single entry point for all AI traffic. Every AI app rou
 
 All backends speak OpenAI-compatible API. Auth via ExternalSecret-managed API keys. Every lane now runs on the MacStudio inference host (`studio.homelab.internal`, 10.10.0.210, oMLX OpenAI-compatible endpoint) — no external LLM API dependency remains. `complex`/`x-priority: high` uses Qwen3.8-27B; `fast`/`memory`/`vision` use Qwen3.5-4B (a unified vision-language model, one endpoint serves all three lanes). No cloud fallback is configured — the studio is a deliberate SPOF.
 
+
+Lane-fit guidance (from MiniCPM5-2B benchmarks: strong classification/agentic-at-size, weak long-context/knowledge, abstains under uncertainty): `micro` fits classification, tagging, title/routing decisions, short structured extraction. Keep `fast` for summarization, compression, session search, memory writes (fidelity-sensitive; MiniCPM5-2B's long-context recall AA-LCR 59% and abstention bias make it unsafe for memory extraction). `vision` is never a `micro` candidate — MiniCPM5-2B is text-only.
+
 `micro` uses **MiniCPM5-2B** (Apache-2.0, 2.6B dense, official 4-bit MLX port `openbmb/MiniCPM5-2B-MLX`, ~1.4 GB resident on the studio) for cheap, low-latency work: classification, extraction, tagging, short summaries, and as the classifier for semantic routing. Serve it with thinking disabled (`chat_template_kwargs: {"enable_thinking": false}`) and constrained JSON output for label safety. The oMLX model alias on the studio must be `minicpm5-2b` (host-side config, out-of-band).
 
 ### Intranet exposure
